@@ -1,9 +1,6 @@
 <template>
   <div class="home">
-    <div class="content">
-      <!-- 这里将放置全景导览的主要内容 -->
-      <PanoramaViewer imagePath="/images/panorama.jpg" />
-    </div>
+    <PanoramaViewer imagePath="/images/panorama.jpg" />
   </div>
 </template>
 
@@ -17,10 +14,8 @@ import PanoramaViewer from '../components/PanoramaViewer.vue';
 
 <style scoped>
 .home {
-  padding: 20px;
-}
-
-.content {
-  margin-top: 20px;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 </style> 

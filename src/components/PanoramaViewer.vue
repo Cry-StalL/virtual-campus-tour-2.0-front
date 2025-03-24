@@ -169,15 +169,19 @@ onBeforeUnmount(() => {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: calc(100vh - 40px);
-  padding: 20px;
+  height: 100vh;
+  padding: 0;
   box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
 #panorama-viewer {
   width: 100%;
   height: 100%;
-  border-radius: 8px;
+  border-radius: 0;
   overflow: hidden;
 }
 </style>
