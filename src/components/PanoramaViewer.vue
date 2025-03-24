@@ -7,11 +7,13 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const viewerContainer = ref<HTMLElement | null>(null);
 let scene: THREE.Scene | null = null;
 let camera: THREE.PerspectiveCamera | null = null;
 let renderer: THREE.WebGLRenderer | null = null;
+let controls: OrbitControls | null = null;
 let isAnimating = false;
 
 const initPanorama = () => {
@@ -33,6 +35,15 @@ const initPanorama = () => {
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
   viewerContainer.value.appendChild(renderer.domElement);
+  
+  // 添加控制器
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableZoom = true; // 启用缩放
+  controls.enablePan = false; // 禁用平移
+  controls.rotateSpeed = -0.5; // 设置旋转速度. 设为负值反转方向
+  controls.minDistance = 0.1; // 设置最小缩放距离
+  controls.maxDistance = 100; // 设置最大缩放距离
+  controls.zoomSpeed = 0.8; // 设置缩放速度
   
   // 加载全景图
   const textureLoader = new THREE.TextureLoader();
@@ -63,6 +74,7 @@ const animate = () => {
   const animateFrame = () => {
     if (!isAnimating) return;
     
+    controls?.update(); // 更新控制器
     renderer?.render(scene!, camera!);
     requestAnimationFrame(animateFrame);
   };
@@ -91,9 +103,11 @@ onBeforeUnmount(() => {
   }
   
   // 清理资源
+  controls?.dispose();
   scene = null;
   camera = null;
   renderer = null;
+  controls = null;
 });
 </script>
 
