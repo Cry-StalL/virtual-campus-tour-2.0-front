@@ -15,6 +15,9 @@ let camera: THREE.PerspectiveCamera | null = null;
 let renderer: THREE.WebGLRenderer | null = null;
 let controls: OrbitControls | null = null;
 let isAnimating = false;
+let targetFov = 75; // 目标FOV值，用于实现缩放惯性
+let currentFov = 75; // 当前FOV值
+const fovDampingFactor = 0.1; // FOV阻尼系数，控制缩放惯性大小，增加可以加快响应速度
 
 const initPanorama = () => {
   if (!viewerContainer.value) return;
@@ -30,6 +33,7 @@ const initPanorama = () => {
     1000
   );
   camera.position.set(0, 0, 0.1);
+  currentFov = targetFov = camera.fov;
   
   // 创建渲染器
   renderer = new THREE.WebGLRenderer();
@@ -40,10 +44,14 @@ const initPanorama = () => {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableZoom = true; // 启用缩放
   controls.enablePan = false; // 禁用平移
-  controls.rotateSpeed = -0.35; // 设置旋转速度. 设为负值反转方向
+  controls.rotateSpeed = -0.15; // 设置旋转速度. 设为负值反转方向
   controls.minDistance = 0.1; // 设置最小缩放距离
   controls.maxDistance = 100; // 设置最大缩放距离
-  controls.zoomSpeed = 1.2; // 设置缩放速度
+  controls.zoomSpeed = 2.0; // 增加缩放速度
+  
+  // 添加惯性
+  controls.enableDamping = true; // 启用阻尼效果，提供惯性
+  controls.dampingFactor = 0.1; // 增加阻尼系数，加快响应速度
   
   // 添加鼠标滚轮事件监听
   viewerContainer.value.addEventListener('wheel', onMouseWheel, { passive: false });
@@ -78,13 +86,12 @@ const onMouseWheel = (event: WheelEvent) => {
   // 获取滚轮方向
   const delta = Math.sign(event.deltaY);
   
-  // 计算新的FOV（视场角）
-  const zoomSpeed = 2;
-  const newFov = camera.fov + delta * zoomSpeed;
+  // 计算新的目标FOV（视场角）
+  const zoomSpeed = 4; // 增加缩放速度从2到4
+  targetFov += delta * zoomSpeed;
   
-  // 限制FOV范围，防止过度缩放
-  camera.fov = Math.max(30, Math.min(90, newFov));
-  camera.updateProjectionMatrix();
+  // 限制目标FOV范围，防止过度缩放
+  targetFov = Math.max(30, Math.min(90, targetFov));
 };
 
 const animate = () => {
@@ -95,7 +102,14 @@ const animate = () => {
   const animateFrame = () => {
     if (!isAnimating) return;
     
-    controls?.update(); // 更新控制器
+    // 应用FOV缩放惯性
+    if (camera && Math.abs(currentFov - targetFov) > 0.01) {
+      currentFov += (targetFov - currentFov) * fovDampingFactor;
+      camera.fov = currentFov;
+      camera.updateProjectionMatrix();
+    }
+    
+    controls?.update(); // 更新控制器（必须在每帧调用以实现阻尼效果）
     renderer?.render(scene!, camera!);
     requestAnimationFrame(animateFrame);
   };
