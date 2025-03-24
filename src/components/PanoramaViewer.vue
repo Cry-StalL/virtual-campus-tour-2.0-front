@@ -40,10 +40,13 @@ const initPanorama = () => {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableZoom = true; // 启用缩放
   controls.enablePan = false; // 禁用平移
-  controls.rotateSpeed = -0.5; // 设置旋转速度. 设为负值反转方向
+  controls.rotateSpeed = -0.35; // 设置旋转速度. 设为负值反转方向
   controls.minDistance = 0.1; // 设置最小缩放距离
   controls.maxDistance = 100; // 设置最大缩放距离
-  controls.zoomSpeed = 0.8; // 设置缩放速度
+  controls.zoomSpeed = 1.2; // 设置缩放速度
+  
+  // 添加鼠标滚轮事件监听
+  viewerContainer.value.addEventListener('wheel', onMouseWheel, { passive: false });
   
   // 加载全景图
   const textureLoader = new THREE.TextureLoader();
@@ -64,6 +67,24 @@ const initPanorama = () => {
   
   // 添加窗口大小变化监听
   window.addEventListener('resize', onWindowResize);
+};
+
+// 处理鼠标滚轮事件
+const onMouseWheel = (event: WheelEvent) => {
+  event.preventDefault();
+  
+  if (!camera) return;
+  
+  // 获取滚轮方向
+  const delta = Math.sign(event.deltaY);
+  
+  // 计算新的FOV（视场角）
+  const zoomSpeed = 2;
+  const newFov = camera.fov + delta * zoomSpeed;
+  
+  // 限制FOV范围，防止过度缩放
+  camera.fov = Math.max(30, Math.min(90, newFov));
+  camera.updateProjectionMatrix();
 };
 
 const animate = () => {
@@ -97,6 +118,11 @@ onMounted(() => {
 onBeforeUnmount(() => {
   isAnimating = false;
   window.removeEventListener('resize', onWindowResize);
+  
+  // 移除鼠标滚轮事件监听
+  if (viewerContainer.value) {
+    viewerContainer.value.removeEventListener('wheel', onMouseWheel);
+  }
   
   if (renderer && viewerContainer.value) {
     viewerContainer.value.removeChild(renderer.domElement);
