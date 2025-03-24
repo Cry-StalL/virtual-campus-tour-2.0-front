@@ -2,7 +2,7 @@
   <div class="home">
     <div class="content">
       <!-- 这里将放置全景导览的主要内容 -->
-      <PanoramaViewer />
+      <PanoramaViewer imagePath="/images/panorama.jpg" />
     </div>
   </div>
 </template>

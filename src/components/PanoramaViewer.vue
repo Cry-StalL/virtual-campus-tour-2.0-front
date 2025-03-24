@@ -9,15 +9,36 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+// 定义组件的props
+interface Props {
+  imagePath: string; // 全景图路径
+  initialFov?: number; // 初始视场角
+  minFov?: number; // 最小视场角
+  maxFov?: number; // 最大视场角
+  rotateSpeed?: number; // 旋转速度
+  zoomSpeed?: number; // 缩放速度
+  dampingFactor?: number; // 阻尼系数
+  fovDampingFactor?: number; // FOV阻尼系数
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  initialFov: 75,
+  minFov: 30,
+  maxFov: 90,
+  rotateSpeed: -0.15,
+  zoomSpeed: 2.0,
+  dampingFactor: 0.1,
+  fovDampingFactor: 0.1
+});
+
 const viewerContainer = ref<HTMLElement | null>(null);
 let scene: THREE.Scene | null = null;
 let camera: THREE.PerspectiveCamera | null = null;
 let renderer: THREE.WebGLRenderer | null = null;
 let controls: OrbitControls | null = null;
 let isAnimating = false;
-let targetFov = 75; // 目标FOV值，用于实现缩放惯性
-let currentFov = 75; // 当前FOV值
-const fovDampingFactor = 0.1; // FOV阻尼系数，控制缩放惯性大小，增加可以加快响应速度
+let targetFov = props.initialFov;
+let currentFov = props.initialFov;
 
 const initPanorama = () => {
   if (!viewerContainer.value) return;
@@ -27,7 +48,7 @@ const initPanorama = () => {
   
   // 创建相机
   camera = new THREE.PerspectiveCamera(
-    75,
+    props.initialFov,
     viewerContainer.value.clientWidth / viewerContainer.value.clientHeight,
     0.1,
     1000
@@ -42,25 +63,22 @@ const initPanorama = () => {
   
   // 添加控制器
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableZoom = true; // 启用缩放
-  controls.enablePan = false; // 禁用平移
-  controls.rotateSpeed = -0.15; // 设置旋转速度. 设为负值反转方向
-  controls.minDistance = 0.1; // 设置最小缩放距离
-  controls.maxDistance = 100; // 设置最大缩放距离
-  controls.zoomSpeed = 2.0; // 增加缩放速度
-  
-  // 添加惯性
-  controls.enableDamping = true; // 启用阻尼效果，提供惯性
-  controls.dampingFactor = 0.1; // 增加阻尼系数，加快响应速度
+  controls.enableZoom = true;
+  controls.enablePan = false;
+  controls.rotateSpeed = props.rotateSpeed;
+  controls.minDistance = 0.1;
+  controls.maxDistance = 100;
+  controls.zoomSpeed = props.zoomSpeed;
+  controls.enableDamping = true;
+  controls.dampingFactor = props.dampingFactor;
   
   // 添加鼠标滚轮事件监听
   viewerContainer.value.addEventListener('wheel', onMouseWheel, { passive: false });
   
   // 加载全景图
   const textureLoader = new THREE.TextureLoader();
-  textureLoader.load('/images/panorama.jpg', (texture) => {
+  textureLoader.load(props.imagePath, (texture) => {
     const geometry = new THREE.SphereGeometry(500, 60, 40);
-    // 翻转几何体，使图像朝内
     geometry.scale(-1, 1, 1);
     
     const material = new THREE.MeshBasicMaterial({
@@ -83,15 +101,11 @@ const onMouseWheel = (event: WheelEvent) => {
   
   if (!camera) return;
   
-  // 获取滚轮方向
   const delta = Math.sign(event.deltaY);
+  targetFov += delta * props.zoomSpeed;
   
-  // 计算新的目标FOV（视场角）
-  const zoomSpeed = 4; // 增加缩放速度从2到4
-  targetFov += delta * zoomSpeed;
-  
-  // 限制目标FOV范围，防止过度缩放
-  targetFov = Math.max(30, Math.min(90, targetFov));
+  // 限制目标FOV范围
+  targetFov = Math.max(props.minFov, Math.min(props.maxFov, targetFov));
 };
 
 const animate = () => {
@@ -104,12 +118,12 @@ const animate = () => {
     
     // 应用FOV缩放惯性
     if (camera && Math.abs(currentFov - targetFov) > 0.01) {
-      currentFov += (targetFov - currentFov) * fovDampingFactor;
+      currentFov += (targetFov - currentFov) * props.fovDampingFactor;
       camera.fov = currentFov;
       camera.updateProjectionMatrix();
     }
     
-    controls?.update(); // 更新控制器（必须在每帧调用以实现阻尼效果）
+    controls?.update();
     renderer?.render(scene!, camera!);
     requestAnimationFrame(animateFrame);
   };
@@ -133,7 +147,6 @@ onBeforeUnmount(() => {
   isAnimating = false;
   window.removeEventListener('resize', onWindowResize);
   
-  // 移除鼠标滚轮事件监听
   if (viewerContainer.value) {
     viewerContainer.value.removeEventListener('wheel', onMouseWheel);
   }
@@ -142,7 +155,6 @@ onBeforeUnmount(() => {
     viewerContainer.value.removeChild(renderer.domElement);
   }
   
-  // 清理资源
   controls?.dispose();
   scene = null;
   camera = null;
