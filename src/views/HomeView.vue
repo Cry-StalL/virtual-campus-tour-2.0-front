@@ -16,7 +16,9 @@
     <!-- 侧边栏 -->
     <div class="sidebar" :class="{ active: sidebarVisible }">
       <div class="sidebar-content">
-        <h3>Virtual Campus Tour</h3>
+        <div class="sidebar-header">
+          <h3>Virtual Campus Tour</h3>
+        </div>
         <div class="sidebar-menu">
           <!-- 地点跳转 -->
           <div class="menu-section">
@@ -273,6 +275,10 @@ body, html, #app {
 
 .sidebar-content {
   padding: 20px;
+}
+
+.sidebar-header {
+  padding-top: 40px; /* 标题顶部的边距 */
 }
 
 .sidebar-content h3 {
