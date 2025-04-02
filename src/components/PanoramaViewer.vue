@@ -9,6 +9,11 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+// 定义事件 TODO
+const emit = defineEmits<{
+  (e: 'hotspotClick', hotspot: HotSpot): void
+}>();
+
 // 定义组件的props
 interface Props {
   imagePath: string; // 全景图路径
@@ -30,6 +35,8 @@ interface HotSpot {
   icon?: string;     // 图标路径
   title?: string;    // 标题
   description?: string; // 描述
+  onClick?: (params?: any) => void; // 点击处理函数
+  onClickParams?: any; // 传递给点击处理函数的参数
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -122,9 +129,13 @@ const handleHotspotClick = (event: MouseEvent) => {
   
   const intersects = raycaster.intersectObjects(hotspotObjects);
   if (intersects.length > 0) {
-    const hotspotData = (intersects[0].object as any).hotspotData;
-    console.log('Clicked hotspot:', hotspotData);
-    // 这里可以触发热点点击事件
+    const hotspotData = (intersects[0].object as any).hotspotData as HotSpot;
+    // 发射热点点击事件
+    emit('hotspotClick', hotspotData); // test
+    // 如果热点定义了点击处理函数，则执行
+    if (hotspotData.onClick) {
+      hotspotData.onClick(hotspotData.onClickParams);
+    }
   }
 };
 
