@@ -79,28 +79,57 @@ const latLonToVector3 = (lat: number, lon: number, radius: number): THREE.Vector
 const createHotspot = (hotspot: HotSpot) => {
   if (!scene) return;
   
-  // 创建热点几何体（这里使用一个简单的球体作为示例）
-  const geometry = new THREE.SphereGeometry(5, 16, 16);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0xff0000,
-    transparent: true,
-    opacity: 0.8
-  });
+  let material: THREE.Material;
   
-  const hotspotMesh = new THREE.Mesh(geometry, material);
-  
-  // 设置热点位置
-  const position = latLonToVector3(hotspot.latitude, hotspot.longitude, 490);
-  hotspotMesh.position.copy(position);
-  
-  // 添加热点数据
-  (hotspotMesh as any).hotspotData = hotspot;
-  
-  // 添加到场景
-  scene.add(hotspotMesh);
-  hotspotObjects.push(hotspotMesh);
-  
-  return hotspotMesh;
+  if (hotspot.icon) {
+    // 使用图标作为热点
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load(hotspot.icon);
+    material = new THREE.SpriteMaterial({ 
+      map: texture,
+      transparent: true,
+      depthTest: false
+    });
+    
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(20, 20, 1);
+    
+    // 设置热点位置
+    const position = latLonToVector3(hotspot.latitude, hotspot.longitude, 490);
+    sprite.position.copy(position);
+    
+    // 添加热点数据
+    (sprite as any).hotspotData = hotspot;
+    
+    // 添加到场景
+    scene.add(sprite);
+    hotspotObjects.push(sprite as any);
+    
+    return sprite;
+  } else {
+    // 使用默认几何体作为热点
+    const geometry = new THREE.SphereGeometry(5, 16, 16);
+    material = new THREE.MeshBasicMaterial({
+      color: 0xff0000,
+      transparent: true,
+      opacity: 0.8
+    });
+    
+    const hotspotMesh = new THREE.Mesh(geometry, material);
+    
+    // 设置热点位置
+    const position = latLonToVector3(hotspot.latitude, hotspot.longitude, 490);
+    hotspotMesh.position.copy(position);
+    
+    // 添加热点数据
+    (hotspotMesh as any).hotspotData = hotspot;
+    
+    // 添加到场景
+    scene.add(hotspotMesh);
+    hotspotObjects.push(hotspotMesh);
+    
+    return hotspotMesh;
+  }
 };
 
 // 初始化所有热点

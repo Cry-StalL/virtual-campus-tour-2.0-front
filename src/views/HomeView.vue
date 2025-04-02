@@ -5,7 +5,6 @@
       <PanoramaViewer 
         imagePath="/images/panorama.jpg"
         :hotspots="hotspots"
-        :debug="true"
       />
     </div>
 
@@ -165,6 +164,7 @@ const hotspots = [
     id: '1',
     longitude: 0.24,
     latitude: -0.72,
+    icon: "/icons/arrow_hotspot.png",
     title: '图书馆',
     description: '这是图书馆的位置',
     onClick: (params: any) => {
