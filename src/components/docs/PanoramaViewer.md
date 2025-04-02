@@ -89,8 +89,126 @@ interface HotSpot {
   icon?: string;       // 图标路径（可选）
   title?: string;      // 热点标题（可选）
   description?: string; // 热点描述（可选）
+  onClick?: (params?: any) => void; // 点击处理函数
+  onClickParams?: any; // 传递给点击处理函数的参数
 }
 ```
+
+#### 热点点击事件
+
+PanoramaViewer 组件提供了两种方式来处理热点点击：
+
+1. Vue自带的**组件事件（@hotspotClick）**
+   - 用于在父组件中统一处理**所有热点**的点击事件
+   - 适合处理**通用**的UI反馈，如显示提示信息
+
+```vue
+<template>
+  <PanoramaViewer 
+    :hotspots="hotspots"
+    @hotspotClick="handleHotspotClick"
+  />
+</template>
+
+<script setup>
+const handleHotspotClick = (hotspot: HotSpot) => {
+  // 处理热点点击事件
+  console.log('热点被点击:', hotspot.title);
+};
+</script>
+```
+
+2. **热点回调函数（onClick）**
+   - 定义在**每个热点**的config中
+   - 用于处理**特定热点的独特行为**
+   - 可以通过 onClickParams 传递参数
+
+```typescript
+const hotspots = [
+  {
+    id: '1',
+    longitude: 120,
+    latitude: 30,
+    title: '图书馆',
+    description: '这是图书馆的位置',
+    onClick: (params) => {
+      // 处理特定于该热点的逻辑
+      console.log('跳转到场景:', params.sceneId);
+    },
+    onClickParams: {
+      sceneId: 'library',
+      transition: 'fade'
+    }
+  }
+];
+```
+
+##### 点击事件执行顺序
+
+当用户点击热点时，事件处理的顺序如下：
+
+1. 触发父组件的 `@hotspotClick` 事件处理函数
+2. 执行热点自身的 `onClick` 回调函数（如果定义了的话）
+
+##### 使用示例
+
+```vue
+<template>
+  <PanoramaViewer 
+    imagePath="/images/panorama.jpg"
+    :hotspots="hotspots"
+    @hotspotClick="handleHotspotClick"
+  />
+</template>
+
+<script setup lang="ts">
+// 定义热点数据
+const hotspots = [
+  {
+    id: '1',
+    longitude: 120,
+    latitude: 30,
+    title: '图书馆',
+    description: '这是图书馆的位置',
+    onClick: (params) => {
+      // 特定于图书馆的处理逻辑
+      router.push(`/scene/${params.sceneId}`);
+    },
+    onClickParams: {
+      sceneId: 'library',
+      transition: 'fade'
+    }
+  }
+];
+
+// 统一的热点点击处理
+const handleHotspotClick = (hotspot: HotSpot) => {
+  // 处理所有热点共有的行为
+  ElMessage({
+    message: `正在前往${hotspot.title}...`,
+    type: 'info'
+  });
+};
+</script>
+```
+
+##### 最佳实践
+
+1. **事件分离**
+   - 使用 `@hotspotClick` 处理通用的UI反馈
+   - 使用 `onClick` 处理特定热点的业务逻辑
+
+2. **参数传递**
+   - 通过 `onClickParams` 传递必要的参数
+   - 参数可以包含场景ID、过渡效果等信息
+
+3. **错误处理**
+   - 在回调函数中添加适当的错误处理
+   - 确保参数验证和类型检查
+
+4. **性能考虑**
+   - 避免在回调函数中进行复杂的计算
+   - 需要时可以使用防抖或节流 
 
 ### 坐标系统说明
 
@@ -105,7 +223,6 @@ interface HotSpot {
   - 0° 表示水平视线
   - 正值表示向上偏移
   - 负值表示向下偏移
-
 
 ## 交互说明
 
