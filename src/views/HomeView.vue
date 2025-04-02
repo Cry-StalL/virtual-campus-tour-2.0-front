@@ -2,7 +2,10 @@
   <div class="home">
     <div class="content">
       <!-- 全景导览的主要内容 -->
-      <PanoramaViewer imagePath="/images/panorama.jpg" />
+      <PanoramaViewer 
+        imagePath="/images/panorama.jpg"
+        :hotspots="hotspots_demo"
+      />
     </div>
 
     <!-- 侧边栏切换按钮 -->
@@ -141,6 +144,38 @@ type SectionState = {
   about: boolean;
   [key: string]: boolean; // Index signature for dynamic access
 };
+
+// 定义热点数据
+const hotspots_demo = [
+  {
+    id: '1',
+    longitude: 120,
+    latitude: 30,
+    title: '图书馆',
+    description: '这是图书馆的位置'
+  },
+  {
+    id: '2',
+    longitude: 90,
+    latitude: 25,
+    title: '教学楼A',
+    description: '这是教学楼A的位置'
+  },
+  {
+    id: '3',
+    longitude: -120,
+    latitude: -20,
+    title: '体育馆',
+    description: '这是体育馆的位置'
+  },
+  {
+    id: '4',
+    longitude: -90,
+    latitude: 15,
+    title: '学生宿舍',
+    description: '这是学生宿舍的位置'
+  }
+];
 
 const router = useRouter();
 const userID = ref('0');

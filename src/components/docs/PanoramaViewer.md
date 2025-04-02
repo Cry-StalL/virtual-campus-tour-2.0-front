@@ -34,6 +34,32 @@ import PanoramaViewer from '@/components/PanoramaViewer.vue'
   :fovDampingFactor="0.15"
 />
 ```
+#### hotSpots示例
+```typescript
+const hotspots = [
+  {
+    id: '1',
+    longitude: 120,
+    latitude: 30,
+    title: '图书馆',
+    description: '这是图书馆的位置'
+  },
+  {
+    id: '2',
+    longitude: -90,
+    latitude: 15,
+    title: '教学楼',
+    description: '这是教学楼的位置'
+  }
+];
+```
+
+```vue
+<PanoramaViewer 
+  imagePath="/images/panorama.jpg"
+  :hotspots="hotspots"
+/>
+```
 
 ## Props 参数说明
 
@@ -47,6 +73,38 @@ import PanoramaViewer from '@/components/PanoramaViewer.vue'
 | zoomSpeed | number | 否 | 2.0 | 缩放速度 |
 | dampingFactor | number | 否 | 0.1 | 旋转阻尼系数，值越大阻尼效果越强 |
 | fovDampingFactor | number | 否 | 0.1 | 缩放阻尼系数，值越大阻尼效果越强 |
+| hotspots | HotSpot[] | 否 | [] | 热点数组 |
+
+### HotSpot 接口说明
+
+热点（HotSpot）是全景图中的可交互标记点，用于标识特定位置或提供额外信息。
+
+#### HotSpot 接口定义
+
+```typescript
+interface HotSpot {
+  id: string;          // 热点唯一标识符
+  longitude: number;   // 经度坐标 (-180 到 180)
+  latitude: number;    // 纬度坐标 (-90 到 90)
+  icon?: string;       // 图标路径（可选）
+  title?: string;      // 热点标题（可选）
+  description?: string; // 热点描述（可选）
+}
+```
+
+### 坐标系统说明
+
+- **经度（longitude）**：
+  - 范围：-180° 到 180°
+  - 0° 表示正前方
+  - 正值表示向右偏移
+  - 负值表示向左偏移
+
+- **纬度（latitude）**：
+  - 范围：-90° 到 90°
+  - 0° 表示水平视线
+  - 正值表示向上偏移
+  - 负值表示向下偏移
 
 
 ## 交互说明
@@ -54,6 +112,7 @@ import PanoramaViewer from '@/components/PanoramaViewer.vue'
 - **旋转**：按住鼠标左键拖动可以旋转视角
 - **缩放**：使用鼠标滚轮可以缩放视角
 - **惯性**：所有操作都带有平滑的惯性效果
+- **热点交互**：点击热点可以触发相应的交互事件
 
 ## 注意事项
 

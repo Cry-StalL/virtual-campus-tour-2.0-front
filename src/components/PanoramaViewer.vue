@@ -19,6 +19,17 @@ interface Props {
   zoomSpeed?: number; // 缩放速度
   dampingFactor?: number; // 阻尼系数
   fovDampingFactor?: number; // FOV阻尼系数
+  hotspots?: HotSpot[]; // 热点数组
+}
+
+// 定义热点接口
+interface HotSpot {
+  id: string;
+  longitude: number; // 经度 (-180 到 180)
+  latitude: number;  // 纬度 (-90 到 90)
+  icon?: string;     // 图标路径
+  title?: string;    // 标题
+  description?: string; // 描述
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -28,7 +39,8 @@ const props = withDefaults(defineProps<Props>(), {
   rotateSpeed: -0.15,
   zoomSpeed: 2.0,
   dampingFactor: 0.1,
-  fovDampingFactor: 0.1
+  fovDampingFactor: 0.1,
+  hotspots: () => []
 });
 
 const viewerContainer = ref<HTMLElement | null>(null);
@@ -39,6 +51,82 @@ let controls: OrbitControls | null = null;
 let isAnimating = false;
 let targetFov = props.initialFov;
 let currentFov = props.initialFov;
+let hotspotObjects: THREE.Mesh[] = []; // 存储热点对象的数组
+
+// 将经纬度转换为3D坐标
+const latLonToVector3 = (lat: number, lon: number, radius: number): THREE.Vector3 => {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lon + 180) * (Math.PI / 180);
+  
+  const x = -(radius * Math.sin(phi) * Math.cos(theta));
+  const z = (radius * Math.sin(phi) * Math.sin(theta));
+  const y = (radius * Math.cos(phi));
+  
+  return new THREE.Vector3(x, y, z);
+};
+
+// 创建热点
+const createHotspot = (hotspot: HotSpot) => {
+  if (!scene) return;
+  
+  // 创建热点几何体（这里使用一个简单的球体作为示例）
+  const geometry = new THREE.SphereGeometry(5, 16, 16);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0xff0000,
+    transparent: true,
+    opacity: 0.8
+  });
+  
+  const hotspotMesh = new THREE.Mesh(geometry, material);
+  
+  // 设置热点位置
+  const position = latLonToVector3(hotspot.latitude, hotspot.longitude, 490);
+  hotspotMesh.position.copy(position);
+  
+  // 添加热点数据
+  (hotspotMesh as any).hotspotData = hotspot;
+  
+  // 添加到场景
+  scene.add(hotspotMesh);
+  hotspotObjects.push(hotspotMesh);
+  
+  return hotspotMesh;
+};
+
+// 初始化所有热点
+const initHotspots = () => {
+  if (!scene) return;
+  
+  // 清除现有热点
+  hotspotObjects.forEach(obj => {
+    scene?.remove(obj);
+  });
+  hotspotObjects = [];
+  
+  // 创建新热点
+  props.hotspots.forEach(hotspot => {
+    createHotspot(hotspot);
+  });
+};
+
+// 处理热点点击
+const handleHotspotClick = (event: MouseEvent) => {
+  if (!camera || !renderer || !scene) return;
+  
+  const mouse = new THREE.Vector2();
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(mouse, camera);
+  
+  const intersects = raycaster.intersectObjects(hotspotObjects);
+  if (intersects.length > 0) {
+    const hotspotData = (intersects[0].object as any).hotspotData;
+    console.log('Clicked hotspot:', hotspotData);
+    // 这里可以触发热点点击事件
+  }
+};
 
 const initPanorama = () => {
   if (!viewerContainer.value) return;
@@ -75,6 +163,9 @@ const initPanorama = () => {
   // 添加鼠标滚轮事件监听
   viewerContainer.value.addEventListener('wheel', onMouseWheel, { passive: false });
   
+  // 添加热点点击事件监听
+  viewerContainer.value.addEventListener('click', handleHotspotClick);
+  
   // 加载全景图
   const textureLoader = new THREE.TextureLoader();
   textureLoader.load(props.imagePath, (texture) => {
@@ -87,6 +178,9 @@ const initPanorama = () => {
     
     const sphere = new THREE.Mesh(geometry, material);
     scene?.add(sphere);
+    
+    // 初始化热点
+    initHotspots();
     
     animate();
   });
@@ -149,6 +243,7 @@ onBeforeUnmount(() => {
   
   if (viewerContainer.value) {
     viewerContainer.value.removeEventListener('wheel', onMouseWheel);
+    viewerContainer.value.removeEventListener('click', handleHotspotClick);
   }
   
   if (renderer && viewerContainer.value) {
