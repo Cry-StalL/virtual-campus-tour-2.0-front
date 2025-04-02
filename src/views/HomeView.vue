@@ -5,6 +5,7 @@
       <PanoramaViewer 
         imagePath="/images/panorama.jpg"
         :hotspots="hotspots"
+        :debug="true"
       />
     </div>
 
@@ -162,8 +163,8 @@ type SectionState = {
 const hotspots = [
   {
     id: '1',
-    longitude: 120,
-    latitude: 30,
+    longitude: 0.24,
+    latitude: -0.72,
     title: '图书馆',
     description: '这是图书馆的位置',
     onClick: (params: any) => {
@@ -180,46 +181,46 @@ const hotspots = [
       transition: 'fade'
     }
   },
-  {
-    id: '2',
-    longitude: 90,
-    latitude: 25,
-    title: '教学楼A',
-    description: '这是教学楼A的位置',
-    onClick: (params: any) => {
-      console.log('教学楼A热点被点击', params);
-      // 显示提示框
-      ElMessage({
-        message: '您点击了教学楼A热点',
-        type: 'info',
-        duration: 3000
-      });
-    },
-    params: {
-      sceneId: 'jxl',
-      transition: 'fade'
-    }
-  },
-  {
-    id: '3',
-    longitude: -120,
-    latitude: -20,
-    title: '体育馆',
-    description: '这是体育馆的位置',
-    onClick: (params: any) => {
-      console.log('体育馆热点被点击', params);
-      // 显示提示框
-      ElMessage({
-        message: '您点击了体育馆热点',
-        type: 'info',
-        duration: 3000
-      });
-    },
-    params: {
-      sceneId: 'gym',
-      transition: 'fade'
-    }
-  },
+  // {
+  //   id: '2',
+  //   longitude: 90,
+  //   latitude: 25,
+  //   title: '教学楼A',
+  //   description: '这是教学楼A的位置',
+  //   onClick: (params: any) => {
+  //     console.log('教学楼A热点被点击', params);
+  //     // 显示提示框
+  //     ElMessage({
+  //       message: '您点击了教学楼A热点',
+  //       type: 'info',
+  //       duration: 3000
+  //     });
+  //   },
+  //   params: {
+  //     sceneId: 'jxl',
+  //     transition: 'fade'
+  //   }
+  // },
+  // {
+  //   id: '3',
+  //   longitude: -120,
+  //   latitude: -20,
+  //   title: '体育馆',
+  //   description: '这是体育馆的位置',
+  //   onClick: (params: any) => {
+  //     console.log('体育馆热点被点击', params);
+  //     // 显示提示框
+  //     ElMessage({
+  //       message: '您点击了体育馆热点',
+  //       type: 'info',
+  //       duration: 3000
+  //     });
+  //   },
+  //   params: {
+  //     sceneId: 'gym',
+  //     transition: 'fade'
+  //   }
+  // },
 ];
 
 const router = useRouter();

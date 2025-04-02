@@ -74,6 +74,7 @@ const hotspots = [
 | dampingFactor | number | 否 | 0.1 | 旋转阻尼系数，值越大阻尼效果越强 |
 | fovDampingFactor | number | 否 | 0.1 | 缩放阻尼系数，值越大阻尼效果越强 |
 | hotspots | HotSpot[] | 否 | [] | 热点数组 |
+| debug | boolean | 否 | false | 是否启用调试模式 |
 
 ### HotSpot 接口说明
 
@@ -250,3 +251,70 @@ const handleHotspotClick = (hotspot: HotSpot) => {
 - 支持所有现代浏览器
 - 需要支持 WebGL
 - 建议使用 Chrome、Firefox、Safari 等主流浏览器的最新版本 
+
+## Debug 模式
+
+在开发过程中，为了方便设置热点的位置，组件提供了debug模式。
+
+### 启用 Debug 模式
+
+```vue
+<template>
+  <PanoramaViewer 
+    imagePath="/images/panorama.jpg"
+    :debug="true"
+  />
+</template>
+```
+
+### Debug 模式功能
+
+当debug模式启用时：
+
+1. **获取坐标**
+   - 点击全景图任意位置，会自动获取该位置的经纬度坐标
+   - 坐标会自动复制到剪贴板
+   - 会显示提示消息"坐标已复制到剪贴板"
+
+2. **坐标格式**
+   ```typescript
+   longitude: number, latitude: number
+   ```
+   - longitude: 经度 (-180 到 180)
+   - latitude: 纬度 (-90 到 90)
+
+3. **使用示例**
+   ```vue
+   <template>
+     <PanoramaViewer 
+       imagePath="/images/panorama.jpg"
+       :debug="true"
+       :hotspots="hotspots"
+     />
+   </template>
+
+   <script setup lang="ts">
+   const hotspots = [
+     {
+       id: '1',
+       // 从debug模式复制的坐标
+       longitude: 120,
+       latitude: 30,
+       title: '图书馆'
+     }
+   ];
+   </script>
+   ```
+
+### 最佳实践
+
+1. **开发流程**
+   - 在开发环境中启用debug模式
+   - 点击需要添加热点的位置
+   - 复制获取的坐标
+   - 将坐标添加到热点数据中
+
+2. **注意事项**
+   - debug模式仅用于开发环境
+   - 在生产环境中应禁用debug模式
+   - 点击已有热点时不会触发坐标获取

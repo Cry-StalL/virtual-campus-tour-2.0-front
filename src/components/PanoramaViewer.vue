@@ -8,6 +8,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { ElMessage } from 'element-plus';
 
 // 定义事件 TODO
 const emit = defineEmits<{
@@ -25,6 +26,7 @@ interface Props {
   dampingFactor?: number; // 阻尼系数
   fovDampingFactor?: number; // FOV阻尼系数
   hotspots?: HotSpot[]; // 热点数组
+  debug?: boolean; // debug模式
 }
 
 // 定义热点接口
@@ -47,7 +49,8 @@ const props = withDefaults(defineProps<Props>(), {
   zoomSpeed: 2.0,
   dampingFactor: 0.1,
   fovDampingFactor: 0.1,
-  hotspots: () => []
+  hotspots: () => [],
+  debug: false
 });
 
 const viewerContainer = ref<HTMLElement | null>(null);
@@ -116,26 +119,80 @@ const initHotspots = () => {
   });
 };
 
-// 处理热点点击
-const handleHotspotClick = (event: MouseEvent) => {
+// 将3D坐标转换为经纬度
+const vector3ToLatLon = (point: THREE.Vector3): { longitude: number; latitude: number } => {
+  // 标准化向量
+  const normalized = point.clone().normalize();
+  
+  // 计算经纬度
+  const latitude = 90 - (Math.acos(normalized.y) * 180) / Math.PI;
+  const longitude = ((Math.atan2(normalized.z, -normalized.x) * 180) / Math.PI);
+  
+  return {
+    latitude: parseFloat(latitude.toFixed(2)),
+    longitude: parseFloat(longitude.toFixed(2))
+  };
+};
+
+// 处理场景点击
+const handleSceneClick = (event: MouseEvent) => {
   if (!camera || !renderer || !scene) return;
-  
+
+  // 计算归一化的设备坐标
   const mouse = new THREE.Vector2();
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
   const raycaster = new THREE.Raycaster();
   raycaster.setFromCamera(mouse, camera);
-  
-  const intersects = raycaster.intersectObjects(hotspotObjects);
-  if (intersects.length > 0) {
-    const hotspotData = (intersects[0].object as any).hotspotData as HotSpot;
-    // 发射热点点击事件
-    emit('hotspotClick', hotspotData); // test
-    // 如果热点定义了点击处理函数，则执行
+
+  // 首先检查是否点击到热点，是的话直接return
+  const hotspotIntersects = raycaster.intersectObjects(hotspotObjects);
+  if (hotspotIntersects.length > 0) {
+    const hotspotData = (hotspotIntersects[0].object as any).hotspotData as HotSpot;
+    emit('hotspotClick', hotspotData);
     if (hotspotData.onClick) {
       hotspotData.onClick(hotspotData.onClickParams);
     }
+    return;
+  }
+
+  // 如果不是热点，且在debug模式下，则获取点击位置的坐标
+  if (props.debug) {
+    // 在全景图中，我们需要从相机发射一条射线到球体内表面
+    // 由于我们是在球体内部，需要直接计算射线与全景球的交点
+    const direction = new THREE.Vector3();
+    raycaster.ray.direction.normalize();
+    direction.copy(raycaster.ray.direction);
+    
+    // 直接使用射线方向来计算经纬度坐标
+    // 因为射线方向就是从相机（球心）指向球面的单位向量
+    const coordinates = vector3ToLatLon(direction);
+    
+    // 修正经度值，减去180度使其与热点坐标系统一致
+    const correctedLongitude = coordinates.longitude - 180;
+    // 规范化经度到 -180 到 180 范围内
+    const normalizedLongitude = ((correctedLongitude + 540) % 360) - 180;
+    
+    const coordText = `longitude: ${parseFloat(normalizedLongitude.toFixed(2))}, latitude: ${coordinates.latitude}`;
+    
+    // 复制到剪贴板
+    navigator.clipboard.writeText(coordText).then(() => {
+      ElMessage({
+        message: '坐标已复制到剪贴板',
+        type: 'success',
+        duration: 2000
+      });
+      console.log('点击位置坐标:', coordText);
+    }).catch(err => {
+      console.error('复制失败:', err);
+      ElMessage({
+        message: '复制坐标失败',
+        type: 'error',
+        duration: 2000
+      });
+    });
   }
 };
 
@@ -175,7 +232,7 @@ const initPanorama = () => {
   viewerContainer.value.addEventListener('wheel', onMouseWheel, { passive: false });
   
   // 添加热点点击事件监听
-  viewerContainer.value.addEventListener('click', handleHotspotClick);
+  viewerContainer.value?.addEventListener('click', handleSceneClick);
   
   // 加载全景图
   const textureLoader = new THREE.TextureLoader();
@@ -254,7 +311,7 @@ onBeforeUnmount(() => {
   
   if (viewerContainer.value) {
     viewerContainer.value.removeEventListener('wheel', onMouseWheel);
-    viewerContainer.value.removeEventListener('click', handleHotspotClick);
+    viewerContainer.value.removeEventListener('click', handleSceneClick);
   }
   
   if (renderer && viewerContainer.value) {
