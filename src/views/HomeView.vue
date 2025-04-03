@@ -55,7 +55,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
-import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, MoreFilled } from '@element-plus/icons-vue';
+import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton } from '@element-plus/icons-vue';
 import PanoramaViewer from '../components/PanoramaViewer.vue';
 import Sidebar from '../components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
