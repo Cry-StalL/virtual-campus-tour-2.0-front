@@ -2,7 +2,10 @@
   <div class="home">
     <div class="content">
       <!-- 全景导览的主要内容 -->
-      <PanoramaViewer imagePath="/images/panorama.jpg" />
+      <PanoramaViewer 
+        imagePath="/images/panorama.jpg"
+        :hotspots="hotspots"
+      />
     </div>
 
     <!-- 侧边栏切换按钮 -->
@@ -55,6 +58,19 @@ import Cookies from 'js-cookie';
 import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, MoreFilled } from '@element-plus/icons-vue';
 import PanoramaViewer from '../components/PanoramaViewer.vue';
 import Sidebar from '../components/Sidebar.vue';
+import { ElMessage } from 'element-plus';
+
+// 导入HotSpot接口类型 TODO
+interface HotSpot {
+  id: string;
+  longitude: number;
+  latitude: number;
+  icon?: string;
+  title?: string;
+  description?: string;
+  onClick?: (params?: any) => void;
+  params?: any;
+}
 
 // Define types
 type SectionState = {
@@ -64,6 +80,71 @@ type SectionState = {
   about: boolean;
   [key: string]: boolean; // Index signature for dynamic access
 };
+
+// 定义热点数据
+const hotspots = [
+  {
+    id: '1',
+    longitude: 0.24,
+    latitude: -0.72,
+    icon: "/icons/arrow_hotspot.png",
+    title: '图书馆',
+    description: '这是图书馆的位置',
+    onClick: (params: any) => {
+      console.log('图书馆热点被点击', params);
+      // 显示提示框
+      ElMessage({
+        message: '您点击了图书馆热点',
+        type: 'info',
+        duration: 3000
+      });
+    },
+    params: {
+      sceneId: 'library',
+      transition: 'fade'
+    }
+  },
+  // {
+  //   id: '2',
+  //   longitude: 90,
+  //   latitude: 25,
+  //   title: '教学楼A',
+  //   description: '这是教学楼A的位置',
+  //   onClick: (params: any) => {
+  //     console.log('教学楼A热点被点击', params);
+  //     // 显示提示框
+  //     ElMessage({
+  //       message: '您点击了教学楼A热点',
+  //       type: 'info',
+  //       duration: 3000
+  //     });
+  //   },
+  //   params: {
+  //     sceneId: 'jxl',
+  //     transition: 'fade'
+  //   }
+  // },
+  // {
+  //   id: '3',
+  //   longitude: -120,
+  //   latitude: -20,
+  //   title: '体育馆',
+  //   description: '这是体育馆的位置',
+  //   onClick: (params: any) => {
+  //     console.log('体育馆热点被点击', params);
+  //     // 显示提示框
+  //     ElMessage({
+  //       message: '您点击了体育馆热点',
+  //       type: 'info',
+  //       duration: 3000
+  //     });
+  //   },
+  //   params: {
+  //     sceneId: 'gym',
+  //     transition: 'fade'
+  //   }
+  // },
+];
 
 const router = useRouter();
 const userID = ref('0');
@@ -162,6 +243,44 @@ body, html, #app {
   z-index: 999;
 
   transition: transform 0.3s;
+}
+
+/* 侧边栏样式 */
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease;
+  z-index: 20;
+  overflow-y: auto;
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar-content {
+  padding: 20px;
+}
+
+.sidebar-header {
+  padding-top: 40px; /* 标题顶部的边距 */
+}
+
+.sidebar-content h3 {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
 }
 
 .toggle-btn:hover {
