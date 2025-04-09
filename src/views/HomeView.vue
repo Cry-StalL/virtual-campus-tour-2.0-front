@@ -115,7 +115,6 @@ import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
 import PanoramaViewer from '../components/PanoramaViewer.vue';
-import { ElMessage } from 'element-plus';
 import axios from 'axios';
 import Sidebar from '../components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
