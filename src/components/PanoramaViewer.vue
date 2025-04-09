@@ -47,11 +47,13 @@ interface Scene {
 // 定义热点接口
 interface HotSpot {
   id: string;
-  longitude: number; // 经度 (-180 到 180)
-  latitude: number;  // 纬度 (-90 到 90)
-  icon?: string;     // 图标路径
-  title?: string;    // 标题
+  type: string;        // 热点类型
+  longitude: number;   // 经度 (-180 到 180)
+  latitude: number;    // 纬度 (-90 到 90)
+  icon?: string;       // 图标路径
+  title?: string;      // 标题
   description?: string; // 描述
+  targetSceneId?: string; // 目标场景ID（当type为"scene"时必填）
   onClick?: (params?: any) => void; // 点击处理函数
   onClickParams?: any; // 传递给点击处理函数的参数
 }
@@ -93,9 +95,54 @@ const latLonToVector3 = (lat: number, lon: number, radius: number): THREE.Vector
   return new THREE.Vector3(x, y, z);
 };
 
+// 验证场景ID是否重复
+const validateSceneIds = () => {
+  const sceneIds = new Set<string>();
+  for (const scene of props.scenes) {
+    if (sceneIds.has(scene.sceneId)) {
+      showError(`场景ID重复: ${scene.sceneId}`);
+      return false;
+    }
+    sceneIds.add(scene.sceneId);
+  }
+  return true;
+};
+
+// 验证热点配置
+const validateHotspot = (hotspot: HotSpot): boolean => {
+  if (hotspot.type === 'scene') {
+    if (!hotspot.targetSceneId) {
+      showError(`热点配置错误: 热点ID "${hotspot.id}" 的类型为 "scene"，但未提供 targetSceneId`);
+      return false;
+    }
+    
+    const targetSceneExists = props.scenes.some(scene => scene.sceneId === hotspot.targetSceneId);
+    if (!targetSceneExists) {
+      showError(`热点配置错误: 热点ID "${hotspot.id}" 的目标场景 "${hotspot.targetSceneId}" 不存在`);
+      return false;
+    }
+  } else {
+    showError(`热点配置错误: 热点ID "${hotspot.id}" 的类型 "${hotspot.type}" 未知`);
+    return false;
+  }
+  
+  return true;
+};
+
+// 处理热点点击
+const handleHotspotClick = (hotspot: HotSpot) => {
+  if (!validateHotspot(hotspot)) {
+    return;
+  }
+
+  if (hotspot.type === 'scene' && hotspot.targetSceneId) {
+    switchScene(hotspot.targetSceneId);
+  }
+};
+
 // 创建热点
 const createHotspot = (hotspot: HotSpot) => {
-  if (!scene) return;
+  if (!scene || !validateHotspot(hotspot)) return;
   
   let material: THREE.SpriteMaterial | THREE.MeshBasicMaterial;
   
@@ -148,19 +195,6 @@ const createHotspot = (hotspot: HotSpot) => {
     
     return hotspotMesh;
   }
-};
-
-// 验证场景ID是否重复
-const validateSceneIds = () => {
-  const sceneIds = new Set<string>();
-  for (const scene of props.scenes) {
-    if (sceneIds.has(scene.sceneId)) {
-      showError(`场景ID重复: ${scene.sceneId}`);
-      return false;
-    }
-    sceneIds.add(scene.sceneId);
-  }
-  return true;
 };
 
 // 显示错误信息
@@ -292,10 +326,7 @@ const handleSceneClick = (event: MouseEvent) => {
   const hotspotIntersects = raycaster.intersectObjects(hotspotObjects);
   if (hotspotIntersects.length > 0) {
     const hotspotData = (hotspotIntersects[0].object as any).hotspotData as HotSpot;
-    emit('hotspotClick', hotspotData);
-    if (hotspotData.onClick) {
-      hotspotData.onClick(hotspotData.onClickParams);
-    }
+    handleHotspotClick(hotspotData);
     return;
   }
 

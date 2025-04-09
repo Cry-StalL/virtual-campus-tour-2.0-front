@@ -64,11 +64,13 @@ import { ElMessage } from 'element-plus';
 // 导入HotSpot接口类型
 interface HotSpot {
   id: string;
+  type: string;        // 热点类型
   longitude: number;
   latitude: number;
   icon?: string;
   title?: string;
   description?: string;
+  targetSceneId?: string; // 目标场景ID（当type为"scene"时必填）
   onClick?: (params?: any) => void;
   params?: any;
 }
@@ -97,24 +99,13 @@ const scenes: Scene[] = [
     hotspots: [
       {
         id: '2',
+        type: 'scene',
         longitude: 0.24,
         latitude: -0.72,
         icon: "/icons/arrow_hotspot.png",
         title: '图书馆',
         description: '这是图书馆的位置',
-        onClick: (params: any) => {
-          console.log('图书馆热点被点击', params);
-          // 显示提示框
-          ElMessage({
-            message: '您点击了图书馆热点',
-            type: 'info',
-            duration: 3000
-          });
-        },
-        params: {
-          sceneId: 'library',
-          transition: 'fade'
-        }
+        targetSceneId: "2"
       }
     ]
   },
@@ -122,6 +113,18 @@ const scenes: Scene[] = [
   {
     sceneId: "2",
     imagePath: "/images/p1.jpg",
+    hotspots: [
+      {
+        id: '2',
+        type: 'scene',
+        longitude: 0.24,
+        latitude: -0.72,
+        icon: "/icons/arrow_hotspot.png",
+        title: '图书馆',
+        description: '这是图书馆的位置',
+        targetSceneId: "1"
+      }
+    ]
   },
 ];
 
