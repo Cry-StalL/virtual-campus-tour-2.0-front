@@ -2,89 +2,20 @@
   <div class="home">
     <div class="content">
       <!-- 全景导览的主要内容 -->
-      <PanoramaViewer imagePath="/images/panorama.jpg" />
+      <PanoramaViewer 
+        imagePath="/images/panorama.jpg"
+        :hotspots="hotspots"
+      />
     </div>
 
     <!-- 侧边栏切换按钮 -->
     <div class="toggle-btn" @click="toggleSidebar">
-      <el-icon>
-        <ArrowRight v-if="!sidebarVisible" />
-        <ArrowLeft v-else />
-      </el-icon>
+      <img class="toggle-icon" src="../../assets/icons/more.png" >
     </div>
 
     <!-- 侧边栏 -->
     <div class="sidebar" :class="{ active: sidebarVisible }">
-      <div class="sidebar-content">
-        <h3>Virtual Campus Tour</h3>
-        <div class="sidebar-menu">
-          <!-- 地点跳转 -->
-          <div class="menu-section">
-            <div class="section-title" @click="toggleSection('location')">
-              地点跳转
-              <el-icon class="section-icon">
-                <ArrowDown v-if="sectionsState.location" />
-                <ArrowRight v-else />
-              </el-icon>
-            </div>
-            <transition name="section">
-              <div class="section-content" v-if="sectionsState.location">
-                <div class="menu-item" @click="navigateTo('overview')">校园概览</div>
-                <div class="menu-item" @click="navigateTo('teaching')">教学楼</div>
-                <div class="menu-item" @click="navigateTo('library')">图书馆</div>
-                <div class="menu-item" @click="navigateTo('dorm')">宿舍区</div>
-                <div class="menu-item" @click="navigateTo('sports')">体育馆</div>
-              </div>
-            </transition>
-          </div>
-          
-          <!-- 实用信息 -->
-          <div class="menu-section">
-            <div class="section-title" @click="toggleSection('info')">
-              实用信息
-            </div>
-            <transition name="section">
-              <div class="section-content" v-if="sectionsState.info">
-
-              </div>
-            </transition>
-          </div>
-          
-          <!-- 帮助 -->
-          <div class="menu-section">
-            <div class="section-title" @click="toggleSection('help')">
-              帮助
-              <el-icon class="section-icon">
-                <ArrowDown v-if="sectionsState.help" />
-                <ArrowRight v-else />
-              </el-icon>
-            </div>
-            <transition name="section">
-              <div class="section-content" v-if="sectionsState.help">
-                <div class="menu-item" @click="navigateToHelp('guide')">使用指南</div>
-                <div class="menu-item" @click="navigateToHelp('faq')">常见问题</div>
-              </div>
-            </transition>
-          </div>
-          
-          <!-- 关于我们 -->
-          <div class="menu-section">
-            <div class="section-title" @click="toggleSection('about')">
-              关于我们
-              <el-icon class="section-icon">
-                <ArrowDown v-if="sectionsState.about" />
-                <ArrowRight v-else />
-              </el-icon>
-            </div>
-            <transition name="section">
-              <div class="section-content" v-if="sectionsState.about">
-                <div class="menu-item" @click="navigateToAbout('team')">团队介绍</div>
-                <div class="menu-item" @click="navigateToAbout('contact')">联系我们</div>
-              </div>
-            </transition>
-          </div>
-        </div>
-      </div>
+      <Sidebar />        
     </div>
 
     <!-- 登录和注册 -->
@@ -126,6 +57,20 @@ import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton } from '@element-plus/icons-vue';
 import PanoramaViewer from '../components/PanoramaViewer.vue';
+import Sidebar from '../components/Sidebar.vue';
+import { ElMessage } from 'element-plus';
+
+// 导入HotSpot接口类型 TODO
+interface HotSpot {
+  id: string;
+  longitude: number;
+  latitude: number;
+  icon?: string;
+  title?: string;
+  description?: string;
+  onClick?: (params?: any) => void;
+  params?: any;
+}
 
 // Define types
 type SectionState = {
@@ -135,6 +80,71 @@ type SectionState = {
   about: boolean;
   [key: string]: boolean; // Index signature for dynamic access
 };
+
+// 定义热点数据
+const hotspots = [
+  {
+    id: '1',
+    longitude: 0.24,
+    latitude: -0.72,
+    icon: "/icons/arrow_hotspot.png",
+    title: '图书馆',
+    description: '这是图书馆的位置',
+    onClick: (params: any) => {
+      console.log('图书馆热点被点击', params);
+      // 显示提示框
+      ElMessage({
+        message: '您点击了图书馆热点',
+        type: 'info',
+        duration: 3000
+      });
+    },
+    params: {
+      sceneId: 'library',
+      transition: 'fade'
+    }
+  },
+  // {
+  //   id: '2',
+  //   longitude: 90,
+  //   latitude: 25,
+  //   title: '教学楼A',
+  //   description: '这是教学楼A的位置',
+  //   onClick: (params: any) => {
+  //     console.log('教学楼A热点被点击', params);
+  //     // 显示提示框
+  //     ElMessage({
+  //       message: '您点击了教学楼A热点',
+  //       type: 'info',
+  //       duration: 3000
+  //     });
+  //   },
+  //   params: {
+  //     sceneId: 'jxl',
+  //     transition: 'fade'
+  //   }
+  // },
+  // {
+  //   id: '3',
+  //   longitude: -120,
+  //   latitude: -20,
+  //   title: '体育馆',
+  //   description: '这是体育馆的位置',
+  //   onClick: (params: any) => {
+  //     console.log('体育馆热点被点击', params);
+  //     // 显示提示框
+  //     ElMessage({
+  //       message: '您点击了体育馆热点',
+  //       type: 'info',
+  //       duration: 3000
+  //     });
+  //   },
+  //   params: {
+  //     sceneId: 'gym',
+  //     transition: 'fade'
+  //   }
+  // },
+];
 
 const router = useRouter();
 const userID = ref('0');
@@ -187,37 +197,6 @@ const logout = () => {
   router.push('/login');
 };
 
-const navigateTo = (location: string) => {
-  console.log(`Navigating to ${location}`);
-  // 导航后关闭侧边栏
-  sidebarVisible.value = false;
-};
-
-const navigateToInfo = (type: string) => {
-  console.log(`导航到实用信息: ${type}`);
-  // 这里可以实现具体的导航逻辑
-
-  sidebarVisible.value = false;
-};
-
-const navigateToHelp = (type: string) => {
-  console.log(`导航到帮助页面: ${type}`);
-  // 这里可以实现具体的导航逻辑
-
-  sidebarVisible.value = false;
-};
-
-const navigateToAbout = (type: string) => {
-  console.log(`导航到关于我们页面: ${type}`);
-  // 这里可以实现具体的导航逻辑
-
-  sidebarVisible.value = false;
-};
-
-const toggleSection = (section: string) => {
-  sectionsState.value[section] = !sectionsState.value[section];
-};
-
 onMounted(() => {
   checkLoginStatus();
 });
@@ -250,6 +229,23 @@ body, html, #app {
   z-index: 10;
 }
 
+/* 侧边栏切换按钮样式 */
+.toggle-btn {
+  display: flex;
+  position: absolute;
+  top: 2%;
+  left: 1.5%;
+  width: 3vw;
+  height: 3vw;
+
+  /* background-color: #409EFF; */
+
+ 
+  z-index: 999;
+
+  transition: transform 0.3s;
+}
+
 /* 侧边栏样式 */
 .sidebar {
   position: absolute;
@@ -272,6 +268,10 @@ body, html, #app {
   padding: 20px;
 }
 
+.sidebar-header {
+  padding-top: 40px; /* 标题顶部的边距 */
+}
+
 .sidebar-content h3 {
   margin-top: 10px;
   margin-bottom: 20px;
@@ -284,40 +284,14 @@ body, html, #app {
   flex-direction: column;
 }
 
-.menu-item {
-  padding: 12px 10px;
-  margin-bottom: 5px;
-  border-radius: 4px;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.menu-item:hover {
-  background-color: #f0f0f0;
-}
-
-/* 侧边栏切换按钮样式 */
-.toggle-btn {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 40px;
-  height: 40px;
-  background-color: #409EFF;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 30;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s;
-}
-
 .toggle-btn:hover {
   transform: scale(1.1);
+}
+
+.toggle-icon{
+  width: 65%;
+  height: 65%;
+  margin: auto;
 }
 
 .menu-section {
