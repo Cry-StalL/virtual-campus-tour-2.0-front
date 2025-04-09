@@ -2,6 +2,7 @@
   <div class="home">
     <div class="content">
       <!-- 全景导览的主要内容 -->
+<<<<<<< HEAD
       <PanoramaViewer imagePath="/images/panorama.jpg" />
       
       <!-- 弹幕显示区域 -->
@@ -19,18 +20,22 @@
           {{ message.content }}
         </div>
       </div>
+=======
+      <PanoramaViewer 
+        imagePath="/images/panorama.jpg"
+        :hotspots="hotspots"
+      />
+>>>>>>> b0c05043a9ffb8a5a5ade7037b592ab6b8ff18e4
     </div>
 
     <!-- 侧边栏切换按钮 -->
     <div class="toggle-btn" @click="toggleSidebar">
-      <el-icon>
-        <ArrowRight v-if="!sidebarVisible" />
-        <ArrowLeft v-else />
-      </el-icon>
+      <img class="toggle-icon" src="../../assets/icons/more.png" >
     </div>
 
     <!-- 侧边栏 -->
     <div class="sidebar" :class="{ active: sidebarVisible }">
+<<<<<<< HEAD
       <div class="sidebar-content">
         <h3>Virtual Campus Tour</h3>
         <div class="sidebar-menu">
@@ -83,6 +88,9 @@
           </div>
         </div>
       </div>
+=======
+      <Sidebar />        
+>>>>>>> b0c05043a9ffb8a5a5ade7037b592ab6b8ff18e4
     </div>
 
     <!-- 登录和注册 -->
@@ -155,8 +163,25 @@ import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
 import PanoramaViewer from '../components/PanoramaViewer.vue';
+<<<<<<< HEAD
 import { ElMessage } from 'element-plus';
 import axios from 'axios';
+=======
+import Sidebar from '../components/Sidebar.vue';
+import { ElMessage } from 'element-plus';
+
+// 导入HotSpot接口类型 TODO
+interface HotSpot {
+  id: string;
+  longitude: number;
+  latitude: number;
+  icon?: string;
+  title?: string;
+  description?: string;
+  onClick?: (params?: any) => void;
+  params?: any;
+}
+>>>>>>> b0c05043a9ffb8a5a5ade7037b592ab6b8ff18e4
 
 // Define types
 type SectionState = {
@@ -166,6 +191,71 @@ type SectionState = {
   about: boolean;
   [key: string]: boolean; // Index signature for dynamic access
 };
+
+// 定义热点数据
+const hotspots = [
+  {
+    id: '1',
+    longitude: 0.24,
+    latitude: -0.72,
+    icon: "/icons/arrow_hotspot.png",
+    title: '图书馆',
+    description: '这是图书馆的位置',
+    onClick: (params: any) => {
+      console.log('图书馆热点被点击', params);
+      // 显示提示框
+      ElMessage({
+        message: '您点击了图书馆热点',
+        type: 'info',
+        duration: 3000
+      });
+    },
+    params: {
+      sceneId: 'library',
+      transition: 'fade'
+    }
+  },
+  // {
+  //   id: '2',
+  //   longitude: 90,
+  //   latitude: 25,
+  //   title: '教学楼A',
+  //   description: '这是教学楼A的位置',
+  //   onClick: (params: any) => {
+  //     console.log('教学楼A热点被点击', params);
+  //     // 显示提示框
+  //     ElMessage({
+  //       message: '您点击了教学楼A热点',
+  //       type: 'info',
+  //       duration: 3000
+  //     });
+  //   },
+  //   params: {
+  //     sceneId: 'jxl',
+  //     transition: 'fade'
+  //   }
+  // },
+  // {
+  //   id: '3',
+  //   longitude: -120,
+  //   latitude: -20,
+  //   title: '体育馆',
+  //   description: '这是体育馆的位置',
+  //   onClick: (params: any) => {
+  //     console.log('体育馆热点被点击', params);
+  //     // 显示提示框
+  //     ElMessage({
+  //       message: '您点击了体育馆热点',
+  //       type: 'info',
+  //       duration: 3000
+  //     });
+  //   },
+  //   params: {
+  //     sceneId: 'gym',
+  //     transition: 'fade'
+  //   }
+  // },
+];
 
 const router = useRouter();
 const userID = ref('0');
@@ -211,7 +301,7 @@ const logout = () => {
   // 清除用户Cookie
   Cookies.set('userId', '0', { expires: 1 });
   Cookies.set('username', '', { expires: 1 });
-  Cookies.set('emial', '', { expires: 1 });
+  Cookies.set('email', '', { expires: 1 });
 
   userID.value = '0';
   username.value = '';
@@ -219,6 +309,7 @@ const logout = () => {
   router.push('/login');
 };
 
+<<<<<<< HEAD
 const navigateTo = (location: string) => {
   // 暂时不设置全景图ID和不执行导航操作
   sidebarVisible.value = false;
@@ -328,6 +419,8 @@ const fetchMessages = async () => {
   }
 };
 
+=======
+>>>>>>> b0c05043a9ffb8a5a5ade7037b592ab6b8ff18e4
 onMounted(() => {
   checkLoginStatus();
   fetchMessages();
@@ -361,6 +454,23 @@ body, html, #app {
   z-index: 10;
 }
 
+/* 侧边栏切换按钮样式 */
+.toggle-btn {
+  display: flex;
+  position: absolute;
+  top: 2%;
+  left: 1.5%;
+  width: 3vw;
+  height: 3vw;
+
+  /* background-color: #409EFF; */
+
+ 
+  z-index: 999;
+
+  transition: transform 0.3s;
+}
+
 /* 侧边栏样式 */
 .sidebar {
   position: absolute;
@@ -383,6 +493,10 @@ body, html, #app {
   padding: 20px;
 }
 
+.sidebar-header {
+  padding-top: 40px; /* 标题顶部的边距 */
+}
+
 .sidebar-content h3 {
   margin-top: 10px;
   margin-bottom: 20px;
@@ -395,40 +509,14 @@ body, html, #app {
   flex-direction: column;
 }
 
-.menu-item {
-  padding: 12px 10px;
-  margin-bottom: 5px;
-  border-radius: 4px;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.menu-item:hover {
-  background-color: #f0f0f0;
-}
-
-/* 侧边栏切换按钮样式 */
-.toggle-btn {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 40px;
-  height: 40px;
-  background-color: #409EFF;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  z-index: 30;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s;
-}
-
 .toggle-btn:hover {
   transform: scale(1.1);
+}
+
+.toggle-icon{
+  width: 65%;
+  height: 65%;
+  margin: auto;
 }
 
 .menu-section {

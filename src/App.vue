@@ -21,30 +21,32 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 20px;
+  margin-top: 0;
   position: relative;
   min-height: 100vh;
 }
 
-.bottom-nav {
+nav {
   padding: 10px;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #f8f9fa;
-  border-top: 1px solid #e7e7e7;
+  background-color: rgba(248, 249, 250, 0.9);
+  border-top: 1px solid rgba(231, 231, 231, 0.5);
   font-size: 0.8rem;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
 }
 
-.bottom-nav a {
+nav a {
   font-weight: bold;
   color: #2c3e50;
   text-decoration: none;
   margin: 0 5px;
 }
 
-.bottom-nav a.router-link-exact-active {
+nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>

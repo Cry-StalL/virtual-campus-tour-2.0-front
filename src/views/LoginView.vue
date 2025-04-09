@@ -134,7 +134,7 @@
                 // 存储用户信息到 Cookies
                 Cookies.set('userId', userId, { expires: 1 }); // 设置1天后过期
                 Cookies.set('username', username, { expires: 1 });
-                Cookies.set('emial', email, { expires: 1 });
+                Cookies.set('email', email, { expires: 1 });
 
 
                 this.$message({
