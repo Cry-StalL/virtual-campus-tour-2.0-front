@@ -79,6 +79,7 @@ let targetFov = props.initialFov;
 let currentFov = props.initialFov;
 let hotspotObjects: THREE.Mesh[] = []; // 存储热点对象的数组
 let currentSceneIndex = 0; // 当前场景索引
+let currentSceneId = ref<string>(''); // 当前场景ID
 let currentSphere: THREE.Mesh | null = null; // 当前全景球体
 const errorMessage = ref<string>(''); // 错误消息
 let errorTimeout: number | null = null; // 错误消息定时器
@@ -245,6 +246,7 @@ const switchScene = (target: number | string) => {
   
   currentSceneIndex = targetIndex;
   const newScene = props.scenes[targetIndex];
+  currentSceneId.value = newScene.sceneId;
   
   // 移除当前全景球体
   if (currentSphere) {
@@ -289,6 +291,11 @@ const switchScene = (target: number | string) => {
       showError(`加载场景图片失败: ${errorMessage}`);
     }
   );
+};
+
+// 获取当前场景ID
+const getCurrentSceneId = (): string => {
+  return currentSceneId.value;
 };
 
 // 监听场景数组变化
@@ -443,6 +450,7 @@ const initPanorama = () => {
   
   // 加载第一个场景
   if (props.scenes.length > 0) {
+    currentSceneId.value = props.scenes[0].sceneId;
     switchScene(0);
   }
   
@@ -527,7 +535,8 @@ onBeforeUnmount(() => {
 defineExpose({
   switchScene,
   showError,
-  hideError
+  hideError,
+  getCurrentSceneId
 });
 </script>
 

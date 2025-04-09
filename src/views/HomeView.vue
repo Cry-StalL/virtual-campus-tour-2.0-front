@@ -9,6 +9,14 @@
       />
     </div>
 
+    <!-- 调试按钮 -->
+    <el-button 
+      class="debug-btn"  
+      size="small" 
+      @click="showCurrentSceneId">
+      调试按钮: 显示当前场景ID
+    </el-button>
+
     <!-- 侧边栏切换按钮 -->
     <div class="toggle-btn" @click="toggleSidebar">
       <img class="toggle-icon" src="../../assets/icons/more.png" >
@@ -189,6 +197,17 @@ const logout = () => {
   username.value = '';
   
   router.push('/login');
+};
+
+// 显示当前场景ID
+const showCurrentSceneId = () => {
+  const currentSceneId = panoramaViewer.value?.getCurrentSceneId();
+  ElMessage({
+    message: `当前场景ID: ${currentSceneId}`,
+    type: 'info',
+    duration: 3000
+  });
+  console.log('当前场景ID:', currentSceneId);
 };
 
 onMounted(() => {
@@ -401,5 +420,13 @@ body, html, #app {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* 调试按钮样式 */
+.debug-btn {
+  position: absolute;
+  bottom: 40px;
+  left: 15px;
+  z-index: 10;
 }
 </style>

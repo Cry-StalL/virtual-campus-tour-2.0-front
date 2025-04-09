@@ -79,6 +79,7 @@ const scenes = [
 | switchScene | index: number \| string | void | 切换场景，参数可以是场景索引或场景ID |
 | showError | message: string | void | 显示错误信息 |
 | hideError | - | void | 隐藏错误信息 |
+| getCurrentSceneId | - | string | 获取当前场景的ID |
 
 ### Scene 接口说明
 
@@ -179,6 +180,13 @@ const showCustomError = () => {
 // 手动清除错误
 const clearError = () => {
   panoramaViewer.value?.hideError();
+};
+
+// 获取当前场景ID
+const getSceneId = () => {
+  const currentSceneId = panoramaViewer.value?.getCurrentSceneId();
+  console.log('当前场景ID:', currentSceneId);
+  return currentSceneId;
 };
 </script>
 ```
