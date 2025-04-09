@@ -1,18 +1,27 @@
 <template>
   <div class="panorama-container">
-    <div id="panorama-viewer" ref="viewerContainer"></div>
+    <div v-if="!errorMessage" id="panorama-viewer" ref="viewerContainer"></div>
+    <div v-else class="error-overlay">
+      <div class="error-content">
+        <el-icon class="error-icon"><Warning /></el-icon>
+        <div class="error-message">{{ errorMessage }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { ElMessage } from 'element-plus';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { ElMessage, ElIcon } from 'element-plus';
+import { Warning } from '@element-plus/icons-vue';
 
-// 定义事件 TODO
+// 定义事件
 const emit = defineEmits<{
-  (e: 'hotspotClick', hotspot: HotSpot): void
+  (e: 'hotspotClick', hotspot: HotSpot): void;
+  (e: 'sceneChange', index: number): void;
+  (e: 'error', message: string): void;
 }>();
 
 // 定义组件的props
@@ -30,7 +39,8 @@ interface Props {
 
 // 定义场景接口
 interface Scene {
-  imagePath: string;    // 全景图片的路径
+  sceneId: string;     // 场景唯一标识符
+  imagePath: string;   // 全景图片的路径
   hotspots?: HotSpot[]; // 热点数组
 }
 
@@ -68,6 +78,8 @@ let currentFov = props.initialFov;
 let hotspotObjects: THREE.Mesh[] = []; // 存储热点对象的数组
 let currentSceneIndex = 0; // 当前场景索引
 let currentSphere: THREE.Mesh | null = null; // 当前全景球体
+const errorMessage = ref<string>(''); // 错误消息
+let errorTimeout: number | null = null; // 错误消息定时器
 
 // 将经纬度转换为3D坐标
 const latLonToVector3 = (lat: number, lon: number, radius: number): THREE.Vector3 => {
@@ -85,7 +97,7 @@ const latLonToVector3 = (lat: number, lon: number, radius: number): THREE.Vector
 const createHotspot = (hotspot: HotSpot) => {
   if (!scene) return;
   
-  let material: THREE.Material;
+  let material: THREE.SpriteMaterial | THREE.MeshBasicMaterial;
   
   if (hotspot.icon) {
     // 使用图标作为热点
@@ -97,7 +109,7 @@ const createHotspot = (hotspot: HotSpot) => {
       depthTest: false
     });
     
-    const sprite = new THREE.Sprite(material);
+    const sprite = new THREE.Sprite(material as THREE.SpriteMaterial);
     sprite.scale.set(20, 20, 1);
     
     // 设置热点位置
@@ -138,12 +150,63 @@ const createHotspot = (hotspot: HotSpot) => {
   }
 };
 
-// 切换场景
-const switchScene = (index: number) => {
-  if (index < 0 || index >= props.scenes.length || !scene) return;
+// 验证场景ID是否重复
+const validateSceneIds = () => {
+  const sceneIds = new Set<string>();
+  for (const scene of props.scenes) {
+    if (sceneIds.has(scene.sceneId)) {
+      showError(`场景ID重复: ${scene.sceneId}`);
+      return false;
+    }
+    sceneIds.add(scene.sceneId);
+  }
+  return true;
+};
+
+// 显示错误信息
+const showError = (message: string) => {
+  errorMessage.value = message;
+  emit('error', message);
   
-  currentSceneIndex = index;
-  const newScene = props.scenes[index];
+  // 停止动画循环
+  isAnimating = false;
+};
+
+// 隐藏错误信息
+const hideError = () => {
+  errorMessage.value = '';
+  
+  // 重新开始动画循环
+  if (scene && camera && renderer) {
+    isAnimating = true;
+    animate();
+  }
+};
+
+// 切换场景
+const switchScene = (target: number | string) => {
+  if (!scene) return;
+  
+  let targetIndex: number;
+  
+  if (typeof target === 'string') {
+    // 通过场景ID查找索引
+    targetIndex = props.scenes.findIndex(s => s.sceneId === target);
+    if (targetIndex === -1) {
+      showError(`未找到场景ID: ${target}`);
+      return;
+    }
+  } else {
+    // 直接使用索引
+    targetIndex = target;
+    if (targetIndex < 0 || targetIndex >= props.scenes.length) {
+      showError(`场景索引超出范围: ${targetIndex}`);
+      return;
+    }
+  }
+  
+  currentSceneIndex = targetIndex;
+  const newScene = props.scenes[targetIndex];
   
   // 移除当前全景球体
   if (currentSphere) {
@@ -159,25 +222,43 @@ const switchScene = (index: number) => {
   
   // 加载新场景的全景图
   const textureLoader = new THREE.TextureLoader();
-  textureLoader.load(newScene.imagePath, (texture) => {
-    const geometry = new THREE.SphereGeometry(500, 60, 40);
-    geometry.scale(-1, 1, 1);
-    
-    const material = new THREE.MeshBasicMaterial({
-      map: texture
-    });
-    
-    currentSphere = new THREE.Mesh(geometry, material);
-    scene?.add(currentSphere);
-    
-    // 初始化热点
-    if (newScene.hotspots) {
-      newScene.hotspots.forEach(hotspot => {
-        createHotspot(hotspot);
+  textureLoader.load(
+    newScene.imagePath,
+    (texture: THREE.Texture) => {
+      const geometry = new THREE.SphereGeometry(500, 60, 40);
+      geometry.scale(-1, 1, 1);
+      
+      const material = new THREE.MeshBasicMaterial({
+        map: texture
       });
+      
+      currentSphere = new THREE.Mesh(geometry, material);
+      scene?.add(currentSphere);
+      
+      // 初始化热点
+      if (newScene.hotspots) {
+        newScene.hotspots.forEach(hotspot => {
+          createHotspot(hotspot);
+        });
+      }
+      
+      // 触发场景切换事件
+      emit('sceneChange', targetIndex);
+    },
+    undefined,
+    (err: unknown) => {
+      const errorMessage = err instanceof Error ? err.message : '未知错误';
+      showError(`加载场景图片失败: ${errorMessage}`);
     }
-  });
+  );
 };
+
+// 监听场景数组变化
+watch(() => props.scenes, () => {
+  if (!validateSceneIds()) {
+    return;
+  }
+}, { deep: true });
 
 // 将3D坐标转换为经纬度
 const vector3ToLatLon = (point: THREE.Vector3): { longitude: number; latitude: number } => {
@@ -259,6 +340,11 @@ const handleSceneClick = (event: MouseEvent) => {
 // 初始化全景图
 const initPanorama = () => {
   if (!viewerContainer.value) return;
+  
+  // 验证场景ID
+  if (!validateSceneIds()) {
+    return;
+  }
   
   // 创建场景
   scene = new THREE.Scene();
@@ -373,6 +459,13 @@ onBeforeUnmount(() => {
   renderer = null;
   controls = null;
 });
+
+// 暴露方法
+defineExpose({
+  switchScene,
+  showError,
+  hideError
+});
 </script>
 
 <style scoped>
@@ -395,5 +488,39 @@ onBeforeUnmount(() => {
   height: 100%;
   border-radius: 0;
   overflow: hidden;
+}
+
+.error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.error-content {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 80%;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.error-icon {
+  font-size: 48px;
+  color: #F56C6C;
+  margin-bottom: 20px;
+}
+
+.error-message {
+  font-size: 18px;
+  color: #303133;
+  word-break: break-word;
 }
 </style>

@@ -75,6 +75,7 @@ interface HotSpot {
 
 // 定义场景接口
 interface Scene {
+  sceneId: string;
   imagePath: string;
   hotspots?: HotSpot[];
 }
@@ -91,10 +92,11 @@ type SectionState = {
 // 定义场景数据
 const scenes: Scene[] = [
   {
+    sceneId: "1",
     imagePath: "/images/panorama.jpg",
     hotspots: [
       {
-        id: '1',
+        id: '2',
         longitude: 0.24,
         latitude: -0.72,
         icon: "/icons/arrow_hotspot.png",
@@ -118,6 +120,7 @@ const scenes: Scene[] = [
   },
 
   {
+    sceneId: "2",
     imagePath: "/images/p1.jpg",
   },
 ];
