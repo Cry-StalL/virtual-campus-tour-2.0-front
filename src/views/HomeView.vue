@@ -3,6 +3,22 @@
     <div class="content">
       <!-- 全景导览的主要内容 -->
       <PanoramaViewer imagePath="/images/panorama.jpg" />
+      
+      <!-- 弹幕显示区域 -->
+      <div class="danmaku-container">
+        <div 
+          v-for="(message, index) in messages" 
+          :key="index"
+          class="danmaku-item"
+          :style="{
+            top: `${message.top}%`,
+            animationDuration: `${message.duration}s`,
+            color: message.color
+          }"
+        >
+          {{ message.content }}
+        </div>
+      </div>
     </div>
 
     <!-- 侧边栏切换按钮 -->
@@ -20,34 +36,16 @@
         <div class="sidebar-menu">
           <!-- 地点跳转 -->
           <div class="menu-section">
-            <div class="section-title" @click="toggleSection('location')">
+            <div class="section-title" @click="">
               地点跳转
-              <el-icon class="section-icon">
-                <ArrowDown v-if="sectionsState.location" />
-                <ArrowRight v-else />
-              </el-icon>
             </div>
-            <transition name="section">
-              <div class="section-content" v-if="sectionsState.location">
-                <div class="menu-item" @click="navigateTo('overview')">校园概览</div>
-                <div class="menu-item" @click="navigateTo('teaching')">教学楼</div>
-                <div class="menu-item" @click="navigateTo('library')">图书馆</div>
-                <div class="menu-item" @click="navigateTo('dorm')">宿舍区</div>
-                <div class="menu-item" @click="navigateTo('sports')">体育馆</div>
-              </div>
-            </transition>
           </div>
           
           <!-- 实用信息 -->
           <div class="menu-section">
-            <div class="section-title" @click="toggleSection('info')">
+            <div class="section-title" @click="">
               实用信息
             </div>
-            <transition name="section">
-              <div class="section-content" v-if="sectionsState.info">
-
-              </div>
-            </transition>
           </div>
           
           <!-- 帮助 -->
@@ -117,6 +115,37 @@
         </div>
       </template>
     </div>
+
+    <!-- 留言按钮 -->
+    <div class="message-button" @click="showMessageDialog = true">
+      <el-icon><ChatDotRound /></el-icon>
+    </div>
+
+    <!-- 留言对话框 -->
+    <el-dialog
+      v-model="showMessageDialog"
+      width="500px"
+      :close-on-click-modal="false"
+      class="message-dialog"
+    >
+      <el-form :model="messageForm">
+        <el-form-item>
+          <el-input
+            v-model="messageForm.content"
+            type="textarea"
+            :rows="4"
+            placeholder="发个友善的留言吧！"
+            class="message-input"
+          />  
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="showMessageDialog = false" class="cancel-btn">取消</el-button>
+          <el-button type="primary" @click="submitMessage" class="submit-btn">提交留言</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -124,8 +153,10 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
-import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton } from '@element-plus/icons-vue';
+import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
 import PanoramaViewer from '../components/PanoramaViewer.vue';
+import { ElMessage } from 'element-plus';
+import axios from 'axios';
 
 // Define types
 type SectionState = {
@@ -140,6 +171,7 @@ const router = useRouter();
 const userID = ref('0');
 const username = ref('');
 const sidebarVisible = ref(false);
+const currentPanoramaId = ref('1');
 const sectionsState = ref<SectionState>({
   location: false,
   info: false,
@@ -188,9 +220,10 @@ const logout = () => {
 };
 
 const navigateTo = (location: string) => {
-  console.log(`Navigating to ${location}`);
-  // 导航后关闭侧边栏
+  // 暂时不设置全景图ID和不执行导航操作
   sidebarVisible.value = false;
+  // 仍然需要获取留言
+  fetchMessages();
 };
 
 const navigateToInfo = (type: string) => {
@@ -218,8 +251,86 @@ const toggleSection = (section: string) => {
   sectionsState.value[section] = !sectionsState.value[section];
 };
 
+// 留言相关
+const showMessageDialog = ref(false);
+const messageForm = ref({
+  content: ''
+});
+const messages = ref<Array<{
+  content: string;
+  top: number;
+  duration: number;
+  color: string;
+}>>([]);
+
+// 生成随机颜色
+const getRandomColor = () => {
+  const colors = [
+    '#409EFF', '#67C23A', '#E6A23C', '#F56C6C', 
+    '#909399', '#9B59B6', '#1ABC9C', '#3498DB'
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
+
+// 提交留言
+const submitMessage = async () => {
+  if (!messageForm.value.content.trim()) {
+    ElMessage.warning('请输入留言内容');
+    return;
+  }
+  
+  try {
+    // 提交到后端，带上全景图ID
+    const response = await axios.post('http://localhost:8080/api/v1/users/messages', {
+      content: messageForm.value.content,
+      userId: userID.value,
+      username: username.value,
+      panoramaId: currentPanoramaId.value
+    });
+
+    if (response.data.success) {
+      // 添加新留言到弹幕列表
+      const newMessage = {
+        content: messageForm.value.content,
+        top: Math.random() * 80,
+        duration: 10 + Math.random() * 5,
+        color: getRandomColor()
+      };
+      messages.value.push(newMessage);
+      
+      ElMessage.success('留言提交成功');
+      showMessageDialog.value = false;
+      messageForm.value.content = '';
+    } else {
+      ElMessage.error('留言提交失败');
+    }
+  } catch (error) {
+    console.error('提交留言失败:', error);
+    ElMessage.error('留言提交失败，请稍后重试');
+  }
+};
+
+// 获取历史留言
+const fetchMessages = async () => {
+  try {
+    // 获取当前全景图的留言
+    const response = await axios.get(`http://localhost:8080/api/v1/users/messages?panoramaId=${currentPanoramaId.value}`);
+    if (response.data.success) {
+      messages.value = response.data.data.map((msg: any) => ({
+        content: msg.content,
+        top: Math.random() * 80,
+        duration: 10 + Math.random() * 5,
+        color: getRandomColor()
+      }));
+    }
+  } catch (error) {
+    console.error('获取留言失败:', error);
+  }
+};
+
 onMounted(() => {
   checkLoginStatus();
+  fetchMessages();
 });
 </script>
 
@@ -433,5 +544,172 @@ body, html, #app {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* 留言按钮样式 */
+.message-button {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #409EFF;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.message-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.message-button .el-icon {
+  font-size: 24px;
+}
+
+/* 对话框样式 */
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+:deep(.message-dialog) {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+:deep(.message-dialog .el-dialog__header) {
+  margin: 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #409EFF 0%, #53a8ff 100%);
+}
+
+:deep(.message-dialog .el-dialog__title) {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+:deep(.message-dialog .el-dialog__body) {
+  padding: 30px;
+}
+
+:deep(.message-dialog .el-dialog__footer) {
+  padding: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dialog-icon {
+  font-size: 24px;
+  color: white;
+}
+
+:deep(.message-input .el-textarea__inner) {
+  min-height: 150px !important;
+  resize: none;
+  border-radius: 8px;
+  border: 1px solid #dcdfe6;
+  padding: 15px;
+  font-size: 16px;
+  line-height: 1.6;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+:deep(.message-input .el-textarea__inner:focus) {
+  border-color: #409EFF;
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+}
+
+:deep(.message-input .el-textarea__inner::placeholder) {
+  color: #909399;
+  font-size: 14px;
+}
+
+.cancel-btn {
+  border-radius: 20px;
+  padding: 10px 25px;
+  font-weight: 500;
+  background-color: #f5f7fa;
+  border: 1px solid #dcdfe6;
+  color: #606266;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #f0f2f5;
+  border-color: #c0c4cc;
+  color: #303133;
+}
+
+.submit-btn {
+  border-radius: 20px;
+  padding: 10px 25px;
+  font-weight: 500;
+  background: linear-gradient(135deg, #409EFF 0%, #53a8ff 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+}
+
+:deep(.el-dialog__close) {
+  color: white;
+  font-size: 18px;
+}
+
+:deep(.el-dialog__close:hover) {
+  color: #f0f0f0;
+}
+
+/* 弹幕样式 */
+.danmaku-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.danmaku-item {
+  position: absolute;
+  right: -200px;
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: 500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  animation: danmaku linear;
+  padding: 4px 8px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+}
+
+@keyframes danmaku {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100vw);
+  }
 }
 </style>
