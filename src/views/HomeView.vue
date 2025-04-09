@@ -3,8 +3,9 @@
     <div class="content">
       <!-- 全景导览的主要内容 -->
       <PanoramaViewer 
-        imagePath="/images/panorama.jpg"
-        :hotspots="hotspots"
+        :scenes="scenes"
+        @sceneChange="handleSceneChange"
+        ref="panoramaViewer"
       />
     </div>
 
@@ -60,7 +61,7 @@ import PanoramaViewer from '../components/PanoramaViewer.vue';
 import Sidebar from '../components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
 
-// 导入HotSpot接口类型 TODO
+// 导入HotSpot接口类型
 interface HotSpot {
   id: string;
   longitude: number;
@@ -72,79 +73,66 @@ interface HotSpot {
   params?: any;
 }
 
+// 定义场景接口
+interface Scene {
+  imagePath: string;
+  hotspots?: HotSpot[];
+}
+
 // Define types
 type SectionState = {
   location: boolean;
   info: boolean;
   help: boolean;
   about: boolean;
-  [key: string]: boolean; // Index signature for dynamic access
+  [key: string]: boolean;
 };
 
-// 定义热点数据
-const hotspots = [
+// 定义场景数据
+const scenes: Scene[] = [
   {
-    id: '1',
-    longitude: 0.24,
-    latitude: -0.72,
-    icon: "/icons/arrow_hotspot.png",
-    title: '图书馆',
-    description: '这是图书馆的位置',
-    onClick: (params: any) => {
-      console.log('图书馆热点被点击', params);
-      // 显示提示框
-      ElMessage({
-        message: '您点击了图书馆热点',
-        type: 'info',
-        duration: 3000
-      });
-    },
-    params: {
-      sceneId: 'library',
-      transition: 'fade'
-    }
+    imagePath: "/images/panorama.jpg",
+    hotspots: [
+      {
+        id: '1',
+        longitude: 0.24,
+        latitude: -0.72,
+        icon: "/icons/arrow_hotspot.png",
+        title: '图书馆',
+        description: '这是图书馆的位置',
+        onClick: (params: any) => {
+          console.log('图书馆热点被点击', params);
+          // 显示提示框
+          ElMessage({
+            message: '您点击了图书馆热点',
+            type: 'info',
+            duration: 3000
+          });
+        },
+        params: {
+          sceneId: 'library',
+          transition: 'fade'
+        }
+      }
+    ]
   },
-  // {
-  //   id: '2',
-  //   longitude: 90,
-  //   latitude: 25,
-  //   title: '教学楼A',
-  //   description: '这是教学楼A的位置',
-  //   onClick: (params: any) => {
-  //     console.log('教学楼A热点被点击', params);
-  //     // 显示提示框
-  //     ElMessage({
-  //       message: '您点击了教学楼A热点',
-  //       type: 'info',
-  //       duration: 3000
-  //     });
-  //   },
-  //   params: {
-  //     sceneId: 'jxl',
-  //     transition: 'fade'
-  //   }
-  // },
-  // {
-  //   id: '3',
-  //   longitude: -120,
-  //   latitude: -20,
-  //   title: '体育馆',
-  //   description: '这是体育馆的位置',
-  //   onClick: (params: any) => {
-  //     console.log('体育馆热点被点击', params);
-  //     // 显示提示框
-  //     ElMessage({
-  //       message: '您点击了体育馆热点',
-  //       type: 'info',
-  //       duration: 3000
-  //     });
-  //   },
-  //   params: {
-  //     sceneId: 'gym',
-  //     transition: 'fade'
-  //   }
-  // },
+
+  {
+    imagePath: "/images/p1.jpg",
+  },
 ];
+
+const panoramaViewer = ref();
+
+// 处理场景切换事件
+const handleSceneChange = (index: number) => {
+  console.log('场景已切换到:', index);
+  ElMessage({
+    message: `已切换到场景 ${index + 1}`,
+    type: 'info',
+    duration: 2000
+  });
+};
 
 const router = useRouter();
 const userID = ref('0');

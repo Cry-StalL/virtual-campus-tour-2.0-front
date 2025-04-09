@@ -1,16 +1,31 @@
 # PanoramaViewer 全景图查看器组件
 
-PanoramaViewer 是一个基于 Three.js 的全景图查看器组件，支持全景图片的展示、旋转和缩放操作。
+PanoramaViewer 是一个基于 Three.js 的全景图查看器组件，支持全景图片的展示、旋转和缩放操作，以及多场景切换功能。
 
 ## 基本用法
 
 ```vue
 <template>
-  <PanoramaViewer imagePath="/images/panorama.jpg" />
+  <PanoramaViewer :scenes="scenes" />
 </template>
 
 <script setup lang="ts">
 import PanoramaViewer from '@/components/PanoramaViewer.vue'
+
+const scenes = [
+  {
+    imagePath: "/images/panorama1.jpg",
+    hotspots: [
+      {
+        id: '1',
+        longitude: 120,
+        latitude: 30,
+        title: '图书馆',
+        description: '这是图书馆的位置'
+      }
+    ]
+  }
+]
 </script>
 ```
 
@@ -18,13 +33,13 @@ import PanoramaViewer from '@/components/PanoramaViewer.vue'
 
 ### 基础用法
 ```vue
-<PanoramaViewer imagePath="/images/panorama.jpg" />
+<PanoramaViewer :scenes="scenes" />
 ```
 
 ### 自定义参数
 ```vue
 <PanoramaViewer 
-  imagePath="/images/panorama.jpg"
+  :scenes="scenes"
   :initialFov="60"
   :minFov="45"
   :maxFov="120"
@@ -34,38 +49,12 @@ import PanoramaViewer from '@/components/PanoramaViewer.vue'
   :fovDampingFactor="0.15"
 />
 ```
-#### hotSpots示例
-```typescript
-const hotspots = [
-  {
-    id: '1',
-    longitude: 120,
-    latitude: 30,
-    title: '图书馆',
-    description: '这是图书馆的位置'
-  },
-  {
-    id: '2',
-    longitude: -90,
-    latitude: 15,
-    title: '教学楼',
-    description: '这是教学楼的位置'
-  }
-];
-```
-
-```vue
-<PanoramaViewer 
-  imagePath="/images/panorama.jpg"
-  :hotspots="hotspots"
-/>
-```
 
 ## Props 参数说明
 
 | 参数名 | 类型 | 必填 | 默认值 | 说明 |
 |--------|------|------|--------|------|
-| imagePath | string | 是 | - | 全景图片的路径 |
+| scenes | Scene[] | 是 | - | 场景数组 |
 | initialFov | number | 否 | 75 | 初始视场角（Field of View） |
 | minFov | number | 否 | 30 | 最小视场角，限制最大缩放程度 |
 | maxFov | number | 否 | 90 | 最大视场角，限制最小缩放程度 |
@@ -73,8 +62,20 @@ const hotspots = [
 | zoomSpeed | number | 否 | 2.0 | 缩放速度 |
 | dampingFactor | number | 否 | 0.1 | 旋转阻尼系数，值越大阻尼效果越强 |
 | fovDampingFactor | number | 否 | 0.1 | 缩放阻尼系数，值越大阻尼效果越强 |
-| hotspots | HotSpot[] | 否 | [] | 热点数组 |
 | debug | boolean | 否 | false | 是否启用调试模式 |
+
+### Scene 接口说明
+
+场景（Scene）是全景图查看器中的基本单位，每个场景包含一张全景图和对应的热点信息。
+
+#### Scene 接口定义
+
+```typescript
+interface Scene {
+  imagePath: string;    // 全景图片的路径
+  hotspots?: HotSpot[]; // 热点数组
+}
+```
 
 ### HotSpot 接口说明
 

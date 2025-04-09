@@ -17,7 +17,7 @@ const emit = defineEmits<{
 
 // 定义组件的props
 interface Props {
-  imagePath: string; // 全景图路径
+  scenes: Scene[]; // 场景数组
   initialFov?: number; // 初始视场角
   minFov?: number; // 最小视场角
   maxFov?: number; // 最大视场角
@@ -25,8 +25,13 @@ interface Props {
   zoomSpeed?: number; // 缩放速度
   dampingFactor?: number; // 阻尼系数
   fovDampingFactor?: number; // FOV阻尼系数
-  hotspots?: HotSpot[]; // 热点数组
   debug?: boolean; // debug模式
+}
+
+// 定义场景接口
+interface Scene {
+  imagePath: string;    // 全景图片的路径
+  hotspots?: HotSpot[]; // 热点数组
 }
 
 // 定义热点接口
@@ -49,7 +54,6 @@ const props = withDefaults(defineProps<Props>(), {
   zoomSpeed: 2.0,
   dampingFactor: 0.1,
   fovDampingFactor: 0.1,
-  hotspots: () => [],
   debug: false
 });
 
@@ -62,6 +66,8 @@ let isAnimating = false;
 let targetFov = props.initialFov;
 let currentFov = props.initialFov;
 let hotspotObjects: THREE.Mesh[] = []; // 存储热点对象的数组
+let currentSceneIndex = 0; // 当前场景索引
+let currentSphere: THREE.Mesh | null = null; // 当前全景球体
 
 // 将经纬度转换为3D坐标
 const latLonToVector3 = (lat: number, lon: number, radius: number): THREE.Vector3 => {
@@ -132,9 +138,18 @@ const createHotspot = (hotspot: HotSpot) => {
   }
 };
 
-// 初始化所有热点
-const initHotspots = () => {
-  if (!scene) return;
+// 切换场景
+const switchScene = (index: number) => {
+  if (index < 0 || index >= props.scenes.length || !scene) return;
+  
+  currentSceneIndex = index;
+  const newScene = props.scenes[index];
+  
+  // 移除当前全景球体
+  if (currentSphere) {
+    scene.remove(currentSphere);
+    currentSphere = null;
+  }
   
   // 清除现有热点
   hotspotObjects.forEach(obj => {
@@ -142,9 +157,25 @@ const initHotspots = () => {
   });
   hotspotObjects = [];
   
-  // 创建新热点
-  props.hotspots.forEach(hotspot => {
-    createHotspot(hotspot);
+  // 加载新场景的全景图
+  const textureLoader = new THREE.TextureLoader();
+  textureLoader.load(newScene.imagePath, (texture) => {
+    const geometry = new THREE.SphereGeometry(500, 60, 40);
+    geometry.scale(-1, 1, 1);
+    
+    const material = new THREE.MeshBasicMaterial({
+      map: texture
+    });
+    
+    currentSphere = new THREE.Mesh(geometry, material);
+    scene?.add(currentSphere);
+    
+    // 初始化热点
+    if (newScene.hotspots) {
+      newScene.hotspots.forEach(hotspot => {
+        createHotspot(hotspot);
+      });
+    }
   });
 };
 
@@ -225,6 +256,7 @@ const handleSceneClick = (event: MouseEvent) => {
   }
 };
 
+// 初始化全景图
 const initPanorama = () => {
   if (!viewerContainer.value) return;
   
@@ -263,27 +295,15 @@ const initPanorama = () => {
   // 添加热点点击事件监听
   viewerContainer.value?.addEventListener('click', handleSceneClick);
   
-  // 加载全景图
-  const textureLoader = new THREE.TextureLoader();
-  textureLoader.load(props.imagePath, (texture) => {
-    const geometry = new THREE.SphereGeometry(500, 60, 40);
-    geometry.scale(-1, 1, 1);
-    
-    const material = new THREE.MeshBasicMaterial({
-      map: texture
-    });
-    
-    const sphere = new THREE.Mesh(geometry, material);
-    scene?.add(sphere);
-    
-    // 初始化热点
-    initHotspots();
-    
-    animate();
-  });
+  // 加载第一个场景
+  if (props.scenes.length > 0) {
+    switchScene(0);
+  }
   
   // 添加窗口大小变化监听
   window.addEventListener('resize', onWindowResize);
+  
+  animate();
 };
 
 // 处理鼠标滚轮事件
