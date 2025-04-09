@@ -12,10 +12,10 @@
           label-width="70px"
           class="login-from"
         >
-          <el-form-item label="邮箱" prop="telephone">
+          <el-form-item label="邮箱" prop="email">
             <el-input 
-              type="tel"
-              v-model="ruleForm.telephone"
+              type="email"
+              v-model="ruleForm.email"
               @input="handleInput"
               autocomplete="off"
             ></el-input>
@@ -59,7 +59,7 @@
 
   export default {
     data() {
-      var validateTelephone = (rule, value, callback) => {
+      var validateEmail = (rule, value, callback) => {
         if (value === "") {
           callback(new Error("邮箱不能为空！"));
         } else if (!/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(value)) {
@@ -84,12 +84,12 @@
 
       return {
         ruleForm: {
-          telephone: "",
+          email: "",
           password: "",
         },
         rules: {
-          telephone: [
-            { required: true, validator: validateTelephone, trigger: "blur" },
+          email: [
+            { required: true, validator: validateEmail, trigger: "blur" },
           ],
           password: [
             { required: true, validator: validatePass, trigger: "blur" },
@@ -108,14 +108,16 @@
             let _this = this;
 
             // 获取表单数据
-            const telephone = _this.ruleForm.telephone;
+            const email = _this.ruleForm.email;
             const password = _this.ruleForm.password;
+
+            console.log(email);
 
             // 使用 axios 将登录信息发送到后端
             axios.post(
-              'http://localhost:8080/api/user/login',
+              'http://localhost:8080/api/v1/users/login',
               {
-                telephone: telephone,
+                email: email,
                 password: password
               },
               {
@@ -125,43 +127,59 @@
               }
             )
             .then(response => {
-              console.log(response.data);
+              if (response.data.code === 0) {
+                // 获取用户信息
+                const userId = response.data.data.user_id;
+                const username = response.data.data.username;
 
-              // 获取用户编号和名称
-              const userId = response.data.userId || 0;
-              const username = response.data.username;
-
-              if (response.data.code === 200) {
-
+                // 存储用户信息到 Cookies
                 Cookies.set('userId', userId, { expires: 1 }); // 设置1天后过期
                 Cookies.set('username', username, { expires: 1 });
+                Cookies.set('email', email, { expires: 1 });
 
 
-                this.$router.push('/home');
-                // 显示后端响应的成功信息
                 this.$message({
-                  message: response.data.message,
+                  message: response.data.message || "登录成功！",
                   type: "success",
+                });
+                this.$router.push('/');
+              } else {
+                this.$message({
+                  message: response.data.message || "登录失败",
+                  type: "error",
                 });
               }
               _this.loading = false;
             })
             .catch(error => {
-              //校验请求返回结果
               console.error("登录请求失败:", error);
-              console.log('Request Headers:', error.config.headers);
-              console.log('Request Data:', error.config.data); // 打印请求体
-              console.log('Response Status:', error.response ? error.response.status : 'No response');
-              console.log('Response Data:', error.response ? error.response.data : 'No response data');
-
+              
+              // 处理错误消息
+              let errorMessage = "登录失败，请稍后重试";
+              if (error.response?.data) {
+                switch (error.response.data.code) {
+                  case 1001:
+                    errorMessage = "邮箱或密码错误";
+                    break;
+                  case 1002:
+                    errorMessage = "用户不存在";
+                    break;
+                  case 1003:
+                    errorMessage = "密码错误";
+                    break;
+                  default:
+                    errorMessage = error.response.data.message || errorMessage;
+                }
+              }
+              
               this.$message({
-                message: error.response.data.message,
-                type: "warning",
+                message: errorMessage,
+                type: "error",
               });
               _this.loading = false;
             });
           } else {
-            console.log("error submit!!");
+            console.log("表单验证失败");
             this.loading = false;
             return false;
           }

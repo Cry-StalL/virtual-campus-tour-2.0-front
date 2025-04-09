@@ -30,7 +30,7 @@
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click="goToPersonal">
+                <el-dropdown-item @click="goToProfile">
                   <el-icon><User /></el-icon>个人中心
                 </el-dropdown-item>
                 <el-dropdown-item @click="logout">
@@ -181,15 +181,16 @@ const goToRegister = () => {
   router.push('/register');
 };
 
-const goToPersonal = () => {
-  router.push('/personal');
+const goToProfile = () => {
+  router.push('/profile');
 };
 
 const logout = () => {
   // 清除用户Cookie
   Cookies.set('userId', '0', { expires: 1 });
   Cookies.set('username', '', { expires: 1 });
-  
+  Cookies.set('email', '', { expires: 1 });
+
   userID.value = '0';
   username.value = '';
   
