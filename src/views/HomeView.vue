@@ -2,9 +2,7 @@
   <div class="home">
     <div class="content">
       <!-- 全景导览的主要内容 -->
-<<<<<<< HEAD
-      <PanoramaViewer imagePath="/images/panorama.jpg" />
-      
+   
       <!-- 弹幕显示区域 -->
       <div class="danmaku-container">
         <div 
@@ -20,13 +18,22 @@
           {{ message.content }}
         </div>
       </div>
-=======
+
       <PanoramaViewer 
-        imagePath="/images/panorama.jpg"
-        :hotspots="hotspots"
+        :scenes="scenes"
+        @sceneChange="handleSceneChange"
+        ref="panoramaViewer"
       />
->>>>>>> b0c05043a9ffb8a5a5ade7037b592ab6b8ff18e4
+
     </div>
+
+    <!-- 调试按钮 -->
+    <el-button 
+      class="debug-btn"  
+      size="small" 
+      @click="showCurrentSceneId">
+      调试按钮: 显示当前场景ID
+    </el-button>
 
     <!-- 侧边栏切换按钮 -->
     <div class="toggle-btn" @click="toggleSidebar">
@@ -35,62 +42,7 @@
 
     <!-- 侧边栏 -->
     <div class="sidebar" :class="{ active: sidebarVisible }">
-<<<<<<< HEAD
-      <div class="sidebar-content">
-        <h3>Virtual Campus Tour</h3>
-        <div class="sidebar-menu">
-          <!-- 地点跳转 -->
-          <div class="menu-section">
-            <div class="section-title" @click="">
-              地点跳转
-            </div>
-          </div>
-          
-          <!-- 实用信息 -->
-          <div class="menu-section">
-            <div class="section-title" @click="">
-              实用信息
-            </div>
-          </div>
-          
-          <!-- 帮助 -->
-          <div class="menu-section">
-            <div class="section-title" @click="toggleSection('help')">
-              帮助
-              <el-icon class="section-icon">
-                <ArrowDown v-if="sectionsState.help" />
-                <ArrowRight v-else />
-              </el-icon>
-            </div>
-            <transition name="section">
-              <div class="section-content" v-if="sectionsState.help">
-                <div class="menu-item" @click="navigateToHelp('guide')">使用指南</div>
-                <div class="menu-item" @click="navigateToHelp('faq')">常见问题</div>
-              </div>
-            </transition>
-          </div>
-          
-          <!-- 关于我们 -->
-          <div class="menu-section">
-            <div class="section-title" @click="toggleSection('about')">
-              关于我们
-              <el-icon class="section-icon">
-                <ArrowDown v-if="sectionsState.about" />
-                <ArrowRight v-else />
-              </el-icon>
-            </div>
-            <transition name="section">
-              <div class="section-content" v-if="sectionsState.about">
-                <div class="menu-item" @click="navigateToAbout('team')">团队介绍</div>
-                <div class="menu-item" @click="navigateToAbout('contact')">联系我们</div>
-              </div>
-            </transition>
-          </div>
-        </div>
-      </div>
-=======
       <Sidebar />        
->>>>>>> b0c05043a9ffb8a5a5ade7037b592ab6b8ff18e4
     </div>
 
     <!-- 登录和注册 -->
@@ -163,25 +115,31 @@ import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
 import PanoramaViewer from '../components/PanoramaViewer.vue';
-<<<<<<< HEAD
 import { ElMessage } from 'element-plus';
 import axios from 'axios';
-=======
 import Sidebar from '../components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
 
-// 导入HotSpot接口类型 TODO
+// 导入HotSpot接口类型
 interface HotSpot {
   id: string;
+  type: string;        // 热点类型
   longitude: number;
   latitude: number;
   icon?: string;
   title?: string;
   description?: string;
+  targetSceneId?: string; // 目标场景ID（当type为"scene"时必填）
   onClick?: (params?: any) => void;
   params?: any;
 }
->>>>>>> b0c05043a9ffb8a5a5ade7037b592ab6b8ff18e4
+
+// 定义场景接口
+interface Scene {
+  sceneId: string;
+  imagePath: string;
+  hotspots?: HotSpot[];
+}
 
 // Define types
 type SectionState = {
@@ -189,73 +147,57 @@ type SectionState = {
   info: boolean;
   help: boolean;
   about: boolean;
-  [key: string]: boolean; // Index signature for dynamic access
+  [key: string]: boolean;
 };
 
-// 定义热点数据
-const hotspots = [
+// 定义场景数据
+const scenes: Scene[] = [
   {
-    id: '1',
-    longitude: 0.24,
-    latitude: -0.72,
-    icon: "/icons/arrow_hotspot.png",
-    title: '图书馆',
-    description: '这是图书馆的位置',
-    onClick: (params: any) => {
-      console.log('图书馆热点被点击', params);
-      // 显示提示框
-      ElMessage({
-        message: '您点击了图书馆热点',
-        type: 'info',
-        duration: 3000
-      });
-    },
-    params: {
-      sceneId: 'library',
-      transition: 'fade'
-    }
+    sceneId: "1",
+    imagePath: "/images/panorama.jpg",
+    hotspots: [
+      {
+        id: '2',
+        type: 'scene',
+        longitude: 0.24,
+        latitude: -0.72,
+        icon: "/icons/arrow_hotspot.png",
+        title: '图书馆',
+        description: '这是图书馆的位置',
+        targetSceneId: "2"
+      }
+    ]
   },
-  // {
-  //   id: '2',
-  //   longitude: 90,
-  //   latitude: 25,
-  //   title: '教学楼A',
-  //   description: '这是教学楼A的位置',
-  //   onClick: (params: any) => {
-  //     console.log('教学楼A热点被点击', params);
-  //     // 显示提示框
-  //     ElMessage({
-  //       message: '您点击了教学楼A热点',
-  //       type: 'info',
-  //       duration: 3000
-  //     });
-  //   },
-  //   params: {
-  //     sceneId: 'jxl',
-  //     transition: 'fade'
-  //   }
-  // },
-  // {
-  //   id: '3',
-  //   longitude: -120,
-  //   latitude: -20,
-  //   title: '体育馆',
-  //   description: '这是体育馆的位置',
-  //   onClick: (params: any) => {
-  //     console.log('体育馆热点被点击', params);
-  //     // 显示提示框
-  //     ElMessage({
-  //       message: '您点击了体育馆热点',
-  //       type: 'info',
-  //       duration: 3000
-  //     });
-  //   },
-  //   params: {
-  //     sceneId: 'gym',
-  //     transition: 'fade'
-  //   }
-  // },
+
+  {
+    sceneId: "2",
+    imagePath: "/images/p1.jpg",
+    hotspots: [
+      {
+        id: '2',
+        type: 'scene',
+        longitude: 8,
+        latitude: -8,
+        icon: "/icons/arrow_hotspot.png",
+        title: '图书馆',
+        description: '这是图书馆的位置',
+        targetSceneId: "1"
+      }
+    ]
+  },
 ];
+
+const panoramaViewer = ref();
+
+// 处理场景切换事件
+const handleSceneChange = (index: number) => {
+  console.log('场景已切换到:', index);
+  ElMessage({
+    message: `已切换到场景 ${index + 1}`,
+    type: 'info',
+    duration: 2000
+  });
+};
 
 const router = useRouter();
 const userID = ref('0');
@@ -309,7 +251,6 @@ const logout = () => {
   router.push('/login');
 };
 
-<<<<<<< HEAD
 const navigateTo = (location: string) => {
   // 暂时不设置全景图ID和不执行导航操作
   sidebarVisible.value = false;
@@ -419,8 +360,17 @@ const fetchMessages = async () => {
   }
 };
 
-=======
->>>>>>> b0c05043a9ffb8a5a5ade7037b592ab6b8ff18e4
+// 显示当前场景ID
+const showCurrentSceneId = () => {
+  const currentSceneId = panoramaViewer.value?.getCurrentSceneId();
+  ElMessage({
+    message: `当前场景ID: ${currentSceneId}`,
+    type: 'info',
+    duration: 3000
+  });
+  console.log('当前场景ID:', currentSceneId);
+};
+
 onMounted(() => {
   checkLoginStatus();
   fetchMessages();
@@ -799,5 +749,12 @@ body, html, #app {
   to {
     transform: translateX(-100vw);
   }
+
+/* 调试按钮样式 */
+.debug-btn {
+  position: absolute;
+  bottom: 40px;
+  left: 15px;
+  z-index: 10;
 }
 </style>
