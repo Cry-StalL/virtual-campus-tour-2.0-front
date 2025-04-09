@@ -165,6 +165,8 @@ const createHotspot = (hotspot: HotSpot) => {
     
     // 添加热点数据
     (sprite as any).hotspotData = hotspot;
+    // 添加热点类名
+    (sprite as any).userData = { class: 'hotspot' };
     
     // 添加到场景
     scene.add(sprite);
@@ -188,6 +190,8 @@ const createHotspot = (hotspot: HotSpot) => {
     
     // 添加热点数据
     (hotspotMesh as any).hotspotData = hotspot;
+    // 添加热点类名
+    (hotspotMesh as any).userData = { class: 'hotspot' };
     
     // 添加到场景
     scene.add(hotspotMesh);
@@ -327,6 +331,8 @@ const handleSceneClick = (event: MouseEvent) => {
   if (hotspotIntersects.length > 0) {
     const hotspotData = (hotspotIntersects[0].object as any).hotspotData as HotSpot;
     handleHotspotClick(hotspotData);
+    // 点击后立即重置光标样式
+    renderer.domElement.style.cursor = 'default';
     return;
   }
 
@@ -368,6 +374,27 @@ const handleSceneClick = (event: MouseEvent) => {
   }
 };
 
+// 添加鼠标移动事件处理
+const handleMouseMove = (event: MouseEvent) => {
+  if (!camera || !renderer || !scene) return;
+
+  // 计算归一化的设备坐标
+  const mouse = new THREE.Vector2();
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(mouse, camera);
+
+  // 检查是否悬停在热点上
+  const hotspotIntersects = raycaster.intersectObjects(hotspotObjects);
+  // 只有当鼠标移动时才更新光标样式
+  if (event.type === 'mousemove') {
+    renderer.domElement.style.cursor = hotspotIntersects.length > 0 ? 'pointer' : 'default';
+  }
+};
+
 // 初始化全景图
 const initPanorama = () => {
   if (!viewerContainer.value) return;
@@ -393,6 +420,8 @@ const initPanorama = () => {
   // 创建渲染器
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
+  // 设置渲染器的CSS样式
+  renderer.domElement.style.cursor = 'default';
   viewerContainer.value.appendChild(renderer.domElement);
   
   // 添加控制器
@@ -469,6 +498,8 @@ const onWindowResize = () => {
 
 onMounted(() => {
   initPanorama();
+  // 添加鼠标移动事件监听
+  viewerContainer.value?.addEventListener('mousemove', handleMouseMove);
 });
 
 onBeforeUnmount(() => {
@@ -478,6 +509,7 @@ onBeforeUnmount(() => {
   if (viewerContainer.value) {
     viewerContainer.value.removeEventListener('wheel', onMouseWheel);
     viewerContainer.value.removeEventListener('click', handleSceneClick);
+    viewerContainer.value.removeEventListener('mousemove', handleMouseMove);
   }
   
   if (renderer && viewerContainer.value) {
@@ -519,6 +551,10 @@ defineExpose({
   height: 100%;
   border-radius: 0;
   overflow: hidden;
+}
+
+#panorama-viewer :deep(.hotspot) {
+  cursor: pointer;
 }
 
 .error-overlay {

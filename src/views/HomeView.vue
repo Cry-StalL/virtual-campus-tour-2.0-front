@@ -117,8 +117,8 @@ const scenes: Scene[] = [
       {
         id: '2',
         type: 'scene',
-        longitude: 0.24,
-        latitude: -0.72,
+        longitude: 8,
+        latitude: -8,
         icon: "/icons/arrow_hotspot.png",
         title: '图书馆',
         description: '这是图书馆的位置',
