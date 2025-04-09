@@ -189,14 +189,14 @@
             .then(response => {
               if (response.data.code === 0) {
                 this.$message({
-                  message: response.data.message || "注册成功！",
+                  message: "注册成功！",
                   type: "success",
                 });
                 // 注册成功后跳转到登录页
                 this.$router.push('/login');
               } else {
                 this.$message({
-                  message: response.data.message || "注册失败",
+                  message: "注册失败",
                   type: "error",
                 });
               }

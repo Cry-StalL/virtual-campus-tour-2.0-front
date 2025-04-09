@@ -32,7 +32,6 @@
           <el-button
             type="primary"
             @click="submitForm('ruleForm')"
-            v-loading="loading"
             >登录</el-button
           >
           <router-link to="/">
@@ -139,13 +138,13 @@
 
 
                 this.$message({
-                  message: response.data.message || "登录成功！",
+                  message: "登录成功！",
                   type: "success",
                 });
                 this.$router.push('/');
               } else {
                 this.$message({
-                  message: response.data.message || "登录失败",
+                  message: "登录失败",
                   type: "error",
                 });
               }
