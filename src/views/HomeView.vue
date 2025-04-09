@@ -748,6 +748,7 @@ body, html, #app {
   to {
     transform: translateX(-100vw);
   }
+}
 
 /* 调试按钮样式 */
 .debug-btn {
