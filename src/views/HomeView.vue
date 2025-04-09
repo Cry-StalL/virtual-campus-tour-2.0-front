@@ -189,7 +189,7 @@ const logout = () => {
   // 清除用户Cookie
   Cookies.set('userId', '0', { expires: 1 });
   Cookies.set('username', '', { expires: 1 });
-  Cookies.set('emial', '', { expires: 1 });
+  Cookies.set('email', '', { expires: 1 });
 
   userID.value = '0';
   username.value = '';
