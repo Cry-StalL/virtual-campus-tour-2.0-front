@@ -1,23 +1,32 @@
 <template>
   <div class="panorama-container">
-    <div id="panorama-viewer" ref="viewerContainer"></div>
+    <div v-if="!errorMessage" id="panorama-viewer" ref="viewerContainer"></div>
+    <div v-else class="error-overlay">
+      <div class="error-content">
+        <el-icon class="error-icon"><Warning /></el-icon>
+        <div class="error-message">{{ errorMessage }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { ElMessage } from 'element-plus';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { ElMessage, ElIcon } from 'element-plus';
+import { Warning } from '@element-plus/icons-vue';
 
-// 定义事件 TODO
+// 定义事件
 const emit = defineEmits<{
-  (e: 'hotspotClick', hotspot: HotSpot): void
+  (e: 'hotspotClick', hotspot: HotSpot): void;
+  (e: 'sceneChange', index: number): void;
+  (e: 'error', message: string): void;
 }>();
 
 // 定义组件的props
 interface Props {
-  imagePath: string; // 全景图路径
+  scenes: Scene[]; // 场景数组
   initialFov?: number; // 初始视场角
   minFov?: number; // 最小视场角
   maxFov?: number; // 最大视场角
@@ -25,18 +34,26 @@ interface Props {
   zoomSpeed?: number; // 缩放速度
   dampingFactor?: number; // 阻尼系数
   fovDampingFactor?: number; // FOV阻尼系数
-  hotspots?: HotSpot[]; // 热点数组
   debug?: boolean; // debug模式
+}
+
+// 定义场景接口
+interface Scene {
+  sceneId: string;     // 场景唯一标识符
+  imagePath: string;   // 全景图片的路径
+  hotspots?: HotSpot[]; // 热点数组
 }
 
 // 定义热点接口
 interface HotSpot {
   id: string;
-  longitude: number; // 经度 (-180 到 180)
-  latitude: number;  // 纬度 (-90 到 90)
-  icon?: string;     // 图标路径
-  title?: string;    // 标题
+  type: string;        // 热点类型
+  longitude: number;   // 经度 (-180 到 180)
+  latitude: number;    // 纬度 (-90 到 90)
+  icon?: string;       // 图标路径
+  title?: string;      // 标题
   description?: string; // 描述
+  targetSceneId?: string; // 目标场景ID（当type为"scene"时必填）
   onClick?: (params?: any) => void; // 点击处理函数
   onClickParams?: any; // 传递给点击处理函数的参数
 }
@@ -49,7 +66,6 @@ const props = withDefaults(defineProps<Props>(), {
   zoomSpeed: 2.0,
   dampingFactor: 0.1,
   fovDampingFactor: 0.1,
-  hotspots: () => [],
   debug: false
 });
 
@@ -62,6 +78,11 @@ let isAnimating = false;
 let targetFov = props.initialFov;
 let currentFov = props.initialFov;
 let hotspotObjects: THREE.Mesh[] = []; // 存储热点对象的数组
+let currentSceneIndex = 0; // 当前场景索引
+let currentSceneId = ref<string>(''); // 当前场景ID
+let currentSphere: THREE.Mesh | null = null; // 当前全景球体
+const errorMessage = ref<string>(''); // 错误消息
+let errorTimeout: number | null = null; // 错误消息定时器
 
 // 将经纬度转换为3D坐标
 const latLonToVector3 = (lat: number, lon: number, radius: number): THREE.Vector3 => {
@@ -75,11 +96,56 @@ const latLonToVector3 = (lat: number, lon: number, radius: number): THREE.Vector
   return new THREE.Vector3(x, y, z);
 };
 
+// 验证场景ID是否重复
+const validateSceneIds = () => {
+  const sceneIds = new Set<string>();
+  for (const scene of props.scenes) {
+    if (sceneIds.has(scene.sceneId)) {
+      showError(`场景ID重复: ${scene.sceneId}`);
+      return false;
+    }
+    sceneIds.add(scene.sceneId);
+  }
+  return true;
+};
+
+// 验证热点配置
+const validateHotspot = (hotspot: HotSpot): boolean => {
+  if (hotspot.type === 'scene') {
+    if (!hotspot.targetSceneId) {
+      showError(`热点配置错误: 热点ID "${hotspot.id}" 的类型为 "scene"，但未提供 targetSceneId`);
+      return false;
+    }
+    
+    const targetSceneExists = props.scenes.some(scene => scene.sceneId === hotspot.targetSceneId);
+    if (!targetSceneExists) {
+      showError(`热点配置错误: 热点ID "${hotspot.id}" 的目标场景 "${hotspot.targetSceneId}" 不存在`);
+      return false;
+    }
+  } else {
+    showError(`热点配置错误: 热点ID "${hotspot.id}" 的类型 "${hotspot.type}" 未知`);
+    return false;
+  }
+  
+  return true;
+};
+
+// 处理热点点击
+const handleHotspotClick = (hotspot: HotSpot) => {
+  if (!validateHotspot(hotspot)) {
+    return;
+  }
+
+  if (hotspot.type === 'scene' && hotspot.targetSceneId) {
+    switchScene(hotspot.targetSceneId);
+  }
+};
+
 // 创建热点
 const createHotspot = (hotspot: HotSpot) => {
-  if (!scene) return;
+  if (!scene || !validateHotspot(hotspot)) return;
   
-  let material: THREE.Material;
+  let material: THREE.SpriteMaterial | THREE.MeshBasicMaterial;
   
   if (hotspot.icon) {
     // 使用图标作为热点
@@ -91,7 +157,7 @@ const createHotspot = (hotspot: HotSpot) => {
       depthTest: false
     });
     
-    const sprite = new THREE.Sprite(material);
+    const sprite = new THREE.Sprite(material as THREE.SpriteMaterial);
     sprite.scale.set(20, 20, 1);
     
     // 设置热点位置
@@ -100,6 +166,8 @@ const createHotspot = (hotspot: HotSpot) => {
     
     // 添加热点数据
     (sprite as any).hotspotData = hotspot;
+    // 添加热点类名
+    (sprite as any).userData = { class: 'hotspot' };
     
     // 添加到场景
     scene.add(sprite);
@@ -123,6 +191,8 @@ const createHotspot = (hotspot: HotSpot) => {
     
     // 添加热点数据
     (hotspotMesh as any).hotspotData = hotspot;
+    // 添加热点类名
+    (hotspotMesh as any).userData = { class: 'hotspot' };
     
     // 添加到场景
     scene.add(hotspotMesh);
@@ -132,9 +202,57 @@ const createHotspot = (hotspot: HotSpot) => {
   }
 };
 
-// 初始化所有热点
-const initHotspots = () => {
+// 显示错误信息
+const showError = (message: string) => {
+  errorMessage.value = message;
+  emit('error', message);
+  
+  // 停止动画循环
+  isAnimating = false;
+};
+
+// 隐藏错误信息
+const hideError = () => {
+  errorMessage.value = '';
+  
+  // 重新开始动画循环
+  if (scene && camera && renderer) {
+    isAnimating = true;
+    animate();
+  }
+};
+
+// 切换场景
+const switchScene = (target: number | string) => {
   if (!scene) return;
+  
+  let targetIndex: number;
+  
+  if (typeof target === 'string') {
+    // 通过场景ID查找索引
+    targetIndex = props.scenes.findIndex(s => s.sceneId === target);
+    if (targetIndex === -1) {
+      showError(`未找到场景ID: ${target}`);
+      return;
+    }
+  } else {
+    // 直接使用索引
+    targetIndex = target;
+    if (targetIndex < 0 || targetIndex >= props.scenes.length) {
+      showError(`场景索引超出范围: ${targetIndex}`);
+      return;
+    }
+  }
+  
+  currentSceneIndex = targetIndex;
+  const newScene = props.scenes[targetIndex];
+  currentSceneId.value = newScene.sceneId;
+  
+  // 移除当前全景球体
+  if (currentSphere) {
+    scene.remove(currentSphere);
+    currentSphere = null;
+  }
   
   // 清除现有热点
   hotspotObjects.forEach(obj => {
@@ -142,11 +260,50 @@ const initHotspots = () => {
   });
   hotspotObjects = [];
   
-  // 创建新热点
-  props.hotspots.forEach(hotspot => {
-    createHotspot(hotspot);
-  });
+  // 加载新场景的全景图
+  const textureLoader = new THREE.TextureLoader();
+  textureLoader.load(
+    newScene.imagePath,
+    (texture: THREE.Texture) => {
+      const geometry = new THREE.SphereGeometry(500, 60, 40);
+      geometry.scale(-1, 1, 1);
+      
+      const material = new THREE.MeshBasicMaterial({
+        map: texture
+      });
+      
+      currentSphere = new THREE.Mesh(geometry, material);
+      scene?.add(currentSphere);
+      
+      // 初始化热点
+      if (newScene.hotspots) {
+        newScene.hotspots.forEach(hotspot => {
+          createHotspot(hotspot);
+        });
+      }
+      
+      // 触发场景切换事件
+      emit('sceneChange', targetIndex);
+    },
+    undefined,
+    (err: unknown) => {
+      const errorMessage = err instanceof Error ? err.message : '未知错误';
+      showError(`加载场景图片失败: ${errorMessage}`);
+    }
+  );
 };
+
+// 获取当前场景ID
+const getCurrentSceneId = (): string => {
+  return currentSceneId.value;
+};
+
+// 监听场景数组变化
+watch(() => props.scenes, () => {
+  if (!validateSceneIds()) {
+    return;
+  }
+}, { deep: true });
 
 // 将3D坐标转换为经纬度
 const vector3ToLatLon = (point: THREE.Vector3): { longitude: number; latitude: number } => {
@@ -180,10 +337,9 @@ const handleSceneClick = (event: MouseEvent) => {
   const hotspotIntersects = raycaster.intersectObjects(hotspotObjects);
   if (hotspotIntersects.length > 0) {
     const hotspotData = (hotspotIntersects[0].object as any).hotspotData as HotSpot;
-    emit('hotspotClick', hotspotData);
-    if (hotspotData.onClick) {
-      hotspotData.onClick(hotspotData.onClickParams);
-    }
+    handleHotspotClick(hotspotData);
+    // 点击后立即重置光标样式
+    renderer.domElement.style.cursor = 'default';
     return;
   }
 
@@ -225,8 +381,35 @@ const handleSceneClick = (event: MouseEvent) => {
   }
 };
 
+// 添加鼠标移动事件处理
+const handleMouseMove = (event: MouseEvent) => {
+  if (!camera || !renderer || !scene) return;
+
+  // 计算归一化的设备坐标
+  const mouse = new THREE.Vector2();
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(mouse, camera);
+
+  // 检查是否悬停在热点上
+  const hotspotIntersects = raycaster.intersectObjects(hotspotObjects);
+  // 只有当鼠标移动时才更新光标样式
+  if (event.type === 'mousemove') {
+    renderer.domElement.style.cursor = hotspotIntersects.length > 0 ? 'pointer' : 'default';
+  }
+};
+
+// 初始化全景图
 const initPanorama = () => {
   if (!viewerContainer.value) return;
+  
+  // 验证场景ID
+  if (!validateSceneIds()) {
+    return;
+  }
   
   // 创建场景
   scene = new THREE.Scene();
@@ -244,6 +427,8 @@ const initPanorama = () => {
   // 创建渲染器
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
+  // 设置渲染器的CSS样式
+  renderer.domElement.style.cursor = 'default';
   viewerContainer.value.appendChild(renderer.domElement);
   
   // 添加控制器
@@ -263,27 +448,16 @@ const initPanorama = () => {
   // 添加热点点击事件监听
   viewerContainer.value?.addEventListener('click', handleSceneClick);
   
-  // 加载全景图
-  const textureLoader = new THREE.TextureLoader();
-  textureLoader.load(props.imagePath, (texture) => {
-    const geometry = new THREE.SphereGeometry(500, 60, 40);
-    geometry.scale(-1, 1, 1);
-    
-    const material = new THREE.MeshBasicMaterial({
-      map: texture
-    });
-    
-    const sphere = new THREE.Mesh(geometry, material);
-    scene?.add(sphere);
-    
-    // 初始化热点
-    initHotspots();
-    
-    animate();
-  });
+  // 加载第一个场景
+  if (props.scenes.length > 0) {
+    currentSceneId.value = props.scenes[0].sceneId;
+    switchScene(0);
+  }
   
   // 添加窗口大小变化监听
   window.addEventListener('resize', onWindowResize);
+  
+  animate();
 };
 
 // 处理鼠标滚轮事件
@@ -332,6 +506,8 @@ const onWindowResize = () => {
 
 onMounted(() => {
   initPanorama();
+  // 添加鼠标移动事件监听
+  viewerContainer.value?.addEventListener('mousemove', handleMouseMove);
 });
 
 onBeforeUnmount(() => {
@@ -341,6 +517,7 @@ onBeforeUnmount(() => {
   if (viewerContainer.value) {
     viewerContainer.value.removeEventListener('wheel', onMouseWheel);
     viewerContainer.value.removeEventListener('click', handleSceneClick);
+    viewerContainer.value.removeEventListener('mousemove', handleMouseMove);
   }
   
   if (renderer && viewerContainer.value) {
@@ -352,6 +529,14 @@ onBeforeUnmount(() => {
   camera = null;
   renderer = null;
   controls = null;
+});
+
+// 暴露方法
+defineExpose({
+  switchScene,
+  showError,
+  hideError,
+  getCurrentSceneId
 });
 </script>
 
@@ -375,5 +560,43 @@ onBeforeUnmount(() => {
   height: 100%;
   border-radius: 0;
   overflow: hidden;
+}
+
+#panorama-viewer :deep(.hotspot) {
+  cursor: pointer;
+}
+
+.error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.error-content {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 80%;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.error-icon {
+  font-size: 48px;
+  color: #F56C6C;
+  margin-bottom: 20px;
+}
+
+.error-message {
+  font-size: 18px;
+  color: #303133;
+  word-break: break-word;
 }
 </style>

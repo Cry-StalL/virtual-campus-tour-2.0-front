@@ -3,10 +3,19 @@
     <div class="content">
       <!-- 全景导览的主要内容 -->
       <PanoramaViewer 
-        imagePath="/images/panorama.jpg"
-        :hotspots="hotspots"
+        :scenes="scenes"
+        @sceneChange="handleSceneChange"
+        ref="panoramaViewer"
       />
     </div>
+
+    <!-- 调试按钮 -->
+    <el-button 
+      class="debug-btn"  
+      size="small" 
+      @click="showCurrentSceneId">
+      调试按钮: 显示当前场景ID
+    </el-button>
 
     <!-- 侧边栏切换按钮 -->
     <div class="toggle-btn" @click="toggleSidebar">
@@ -60,16 +69,25 @@ import PanoramaViewer from '../components/PanoramaViewer.vue';
 import Sidebar from '../components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
 
-// 导入HotSpot接口类型 TODO
+// 导入HotSpot接口类型
 interface HotSpot {
   id: string;
+  type: string;        // 热点类型
   longitude: number;
   latitude: number;
   icon?: string;
   title?: string;
   description?: string;
+  targetSceneId?: string; // 目标场景ID（当type为"scene"时必填）
   onClick?: (params?: any) => void;
   params?: any;
+}
+
+// 定义场景接口
+interface Scene {
+  sceneId: string;
+  imagePath: string;
+  hotspots?: HotSpot[];
 }
 
 // Define types
@@ -78,73 +96,57 @@ type SectionState = {
   info: boolean;
   help: boolean;
   about: boolean;
-  [key: string]: boolean; // Index signature for dynamic access
+  [key: string]: boolean;
 };
 
-// 定义热点数据
-const hotspots = [
+// 定义场景数据
+const scenes: Scene[] = [
   {
-    id: '1',
-    longitude: 0.24,
-    latitude: -0.72,
-    icon: "/icons/arrow_hotspot.png",
-    title: '图书馆',
-    description: '这是图书馆的位置',
-    onClick: (params: any) => {
-      console.log('图书馆热点被点击', params);
-      // 显示提示框
-      ElMessage({
-        message: '您点击了图书馆热点',
-        type: 'info',
-        duration: 3000
-      });
-    },
-    params: {
-      sceneId: 'library',
-      transition: 'fade'
-    }
+    sceneId: "1",
+    imagePath: "/images/panorama.jpg",
+    hotspots: [
+      {
+        id: '2',
+        type: 'scene',
+        longitude: 0.24,
+        latitude: -0.72,
+        icon: "/icons/arrow_hotspot.png",
+        title: '图书馆',
+        description: '这是图书馆的位置',
+        targetSceneId: "2"
+      }
+    ]
   },
-  // {
-  //   id: '2',
-  //   longitude: 90,
-  //   latitude: 25,
-  //   title: '教学楼A',
-  //   description: '这是教学楼A的位置',
-  //   onClick: (params: any) => {
-  //     console.log('教学楼A热点被点击', params);
-  //     // 显示提示框
-  //     ElMessage({
-  //       message: '您点击了教学楼A热点',
-  //       type: 'info',
-  //       duration: 3000
-  //     });
-  //   },
-  //   params: {
-  //     sceneId: 'jxl',
-  //     transition: 'fade'
-  //   }
-  // },
-  // {
-  //   id: '3',
-  //   longitude: -120,
-  //   latitude: -20,
-  //   title: '体育馆',
-  //   description: '这是体育馆的位置',
-  //   onClick: (params: any) => {
-  //     console.log('体育馆热点被点击', params);
-  //     // 显示提示框
-  //     ElMessage({
-  //       message: '您点击了体育馆热点',
-  //       type: 'info',
-  //       duration: 3000
-  //     });
-  //   },
-  //   params: {
-  //     sceneId: 'gym',
-  //     transition: 'fade'
-  //   }
-  // },
+
+  {
+    sceneId: "2",
+    imagePath: "/images/p1.jpg",
+    hotspots: [
+      {
+        id: '2',
+        type: 'scene',
+        longitude: 8,
+        latitude: -8,
+        icon: "/icons/arrow_hotspot.png",
+        title: '图书馆',
+        description: '这是图书馆的位置',
+        targetSceneId: "1"
+      }
+    ]
+  },
 ];
+
+const panoramaViewer = ref();
+
+// 处理场景切换事件
+const handleSceneChange = (index: number) => {
+  console.log('场景已切换到:', index);
+  ElMessage({
+    message: `已切换到场景 ${index + 1}`,
+    type: 'info',
+    duration: 2000
+  });
+};
 
 const router = useRouter();
 const userID = ref('0');
@@ -195,6 +197,17 @@ const logout = () => {
   username.value = '';
   
   router.push('/login');
+};
+
+// 显示当前场景ID
+const showCurrentSceneId = () => {
+  const currentSceneId = panoramaViewer.value?.getCurrentSceneId();
+  ElMessage({
+    message: `当前场景ID: ${currentSceneId}`,
+    type: 'info',
+    duration: 3000
+  });
+  console.log('当前场景ID:', currentSceneId);
 };
 
 onMounted(() => {
@@ -407,5 +420,13 @@ body, html, #app {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* 调试按钮样式 */
+.debug-btn {
+  position: absolute;
+  bottom: 40px;
+  left: 15px;
+  z-index: 10;
 }
 </style>
