@@ -29,6 +29,7 @@
 
     <!-- 调试按钮 -->
     <el-button 
+      v-if="config.debug.enabled"
       class="debug-btn"  
       size="small" 
       @click="showCurrentSceneId">
@@ -118,6 +119,7 @@ import PanoramaViewer from '../components/PanoramaViewer.vue';
 import axios from 'axios';
 import Sidebar from '../components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
+import { config } from '../config/config';
 
 // 导入HotSpot接口类型
 interface HotSpot {
