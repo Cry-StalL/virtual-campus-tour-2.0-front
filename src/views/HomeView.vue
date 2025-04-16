@@ -19,16 +19,13 @@
         </div>
       </div>
 
-      <PanoramaViewer 
-        :scenes="scenes"
-        @sceneChange="handleSceneChange"
-        ref="panoramaViewer"
-      />
+      <PanoramaViewerGroup :viewers="viewers" ref="viewerGroup" initialViewerName="street"/>
 
     </div>
 
     <!-- 调试按钮 -->
     <el-button 
+      v-if="config.debug.enabled"
       class="debug-btn"  
       size="small" 
       @click="showCurrentSceneId">
@@ -124,14 +121,17 @@ import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
-import PanoramaViewer from '../components/PanoramaViewer.vue';
+import PanoramaViewerGroup from '@/components/base-components/PanoramaViewerGroup.vue';
 import axios from 'axios';
-import Sidebar from '../components/Sidebar.vue';
+import Sidebar from '@/components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
+import { config } from '@/config/config';
+import StreetViewer from '@/components/StreetViewer.vue';
+import SceneViewer from '@/components/SceneViewer.vue';
 
 // 导入HotSpot接口类型
 interface HotSpot {
-  id: string;
+  id?: string;
   type: string;        // 热点类型
   longitude: number;
   latitude: number;
@@ -166,7 +166,6 @@ const scenes: Scene[] = [
     imagePath: "/images/panorama.jpg",
     hotspots: [
       {
-        id: '2',
         type: 'scene',
         longitude: 0.24,
         latitude: -0.72,
@@ -174,6 +173,15 @@ const scenes: Scene[] = [
         title: '图书馆',
         description: '这是图书馆的位置',
         targetSceneId: "2"
+      },
+
+      {
+        type: 'custom',
+        longitude: 10.24,
+        latitude: 10.72,
+        icon: "/icons/scene_hotspot.png",
+        title: '图书馆',
+        description: '这是图书馆的位置',
       }
     ]
   },
@@ -183,7 +191,6 @@ const scenes: Scene[] = [
     imagePath: "/images/p1.jpg",
     hotspots: [
       {
-        id: '2',
         type: 'scene',
         longitude: 8,
         latitude: -8,
@@ -191,12 +198,19 @@ const scenes: Scene[] = [
         title: '图书馆',
         description: '这是图书馆的位置',
         targetSceneId: "1"
+      },
+
+      {
+        type: 'custom',
+        longitude: -10.24,
+        latitude: -10.72,
+        icon: "/icons/scene_hotspot.png",
       }
     ]
   },
 ];
 
-const panoramaViewer = ref();
+const viewerGroup = ref();
 
 // 处理场景切换事件
 const handleSceneChange = (index: number) => {
@@ -448,7 +462,7 @@ const fetchMessages = async () => {
 
 // 显示当前场景ID
 const showCurrentSceneId = () => {
-  const currentSceneId = panoramaViewer.value?.getCurrentSceneId();
+  const currentSceneId = viewerGroup.value?.getCurrentSceneId();
   ElMessage({
     message: `当前场景ID: ${currentSceneId}`,
     type: 'info',
@@ -457,6 +471,10 @@ const showCurrentSceneId = () => {
   console.log('当前场景ID:', currentSceneId);
 };
 
+const viewers = [
+  { name: 'street', component: StreetViewer },
+  { name: 'scene', component: SceneViewer }
+];
 
 onMounted(() => {
   checkLoginStatus();
