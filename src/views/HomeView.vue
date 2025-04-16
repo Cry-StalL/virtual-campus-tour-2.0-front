@@ -11,7 +11,7 @@
           class="danmaku-item"
           :style="{
             top: `${message.top}%`,
-            animationDuration: `${message.duration}s`,
+            '--duration': `${message.duration}s`,
             color: message.color
           }"
         >
@@ -77,7 +77,7 @@
     </div>
 
     <!-- 留言按钮 -->
-    <div class="message-button" @click="showMessageDialog = true">
+    <div class="message-button" @click="openMessageDialog">
       <el-icon><ChatDotRound /></el-icon>
     </div>
 
@@ -87,7 +87,15 @@
       width="500px"
       :close-on-click-modal="false"
       class="message-dialog"
+      top="40vh"
+      destroy-on-close
     >
+      <template #header>
+        <div class="dialog-header">
+          <el-icon style="color: #409EFF; font-size: 22px;"><ChatDotRound /></el-icon>
+          <span style="color: #409EFF; font-size: 18px; font-weight: 600;">发表留言</span>
+        </div>
+      </template>
       <el-form :model="messageForm">
         <el-form-item>
           <el-input
@@ -96,6 +104,8 @@
             :rows="4"
             placeholder="发个友善的留言吧！"
             class="message-input"
+            maxlength="50"
+            show-word-limit
           />  
         </el-form-item>
       </el-form>
@@ -110,7 +120,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
@@ -196,6 +206,9 @@ const handleSceneChange = (index: number) => {
     type: 'info',
     duration: 2000
   });
+  
+  // 场景切换后获取该场景的历史留言
+  fetchMessages();
 };
 
 const router = useRouter();
@@ -250,13 +263,6 @@ const logout = () => {
   router.push('/login');
 };
 
-const navigateTo = (location: string) => {
-  // 暂时不设置全景图ID和不执行导航操作
-  sidebarVisible.value = false;
-  // 仍然需要获取留言
-  fetchMessages();
-};
-
 const navigateToInfo = (type: string) => {
   console.log(`导航到实用信息: ${type}`);
   // 这里可以实现具体的导航逻辑
@@ -293,6 +299,69 @@ const messages = ref<Array<{
   duration: number;
   color: string;
 }>>([]);
+const allMessages = ref<Array<{
+  content: string;
+  userId?: string;
+  username?: string;
+  panoramaId?: string;
+}>>([]);
+const messageIntervalId = ref<number | null>(null);
+
+//打开留言框
+const openMessageDialog = () => {
+  if(isLoggedIn.value){
+    showMessageDialog.value = true;
+  }else{
+    ElMessage.warning('请先登录');
+  }
+};
+
+// 开始循环播放留言
+const startMessageCycle = () => {
+  // 清除可能存在的旧定时器
+  if (messageIntervalId.value) {
+    clearInterval(messageIntervalId.value);
+  }
+  
+  // 如果没有留言，不启动循环
+  if (allMessages.value.length === 0) {
+    return;
+  }
+  
+  // 每5秒显示一条留言
+  const cycleInterval = 5 * 1000;
+  let currentIndex = 0;
+  
+  // 只有当当前没有显示留言时，才立即显示第一条
+  if (messages.value.length === 0) {
+    displayMessage(currentIndex);
+  }
+  
+  // 设置定时器，每隔5秒显示下一条
+  messageIntervalId.value = window.setInterval(() => {
+    // 移动到下一条留言
+    currentIndex = (currentIndex + 1) % allMessages.value.length;
+    
+    displayMessage(currentIndex);
+  }, cycleInterval);
+};
+
+// 显示单条留言
+const displayMessage = (index: number) => {
+  if (index >= 0 && index < allMessages.value.length) {
+    const msg = allMessages.value[index];
+    
+    // 创建新的留言，确保从右侧飘入
+    setTimeout(() => {
+      messages.value.push({
+        content: msg.content,
+        top: Math.random() * 80,
+        duration: 15 + Math.random() * 5, // 稍微延长显示时间
+        color: getRandomColor()
+      });
+    }, 10); // 短暂延迟，确保动画正确触发
+  }
+};
 
 // 生成随机颜色
 const getRandomColor = () => {
@@ -309,25 +378,43 @@ const submitMessage = async () => {
     ElMessage.warning('请输入留言内容');
     return;
   }
-  
+
   try {
-    // 提交到后端，带上全景图ID
+    const currentSceneId = panoramaViewer.value?.getCurrentSceneId();
+    
     const response = await axios.post('http://localhost:8080/api/v1/users/messages', {
       content: messageForm.value.content,
       userId: userID.value,
       username: username.value,
-      panoramaId: currentPanoramaId.value
+      panoramaId: currentSceneId
     });
 
     if (response.data.success) {
-      // 添加新留言到弹幕列表
+      // 创建新留言对象
       const newMessage = {
         content: messageForm.value.content,
-        top: Math.random() * 80,
-        duration: 10 + Math.random() * 5,
-        color: getRandomColor()
+        userId: userID.value,
+        username: username.value,
+        panoramaId: currentSceneId
       };
-      messages.value.push(newMessage);
+      
+      // 添加到留言列表
+      allMessages.value.push(newMessage);
+      
+      // 立即显示新发表的留言
+      setTimeout(() => {
+        messages.value.push({
+          content: newMessage.content,
+          top: Math.random() * 80,
+          duration: 15 + Math.random() * 5,
+          color: getRandomColor()
+        });
+      }, 10);
+      
+      // 如果是第一条留言，启动循环
+      if (allMessages.value.length === 1) {
+        startMessageCycle();
+      }
       
       ElMessage.success('留言提交成功');
       showMessageDialog.value = false;
@@ -344,15 +431,15 @@ const submitMessage = async () => {
 // 获取历史留言
 const fetchMessages = async () => {
   try {
+    const currentSceneId = panoramaViewer.value?.getCurrentSceneId();
     // 获取当前全景图的留言
-    const response = await axios.get(`http://localhost:8080/api/v1/users/messages?panoramaId=${currentPanoramaId.value}`);
+    const response = await axios.get(`http://localhost:8080/api/v1/users/messages?panoramaId=${currentSceneId}`);
     if (response.data.success) {
-      messages.value = response.data.data.map((msg: any) => ({
-        content: msg.content,
-        top: Math.random() * 80,
-        duration: 10 + Math.random() * 5,
-        color: getRandomColor()
-      }));
+      // 保存所有留言
+      allMessages.value = response.data.data || [];
+      
+      // 重新启动循环播放
+      startMessageCycle();
     }
   } catch (error) {
     console.error('获取留言失败:', error);
@@ -370,9 +457,18 @@ const showCurrentSceneId = () => {
   console.log('当前场景ID:', currentSceneId);
 };
 
+
 onMounted(() => {
   checkLoginStatus();
   fetchMessages();
+});
+
+onBeforeUnmount(() => {
+  // 清除定时器，避免内存泄漏
+  if (messageIntervalId.value) {
+    clearInterval(messageIntervalId.value);
+    messageIntervalId.value = null;
+  }
 });
 </script>
 
@@ -588,27 +684,27 @@ body, html, #app {
   position: fixed;
   right: 30px;
   bottom: 30px;
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background-color: #409EFF;
+  background: linear-gradient(135deg, #409EFF 0%, #53a8ff 100%);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(64, 158, 255, 0.3);
   transition: all 0.3s ease;
   z-index: 1000;
 }
 
 .message-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+  transform: scale(1.08) translateY(-3px);
+  box-shadow: 0 6px 20px rgba(64, 158, 255, 0.4);
 }
 
 .message-button .el-icon {
-  font-size: 24px;
+  font-size: 26px;
 }
 
 /* 对话框样式 */
@@ -616,17 +712,21 @@ body, html, #app {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  margin-top: 10px;
 }
 
 :deep(.message-dialog) {
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 :deep(.message-dialog .el-dialog__header) {
   margin: 0;
   padding: 20px;
-  background: linear-gradient(135deg, #409EFF 0%, #53a8ff 100%);
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e5ec;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 :deep(.message-dialog .el-dialog__title) {
@@ -636,12 +736,14 @@ body, html, #app {
 }
 
 :deep(.message-dialog .el-dialog__body) {
-  padding: 30px;
+  padding: 30px 30px 20px;
+  background-color: #f8f9fa;
 }
 
 :deep(.message-dialog .el-dialog__footer) {
-  padding: 20px;
-  border-top: 1px solid #f0f0f0;
+  padding: 0 30px 25px;
+  background-color: #f8f9fa;
+  border-top: none;
 }
 
 .dialog-header {
@@ -650,70 +752,21 @@ body, html, #app {
   gap: 10px;
 }
 
-.dialog-icon {
-  font-size: 24px;
-  color: white;
-}
-
-:deep(.message-input .el-textarea__inner) {
-  min-height: 150px !important;
-  resize: none;
-  border-radius: 8px;
-  border: 1px solid #dcdfe6;
-  padding: 15px;
-  font-size: 16px;
-  line-height: 1.6;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-:deep(.message-input .el-textarea__inner:focus) {
-  border-color: #409EFF;
-  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
-}
-
-:deep(.message-input .el-textarea__inner::placeholder) {
-  color: #909399;
-  font-size: 14px;
-}
-
-.cancel-btn {
-  border-radius: 20px;
-  padding: 10px 25px;
-  font-weight: 500;
-  background-color: #f5f7fa;
-  border: 1px solid #dcdfe6;
-  color: #606266;
-  transition: all 0.3s ease;
-}
-
-.cancel-btn:hover {
-  background-color: #f0f2f5;
-  border-color: #c0c4cc;
+.dialog-header span {
   color: #303133;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
-.submit-btn {
-  border-radius: 20px;
-  padding: 10px 25px;
-  font-weight: 500;
-  background: linear-gradient(135deg, #409EFF 0%, #53a8ff 100%);
-  border: none;
-  transition: all 0.3s ease;
-}
-
-.submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+.dialog-icon {
+  font-size: 22px;
+  color: #409EFF;
 }
 
 :deep(.el-dialog__close) {
-  color: white;
+  color: #606266;
   font-size: 18px;
-}
-
-:deep(.el-dialog__close:hover) {
-  color: #f0f0f0;
 }
 
 /* 弹幕样式 */
@@ -725,28 +778,32 @@ body, html, #app {
   height: 100%;
   pointer-events: none;
   overflow: hidden;
+  z-index: 50;
 }
 
 .danmaku-item {
   position: absolute;
-  right: -200px;
+  right: 0; /* Start position at the right edge */
   white-space: nowrap;
-  font-size: 16px;
-  font-weight: 500;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-  animation: danmaku linear;
-  padding: 4px 8px;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 12px;
+  font-size: 20px;
+  font-weight: 600;
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+  animation: danmaku linear forwards;
+  animation-duration: var(--duration, 15s);
+  padding: 6px 12px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
   backdrop-filter: blur(4px);
+  z-index: 100;
+  transform: translateX(100%); /* Start off-screen */
 }
 
 @keyframes danmaku {
   from {
-    transform: translateX(0);
+    transform: translateX(100%); /* Start off-screen to the right */
   }
   to {
-    transform: translateX(-100vw);
+    transform: translateX(-100vw); /* Move left beyond the viewport */
   }
 }
 
@@ -757,4 +814,6 @@ body, html, #app {
   left: 15px;
   z-index: 10;
 }
+
+
 </style>
