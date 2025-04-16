@@ -123,7 +123,7 @@ import { config } from '../config/config';
 
 // 导入HotSpot接口类型
 interface HotSpot {
-  id: string;
+  id?: string;
   type: string;        // 热点类型
   longitude: number;
   latitude: number;
@@ -158,7 +158,6 @@ const scenes: Scene[] = [
     imagePath: "/images/panorama.jpg",
     hotspots: [
       {
-        id: '2',
         type: 'scene',
         longitude: 0.24,
         latitude: -0.72,
@@ -166,6 +165,15 @@ const scenes: Scene[] = [
         title: '图书馆',
         description: '这是图书馆的位置',
         targetSceneId: "2"
+      },
+
+      {
+        type: 'custom',
+        longitude: 10.24,
+        latitude: 10.72,
+        icon: "/icons/scene_hotspot.png",
+        title: '图书馆',
+        description: '这是图书馆的位置',
       }
     ]
   },
@@ -175,7 +183,6 @@ const scenes: Scene[] = [
     imagePath: "/images/p1.jpg",
     hotspots: [
       {
-        id: '2',
         type: 'scene',
         longitude: 8,
         latitude: -8,
@@ -183,6 +190,13 @@ const scenes: Scene[] = [
         title: '图书馆',
         description: '这是图书馆的位置',
         targetSceneId: "1"
+      },
+
+      {
+        type: 'custom',
+        longitude: -10.24,
+        latitude: -10.72,
+        icon: "/icons/scene_hotspot.png",
       }
     ]
   },

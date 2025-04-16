@@ -122,11 +122,16 @@ interface HotSpot {
 - `"scene"`: 场景切换热点，点击后切换到指定场景
   - 必须提供 `targetSceneId` 参数，指定要切换到的场景ID
   - 如果未提供 `targetSceneId` 或目标场景不存在，会显示错误信息
+- `"custom"`: 自定义热点，没有预设逻辑，完全依赖用户自定义的点击处理函数
+  - 可以提供 `onClick` 处理函数，用于处理点击事件
+  - 可以提供 `onClickParams` 参数，在点击时传递给处理函数
+  - 点击时会触发 `hotspotClick` 事件，并传递整个热点对象
 
 #### 使用示例
 
 ```typescript
 const hotspots = [
+  // 场景切换热点
   {
     id: '1',
     type: 'scene',
@@ -136,6 +141,20 @@ const hotspots = [
     description: '这是图书馆的位置',
     targetSceneId: 'library', // 切换到ID为library的场景
     icon: '/icons/arrow_hotspot.png'
+  },
+  // 自定义热点
+  {
+    id: '2',
+    type: 'custom',
+    longitude: 80,
+    latitude: 20,
+    title: '信息点',
+    description: '这是一个信息点',
+    icon: '/icons/info_hotspot.png',
+    onClick: (hotspot) => {
+      console.log('点击了自定义热点:', hotspot);
+      // 在这里添加自定义逻辑
+    }
   }
 ];
 ```

@@ -46,7 +46,7 @@ interface Scene {
 
 // 定义热点接口
 interface HotSpot {
-  id: string;
+  id?: string;
   type: string;        // 热点类型
   longitude: number;   // 经度 (-180 到 180)
   latitude: number;    // 纬度 (-90 到 90)
@@ -122,6 +122,9 @@ const validateHotspot = (hotspot: HotSpot): boolean => {
       showError(`热点配置错误: 热点ID "${hotspot.id}" 的目标场景 "${hotspot.targetSceneId}" 不存在`);
       return false;
     }
+  } else if (hotspot.type === 'custom') {
+    // custom 类型不需要特别的验证，因为它完全依赖用户自定义的点击处理函数
+    return true;
   } else {
     showError(`热点配置错误: 热点ID "${hotspot.id}" 的类型 "${hotspot.type}" 未知`);
     return false;
@@ -138,6 +141,14 @@ const handleHotspotClick = (hotspot: HotSpot) => {
 
   if (hotspot.type === 'scene' && hotspot.targetSceneId) {
     switchScene(hotspot.targetSceneId);
+  } else if (hotspot.type === 'custom') {
+    // 对于自定义热点，触发hotspotClick事件，由父组件处理
+    emit('hotspotClick', hotspot);
+    
+    // 如果提供了onClick回调，则调用它
+    if (typeof hotspot.onClick === 'function') {
+      hotspot.onClick(hotspot.onClickParams);
+    }
   }
 };
 
