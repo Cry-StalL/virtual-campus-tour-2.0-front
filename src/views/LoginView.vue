@@ -12,7 +12,7 @@
           class="login-from"
         >
 
-          <el-form-item label="邮箱" prop="email">
+          <el-form-item prop="email">
             <el-input 
               type="email"
               v-model="ruleForm.email"
