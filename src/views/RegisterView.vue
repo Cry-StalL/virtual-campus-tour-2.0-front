@@ -2,35 +2,43 @@
   <div>
     <div class="register">
       <el-card class="box-card">
-        <h2>注册</h2>
+        <h2 style="margin-top: -2vh;">注册</h2>
         <el-form
           :model="ruleForm"
           status-icon
           :rules="rules"
           ref="ruleForm"
-          label-position="left"
-          label-width="100px"
-          class="demo-ruleForm"
+          class="register-form"
         >
-          <el-form-item label="用户名" prop="uname">
-            <el-input v-model="ruleForm.uname"></el-input>
+          <el-form-item prop="uname">
+            <el-input v-model="ruleForm.uname"><template #prefix>
+              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 1.1vw; font-weight: bold; width: 3.5vw; text-align: left;">用户名</el-text>
+              </template></el-input>
           </el-form-item>
-          <el-form-item label="邮箱" prop="email">
+          <el-form-item prop="email">
             <el-input
               type="email"
               v-model="ruleForm.email"
               autocomplete="off"
-            ></el-input>
+            ><template #prefix>
+              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 1.1vw; font-weight: bold; width: 3.5vw; text-align: left;">邮箱</el-text>
+              </template></el-input>
           </el-form-item>
-          <el-form-item label="验证码" prop="code">
+          <el-form-item prop="code">
             <div class="code-input">
               <el-input
                 v-model="ruleForm.code"
                 placeholder="请输入验证码"
                 autocomplete="off"
-              ></el-input>
+              ><template #prefix>
+              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 1.1vw; font-weight: bold; width: 3.5vw; text-align: left;">验证码</el-text>
+              </template></el-input>
               <el-button 
                 type="primary" 
+                style="height: 36px; margin-top: 2px;"
                 :disabled="isCodeButtonDisabled"
                 @click="getCode"
               >
@@ -38,19 +46,25 @@
               </el-button>
             </div>
           </el-form-item>
-          <el-form-item label="密码" prop="pass">
+          <el-form-item prop="pass">
             <el-input
               type="password"
               v-model="ruleForm.pass"
               autocomplete="off"
-            ></el-input>
+            ><template #prefix>
+              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 1.1vw; font-weight: bold; width: 4.2vw; text-align: left;">密码</el-text>
+              </template></el-input>
           </el-form-item>
-          <el-form-item label="确认密码" prop="password">
+          <el-form-item prop="password">
             <el-input
               type="password"
               v-model="ruleForm.password"
               autocomplete="off"
-            ></el-input>
+            ><template #prefix>
+              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 1.1vw; font-weight: bold; width: 4.2vw; text-align: left;">验证密码</el-text>
+              </template></el-input>
           </el-form-item>
         </el-form>
         <div class="btnGroup">
@@ -300,21 +314,26 @@
 
 
   <style scoped>
+  /* 整个页面 */
   .register {
     display: grid;
     place-items: center;
     width: 100%;
     height: 100vh;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    /* background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); */
+    background-image: url('../../assets/123.jpg');
+    background-size: cover;
+    background-position: center;
   }
+  /* register那一块 */
   .box-card {
     margin: auto auto;
-    width: 500px;
+    width: 30%;
     padding: 40px;
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.88);
+    /* backdrop-filter: blur(10px); */
     transition: all 0.4s ease;
   }
   
@@ -327,7 +346,7 @@
     text-align: center;
     color: #409eff;
     font-size: 28px;
-    margin-bottom: 40px;
+    margin-bottom: 38px;
     font-weight: 600;
     position: relative;
     padding-bottom: 10px;
@@ -346,10 +365,12 @@
     background: linear-gradient(90deg, #409eff, #3a8ee6);
     border-radius: 3px;
   }
-
-  .login-from {
+  /* 5行表格 */
+  .register-form {
     margin: auto auto;
-    padding: 0 20px;
+    /* padding: 0 20px; */
+    width: 85%;
+    /* background-color: #3a8ee6; */
   }
 
   :deep(.el-form-item__label) {
@@ -361,7 +382,7 @@
   }
 
   :deep(.el-form-item) {
-    margin-bottom: 25px;
+    margin-bottom: 23px;
     transition: all 0.3s ease;
   }
   
@@ -371,6 +392,10 @@
   
   :deep(.el-input) {
     transition: all 0.3s ease;
+    /* background-color: #409eff; */
+    height: 5vh;
+    /* padding-left: 50px; */
+    /* width: 20vw; */
   }
   
   :deep(.el-input__inner) {
@@ -405,7 +430,7 @@
   }
 
   .code-input .el-button {
-    width: 120px;
+    width: 32%;
     padding: 0;
     border-radius: 8px;
     font-weight: 500;
@@ -426,12 +451,14 @@
 
   .btnGroup .el-button {
     min-width: 120px;
+    width: 30%;
     border-radius: 8px;
     font-weight: 500;
     transition: all 0.3s ease;
     font-family: 'Helvetica Neue', Arial, sans-serif;
     letter-spacing: 0.5px;
     font-size: 15px;
+    height: 40px;
   }
 
   .btnGroup .el-button--primary {
