@@ -19,11 +19,7 @@
         </div>
       </div>
 
-      <PanoramaViewer 
-        :scenes="scenes"
-        @sceneChange="handleSceneChange"
-        ref="panoramaViewer"
-      />
+      <PanoramaViewerGroup :viewers="viewers" ref="viewerGroup" initialViewerName="street"/>
 
     </div>
 
@@ -115,11 +111,13 @@ import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
-import PanoramaViewer from '../components/PanoramaViewer.vue';
+import PanoramaViewerGroup from '@/components/base-components/PanoramaViewerGroup.vue';
 import axios from 'axios';
-import Sidebar from '../components/Sidebar.vue';
+import Sidebar from '@/components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
-import { config } from '../config/config';
+import { config } from '@/config/config';
+import StreetViewer from '@/components/StreetViewer.vue';
+import SceneViewer from '@/components/SceneViewer.vue';
 
 // 导入HotSpot接口类型
 interface HotSpot {
@@ -202,7 +200,7 @@ const scenes: Scene[] = [
   },
 ];
 
-const panoramaViewer = ref();
+const viewerGroup = ref();
 
 // 处理场景切换事件
 const handleSceneChange = (index: number) => {
@@ -377,7 +375,7 @@ const fetchMessages = async () => {
 
 // 显示当前场景ID
 const showCurrentSceneId = () => {
-  const currentSceneId = panoramaViewer.value?.getCurrentSceneId();
+  const currentSceneId = viewerGroup.value?.getCurrentSceneId();
   ElMessage({
     message: `当前场景ID: ${currentSceneId}`,
     type: 'info',
@@ -385,6 +383,11 @@ const showCurrentSceneId = () => {
   });
   console.log('当前场景ID:', currentSceneId);
 };
+
+const viewers = [
+  { name: 'street', component: StreetViewer },
+  { name: 'scene', component: SceneViewer }
+];
 
 onMounted(() => {
   checkLoginStatus();
