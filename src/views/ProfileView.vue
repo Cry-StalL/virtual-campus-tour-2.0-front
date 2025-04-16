@@ -77,7 +77,7 @@
           </el-button>
         </template>
         
-        <router-link to="/home">
+        <router-link to="/">
           <el-button round>
             <el-icon><Back /></el-icon> 返回首页
           </el-button>
@@ -302,6 +302,7 @@ export default {
 .profile {
   width: 100%;
   min-height: 100vh;
+  max-height: 200%;
   display: flex;
   justify-content: center;
   align-items: center;

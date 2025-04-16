@@ -67,7 +67,6 @@
   </div>
 </template>
 
-
   
 <script>
   import axios from 'axios'
@@ -77,8 +76,8 @@
       var validateUsername = (rule, value, callback) => {
         if (value === "") {
           callback(new Error("请输入用户名"));
-        } else if (!/^[\u4e00-\u9fa5\w-]{3,20}$/.test(value)) {
-          callback(new Error("用户名无效!"));
+        } else if (!/^[\u4e00-\u9fa5\w-]{4,20}$/.test(value)) {
+          callback(new Error("用户名长度必须在4-20个字符之间"));
         } else {
           callback();
         }
@@ -97,8 +96,8 @@
       var validatePass = (rule, value, callback) => {
         if (value === "") {
           callback(new Error("请输入密码"));
-        } else if (!/^\S{8,}$/.test(value)) {
-          callback(new Error("密码不能少于8位或密码无效!"));
+        } else if (!/^\S{6,20}$/.test(value)) {
+          callback(new Error("密码长度必须在6-20个字符之间"));
         } else {
           if (this.ruleForm.checkPass !== "") {
             this.$refs.ruleForm.validateField("checkPass");
@@ -167,16 +166,16 @@
             let _this = this;
 
             // 获取表单数据
-            const name = _this.ruleForm.uname;
+            const username = _this.ruleForm.uname;
             const email = _this.ruleForm.email;
             const password = _this.ruleForm.password;
             const code = _this.ruleForm.code;
 
-            // 使用 axios 将登录信息发送到后端
+            // 使用 axios 将注册信息发送到后端
             axios.post(
-              'http://localhost:8080/api/user/register',
+              'http://localhost:8080/api/v1/users/register',
               {
-                name: name,
+                username: username,
                 email: email,
                 password: password,
                 code: code,
@@ -188,42 +187,59 @@
               }
             )
             .then(response => {
-              console.log(response.data);
-
-              if (response.data.code === 200) {
-                
-                this.$router.push('/login');
-                // 显示后端响应的成功信息
+              if (response.data.code === 0) {
                 this.$message({
-                  message: response.data.message,
+                  message: "注册成功！",
                   type: "success",
+                });
+                // 注册成功后跳转到登录页
+                this.$router.push('/login');
+              } else {
+                this.$message({
+                  message: "注册失败",
+                  type: "error",
                 });
               }
               _this.loading = false;
             })
             .catch(error => {
-              //校验请求返回结果
-              console.error("登录请求失败:", error);
-              console.log('Request Headers:', error.config.headers);
-              console.log('Request Data:', error.config.data); // 打印请求体
-              console.log('Response Status:', error.response ? error.response.status : 'No response');
-              console.log('Response Data:', error.response ? error.response.data : 'No response data');
-
+              console.error("注册请求失败:", error);
+              
+              // 处理错误消息
+              let errorMessage = "注册失败，请稍后重试";
+              if (error.response?.data) {
+                switch (error.response.data.code) {
+                  case 1001:
+                    errorMessage = "邮箱已注册";
+                    break;
+                  case 1002:
+                    errorMessage = "用户名已存在";
+                    break;
+                  case 1003:
+                    errorMessage = "验证码不正确";
+                    break;
+                  default:
+                    errorMessage = error.response.data.message || errorMessage;
+                }
+              }
+              
               this.$message({
-                message: error.response.data.message,
-                type: "warning",
+                message: errorMessage,
+                type: "error",
               });
               _this.loading = false;
             });
           } else {
-            console.log("error submit!!");
+            console.log("表单验证失败");
             return false;
           }
         });
       },
+      
       goBack() {
         this.$router.go(-1);
       },
+
       getCode() {
         if (!this.ruleForm.email) {
           this.$message({
@@ -232,9 +248,11 @@
           });
           return;
         }
-        if (!/^\d{11}$/.test(this.ruleForm.email)) {
+
+        // 验证邮箱格式
+        if (!/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(this.ruleForm.email)) {
           this.$message({
-            message: "请输入正确的邮箱",
+            message: "请输入有效的邮箱地址",
             type: "warning",
           });
           return;
@@ -245,7 +263,7 @@
         
         // 发送获取验证码请求
         axios.post(
-          'http://localhost:8080/api/user/sendCode',
+          'http://localhost:8080/api/v1/users/email-code',
           {
             email: this.ruleForm.email
           },
@@ -256,9 +274,9 @@
           }
         )
         .then(response => {
-          if (response.data.code === 200) {
+          if (response.data.code === 0) {
             this.$message({
-              message: "验证码已发送",
+              message: response.data.message || "验证码已发送",
               type: "success",
             });
             this.startCountdown();
@@ -272,8 +290,34 @@
           }
         })
         .catch(error => {
+          console.error("验证码发送失败:", error);
+          
+          // 处理错误消息
+          let errorMessage = "验证码发送失败，请稍后重试";
+          if (error.response?.data) {
+            switch (error.response.data.code) {
+              case 2001:
+                errorMessage = "邮箱已被注册";
+                break;
+              case 2002:
+                errorMessage = "邮箱格式不正确";
+                break;
+              case 2003:
+                errorMessage = "发送过于频繁，请稍后再试";
+                break;
+              case 2004:
+                errorMessage = "IP发送次数过多，请稍后再试";
+                break;
+              case 2005:
+                errorMessage = "邮件发送失败，请稍后重试";
+                break;
+              default:
+                errorMessage = error.response.data.message || errorMessage;
+            }
+          }
+          
           this.$message({
-            message: error.response?.data?.message || "发送失败",
+            message: errorMessage,
             type: "error",
           });
           this.isCodeButtonDisabled = false;
