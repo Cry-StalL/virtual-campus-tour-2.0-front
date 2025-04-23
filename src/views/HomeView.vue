@@ -71,6 +71,7 @@
 import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
 import PanoramaViewerGroup from '@/components/base-components/PanoramaViewerGroup.vue';
 import Sidebar from '@/components/Sidebar.vue';
@@ -170,7 +171,11 @@ const handleSceneChange = (index: number) => {
     type: 'info',
     duration: 2000
   });
-
+  
+  // 清空当前留言
+  messages.value = [];
+  allMessages.value = [];
+  
   // 场景切换后获取该场景的历史留言
   // fetchMessages(); // 此功能已移动到 SceneViewer 中
 };

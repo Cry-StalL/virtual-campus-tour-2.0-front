@@ -2,7 +2,7 @@
   <div class="profile">
     <el-card class="profile-card">
       <div class="profile-header">
-        <h2>个人主页</h2>
+        <h2>个人信息</h2>
       </div>
       
       <div class="avatar-section">
@@ -22,35 +22,42 @@
         ref="form"
         label-position="left"
         label-width="80px"
-        :disabled="!isEditing"
       >
-        <el-form-item label="用户名" prop="name">
-          <el-input v-model="form.name">
+        <el-form-item label="用户名" prop="name" class="username-item">
+          <el-input v-model="form.name" :disabled="!isEditingUsername">
             <template #prefix><el-icon><User /></el-icon></template>
           </el-input>
-        </el-form-item>
-        
-        <el-form-item label="年龄" prop="age">
-          <el-input v-model="form.age" type="number">
-            <template #prefix><el-icon><Calendar /></el-icon></template>
-          </el-input>
-        </el-form-item>
-        
-        <el-form-item label="性别" prop="gender">
-          <el-radio-group v-model="form.gender">
-            <el-radio value="1" size="large">男</el-radio>
-            <el-radio value="2" size="large">女</el-radio>
-          </el-radio-group>
+          <template v-if="!isEditingUsername">
+            <el-button type="primary" @click="startEditingUsername" class="username-edit-btn">
+              <el-icon><Edit /></el-icon> 修改用户名
+            </el-button>
+          </template>
+          <template v-else>
+            <div class="username-action-btns">
+              <el-button type="success" @click="saveUsername">
+                <el-icon><Check /></el-icon> 保存
+              </el-button>
+              <el-button @click="cancelEditingUsername">
+                <el-icon><Close /></el-icon> 取消
+              </el-button>
+            </div>
+          </template>
         </el-form-item>
         
         <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" type="email">
+          <el-input v-model="form.email" type="email" disabled>
             <template #prefix><el-icon><Message /></el-icon></template>
           </el-input>
         </el-form-item>
 
-        <template v-if="isEditing">
-          <el-form-item label="密码" prop="pass">
+        <el-form-item label="注册时间">
+          <el-input v-model="form.registerTime" disabled>
+            <template #prefix><el-icon><Calendar /></el-icon></template>
+          </el-input>
+        </el-form-item>
+
+        <template v-if="isResetingPassword">
+          <el-form-item label="新密码" prop="pass">
             <el-input type="password" v-model="form.pass" autocomplete="off" placeholder="请输入新密码">
               <template #prefix><el-icon><Lock /></el-icon></template>
             </el-input>
@@ -65,14 +72,17 @@
       </el-form>
       
       <div class="action-buttons">
-        <el-button v-if="!isEditing" type="primary" @click="startEditing" round>
-          <el-icon><Edit /></el-icon> 编辑资料
-        </el-button>
-        <template v-else>
-          <el-button type="success" @click="saveChanges" round>
-            <el-icon><Check /></el-icon> 保存
+        <template v-if="!isResetingPassword">
+          <el-button type="warning" @click="startPasswordReset" round>
+            <el-icon><Lock /></el-icon> 重置密码
           </el-button>
-          <el-button @click="cancelEditing" round>
+        </template>
+
+        <template v-if="isResetingPassword">
+          <el-button type="success" @click="savePassword" round>
+            <el-icon><Check /></el-icon> 保存密码
+          </el-button>
+          <el-button @click="cancelPasswordReset" round>
             <el-icon><Close /></el-icon> 取消
           </el-button>
         </template>
@@ -85,44 +95,27 @@
       </div>
     </el-card>
     
-    <!-- 头像选择对话框 -->
-    <el-dialog 
-      title="选择头像" 
-      v-model="showAvatarDialog" 
-      width="800px"
-      center
-      custom-class="avatar-dialog"
-    >
-      <div class="avatar-gallery">
-        <div 
-          v-for="(avatar, index) in avatarOptions" 
-          :key="index" 
-          class="avatar-option"
-          :class="{ 'selected': selectedAvatar === avatar }"
-          @click="selectAvatar(avatar)"
-        >
-          <el-avatar :src="avatar" :size="90"></el-avatar>
-        </div>
-      </div>
-      
-      <div class="dialog-footer-center">
-        <el-button @click="showAvatarDialog = false" round>
-          <el-icon><Close /></el-icon> 取消
-        </el-button>
-        <el-button type="primary" @click="confirmAvatar" round>
-          <el-icon><Check /></el-icon> 确定
-        </el-button>
-      </div>
-    </el-dialog>
+    <!-- 使用头像选择组件 -->
+    <AvatarSelector 
+      v-model:visible="showAvatarDialog"
+      :avatar-options="avatarOptions"
+      :current-avatar="form.avatar"
+      @confirm="handleAvatarConfirm"
+      @cancel="handleAvatarCancel"
+    />
   </div>
 </template>
 
 <script>
-import { User, Calendar, Message, Lock, Edit, Check, Close, Back, Camera } from '@element-plus/icons-vue'
+import { User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar } from '@element-plus/icons-vue'
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import AvatarSelector from '@/components/AvatarSelector.vue';
 
 export default {
   components: {
-    User, Calendar, Message, Lock, Edit, Check, Close, Back, Camera
+    User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar,
+    AvatarSelector
   },
   data() {
     const validateUsername = (rule, value, callback) => {
@@ -130,18 +123,6 @@ export default {
         callback(new Error("请输入用户名"));
       } else if (!/^[\u4e00-\u9fa5\w-]{3,20}$/.test(value)) {
         callback(new Error("用户名必须为3-20位中文、字母、数字、下划线或连字符"));
-      } else {
-        callback();
-      }
-    };
-
-    const validateAge = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入年龄"));
-      } else if (!Number.isInteger(Number(value))) {
-        callback(new Error("年龄必须是整数"));
-      } else if (value < 1 || value > 120) {
-        callback(new Error("年龄必须在1-99之间"));
       } else {
         callback();
       }
@@ -158,7 +139,7 @@ export default {
     };
 
     const validatePass = (rule, value, callback) => {
-      if (this.isEditing && value === "") {
+      if (this.isResetingPassword && value === "") {
         callback(new Error("请输入密码"));
       } else if (value && !/^\S{8,}$/.test(value)) {
         callback(new Error("密码不能少于8位且不能包含空格"));
@@ -171,7 +152,7 @@ export default {
     };
 
     const validatePass2 = (rule, value, callback) => {
-      if (this.isEditing && value === "") {
+      if (this.isResetingPassword && value === "") {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.form.pass) {
         callback(new Error("两次输入密码不一致!"));
@@ -182,25 +163,17 @@ export default {
 
     return {
       form: {
-        name: 'chen',
-        age: '21',
-        gender: '1',
+        userId: '',
+        name: '',
         email: '',
         pass: '',
         checkPass: '',
         avatar: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
-        
-
+        registerTime: ''
       },
       rules: {
         name: [
-          { required: true, validator: validateUsername, trigger: "blur" }
-        ],
-        age: [
-          { required: true, validator: validateAge, trigger: "blur" }
-        ],
-        gender: [
-          { required: true, message: "请选择性别", trigger: "change" }
+          { validator: validateUsername, trigger: "blur" }
         ],
         email: [
           { validator: validateEmail, trigger: "blur" }
@@ -212,10 +185,10 @@ export default {
           { validator: validatePass2, trigger: "blur" }
         ]
       },
-      originalForm: {},
-      isEditing: false,
+      originalName: '',
+      isEditingUsername: false,
+      isResetingPassword: false,
       showAvatarDialog: false,
-      selectedAvatar: '',
       avatarOptions: [
         'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
         'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
@@ -224,75 +197,192 @@ export default {
       ]
     }
   },
+  mounted() {
+    // 从 cookie 中获取用户信息
+    this.getUserInfo();
+  },
   methods: {
-    // 开始编辑资料
-    startEditing() {
-      // 保存原始数据，以便取消时恢复
-      this.originalForm = JSON.parse(JSON.stringify(this.form));
-      this.isEditing = true;
+    // 从 cookie 中获取用户信息
+    getUserInfo() {
+      this.form.userId = Cookies.get('userId');
+      this.form.name = Cookies.get('username') || '';
+      this.form.email = Cookies.get('email') || '';
+      this.form.registerTime = Cookies.get('registerTime') || '';
     },
     
-    // 保存变更
-    saveChanges() {
-      this.$refs.form.validate((valid) => {
+    // 开始编辑用户名
+    startEditingUsername() {
+      this.originalName = this.form.name;
+      this.isEditingUsername = true;
+    },
+    
+    // 保存用户名
+    saveUsername() {
+      // 检查用户名是否实际发生了变化
+      if (this.form.name === this.originalName) {
+        this.$message({
+          message: '用户名未修改',
+          type: 'info'
+        });
+        this.isEditingUsername = false;
+        return;
+      }
+
+      this.$refs.form.validateField('name', (valid) => {
         if (valid) {
-          // 模拟API保存
-          setTimeout(() => {
+          // 显示加载提示
+          const loading = this.$loading({
+            lock: true,
+            text: '保存中...',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          });
+          
+          // 调用API更新用户名
+          axios.post('http://localhost:8080/api/v1/users/updateUsername', {
+            userId: this.form.userId,
+            username: this.form.name
+          })
+          .then(response => {
+            // 关闭加载提示
+            loading.close();
+            
+            if (response.data.code === 200) {
+              // 保存成功，更新cookie
+              Cookies.set('username', this.form.name);
+              
+              this.$message({
+                message: '用户名已更新',
+                type: 'success'
+              });
+              this.isEditingUsername = false;
+            } else {
+              // 显示错误信息
+              this.$message({
+                message: response.data.message || '用户名更新失败',
+                type: 'error'
+              });
+            }
+          })
+          .catch(error => {
+            // 关闭加载提示
+            loading.close();
+            
+            console.error('更新用户名出错:', error);
             this.$message({
-              message: '个人资料已更新',
-              type: 'success'
+              message: '网络错误，请稍后重试',
+              type: 'error'
             });
-            this.isEditing = false;
-            // 清空密码字段
-            this.form.pass = '';
-            this.form.checkPass = '';
-          }, 600);
+          });
         } else {
           this.$message({
-            message: '表单验证失败，请检查输入',
+            message: '用户名验证失败，请检查输入',
             type: 'error'
           });
-          return false;
         }
       });
     },
     
-    // 取消编辑
-    cancelEditing() {
-      // 恢复原始数据
-      this.form = JSON.parse(JSON.stringify(this.originalForm));
-      this.isEditing = false;
-      // 重置表单验证状态
-      this.$refs.form.clearValidate();
+    // 取消编辑用户名
+    cancelEditingUsername() {
+      this.form.name = this.originalName;
+      this.isEditingUsername = false;
+      this.$refs.form.clearValidate('name');
+    },
+
+    // 开始重置密码
+    startPasswordReset() {
+      this.form.pass = '';
+      this.form.checkPass = '';
+      this.isResetingPassword = true;
+    },
+
+    // 保存新密码
+    savePassword() {
+      this.$refs.form.validateField(['pass', 'checkPass'], (valid) => {
+        if (valid) {
+          // 显示加载提示
+          const loading = this.$loading({
+            lock: true,
+            text: '保存中...',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          });
+          
+          // 调用API重置密码
+          axios.post('http://localhost:8080/api/v1/users/resetPassword', {
+            userId: this.form.userId,
+            password: this.form.pass
+          })
+          .then(response => {
+            // 关闭加载提示
+            loading.close();
+            
+            if (response.data.code === 200) {
+              this.$message({
+                message: '密码已重置',
+                type: 'success'
+              });
+              this.isResetingPassword = false;
+              this.form.pass = '';
+              this.form.checkPass = '';
+            } else {
+              // 显示错误信息
+              this.$message({
+                message: response.data.message || '密码重置失败',
+                type: 'error'
+              });
+            }
+          })
+          .catch(error => {
+            // 关闭加载提示
+            loading.close();
+            
+            console.error('重置密码出错:', error);
+            this.$message({
+              message: '网络错误，请稍后重试',
+              type: 'error'
+            });
+          });
+        } else {
+          this.$message({
+            message: '密码验证失败，请检查输入',
+            type: 'error'
+          });
+        }
+      });
+    },
+
+    // 取消重置密码
+    cancelPasswordReset() {
+      this.form.pass = '';
+      this.form.checkPass = '';
+      this.isResetingPassword = false;
+      this.$refs.form.clearValidate(['pass', 'checkPass']);
     },
     
     // 打开头像选择对话框
     openAvatarDialog() {
-      this.selectedAvatar = this.form.avatar; // 默认选中当前头像
       this.showAvatarDialog = true;
     },
     
-    // 选择头像
-    selectAvatar(avatar) {
-      this.selectedAvatar = avatar;
-    },
-    
-    // 确认头像选择
-    confirmAvatar() {
-      if (this.selectedAvatar) {
-        this.form.avatar = this.selectedAvatar;
-        this.$message({
-          message: '头像已更新',
-          type: 'success'
-        });
+    // 处理头像确认
+    handleAvatarConfirm(avatar) {
+      // 检查头像是否实际发生了变化
+      if (this.form.avatar === avatar) {
+        return; // 如果头像没有变化，不执行任何操作
       }
-      this.showAvatarDialog = false;
+      
+      this.form.avatar = avatar;
+      this.$message({
+        message: '头像已更新',
+        type: 'success'
+      });
     },
     
-    // 取消头像更改
-    cancelAvatarChange() {
-      this.selectedAvatar = '';
-      this.showAvatarDialog = false;
+    // 处理头像取消
+    handleAvatarCancel() {
+      // 可以在这里添加额外的取消逻辑
     }
   }
 }
@@ -312,7 +402,7 @@ export default {
 
 .profile-card {
   width: 100%;
-  max-width: 650px;
+  max-width: 600px;
   margin: auto;
   padding: 30px;
   border-radius: 15px;
@@ -445,6 +535,78 @@ export default {
   gap: 20px;
 }
 
+/* 用户名编辑按钮样式 */
+.username-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.username-edit-btn {
+  align-self: center;
+  margin-top: 5px;
+  font-size: 14px;
+  padding: 10px 20px !important;
+}
+
+.username-action-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  align-self: center;
+}
+
+/* 表单容器样式 */
+:deep(.el-form) {
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+:deep(.el-form-item) {
+  display: flex;
+  align-items: flex-start;
+}
+
+:deep(.el-form-item__content) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* 响应式布局 */
+@media (min-width: 768px) {
+  .username-item {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .el-input {
+    flex: 1;
+    max-width: 280px;
+  }
+  
+  :deep(.el-form-item__content) {
+    justify-content: flex-start;
+    display: flex;
+    align-items: center;
+  }
+  
+  .username-edit-btn {
+    margin-left: 15px;
+    margin-top: 0;
+    font-size: 14px;
+    padding: 10px 20px !important;
+    height: auto;
+    align-self: center;
+  }
+  
+  .username-action-btns {
+    margin-left: 15px;
+    margin-top: 0;
+    align-self: center;
+  }
+}
+
 /* 自定义对话框样式 */
 :deep(.avatar-dialog) {
   border-radius: 15px;
@@ -478,11 +640,13 @@ export default {
 
 :deep(.el-input) {
   transition: all 0.3s ease;
+  width: 100%;
+  max-width: 320px;
 }
 
 :deep(.el-input__inner) {
   border-radius: 8px;
-  height: 45px;
+  height: 42px;
 }
 
 /* 移除多余的样式 */
@@ -503,12 +667,8 @@ export default {
   box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2) !important;
 }
 
-:deep(.el-radio) {
-  margin-right: 15px;
-}
-
 :deep(.el-button) {
-  padding: 12px 25px;
+  padding: 10px 22px;
   font-weight: 500;
   transition: all 0.3s ease;
 }
@@ -516,5 +676,36 @@ export default {
 :deep(.el-button:hover) {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+}
+
+/* 修改用户名按钮特殊样式 */
+:deep(.username-edit-btn.el-button) {
+  padding: 10px 25px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+:deep(.username-action-btns .el-button) {
+  padding: 8px 15px;
+}
+</style>
+
+<style>
+/* 全局字体样式 */
+.el-form-item__label {
+font-size: 16px !important;
+font-weight: 600 !important;
+color: #606266 !important;
+font-family: 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+.el-button {
+font-family: 'Helvetica Neue', Arial, sans-serif !important;
+letter-spacing: 0.5px !important;
+}
+
+h2 {
+font-family: 'Helvetica Neue', Arial, sans-serif !important;
+letter-spacing: 1px !important;
 }
 </style>
