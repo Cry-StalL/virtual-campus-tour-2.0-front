@@ -14,7 +14,7 @@ const props = defineProps<{ switchViewer: (name: string) => void }>();
 // 定义场景数据
 const scenes = ref([
   {
-    sceneId: "scene1",
+    sceneId: "scene",
     imagePath: "/images/p1.jpg",
     hotspots: [
       {
@@ -41,4 +41,4 @@ const scenes = ref([
   height: 100%;
   background-color: #f0f0f0;
 }
-</style> 
+</style>

@@ -4,6 +4,9 @@
       :is="currentViewerComponent" 
       v-if="currentViewerComponent" 
       :switchViewer="switchViewer"
+      :isLoggedIn="isLoggedIn"
+      :userID="userID"
+      :username="username"
     />
   </div>
 </template>
@@ -18,7 +21,18 @@ interface Viewer {
 }
 
 // 接收 Viewer 列表和初始 Viewer 名称作为 props
-const props = defineProps<{ viewers: Viewer[], initialViewerName: string }>();
+const props = defineProps<{ 
+  viewers: Viewer[], 
+  initialViewerName: string,
+  isLoggedIn?: boolean,
+  userID?: string,
+  username?: string
+}>();
+
+// 使用 computed 属性来监控 props 的变化
+const isLoggedIn = computed(() => props.isLoggedIn === true);
+const userID = computed(() => props.userID || '0');
+const username = computed(() => props.username || '');
 
 // 管理 Viewer 实例
 const viewers = ref<Record<string, Viewer>>({});
