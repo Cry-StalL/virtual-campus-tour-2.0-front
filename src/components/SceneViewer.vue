@@ -3,7 +3,7 @@
     <!-- 使用基础 Viewer 组件 -->
     <PanoramaViewer ref="panoramaViewerRef" :scenes="scenes" />
     <!-- 弹幕显示区域 -->
-    <div class="danmaku-container">
+    <div class="danmaku-container" v-show="showDanmaku">
       <div
         v-for="(message, index) in messages"
         :key="index"
@@ -20,6 +20,10 @@
     <!-- 留言按钮 -->
     <div class="message-button" @click="openMessageDialog">
       <el-icon><ChatDotRound /></el-icon>
+    </div>
+    <!-- 弹幕开关按钮 -->
+    <div class="danmaku-toggle-button" @click="toggleDanmaku">
+      <span>{{ showDanmaku ? '隐藏弹幕' : '开启弹幕' }}</span>
     </div>
 
     <!-- 留言对话框 -->
@@ -144,6 +148,7 @@ const allMessages = ref<Array<{
   panoramaId?: string;
 }>>([]);
 const messageIntervalId = ref<number | null>(null);
+const showDanmaku = ref(true);
 
 //打开留言框
 const openMessageDialog = () => {
@@ -166,8 +171,8 @@ const startMessageCycle = () => {
     return;
   }
 
-  // 每 30 秒显示一条留言
-  const cycleInterval = 30 * 1000;
+  // 每 3 秒显示一条留言
+  const cycleInterval = 3 * 1000;
   let currentIndex = 0;
 
   // 只有当当前没有显示留言时，才立即显示第一条
@@ -291,6 +296,24 @@ const fetchMessages = async () => {
   }
 };
 
+// 切换弹幕显示状态
+const toggleDanmaku = () => {
+  showDanmaku.value = !showDanmaku.value;
+  
+  if (showDanmaku.value) {
+    // 重新启动弹幕循环
+    startMessageCycle();
+  } else {
+    // 停止弹幕循环
+    if (messageIntervalId.value) {
+      clearInterval(messageIntervalId.value);
+      messageIntervalId.value = null;
+    }
+    // 清除现有弹幕
+    messages.value = [];
+  }
+};
+
 </script>
 
 <style scoped>
@@ -330,7 +353,7 @@ const fetchMessages = async () => {
 .message-button {
   position: fixed;
   right: 30px;
-  bottom: 30px;
+  bottom: 40px;
   width: 56px;
   height: 56px;
   border-radius: 50%;
@@ -419,10 +442,10 @@ const fetchMessages = async () => {
 /* 弹幕样式 */
 .danmaku-container {
   position: absolute;
-  top: 0;
+  top: 60px;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 25%; /* 减小区域高度，只占中间部分 */
   pointer-events: none;
   overflow: hidden;
   z-index: 50;
@@ -432,15 +455,15 @@ const fetchMessages = async () => {
   position: absolute;
   right: 0; /* Start position at the right edge */
   white-space: nowrap;
-  font-size: 20px;
-  font-weight: 600;
-  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+  font-size: 16px; /* 减小字体大小 */
+  font-weight: 500; /* 减轻字体粗细 */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   animation: danmaku linear forwards;
   animation-duration: var(--duration, 15s);
-  padding: 6px 12px;
-  background-color: rgba(0, 0, 0, 0.5);
+  padding: 4px 10px; /* 减小内边距 */
+  background-color: rgba(0, 0, 0, 0.3); /* 增加透明度 */
   border-radius: 20px;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(2px);
   z-index: 100;
   transform: translateX(100%); /* Start off-screen */
 }
@@ -452,5 +475,33 @@ const fetchMessages = async () => {
   to {
     transform: translateX(-100vw); /* Move left beyond the viewport */
   }
+}
+
+/* 弹幕开关按钮样式 */
+.danmaku-toggle-button {
+  position: fixed;
+  right: 30px;
+  bottom: 5px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #409EFF 0%, #53a8ff 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(64, 158, 255, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.danmaku-toggle-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(64, 158, 255, 0.4);
+}
+
+.danmaku-toggle-button span {
+  font-size: 14px;
+  font-weight: 600;
 }
 </style>
