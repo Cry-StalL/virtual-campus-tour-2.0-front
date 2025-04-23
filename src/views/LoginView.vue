@@ -9,33 +9,39 @@
           :rules="rules"
           ref="ruleForm"
           label-position="left"
-          label-width="70px"
           class="login-from"
         >
-          <el-form-item label="邮箱" prop="email">
+
+          <el-form-item prop="email">
             <el-input 
               type="email"
               v-model="ruleForm.email"
               @input="handleInput"
               autocomplete="off"
-            ></el-input>
+            ><template #prefix>
+              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 1.1vw; font-weight: bold;">邮箱</el-text>
+              </template></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="password">
+          <el-form-item prop="password">
             <el-input
               type="password"
               v-model="ruleForm.password"
               autocomplete="off"
-            ></el-input>
+            ><template #prefix>
+              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 1.1vw; font-weight: bold;">密码</el-text>
+              </template></el-input>
           </el-form-item>
         </el-form>
         <div class="btnGroup">
           <el-button
             type="primary"
             @click="submitForm('ruleForm')"
-            >登录</el-button
-          >
-          <router-link to="/">
-            <el-button style="margin-left:10px">返回</el-button>
+            v-loading="loading" class="ttt">登录</el-button>
+          <router-link to="/" style="width: 30%;" >
+            <el-button style="width: 100%;">返回</el-button>
+
           </router-link>
         </div>
         <div class="divider">
@@ -189,32 +195,42 @@
 </script>
   
 <style scoped>
+  /* 整个页面 */
   .login {
     display: grid;
     place-items: center;
     width: 100%;
     height: 100vh; 
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    /* background: linear-gradient(135deg, #FFFEFF 0%, #FFFFEE 100%); */
+    background-image: url('123.jpg');
+    background-size: cover;
+    background-position: center;
   }
-  
+  /* login那一块 */
   .box-card {
     margin: auto auto;
-    width: 420px;   
+    width: 24vw;   
+    /* height: 50vh; */
     transition: all 0.3s ease;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.88); /* 半透明背景色 */
+    padding: 2vw;
+    position: relative; /* 添加 position 属性 */
+    z-index: 2; /* 确保卡片在伪元素之上 */
   }
-  
+
+  /* 鼠标放在login上会移动 */
   .box-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   }
-  
+  /* 两行表格 */
   .login-from {
+    /* background-color: #409EFF; */
     margin: auto auto;
-    padding: 0 20px;
+    width: 90%;
+    /* padding: 0 20px; */
   }
   
   /* 美化输入框样式 */
@@ -225,6 +241,7 @@
   :deep(.el-input__inner) {
     border-radius: 8px;
     height: 45px;
+    font-size: 1vw;
   }
   
   /* 移除多余的样式 */
@@ -249,7 +266,7 @@
   :deep(.el-button) {
     border-radius: 8px;
     transition: all 0.3s ease;
-    height: 45px;
+    height: 40px;
     padding: 0 25px;
   }
   
@@ -293,7 +310,7 @@
   .register-link {
     text-align: center;
     margin-top: 25px;
-    color: #606266;
+    /* color: #606266; */
     font-size: 14px;
   }
   
@@ -327,6 +344,11 @@
     padding: 0 20px;
     color: #909399;
     font-size: 14px;
+  }
+  
+  .ttt{
+    /* background-color: #909399; */
+    width: 30%;
   }
 </style>
 

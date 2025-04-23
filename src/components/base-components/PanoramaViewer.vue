@@ -46,7 +46,7 @@ interface Scene {
 
 // 定义热点接口
 interface HotSpot {
-  id: string;
+  id?: string;
   type: string;        // 热点类型
   longitude: number;   // 经度 (-180 到 180)
   latitude: number;    // 纬度 (-90 到 90)
@@ -122,6 +122,9 @@ const validateHotspot = (hotspot: HotSpot): boolean => {
       showError(`热点配置错误: 热点ID "${hotspot.id}" 的目标场景 "${hotspot.targetSceneId}" 不存在`);
       return false;
     }
+  } else if (hotspot.type === 'custom') {
+    // custom 类型不需要特别的验证，因为它完全依赖用户自定义的点击处理函数
+    return true;
   } else {
     showError(`热点配置错误: 热点ID "${hotspot.id}" 的类型 "${hotspot.type}" 未知`);
     return false;
@@ -138,6 +141,14 @@ const handleHotspotClick = (hotspot: HotSpot) => {
 
   if (hotspot.type === 'scene' && hotspot.targetSceneId) {
     switchScene(hotspot.targetSceneId);
+  } else if (hotspot.type === 'custom') {
+    // 对于自定义热点，触发hotspotClick事件，由父组件处理
+    emit('hotspotClick', hotspot);
+    
+    // 如果提供了onClick回调，则调用它
+    if (typeof hotspot.onClick === 'function') {
+      hotspot.onClick(hotspot.onClickParams);
+    }
   }
 };
 
@@ -262,11 +273,22 @@ const switchScene = (target: number | string) => {
   
   // 加载新场景的全景图
   const textureLoader = new THREE.TextureLoader();
+  
   textureLoader.load(
     newScene.imagePath,
     (texture: THREE.Texture) => {
-      const geometry = new THREE.SphereGeometry(500, 60, 40);
-      geometry.scale(-1, 1, 1);
+      // 设置正确的色彩空间，防止图像过亮
+      texture.colorSpace = THREE.SRGBColorSpace;
+      
+      // 提高纹理质量设置
+      texture.generateMipmaps = false;
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.anisotropy = renderer?.capabilities.getMaxAnisotropy() || 1;
+      
+      // 使用更高分辨率的球体几何体
+      const geometry = new THREE.SphereGeometry(500, 96, 64); // todo: 这里hard-code了球体面数，可以优化
+      geometry.scale(-1, 1, 1); 
       
       const material = new THREE.MeshBasicMaterial({
         map: texture
@@ -425,10 +447,12 @@ const initPanorama = () => {
   currentFov = targetFov = camera.fov;
   
   // 创建渲染器
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
   // 设置渲染器的CSS样式
   renderer.domElement.style.cursor = 'default';
+  // 设置设备像素比以提高渲染质量
+  renderer.setPixelRatio(window.devicePixelRatio);
   viewerContainer.value.appendChild(renderer.domElement);
   
   // 添加控制器
