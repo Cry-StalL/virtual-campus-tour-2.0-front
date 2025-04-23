@@ -24,7 +24,9 @@
 
     <!-- 侧边栏切换按钮 -->
     <div class="toggle-btn" @click="toggleSidebar">
-      <img class="toggle-icon" src="../../assets/icons/more.png" >
+      <div style="background-color: white; margin: auto auto; width: 100%; height: 100%; display: flex; align-items: center; border-radius: 50%;">
+        <img class="toggle-icon" src="../../assets/icons/more.png" >
+      </div>
     </div>
 
     <!-- 侧边栏 -->
