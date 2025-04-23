@@ -123,7 +123,7 @@
 import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
-import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
+import { ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
 import PanoramaViewer from '../components/PanoramaViewer.vue';
 import axios from 'axios';
 import Sidebar from '../components/Sidebar.vue';
@@ -207,6 +207,10 @@ const handleSceneChange = (index: number) => {
     duration: 2000
   });
   
+  // 清空当前留言
+  messages.value = [];
+  allMessages.value = [];
+  
   // 场景切换后获取该场景的历史留言
   fetchMessages();
 };
@@ -261,31 +265,6 @@ const logout = () => {
   username.value = '';
   
   router.push('/login');
-};
-
-const navigateToInfo = (type: string) => {
-  console.log(`导航到实用信息: ${type}`);
-  // 这里可以实现具体的导航逻辑
-
-  sidebarVisible.value = false;
-};
-
-const navigateToHelp = (type: string) => {
-  console.log(`导航到帮助页面: ${type}`);
-  // 这里可以实现具体的导航逻辑
-
-  sidebarVisible.value = false;
-};
-
-const navigateToAbout = (type: string) => {
-  console.log(`导航到关于我们页面: ${type}`);
-  // 这里可以实现具体的导航逻辑
-
-  sidebarVisible.value = false;
-};
-
-const toggleSection = (section: string) => {
-  sectionsState.value[section] = !sectionsState.value[section];
 };
 
 // 留言相关
