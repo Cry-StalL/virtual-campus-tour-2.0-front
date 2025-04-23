@@ -1,6 +1,8 @@
 <template>
   <div class="sidebar-content">
-    <h3 class="project-name">Virtual Campus Tour</h3>
+    <div style="height: 12vh;"></div>
+    <text class="project-name">Virtual Campus Tour</text>
+    <div style="height: 4vh;"></div>
 
     <div class="sidebar-menu">
       <!-- 地点跳转 -->
@@ -162,8 +164,6 @@
 .sidebar {
   position: absolute;
   top: 0;
-  left: -18%;
-  width: 18%;
   height: 100%;
 
   background-color: rgba(255, 255, 255, 0.5);
@@ -191,10 +191,12 @@
 /* 云游中珠 */
 .project-name {
   height: 10vh;
-  font-size: 1.5vw;
-  margin: 0;
-  margin-top: 12vh;
-  margin-bottom: 5vh;
+  width: 100%;
+
+  font-size: 1.4vw;
+  font-weight: bold;
+
+  white-space: nowrap;
 }
 
 .menu-section {
@@ -206,9 +208,11 @@
 
 .menu-button {
   border: 0;
-  width: 60%;
+  margin-left: 12%;
+  width: 80%;
   height: 80%;
   background-color: rgba(255, 255, 255, 0);
+
   color: black;
   display: flex;
 }
@@ -217,8 +221,8 @@
 }
 
 .menu-icon{
-  width: 2.5vh;
-  height: 2.5vh;
+  width: 1.3vw;
+  height: 1.3vw;
   margin: auto;
 
   align-items: center;

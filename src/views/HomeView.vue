@@ -538,8 +538,8 @@ body, html, #app {
 .sidebar {
   position: absolute;
   top: 0;
-  left: -250px;
-  width: 250px;
+  left: -16%;
+  width: 16%;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);

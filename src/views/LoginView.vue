@@ -209,12 +209,13 @@
   /* login那一块 */
   .box-card {
     margin: auto auto;
-    width: 30%;   
+    width: 24vw;   
+    /* height: 50vh; */
     transition: all 0.3s ease;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     background-color: rgba(255, 255, 255, 0.88); /* 半透明背景色 */
-    padding: 40px;
+    padding: 2vw;
     position: relative; /* 添加 position 属性 */
     z-index: 2; /* 确保卡片在伪元素之上 */
   }
@@ -228,7 +229,7 @@
   .login-from {
     /* background-color: #409EFF; */
     margin: auto auto;
-    width: 78%;
+    width: 90%;
     /* padding: 0 20px; */
   }
   
@@ -240,6 +241,7 @@
   :deep(.el-input__inner) {
     border-radius: 8px;
     height: 45px;
+    font-size: 1vw;
   }
   
   /* 移除多余的样式 */

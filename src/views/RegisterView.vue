@@ -2,7 +2,7 @@
   <div>
     <div class="register">
       <el-card class="box-card">
-        <h2 style="margin-top: -2vh;">注册</h2>
+        <h2>注册</h2>
         <el-form
           :model="ruleForm"
           status-icon
@@ -38,7 +38,7 @@
               </template></el-input>
               <el-button 
                 type="primary" 
-                style="height: 36px; margin-top: 2px;"
+                style="height: 36px; height: 80%; margin: auto auto;"
                 :disabled="isCodeButtonDisabled"
                 @click="getCode"
               >
@@ -76,6 +76,7 @@
           >
           <el-button @click="goBack">返回</el-button>
         </div>
+        <div style="height: 10vh;"></div>
       </el-card>
     </div>
   </div>
@@ -372,7 +373,8 @@
   /* register那一块 */
   .box-card {
     margin: auto auto;
-    width: 30%;
+    width: 28%;
+    height: 64vh;
     padding: 40px;
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
@@ -413,7 +415,8 @@
   .register-form {
     margin: auto auto;
     /* padding: 0 20px; */
-    width: 85%;
+    width: 90%;
+    height: 80%;
     /* background-color: #3a8ee6; */
   }
 
@@ -467,6 +470,8 @@
   .code-input {
     display: flex;
     gap: 12px;
+    width: 100%;
+    height: 100%;
   }
 
   .code-input .el-input {
