@@ -1,12 +1,14 @@
 <template>
   <div class="sidebar-content">
-    <h3 class="project-name">Virtual Campus Tour</h3>
+    <div style="height: 12vh;"></div>
+    <text class="project-name">Virtual Campus Tour</text>
+    <div style="height: 4vh;"></div>
 
     <div class="sidebar-menu">
       <!-- 地点跳转 -->
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('location')">
-          <img class="menu-icon" :src="sectionsState.location ? '../../assets/icons/SideBar/location_selected.png' : '../../assets/icons/SideBar/location.png'" />
+          <img class="menu-icon" :src="sectionsState.location ? '/icons/SideBar/location_selected.png' : '/icons/SideBar/location.png'" />
           <text class="menu-text" :style="{ fontWeight: sectionsState.location?'bold':'normal', textDecoration: sectionsState.location?'underline':'none'}" >地点跳转</text>
         </button>
       </div>
@@ -14,7 +16,7 @@
       <!-- 实用信息 -->
       <div class="menu-section"  @click="toggleSection('info')">
         <button class="menu-button">
-          <img class="menu-icon" :src="sectionsState.info ? '../../assets/icons/SideBar/info_selected.png' : '../../assets/icons/SideBar/info.png'" />
+          <img class="menu-icon" :src="sectionsState.info ? '/icons/SideBar/info_selected.png' : '/icons/SideBar/info.png'" />
           <text class="menu-text" :style="{ fontWeight: sectionsState.info?'bold':'normal', textDecoration: sectionsState.info?'underline':'none'}">实用信息</text>
         </button>
       </div>
@@ -22,7 +24,7 @@
       <!-- 帮助 -->
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('help')">
-          <img class="menu-icon" :src="sectionsState.help ? '../../assets/icons/SideBar/help_selected.png' : '../../assets/icons/SideBar/help.png'" />
+          <img class="menu-icon" :src="sectionsState.help ? '/icons/SideBar/help_selected.png' : '/icons/SideBar/help.png'" />
           <text class="menu-text" :style="{ fontWeight: sectionsState.help?'bold':'normal', textDecoration: sectionsState.help?'underline':'none'}">帮助</text>
         </button>
       </div>
@@ -30,7 +32,7 @@
       <!-- 语言 -->
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('language')">
-          <img class="menu-icon" :src="sectionsState.language ? '../../assets/icons/SideBar/language_selected.png' : '../../assets/icons/SideBar/language.png'" />
+          <img class="menu-icon" :src="sectionsState.language ? '/icons/SideBar/language_selected.png' : '/icons/SideBar/language.png'" />
           <text class="menu-text" :style="{ fontWeight: sectionsState.language?'bold':'normal', textDecoration: sectionsState.language?'underline':'none'}">Language</text>
         </button>
       </div>
@@ -38,7 +40,7 @@
       <!-- 隐私政策 -->
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('privacy')">
-          <img class="menu-icon" :src="sectionsState.privacy ? '../../assets/icons/SideBar/privacy_selected.png' : '../../assets/icons/SideBar/privacy.png'" />
+          <img class="menu-icon" :src="sectionsState.privacy ? '/icons/SideBar/privacy_selected.png' : '/icons/SideBar/privacy.png'" />
           <text class="menu-text" :style="{ fontWeight: sectionsState.privacy?'bold':'normal', textDecoration: sectionsState.privacy?'underline':'none'}">隐私政策</text>
         </button>
       </div>
@@ -46,8 +48,8 @@
       <!-- 关于我们 -->
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('about')">
-          <img class="menu-icon" src="../../assets/icons/SideBar/about_selected.png" v-if="sectionsState.about" />
-          <img class="menu-icon" src="../../assets/icons/SideBar/about.png" v-else />
+          <img class="menu-icon" src="/icons/SideBar/about_selected.png" v-if="sectionsState.about" />
+          <img class="menu-icon" src="/icons/SideBar/about.png" v-else />
           <text class="menu-text" :style="{ fontWeight: sectionsState.about?'bold':'normal', textDecoration: sectionsState.about?'underline':'none'}">关于我们</text>
         </button>
       </div>
@@ -72,8 +74,8 @@
 
     [key: string]: boolean; // Index signature for dynamic access
   };
-  const src_path1 = ref('../../assets/icons/SideBar/help_selected.png')
-  const src_path2 = ref('../../assets/icons/SideBar/help.png')
+  const src_path1 = ref('/icons/SideBar/help_selected.png')
+  const src_path2 = ref('/icons/SideBar/help.png')
 
   const sectionsState = ref<SectionState>({
     location: false,
@@ -162,8 +164,6 @@
 .sidebar {
   position: absolute;
   top: 0;
-  left: -18%;
-  width: 18%;
   height: 100%;
 
   background-color: rgba(255, 255, 255, 0.5);
@@ -191,10 +191,12 @@
 /* 云游中珠 */
 .project-name {
   height: 10vh;
-  font-size: 1.5vw;
-  margin: 0;
-  margin-top: 12vh;
-  margin-bottom: 5vh;
+  width: 100%;
+
+  font-size: 1.4vw;
+  font-weight: bold;
+
+  white-space: nowrap;
 }
 
 .menu-section {
@@ -206,9 +208,11 @@
 
 .menu-button {
   border: 0;
-  width: 60%;
+  margin-left: 12%;
+  width: 80%;
   height: 80%;
   background-color: rgba(255, 255, 255, 0);
+
   color: black;
   display: flex;
 }
@@ -217,8 +221,8 @@
 }
 
 .menu-icon{
-  width: 2.5vh;
-  height: 2.5vh;
+  width: 1.3vw;
+  height: 1.3vw;
   margin: auto;
 
   align-items: center;
