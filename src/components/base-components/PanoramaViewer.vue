@@ -273,11 +273,22 @@ const switchScene = (target: number | string) => {
   
   // 加载新场景的全景图
   const textureLoader = new THREE.TextureLoader();
+  
   textureLoader.load(
     newScene.imagePath,
     (texture: THREE.Texture) => {
-      const geometry = new THREE.SphereGeometry(500, 60, 40);
-      geometry.scale(-1, 1, 1);
+      // 设置正确的色彩空间，防止图像过亮
+      texture.colorSpace = THREE.SRGBColorSpace;
+      
+      // 提高纹理质量设置
+      texture.generateMipmaps = false;
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.anisotropy = renderer?.capabilities.getMaxAnisotropy() || 1;
+      
+      // 使用更高分辨率的球体几何体
+      const geometry = new THREE.SphereGeometry(500, 96, 64); // todo: 这里hard-code了球体面数，可以优化
+      geometry.scale(-1, 1, 1); 
       
       const material = new THREE.MeshBasicMaterial({
         map: texture
@@ -436,10 +447,12 @@ const initPanorama = () => {
   currentFov = targetFov = camera.fov;
   
   // 创建渲染器
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
   // 设置渲染器的CSS样式
   renderer.domElement.style.cursor = 'default';
+  // 设置设备像素比以提高渲染质量
+  renderer.setPixelRatio(window.devicePixelRatio);
   viewerContainer.value.appendChild(renderer.domElement);
   
   // 添加控制器

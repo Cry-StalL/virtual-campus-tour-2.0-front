@@ -15,7 +15,7 @@ const props = defineProps<{ switchViewer: (name: string) => void }>();
 const scenes = ref([
   {
     sceneId: "scene",
-    imagePath: "/images/p1.jpg",
+    imagePath: "http://127.0.0.1:8080/assets/panos/streets/byy_road1/1.jpg",
     hotspots: [
       {
         type: 'custom',
