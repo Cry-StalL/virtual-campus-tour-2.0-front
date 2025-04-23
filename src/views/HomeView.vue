@@ -2,7 +2,14 @@
   <div class="home">
     <div class="content">
       <!-- 全景导览 -->
-      <PanoramaViewerGroup :viewers="viewers" ref="viewerGroup" initialViewerName="street"/>
+      <PanoramaViewerGroup 
+        :viewers="viewers" 
+        ref="viewerGroup" 
+        initialViewerName="street"
+        :isLoggedIn="isLoggedIn"
+        :userID="userID"
+        :username="username"
+      />
 
     </div>
 
@@ -64,7 +71,6 @@ import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
 import PanoramaViewerGroup from '@/components/base-components/PanoramaViewerGroup.vue';
-import axios from 'axios';
 import Sidebar from '@/components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
 import { config } from '@/config/config';
@@ -164,7 +170,7 @@ const handleSceneChange = (index: number) => {
   });
 
   // 场景切换后获取该场景的历史留言
-  fetchMessages();
+  // fetchMessages(); // 此功能已移动到 SceneViewer 中
 };
 
 const router = useRouter();
@@ -263,16 +269,8 @@ const viewers = [
 
 onMounted(() => {
   checkLoginStatus();
-  fetchMessages();
 });
 
-onBeforeUnmount(() => {
-  // 清除定时器，避免内存泄漏
-  if (messageIntervalId.value) {
-    clearInterval(messageIntervalId.value);
-    messageIntervalId.value = null;
-  }
-});
 </script>
 
 <style>
@@ -480,134 +478,6 @@ body, html, #app {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* 留言按钮样式 */
-.message-button {
-  position: fixed;
-  right: 30px;
-  bottom: 30px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #409EFF 0%, #53a8ff 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(64, 158, 255, 0.3);
-  transition: all 0.3s ease;
-  z-index: 1000;
-}
-
-.message-button:hover {
-  transform: scale(1.08) translateY(-3px);
-  box-shadow: 0 6px 20px rgba(64, 158, 255, 0.4);
-}
-
-.message-button .el-icon {
-  font-size: 26px;
-}
-
-/* 对话框样式 */
-.dialog-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-:deep(.message-dialog) {
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-:deep(.message-dialog .el-dialog__header) {
-  margin: 0;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e0e5ec;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-:deep(.message-dialog .el-dialog__title) {
-  color: white;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-:deep(.message-dialog .el-dialog__body) {
-  padding: 30px 30px 20px;
-  background-color: #f8f9fa;
-}
-
-:deep(.message-dialog .el-dialog__footer) {
-  padding: 0 30px 25px;
-  background-color: #f8f9fa;
-  border-top: none;
-}
-
-.dialog-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.dialog-header span {
-  color: #303133;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.dialog-icon {
-  font-size: 22px;
-  color: #409EFF;
-}
-
-:deep(.el-dialog__close) {
-  color: #606266;
-  font-size: 18px;
-}
-
-/* 弹幕样式 */
-.danmaku-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 50;
-}
-
-.danmaku-item {
-  position: absolute;
-  right: 0; /* Start position at the right edge */
-  white-space: nowrap;
-  font-size: 20px;
-  font-weight: 600;
-  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
-  animation: danmaku linear forwards;
-  animation-duration: var(--duration, 15s);
-  padding: 6px 12px;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 20px;
-  backdrop-filter: blur(4px);
-  z-index: 100;
-  transform: translateX(100%); /* Start off-screen */
-}
-
-@keyframes danmaku {
-  from {
-    transform: translateX(100%); /* Start off-screen to the right */
-  }
-  to {
-    transform: translateX(-100vw); /* Move left beyond the viewport */
-  }
 }
 
 /* 调试按钮样式 */

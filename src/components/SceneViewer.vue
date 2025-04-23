@@ -1,7 +1,7 @@
 <template>
   <div class="scene-viewer">
     <!-- 使用基础 Viewer 组件 -->
-    <PanoramaViewer :scenes="scenes" />
+    <PanoramaViewer ref="panoramaViewerRef" :scenes="scenes" />
     <!-- 弹幕显示区域 -->
     <div class="danmaku-container">
       <div
@@ -73,11 +73,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import {ArrowLeft, ChatDotRound} from '@element-plus/icons-vue';
+import { onBeforeUnmount, onMounted, ref, computed, watch } from 'vue';
+import { ArrowLeft, ChatDotRound } from '@element-plus/icons-vue';
 import PanoramaViewer from './base-components/PanoramaViewer.vue';
+import axios from 'axios';
+import { ElMessage } from 'element-plus';
 
-const props = defineProps<{ switchViewer: (name: string) => void }>();
+const panoramaViewerRef = ref(null);
+
+const props = defineProps<{ 
+  switchViewer: (name: string) => void,
+  isLoggedIn?: boolean,
+  userID?: string,
+  username?: string
+}>();
+
+// 使用 computed 属性来监控 props 的变化
+const isUserLoggedIn = computed(() => props.isLoggedIn === true);
+const userId = computed(() => props.userID || '0');
+const userName = computed(() => props.username || '');
+
+// 调试输出
+watch(() => props.isLoggedIn, (newVal, oldVal) => {
+  console.log(`isLoggedIn changed from ${oldVal} to ${newVal}`);
+}, { immediate: true });
+
+onMounted(() => {
+  fetchMessages();
+  console.log('SceneViewer mounted, isLoggedIn:', props.isLoggedIn);
+});
+
+onBeforeUnmount(() => {
+  // 清除定时器，避免内存泄漏
+  if (messageIntervalId.value) {
+    clearInterval(messageIntervalId.value);
+    messageIntervalId.value = null;
+  }
+});
 
 // 处理返回按钮点击
 const handleReturn = () => {
@@ -115,7 +147,7 @@ const messageIntervalId = ref<number | null>(null);
 
 //打开留言框
 const openMessageDialog = () => {
-  if(isLoggedIn.value){
+  if(isUserLoggedIn.value){
     showMessageDialog.value = true;
   }else{
     ElMessage.warning('请先登录');
@@ -134,8 +166,8 @@ const startMessageCycle = () => {
     return;
   }
 
-  // 每5秒显示一条留言
-  const cycleInterval = 5 * 1000;
+  // 每 30 秒显示一条留言
+  const cycleInterval = 30 * 1000;
   let currentIndex = 0;
 
   // 只有当当前没有显示留言时，才立即显示第一条
@@ -185,13 +217,19 @@ const submitMessage = async () => {
     return;
   }
 
+  if (!isUserLoggedIn.value) {
+    ElMessage.warning('请先登录');
+    return;
+  }
+
   try {
-    const currentSceneId = panoramaViewer.value?.getCurrentSceneId();
+    const panoramaViewer = panoramaViewerRef.value as any;
+    const currentSceneId = panoramaViewer?.getCurrentSceneId();
 
     const response = await axios.post('http://localhost:8080/api/v1/users/messages', {
       content: messageForm.value.content,
-      userId: userID.value,
-      username: username.value,
+      userId: userId.value,
+      username: userName.value,
       panoramaId: currentSceneId
     });
 
@@ -199,8 +237,8 @@ const submitMessage = async () => {
       // 创建新留言对象
       const newMessage = {
         content: messageForm.value.content,
-        userId: userID.value,
-        username: username.value,
+        userId: userId.value,
+        username: userName.value,
         panoramaId: currentSceneId
       };
 
@@ -237,7 +275,8 @@ const submitMessage = async () => {
 // 获取历史留言
 const fetchMessages = async () => {
   try {
-    const currentSceneId = panoramaViewer.value?.getCurrentSceneId();
+    const panoramaViewer = panoramaViewerRef.value as any;
+    const currentSceneId = panoramaViewer?.getCurrentSceneId();
     // 获取当前全景图的留言
     const response = await axios.get(`http://localhost:8080/api/v1/users/messages?panoramaId=${currentSceneId}`);
     if (response.data.success) {
@@ -251,7 +290,6 @@ const fetchMessages = async () => {
     console.error('获取留言失败:', error);
   }
 };
-
 
 </script>
 
@@ -286,5 +324,133 @@ const fetchMessages = async () => {
 
 .return-button .el-icon {
   margin-right: 5px;
+}
+
+/* 留言按钮样式 */
+.message-button {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #409EFF 0%, #53a8ff 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(64, 158, 255, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.message-button:hover {
+  transform: scale(1.08) translateY(-3px);
+  box-shadow: 0 6px 20px rgba(64, 158, 255, 0.4);
+}
+
+.message-button .el-icon {
+  font-size: 26px;
+}
+
+/* 对话框样式 */
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+:deep(.message-dialog) {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+:deep(.message-dialog .el-dialog__header) {
+  margin: 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e5ec;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+:deep(.message-dialog .el-dialog__title) {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+:deep(.message-dialog .el-dialog__body) {
+  padding: 30px 30px 20px;
+  background-color: #f8f9fa;
+}
+
+:deep(.message-dialog .el-dialog__footer) {
+  padding: 0 30px 25px;
+  background-color: #f8f9fa;
+  border-top: none;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dialog-header span {
+  color: #303133;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.dialog-icon {
+  font-size: 22px;
+  color: #409EFF;
+}
+
+:deep(.el-dialog__close) {
+  color: #606266;
+  font-size: 18px;
+}
+
+/* 弹幕样式 */
+.danmaku-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 50;
+}
+
+.danmaku-item {
+  position: absolute;
+  right: 0; /* Start position at the right edge */
+  white-space: nowrap;
+  font-size: 20px;
+  font-weight: 600;
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5);
+  animation: danmaku linear forwards;
+  animation-duration: var(--duration, 15s);
+  padding: 6px 12px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  transform: translateX(100%); /* Start off-screen */
+}
+
+@keyframes danmaku {
+  from {
+    transform: translateX(100%); /* Start off-screen to the right */
+  }
+  to {
+    transform: translateX(-100vw); /* Move left beyond the viewport */
+  }
 }
 </style>
