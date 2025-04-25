@@ -95,26 +95,58 @@
       </div>
     </el-card>
     
+
+    <!-- 留言记录 -->
+    <el-card class="message-history-card">
+      <div class="message-header">
+        <h2>我的留言</h2>
+      </div>
+      
+      <div class="message-list" v-if="userMessages.length > 0">
+        <el-timeline>
+          <el-timeline-item
+            v-for="(message, index) in userMessages"
+            :key="index"
+            :timestamp="formatTime(message.createTime)"
+            placement="top"
+            :color="getMessageColor(index)"
+            :hide-timestamp="false"
+            class="custom-timeline-item"
+          >
+            <el-card class="message-card">
+              <div class="message-content">{{ message.content }}</div>
+              <div class="message-location">{{ message.location }}</div>
+            </el-card>
+          </el-timeline-item>
+        </el-timeline>
+      </div>
+      
+      <div class="empty-messages" v-else>
+        <el-empty description="暂无留言记录" :image-size="100">
+          <template #image>
+            <el-icon style="font-size: 60px; color: #909399;"><ChatDotRound /></el-icon>
+          </template>
+        </el-empty>
+      </div>
+    </el-card>
+    
     <!-- 使用头像选择组件 -->
     <AvatarSelector 
       v-model:visible="showAvatarDialog"
-      :avatar-options="avatarOptions"
       :current-avatar="form.avatar"
-      @confirm="handleAvatarConfirm"
-      @cancel="handleAvatarCancel"
     />
   </div>
 </template>
 
 <script>
-import { User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar } from '@element-plus/icons-vue'
+import { User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDotRound } from '@element-plus/icons-vue'
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import AvatarSelector from '@/components/AvatarSelector.vue';
 
 export default {
   components: {
-    User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar,
+    User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDotRound,
     AvatarSelector
   },
   data() {
@@ -163,7 +195,7 @@ export default {
 
     return {
       form: {
-        userId: '',
+        userId: 0,
         name: '',
         email: '',
         pass: '',
@@ -189,25 +221,23 @@ export default {
       isEditingUsername: false,
       isResetingPassword: false,
       showAvatarDialog: false,
-      avatarOptions: [
-        'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-        'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-        'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
-      ]
+      userMessages: [] // 用户留言数组
     }
   },
   mounted() {
-    // 从 cookie 中获取用户信息
     this.getUserInfo();
+    this.fetchUserMessages();
+    
   },
   methods: {
-    // 从 cookie 中获取用户信息
+    // 从 cookie 中获取用户信息（待补充）
     getUserInfo() {
-      this.form.userId = Cookies.get('userId');
+      this.form.userId = Number(Cookies.get('userId') || 0);
       this.form.name = Cookies.get('username') || '';
       this.form.email = Cookies.get('email') || '';
-      this.form.registerTime = Cookies.get('registerTime') || '';
+      this.form.registerTime = Cookies.get('registerTime') || '未知';
+
+
     },
     
     // 开始编辑用户名
@@ -346,7 +376,7 @@ export default {
           });
         } else {
           this.$message({
-            message: '密码验证失败，请检查输入',
+            message: '请输入正确的密码',
             type: 'error'
           });
         }
@@ -366,23 +396,78 @@ export default {
       this.showAvatarDialog = true;
     },
     
-    // 处理头像确认
-    handleAvatarConfirm(avatar) {
-      // 检查头像是否实际发生了变化
-      if (this.form.avatar === avatar) {
-        return; // 如果头像没有变化，不执行任何操作
-      }
-      
-      this.form.avatar = avatar;
-      this.$message({
-        message: '头像已更新',
-        type: 'success'
+    // 获取用户留言记录
+    fetchUserMessages() {
+      // 显示加载状态
+      const loading = this.$loading({
+        lock: true,
+        text: '加载留言记录...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
       });
+      
+      // 调用API获取用户留言数据
+      axios.get(`http://localhost:8080/api/v1/users/getUserMessages?userId=${this.form.userId}`)
+        .then(response => {
+          loading.close();
+          
+          if (response.data.code === 0) {
+            // 获取留言数据并排序
+            this.userMessages = (response.data.data || []).sort((a, b) => {
+              return new Date(b.createTime) - new Date(a.createTime);
+            });
+            
+            // 如果没有留言记录
+            if (this.userMessages.length === 0) {
+              this.$message({
+                message: '暂无留言记录',
+                type: 'info'
+              });
+            }
+          } else {
+            // 显示错误信息
+            this.$message({
+              message: response.data.message || '获取留言记录失败',
+              type: 'error'
+            });
+          }
+        })
+        .catch(error => {
+          loading.close();
+          console.error('获取用户留言失败:', error);
+          this.$message({
+            message: '网络错误，请稍后重试',
+            type: 'error'
+          });
+        });
     },
     
-    // 处理头像取消
-    handleAvatarCancel() {
-      // 可以在这里添加额外的取消逻辑
+    // 格式化时间
+    formatTime(timestamp) {
+      if (!timestamp) return '未知时间';
+      
+      // 如果已经是格式化的时间字符串，直接返回
+      if (typeof timestamp === 'string' && timestamp.includes('-') && timestamp.includes(':')) {
+        return timestamp;
+      }
+      
+      try {
+        const date = new Date(timestamp);
+        return `${date.getFullYear()}-${padZero(date.getMonth() + 1)}-${padZero(date.getDate())} ${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
+      } catch (e) {
+        return '未知时间';
+      }
+      
+      // 数字补零
+      function padZero(num) {
+        return num < 10 ? '0' + num : num;
+      }
+    },
+    
+    // 获取留言颜色
+    getMessageColor(index) {
+      const colors = ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399'];
+      return colors[index % colors.length];
     }
   }
 }
@@ -390,20 +475,27 @@ export default {
 
 <style scoped>
 .profile {
-  width: 100%;
-  min-height: 100vh;
-  max-height: 200%;
   display: flex;
+  flex-direction: row;
   justify-content: center;
-  align-items: center;
-  padding: 20px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  align-items: flex-start;
+  width: 100%;
+  height: auto;
+  min-height: 100vh;
+  /* background: linear-gradient(135deg, #FFFEFF 0%, #FFFFEE 100%); */
+  background-image: url('123.jpg');
+  background-size: cover;
+  background-position: center;
+  overflow-y: auto;
+  padding: 40px;
+  gap: 30px;
 }
 
-.profile-card {
+.profile-card, .message-history-card {
   width: 100%;
-  max-width: 600px;
-  margin: auto;
+  max-width: 500px;
+  height: fit-content;
+  margin: 0;
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -411,18 +503,23 @@ export default {
   transition: all 0.3s ease;
 }
 
-.profile-card:hover {
+.profile-card:hover, .message-history-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
-.profile-header {
+.message-history-card {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.profile-header, .message-header {
   text-align: center;
   margin-bottom: 30px;
   position: relative;
 }
 
-.profile-header h2 {
+.profile-header h2, .message-header h2 {
   font-size: 28px;
   color: #409EFF;
   margin: 0;
@@ -431,7 +528,7 @@ export default {
   position: relative;
 }
 
-.profile-header h2:after {
+.profile-header h2:after, .message-header h2:after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -687,6 +784,102 @@ export default {
 
 :deep(.username-action-btns .el-button) {
   padding: 8px 15px;
+}
+
+.message-list {
+  padding: 0 10px;
+}
+
+.message-card {
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.message-content {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.message-location {
+  font-size: 14px;
+  color: #909399;
+  display: flex;
+  align-items: center;
+}
+
+.message-location:before {
+  content: '📍';
+  margin-right: 5px;
+}
+
+.empty-messages {
+  padding: 40px 0;
+  text-align: center;
+}
+
+/* 媒体查询 - 响应式设计 */
+@media (max-width: 1200px) {
+  .profile {
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+  }
+  
+  .profile-card, .message-history-card {
+    max-width: 600px;
+    margin-bottom: 30px;
+  }
+  
+  .message-history-card {
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile {
+    padding: 20px;
+  }
+  
+  .profile-card, .message-history-card {
+    max-width: 90%;
+    padding: 20px;
+  }
+  
+  .message-list {
+    padding: 0 5px;
+  }
+}
+
+/* 自定义时间线样式*/
+:deep(.el-timeline) {
+  padding-left: 0;
+}
+
+:deep(.el-timeline-item__tail) {
+  display: none;
+}
+
+:deep(.el-timeline-item__node) {
+  left: 0;
+}
+
+:deep(.el-timeline-item__wrapper) {
+  padding-left: 26px;
+}
+
+:deep(.el-timeline-item__timestamp) {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  padding-left: 0;
+  color: #909399;
+  font-size: 12px;
+}
+
+:deep(.custom-timeline-item) {
+  margin-bottom: 20px;
 }
 </style>
 

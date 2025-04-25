@@ -71,8 +71,7 @@
 import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
-import axios from 'axios';
-import { ArrowRight, ArrowLeft, ArrowDown, User, SwitchButton, ChatDotRound } from '@element-plus/icons-vue';
+import { ArrowDown, User, SwitchButton } from '@element-plus/icons-vue';
 import PanoramaViewerGroup from '@/components/base-components/PanoramaViewerGroup.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
@@ -172,12 +171,8 @@ const handleSceneChange = (index: number) => {
     duration: 2000
   });
   
-  // 清空当前留言
-  messages.value = [];
-  allMessages.value = [];
-  
-  // 场景切换后获取该场景的历史留言
-  // fetchMessages(); // 此功能已移动到 SceneViewer 中
+  // 场景切换后获取该场景的历史留言已移动到 SceneViewer 中
+  // fetchMessages();
 };
 
 const router = useRouter();
@@ -199,7 +194,7 @@ const checkLoginStatus = () => {
 };
 
 const isLoggedIn = computed(() => {
-  return Number(userID.value || 0) !== 0;
+  return Number(userID.value) !== 0;
 });
 
 // 切换侧边栏显示状态
@@ -238,25 +233,6 @@ const navigateToInfo = (type: string) => {
 
   sidebarVisible.value = false;
 };
-
-const navigateToHelp = (type: string) => {
-  console.log(`导航到帮助页面: ${type}`);
-  // 这里可以实现具体的导航逻辑
-
-  sidebarVisible.value = false;
-};
-
-const navigateToAbout = (type: string) => {
-  console.log(`导航到关于我们页面: ${type}`);
-  // 这里可以实现具体的导航逻辑
-
-  sidebarVisible.value = false;
-};
-
-const toggleSection = (section: string) => {
-  sectionsState.value[section] = !sectionsState.value[section];
-};
-
 
 // 显示当前场景ID
 const showCurrentSceneId = () => {
