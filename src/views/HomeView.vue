@@ -30,8 +30,17 @@
     </div>
 
     <!-- 侧边栏 -->
-    <div class="sidebar" :class="{ active: sidebarVisible }">
-      <Sidebar />
+    <div class="sidebar" :class="{ active: sidebarVisible }" >
+      <Sidebar @toggle-site-choose="toggleSiteChoose" @toggle-useful-info="toggleUsefulInfo" :clearSideBarChoose="clearSideBarChoose" />
+    </div>
+
+    <!-- 地点跳转 -->
+    <div class="sitechoose" :class="{ active: siteChooseVisible }">
+      <SiteChoose @closeSiteChooseView="closeSiteChoose"/>
+    </div>
+    <!-- 实用信息 -->
+    <div class="usefulinfo" :class="{ active: usefulInfoVisible }">
+      <UsefulInfo @closeUsefulInfoView="closeUsefulInfo"/>
     </div>
 
     <!-- 登录和注册 -->
@@ -78,6 +87,9 @@ import { ElMessage } from 'element-plus';
 import { config } from '@/config/config';
 import StreetViewer from '@/components/StreetViewer.vue';
 import SceneViewer from '@/components/SceneViewer.vue';
+import SiteChoose from '@/components/SiteChoose.vue';
+import usefulInfo from '@/components/usefulInfo.vue';
+import UsefulInfo from '@/components/usefulInfo.vue';
 
 // 导入HotSpot接口类型
 interface HotSpot {
@@ -202,10 +214,33 @@ const toggleSidebar = () => {
   sidebarVisible.value = !sidebarVisible.value;
 };
 
-// 导航相关函数
-const goToLogin = () => {
-  router.push('/login');
+// 侧边栏点击显示地点跳转 
+const siteChooseVisible = ref(false);
+const usefulInfoVisible = ref(false);
+
+let clearSideBarChoose = ref(false);
+const toggleSiteChoose = () => {
+  siteChooseVisible.value = !siteChooseVisible.value; // 切换显示状态
+  usefulInfoVisible.value = false;
 };
+const toggleUsefulInfo = () => {
+  usefulInfoVisible.value = !usefulInfoVisible.value; // 切换显示状态
+  siteChooseVisible.value = false;
+};
+const closeSiteChoose = () => {
+  clearSideBarChoose.value = !clearSideBarChoose.value;
+  siteChooseVisible.value = !siteChooseVisible.value; // 切换显示状态
+};
+const closeUsefulInfo = () => {
+  clearSideBarChoose.value = !clearSideBarChoose.value;
+  usefulInfoVisible.value = !usefulInfoVisible.value; // 切换显示状态
+};
+
+
+// 导航相关函数
+function goToLogin() {
+router.push('/login');
+}
 
 const goToRegister = () => {
   router.push('/register');
@@ -317,6 +352,8 @@ body, html, #app {
   z-index: 999;
 
   transition: transform 0.3s;
+
+  
 }
 
 /* 侧边栏样式 */
@@ -490,5 +527,42 @@ body, html, #app {
   z-index: 10;
 }
 
+/* 场景跳转 */
+.sitechoose {
+  position: absolute;
+  top: 0;
+  left: -80vw;
+  width: 80vw;
+  top: 8vh;
+  height: 90vh;
+
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease;
+  z-index: 10;
+  overflow-y: auto;
+}
+
+.sitechoose.active {
+  left: 18vw;
+}
+
+/* 实用信息 */
+.usefulinfo {
+  position: absolute;
+  top: 0;
+  left: -80vw;
+  width: 80vw;
+  top: 8vh;
+  height: 90vh;
+
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease;
+  z-index: 10;
+  overflow-y: auto;
+}
+
+.usefulinfo.active {
+  left: 18vw;
+}
 
 </style>
