@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
   import { ref, onMounted, computed, watch } from 'vue';
-
+  const emit = defineEmits(['toggle-site-choose', 'toggle-useful-info']);
   // Define types
   type SectionState = {
     location: boolean;
@@ -86,12 +86,10 @@
     about: false
   });
   const showPlace = () => {
-    console.log('显示地点');
-    alert('显示地点')
+    emit('toggle-site-choose'); // 触发自定义事件，通知父组件
   };
   const showInfo = () => {
-    console.log('显示实用信息');
-    alert('显示实用信息')
+    emit('toggle-useful-info'); 
   };
   const navigateToPlace = (location: string) => {
     console.log(`Navigating to ${location}`);
@@ -126,6 +124,8 @@
     sectionsState.value['about'] = false;
     sectionsState.value[section] = true;
   };
+
+  // 监听 sectionsState 的变化
   watch(
     sectionsState.value,
     (newValue) => {
@@ -148,8 +148,38 @@
         navigateToAbout('about');
       }
     },
-    { deep: true }
-  )
+  );
+  const props = defineProps({
+    clearSideBarChoose: {
+      type: Boolean,
+      default: false,
+    },
+  })
+// 监听 clearSideBarChoose 的变化
+watch(
+  () => props.clearSideBarChoose,
+  (newValue) => {
+    if (newValue === true) {
+      sectionsState.value['location'] = false;
+      sectionsState.value['info'] = false;
+      sectionsState.value['help'] = false;
+      sectionsState.value['language'] = false;
+      sectionsState.value['privacy'] = false;
+      sectionsState.value['about'] = false;
+    }else{
+      sectionsState.value['location'] = false;
+      sectionsState.value['info'] = false;
+      sectionsState.value['help'] = false;
+      sectionsState.value['language'] = false;
+      sectionsState.value['privacy'] = false;
+      sectionsState.value['about'] = false;
+    }
+  }
+);
+  
+
+  
+
   onMounted(() => {
 
   });
