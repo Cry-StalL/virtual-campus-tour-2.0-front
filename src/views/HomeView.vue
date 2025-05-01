@@ -2,9 +2,9 @@
   <div class="home">
     <div class="content">
       <!-- 全景导览 -->
-      <PanoramaViewerGroup 
-        :viewers="viewers" 
-        ref="viewerGroup" 
+      <PanoramaViewerGroup
+        :viewers="viewers"
+        ref="viewerGroup"
         initialViewerName="street"
         :isLoggedIn="isLoggedIn"
         :userID="userID"
@@ -15,7 +15,7 @@
 
     <!-- 调试按钮 -->
     <el-button
-      v-if="config.debug.enabled"
+      v-if="APP_CONFIG.debug.enabled"
       class="debug-btn"
       size="small"
       @click="showCurrentSceneId">
@@ -75,7 +75,7 @@ import { ArrowDown, User, SwitchButton } from '@element-plus/icons-vue';
 import PanoramaViewerGroup from '@/components/base-components/PanoramaViewerGroup.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
-import { config } from '@/config/config';
+import { APP_CONFIG } from '@/config/config';
 import StreetViewer from '@/components/StreetViewer.vue';
 import SceneViewer from '@/components/SceneViewer.vue';
 
@@ -170,7 +170,7 @@ const handleSceneChange = (index: number) => {
     type: 'info',
     duration: 2000
   });
-  
+
   // 场景切换后获取该场景的历史留言已移动到 SceneViewer 中
   // fetchMessages();
 };

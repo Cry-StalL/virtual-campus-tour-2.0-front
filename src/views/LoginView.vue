@@ -61,6 +61,7 @@
 <script>
   import axios from 'axios'
   import Cookies from 'js-cookie'
+  import { getApiUrl } from '@/config/config.ts';
 
   export default {
     data() {
@@ -120,7 +121,7 @@
 
             // 使用 axios 将登录信息发送到后端
             axios.post(
-              'http://localhost:8080/api/v1/users/login',
+              getApiUrl('users/login'), 
               {
                 email: email,
                 password: password

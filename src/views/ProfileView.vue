@@ -143,6 +143,7 @@ import { User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDo
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import AvatarSelector from '@/components/AvatarSelector.vue';
+import { getApiUrl } from '@/config/config.ts';
 
 export default {
   components: {
@@ -269,7 +270,7 @@ export default {
           });
           
           // 调用API更新用户名
-          axios.post('http://localhost:8080/api/v1/users/updateUsername', {
+          axios.post(getApiUrl('users/updateUsername'), {
             userId: this.form.userId,
             username: this.form.name
           })
@@ -340,7 +341,7 @@ export default {
           });
           
           // 调用API重置密码
-          axios.post('http://localhost:8080/api/v1/users/resetPassword', {
+          axios.post(getApiUrl('users/resetPassword'), {
             userId: this.form.userId,
             password: this.form.pass
           })
@@ -407,7 +408,7 @@ export default {
       });
       
       // 调用API获取用户留言数据
-      axios.get(`http://localhost:8080/api/v1/users/getUserMessages?userId=${this.form.userId}`)
+      axios.get(getApiUrl(`users/getUserMessages?userId=${this.form.userId}`))
         .then(response => {
           loading.close();
           
