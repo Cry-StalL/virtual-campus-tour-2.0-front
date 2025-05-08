@@ -76,6 +76,9 @@
           <el-button type="warning" @click="startPasswordReset" round>
             <el-icon><Lock /></el-icon> 重置密码
           </el-button>
+          <el-button type="danger" @click="handleLogout" round>
+            <el-icon><SwitchButton /></el-icon> 注销账号
+          </el-button>
         </template>
 
         <template v-if="isResetingPassword">
@@ -86,12 +89,6 @@
             <el-icon><Close /></el-icon> 取消
           </el-button>
         </template>
-        
-        <router-link to="/">
-          <el-button round>
-            <el-icon><Back /></el-icon> 返回首页
-          </el-button>
-        </router-link>
       </div>
     </el-card>
     
@@ -135,18 +132,27 @@
       v-model:visible="showAvatarDialog"
       :current-avatar="form.avatar"
     />
+
+    <!-- 返回按钮 -->
+    <div class="back-button-container">
+      <router-link to="/">
+        <el-button round>
+          <el-icon><Back /></el-icon> 返回
+        </el-button>
+      </router-link>
+    </div>
   </div>
 </template>
 
 <script>
-import { User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDotRound } from '@element-plus/icons-vue'
+import { User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDotRound, SwitchButton } from '@element-plus/icons-vue'
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import AvatarSelector from '@/components/AvatarSelector.vue';
 
 export default {
   components: {
-    User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDotRound,
+    User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDotRound, SwitchButton,
     AvatarSelector
   },
   data() {
@@ -230,14 +236,35 @@ export default {
     
   },
   methods: {
-    // 从 cookie 中获取用户信息（待补充）
+    // 从 cookie 中获取用户信息
     getUserInfo() {
       this.form.userId = Number(Cookies.get('userId') || 0);
       this.form.name = Cookies.get('username') || '';
       this.form.email = Cookies.get('email') || '';
-      this.form.registerTime = Cookies.get('registerTime') || '未知';
+      this.fetchUserCreationTime();
+    },
 
+    // 获取用户创建时间
+    fetchUserCreationTime() {
+      if (!this.form.userId || isNaN(this.form.userId)) {
+        return;
+      }
 
+      axios.post('http://localhost:8080/api/v1/users/getUserCreationTime', {
+        userId: parseInt(this.form.userId)
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.data.code === 0) {
+          this.form.registerTime = response.data.data;
+        }
+      })
+      .catch(error => {
+        this.form.registerTime = '未知';
+      });
     },
     
     // 开始编辑用户名
@@ -406,8 +433,24 @@ export default {
         background: 'rgba(0, 0, 0, 0.7)'
       });
       
+      // 确保userId是有效的数字
+      if (!this.form.userId || isNaN(this.form.userId)) {
+        loading.close();
+        this.$message({
+          message: '无效的用户ID',
+          type: 'error'
+        });
+        return;
+      }
+
       // 调用API获取用户留言数据
-      axios.get(`http://localhost:8080/api/v1/users/getUserMessages?userId=${this.form.userId}`)
+      axios.post(`http://localhost:8080/api/v1/users/getUserMessages`, {
+        userId: parseInt(this.form.userId)
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
         .then(response => {
           loading.close();
           
@@ -435,8 +478,18 @@ export default {
         .catch(error => {
           loading.close();
           console.error('获取用户留言失败:', error);
+          
+          let errorMessage = '网络错误，请稍后重试';
+          if (error.response) {
+            console.error('Error response:', error.response.data);
+            errorMessage = error.response.data.message || `服务器错误 (${error.response.status})`;
+          } else if (error.request) {
+            console.error('No response received:', error.request);
+            errorMessage = '服务器无响应，请检查网络连接';
+          }
+          
           this.$message({
-            message: '网络错误，请稍后重试',
+            message: errorMessage,
             type: 'error'
           });
         });
@@ -468,6 +521,57 @@ export default {
     getMessageColor(index) {
       const colors = ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399'];
       return colors[index % colors.length];
+    },
+    
+    // 注销账号
+    handleLogout() {
+      this.$confirm('确定要注销账号吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 调用API注销账号
+        axios.post('http://localhost:8080/api/v1/users/logout', {
+          userId: this.form.userId
+        })
+        .then(response => {
+          if (response.data.code === 200) {
+            // 清除所有cookie
+            Cookies.remove('userId');
+            Cookies.remove('username');
+            Cookies.remove('email');
+            
+            // 显示成功消息
+            this.$message({
+              type: 'success',  
+              message: '账号已注销'
+            });
+            
+            // 延迟跳转到登录页
+            setTimeout(() => {
+              this.$router.push('/login');
+            }, 500);
+          } else {
+            // 显示错误信息
+            this.$message({
+              message: response.data.message || '注销失败',
+              type: 'error' 
+            });
+          }
+        })
+        .catch(error => {
+          console.error('注销账号失败:', error);
+          this.$message({
+            message: '网络错误，请稍后重试',
+            type: 'error'
+          });
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消注销'
+        });          
+      });
     }
   }
 }
@@ -489,6 +593,7 @@ export default {
   overflow-y: auto;
   padding: 40px;
   gap: 30px;
+  position: relative; /* Add position relative */
 }
 
 .profile-card, .message-history-card {
@@ -853,7 +958,7 @@ export default {
   }
 }
 
-/* 自定义时间线样式*/
+/* 自定义时间线样式 */
 :deep(.el-timeline) {
   padding-left: 0;
 }
@@ -880,6 +985,26 @@ export default {
 
 :deep(.custom-timeline-item) {
   margin-bottom: 20px;
+}
+
+/* 返回按钮 */
+.back-button-container {
+  position: absolute;
+  top: 20px;
+  right: 100px;
+  z-index: 1000;
+}
+
+.back-button-container .el-button {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.back-button-container .el-button:hover {
+  background-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 </style>
 
