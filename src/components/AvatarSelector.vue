@@ -5,6 +5,8 @@
     width="800px"
     center
     custom-class="avatar-dialog"
+    :close-on-click-modal="false"
+    :close-on-press-escape="true"
   >
     <div class="avatar-gallery">
       <div 
@@ -14,7 +16,12 @@
         :class="{ 'selected': selectedAvatar === avatar }"
         @click="selectAvatar(avatar)"
       >
-        <el-avatar :src="avatar" :size="90"></el-avatar>
+        <div class="avatar-wrapper">
+          <el-avatar :src="avatar" :size="90"></el-avatar>
+          <div class="avatar-overlay">
+            <el-icon><Check /></el-icon>
+          </div>
+        </div>
       </div>
     </div>
     
@@ -22,7 +29,7 @@
       <el-button @click="cancel" round>
         <el-icon><Close /></el-icon> 取消
       </el-button>
-      <el-button type="primary" @click="confirm" round>
+      <el-button type="primary" @click="confirm" round :disabled="!selectedAvatar">
         <el-icon><Check /></el-icon> 确定
       </el-button>
     </div>
@@ -45,10 +52,10 @@ export default {
     avatarOptions: {
       type: Array,
       default: () => [
-        'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-        'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-        'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-        'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg'
+        '/images/avatar/avatar1.jpg',
+        '/images/avatar/avatar2.jpg',
+        '/images/avatar/avatar3.jpg',
+        '/images/avatar/avatar4.jpg'
       ]
     },
     currentAvatar: {
@@ -100,9 +107,11 @@ export default {
 .avatar-gallery {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
-  margin-bottom: 25px;
-  padding: 20px;
+  gap: 30px;
+  margin-bottom: 30px;
+  padding: 30px;
+  background: #f8f9fa;
+  border-radius: 12px;
 }
 
 .avatar-option {
@@ -110,49 +119,157 @@ export default {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  padding: 15px;
-  border-radius: 12px;
-  transition: all 0.3s;
+  padding: 20px;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.avatar-wrapper {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+}
+
+.avatar-overlay .el-icon {
+  color: #409EFF;
+  font-size: 24px;
+  transform: scale(0.5);
+  transition: transform 0.3s ease;
 }
 
 .avatar-option:hover {
-  background-color: #f0f9ff;
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.avatar-option:hover .avatar-overlay {
+  opacity: 1;
+}
+
+.avatar-option:hover .avatar-overlay .el-icon {
+  transform: scale(1);
 }
 
 .avatar-option.selected {
-  background-color: #e1f3d8;
-  border: 2px solid #67c23a;
+  background: #f5f7fa;
+  border: 2px solid #409EFF;
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(64, 158, 255, 0.15);
+}
+
+.avatar-option.selected .avatar-overlay {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.avatar-option.selected .avatar-overlay .el-icon {
+  transform: scale(1);
 }
 
 .dialog-footer-center {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 30px;
   gap: 20px;
+}
+
+.dialog-footer-center .el-button {
+  padding: 12px 30px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.dialog-footer-center .el-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* 自定义对话框样式 */
 :deep(.avatar-dialog) {
-  border-radius: 15px;
+  border-radius: 20px;
   overflow: hidden;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
 }
 
 :deep(.avatar-dialog .el-dialog__header) {
-  background-color: #409EFF;
+  background: linear-gradient(135deg, #409EFF 0%, #53a8ff 100%);
   color: white;
-  padding: 15px 20px;
+  padding: 20px;
+  margin: 0;
 }
 
 :deep(.avatar-dialog .el-dialog__title) {
   color: white;
   font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.5px;
 }
 
 :deep(.avatar-dialog .el-dialog__body) {
   padding: 30px;
+  background: #fff;
+}
+
+:deep(.avatar-dialog .el-dialog__headerbtn) {
+  top: 20px;
+  right: 20px;
+}
+
+:deep(.avatar-dialog .el-dialog__headerbtn .el-dialog__close) {
+  color: white;
+  font-size: 20px;
+}
+
+:deep(.avatar-dialog .el-dialog__headerbtn:hover .el-dialog__close) {
+  color: #f0f9ff;
+  transform: rotate(90deg);
+}
+
+/* 添加动画效果 */
+:deep(.el-dialog) {
+  animation: dialogFadeIn 0.3s ease-out;
+}
+
+@keyframes dialogFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .avatar-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+
+  :deep(.avatar-dialog) {
+    width: 90% !important;
+    margin: 0 auto;
+  }
 }
 </style> 
