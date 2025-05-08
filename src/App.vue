@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { config } from './config/config';
+import { APP_CONFIG } from './config/config';
 </script>
 
 <template>
   <div id="app">
     <router-view></router-view>
-    <nav v-if="config.debug.enabled" class="bottom-nav">
+    <nav v-if="APP_CONFIG.debug.enabled" class="bottom-nav">
       <router-link to="/">首页</router-link> |
       <router-link to="/login">登录</router-link> |
       <router-link to="/register">注册</router-link> |
