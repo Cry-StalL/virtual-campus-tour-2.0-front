@@ -227,19 +227,17 @@ const submitMessage = async () => {
     ElMessage.warning('请先登录');
     return;
   }
-
   try {
     const panoramaViewer = panoramaViewerRef.value as any;
     const currentSceneId = panoramaViewer?.getCurrentSceneId();
-
     const response = await axios.post(getApiUrl('users/messages'), {
       content: messageForm.value.content,
-      userId: userId.value,
+      userId: parseInt(userId.value, 10),
       username: userName.value,
       panoramaId: currentSceneId
     });
 
-    if (response.data.success) {
+    if (response.data.message === '创建成功') {
       // 创建新留言对象
       const newMessage = {
         content: messageForm.value.content,
@@ -247,9 +245,10 @@ const submitMessage = async () => {
         username: userName.value,
         panoramaId: currentSceneId
       };
-
+      // alert(allMessages.value.length)
       // 添加到留言列表
       allMessages.value.push(newMessage);
+      // alert(allMessages.value.length)
 
       // 立即显示新发表的留言
       setTimeout(() => {
