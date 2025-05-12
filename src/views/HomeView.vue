@@ -344,7 +344,7 @@ body, html, #app {
   left: -16%;
   width: 16%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 1);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   transition: left 0.3s ease;
   z-index: 20;
@@ -516,7 +516,7 @@ body, html, #app {
   width: 80vw;
   top: 8vh;
   height: 90vh;
-
+  background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   transition: left 0.3s ease;
   z-index: 10;
