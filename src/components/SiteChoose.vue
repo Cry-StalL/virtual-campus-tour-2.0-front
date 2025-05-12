@@ -9,54 +9,54 @@
             <text style="font-size: 2vw; font-weight: bold; color: black;">地点跳转</text>
         </div>
         <div class="image_line">
-            <div class="image_button" @click="test(0)">
-                <img class="image_img" :src="a_page[0].siteURL" v-show="is_show_image[0]"/>
-                <text class="image_text" v-show="is_show_image[0]">{{a_page[0].siteName}}</text>
+            <div class="image_button" @click="test(0)" v-show="is_show_image[0]">
+                <img class="image_img" :src="sites_in_a_page[0].siteURL"/>
+                <text class="image_text">{{sites_in_a_page[0].siteName}}</text>
             </div>
-            <div class="image_button" @click="test(1)">
-                <img class="image_img" :src="a_page[1].siteURL" v-show="is_show_image[1]"/>
-                <text class="image_text" v-show="is_show_image[1]">{{a_page[1].siteName}}</text>
+            <div class="image_button" @click="test(1)" v-show="is_show_image[1]">
+                <img class="image_img" :src="sites_in_a_page[1].siteURL"/>
+                <text class="image_text">{{sites_in_a_page[1].siteName}}</text>
             </div>
-            <div class="image_button" @click="test(2)">
-                <img class="image_img" :src="a_page[2].siteURL" v-show="is_show_image[2]"/>
-                <text class="image_text" v-show="is_show_image[2]">{{a_page[2].siteName}}</text>
-            </div>
-        </div>
-        <div class="image_line">
-            <div class="image_button" @click="test(3)">
-                <img class="image_img" :src="a_page[3].siteURL" v-show="is_show_image[3]"/>
-                <text class="image_text" v-show="is_show_image[3]">{{a_page[3].siteName}}</text>
-            </div>
-            <div class="image_button" @click="test(4)">
-                <img class="image_img" :src="a_page[4].siteURL" v-show="is_show_image[4]"/>
-                <text class="image_text" v-show="is_show_image[4]">{{a_page[4].siteName}}</text>
-            </div>
-            <div class="image_button" @click="test(5)">
-                <img class="image_img" :src="a_page[5].siteURL" v-show="is_show_image[5]"/>
-                <text class="image_text" v-show="is_show_image[5]">{{a_page[5].siteName}}</text>
+            <div class="image_button" @click="test(2)" v-show="is_show_image[2]">
+                <img class="image_img" :src="sites_in_a_page[2].siteURL"/>
+                <text class="image_text">{{sites_in_a_page[2].siteName}}</text>
             </div>
         </div>
         <div class="image_line">
-            <div class="image_button" @click="test(6)">
-                <img class="image_img" :src="a_page[6].siteURL" v-show="is_show_image[6]"/>
-                <text class="image_text" v-show="is_show_image[6]">{{a_page[6].siteName}}</text>
+            <div class="image_button" @click="test(3)" v-show="is_show_image[3]">
+                <img class="image_img" :src="sites_in_a_page[3].siteURL"/>
+                <text class="image_text">{{sites_in_a_page[3].siteName}}</text>
             </div>
-            <div class="image_button" @click="test(7)">
-                <img class="image_img" :src="a_page[7].siteURL" v-show="is_show_image[7]"/>
-                <text class="image_text" v-show="is_show_image[7]">{{a_page[7].siteName}}</text>
+            <div class="image_button" @click="test(4)" v-show="is_show_image[4]">
+                <img class="image_img" :src="sites_in_a_page[4].siteURL"/>
+                <text class="image_text">{{sites_in_a_page[4].siteName}}</text>
             </div>
-            <div class="image_button" @click="test(8)">
-                <img class="image_img" :src="a_page[8].siteURL" v-show="is_show_image[8]"/>
-                <text class="image_text" v-show="is_show_image[8]">{{a_page[8].siteName}}</text>
+            <div class="image_button" @click="test(5)" v-show="is_show_image[5]">
+                <img class="image_img" :src="sites_in_a_page[5].siteURL"/>
+                <text class="image_text">{{sites_in_a_page[5].siteName}}</text>
+            </div>
+        </div>
+        <div class="image_line">
+            <div class="image_button" @click="test(6)" v-show="is_show_image[6]">
+                <img class="image_img" :src="sites_in_a_page[6].siteURL"/>
+                <text class="image_text">{{sites_in_a_page[6].siteName}}</text>
+            </div>
+            <div class="image_button" @click="test(7)" v-show="is_show_image[7]">
+                <img class="image_img" :src="sites_in_a_page[7].siteURL"/>
+                <text class="image_text">{{sites_in_a_page[7].siteName}}</text>
+            </div>
+            <div class="image_button" @click="test(8)" v-show="is_show_image[8]">
+                <img class="image_img" :src="sites_in_a_page[8].siteURL"/>
+                <text class="image_text">{{sites_in_a_page[8].siteName}}</text>
             </div>
         </div>
         <div class="page_number" style="display: flex; flex-direction: row; ">
-            <div >
+            <div style="width:2vw;">
                 <div @click="sub_page()" v-show="base_Id >= 9" style="font-size: 2vw">-</div>
             </div>
-            <div style="font-size: 2vw">{{base_Id/9+1}}</div>
-            <div >
-                <div @click="add_page()" v-show="img_numbers - base_Id - 9 > 0" style="font-size: 2vw">+</div>
+            <div style="font-size: 2vw; width: 2vw;">{{base_Id/9+1}}</div>
+            <div style="width: 2vw;">
+                <div @click="add_page()" v-show="total_image_numbers - base_Id - 9 > 0" style="font-size: 2vw">+</div>
             </div>
         </div>
         
@@ -68,7 +68,7 @@
 <script setup lang="ts">
     import { onMounted, ref } from 'vue';
     const base_Id = ref(0);
-    const img_numbers = ref(0);
+    const total_image_numbers = ref(0);
     const is_show_image = ref<boolean[]>([
         false, false, false,
         false, false, false,
@@ -80,7 +80,7 @@
         siteName: string;
         siteURL:  string;
     };
-    const sites: SiteClass[] = [
+    const total_sites: SiteClass[] = [
         { siteID: "1", siteName: "010101", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
         { siteID: "2", siteName: "020202", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
         { siteID: "3", siteName: "030303", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
@@ -108,37 +108,35 @@
         { siteID: "25", siteName: "252525", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" }
     ];
 
-    const a_page: SiteClass[] = [
-        sites[0], sites[0], sites[0],
-        sites[0], sites[0], sites[0],
-        sites[0], sites[0], sites[0] 
+    const sites_in_a_page: SiteClass[] = [
+        total_sites[0], total_sites[0], total_sites[0],
+        total_sites[0], total_sites[0], total_sites[0],
+        total_sites[0], total_sites[0], total_sites[0] 
     ];
 
     onMounted(() => {
-        // alert("SiteChooseView");
-        get_image();
+        get_images_from_back();
     });
-    const get_image = () => { 
-        img_numbers.value = 25;
+    const get_images_from_back = () => { 
+        total_image_numbers.value = 25;
         base_Id.value = 0;
-        push_to_a_page(base_Id.value, img_numbers.value);
-        change_is_show_image(base_Id.value, img_numbers.value);
-        // alert(base_Id.value);
+        update_sites_in_a_page(base_Id.value, total_image_numbers.value);
+        update_is_show_image(base_Id.value, total_image_numbers.value);
 
     };  
-    const change_is_show_image = (base_Id: number, img_numbers: number) => {
+    const update_is_show_image = (base_Id: number, total_image_numbers: number) => {
         for (let i = 0; i < 9; i++) {
-            if (base_Id + i < img_numbers){
+            if (base_Id + i < total_image_numbers){
                 is_show_image.value[i] = true;
             }else{
                 is_show_image.value[i] = false;
             }
         }
     };
-    const push_to_a_page = (base_Id: number, img_numbers: number) => {
+    const update_sites_in_a_page = (base_Id: number, total_image_numbers: number) => {
         for (let i = 0; i < 9; i++) {
-            if (base_Id + i < img_numbers){
-                a_page[i] = sites[base_Id + i];
+            if (base_Id + i < total_image_numbers){
+                sites_in_a_page[i] = total_sites[base_Id + i];
             }
         }
     };
@@ -160,15 +158,14 @@
     const add_page = () => {
         let tmp = base_Id.value;
         base_Id.value = tmp + 9;
-        // alert(base_Id.value);
-        push_to_a_page(base_Id.value, img_numbers.value);
-        change_is_show_image(base_Id.value, img_numbers.value);
+        update_sites_in_a_page(base_Id.value, total_image_numbers.value);
+        update_is_show_image(base_Id.value, total_image_numbers.value);
     }
     const sub_page = () => {
         let tmp = base_Id.value;
         base_Id.value = tmp - 9;
-        push_to_a_page(base_Id.value, img_numbers.value);
-        change_is_show_image(base_Id.value, img_numbers.value);
+        update_sites_in_a_page(base_Id.value, total_image_numbers.value);
+        update_is_show_image(base_Id.value, total_image_numbers.value);
     }
 
 
