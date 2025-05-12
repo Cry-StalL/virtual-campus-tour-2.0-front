@@ -85,6 +85,7 @@
   
 <script>
   import axios from 'axios'
+  import { getApiUrl } from '@/config/config.ts';
 
   export default {
     data() {
@@ -188,7 +189,7 @@
 
             // 使用 axios 将注册信息发送到后端
             axios.post(
-              'http://localhost:8080/api/v1/users/register',
+              getApiUrl('users/register'),
               {
                 username: username,
                 email: email,
@@ -278,7 +279,7 @@
         
         // 发送获取验证码请求
         axios.post(
-          'http://localhost:8080/api/v1/users/email-code',
+          getApiUrl('users/email-code'),
           {
             email: this.ruleForm.email
           },
