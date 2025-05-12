@@ -82,6 +82,7 @@ import { ArrowLeft, ChatDotRound } from '@element-plus/icons-vue';
 import PanoramaViewer from './base-components/PanoramaViewer.vue';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
+import { getApiUrl } from '@/config/config.ts';
 
 const panoramaViewerRef = ref(null);
 
@@ -231,7 +232,7 @@ const submitMessage = async () => {
     const panoramaViewer = panoramaViewerRef.value as any;
     const currentSceneId = panoramaViewer?.getCurrentSceneId();
 
-    const response = await axios.post('http://localhost:8080/api/v1/users/messages', {
+    const response = await axios.post(getApiUrl('users/messages'), {
       content: messageForm.value.content,
       userId: userId.value,
       username: userName.value,
@@ -283,7 +284,7 @@ const fetchMessages = async () => {
     const panoramaViewer = panoramaViewerRef.value as any;
     const currentSceneId = panoramaViewer?.getCurrentSceneId();
     // 获取当前全景图的留言
-    const response = await axios.get(`http://localhost:8080/api/v1/users/messages?panoramaId=${currentSceneId}`);
+    const response = await axios.get(getApiUrl(`users/messages?panoramaId=${currentSceneId}`));
     if (response.data.success) {
       // 保存所有留言
       allMessages.value = response.data.data || [];
