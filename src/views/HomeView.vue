@@ -81,12 +81,12 @@ import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowDown, User, SwitchButton } from '@element-plus/icons-vue';
-import PanoramaViewerGroup from '@/components/base-components/PanoramaViewerGroup.vue';
+import PanoramaViewerGroup from '@/components/pano/base-components/PanoramaViewerGroup.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
 import { APP_CONFIG } from '@/config/config';
-import StreetViewer from '@/components/StreetViewer.vue';
-import SceneViewer from '@/components/SceneViewer.vue';
+import StreetViewer from '@/components/pano/StreetViewer.vue';
+import SceneViewer from '@/components/pano/SceneViewer.vue';
 import SiteChoose from '@/components/SiteChoose.vue';
 import usefulInfo from '@/components/usefulInfo.vue';
 import UsefulInfo from '@/components/usefulInfo.vue';
@@ -214,7 +214,7 @@ const toggleSidebar = () => {
   sidebarVisible.value = !sidebarVisible.value;
 };
 
-// 侧边栏点击显示地点跳转 
+// 侧边栏点击显示地点跳转
 const siteChooseVisible = ref(false);
 const usefulInfoVisible = ref(false);
 
@@ -334,7 +334,7 @@ body, html, #app {
 
   transition: transform 0.3s;
 
-  
+
 }
 
 /* 侧边栏样式 */
