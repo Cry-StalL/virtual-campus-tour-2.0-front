@@ -378,9 +378,10 @@ const submitMessage = async () => {
   }
 
   try {
-    // 获取预览框底部锚点的位置
-    const anchorX = previewPosition.value.x + 10; // 锚点位于预览框左下角
-    const anchorY = previewPosition.value.y + 100; // 根据预览框高度调整
+    // 获取白色圆点的精确位置（而不是预览框的位置）
+    // 圆点位于锚线的底部，锚线从预览框左下方延伸出来
+    const circleX = previewPosition.value.x + 15; // 锚点左偏移15px
+    const circleY = previewPosition.value.y + 40 + 20 + 5; // 预览框高度 + 锚线长度 + 圆点垂直偏移
     
     // 使用全景查看器提供的坐标转换接口获取三维坐标
     const panoramaViewer = panoramaViewerRef.value as any;
@@ -390,17 +391,32 @@ const submitMessage = async () => {
     }
     
     // 获取三维坐标
-    const coordinates = panoramaViewer.convertScreenToSphericalCoordinates(anchorX, anchorY);
+    const coordinates = panoramaViewer.convertScreenToSphericalCoordinates(circleX, circleY);
     if (!coordinates) {
       ElMessage.error('坐标转换失败');
       return;
     }
     
-    console.log('留言位置三维坐标:', coordinates);
+    console.log('白色圆点的二维坐标:', { x: circleX, y: circleY });
+    console.log('转换后的三维坐标:', coordinates);
+    
     const currentSceneId = panoramaViewer.getCurrentSceneId();
     
-    // 这里添加后续的后端保存逻辑
-    // ...
+    // 准备要发送到后端的数据
+    // const messageData = {
+    //   content: messageForm.value.content,
+    //   userId: userId.value,
+    //   username: userName.value,
+    //   panoramaId: currentSceneId,
+    //   position: {
+    //     longitude: coordinates.longitude,
+    //     latitude: coordinates.latitude
+    //   }
+    // };
+    
+    // console.log('将发送到后端的数据:', messageData);
+    
+    // TODO: 这里添加后端保存逻辑 (上面的作为参考，主要是三维坐标 coordinates.longitude 和 coordinates.latitude)
     
     // 临时模拟成功
     ElMessage.success('留言提交成功');
