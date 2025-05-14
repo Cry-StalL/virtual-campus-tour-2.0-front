@@ -519,14 +519,14 @@ const stopDraggingPanel = (event: MouseEvent) => {
   min-height: 40px;
   background: linear-gradient(135deg, rgba(255, 150, 50, 0.95) 0%, rgba(255, 102, 0, 0.95) 100%);
   border-radius: 10px;
-  padding: 15px;
+  padding: 10px;
   color: white;
   font-size: 14px;
   cursor: move;
   z-index: 2001; /* 确保在对话框之上 */
   user-select: none;
   transition: box-shadow 0.2s;
-  overflow: hidden;
+  overflow: visible; /* 修改为visible以显示超出的线条 */
   word-break: break-word;
   pointer-events: auto;
   transform: translate3d(0, 0, 0); /* 启用硬件加速 */
@@ -560,15 +560,26 @@ const stopDraggingPanel = (event: MouseEvent) => {
 
 .message-preview-anchor {
   position: absolute;
+  bottom: -20px;
+  left: 15px;
+  width: 2px;
+  height: 20px;
+  background-color: white;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5); /* 添加阴影使白线更明显 */
+  z-index: 2002;
+}
+
+.message-preview-anchor::after {
+  content: "";
+  position: absolute;
   bottom: -5px;
-  left: 10px;
-  width: 15px;
-  height: 15px;
+  left: -4px;
+  width: 10px;
+  height: 10px;
   background-color: white;
   border-radius: 50%;
-  border: 2px solid rgba(255, 102, 0, 0.95);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 2002; /* 确保在预览框之上 */
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5); /* 添加阴影使白圈更明显 */
+  z-index: 2002;
 }
 
 .return-button {
