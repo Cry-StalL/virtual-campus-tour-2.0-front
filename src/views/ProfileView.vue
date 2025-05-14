@@ -113,6 +113,17 @@
             <el-card class="message-card">
               <div class="message-content">{{ message.content }}</div>
               <div class="message-location">{{ message.location }}</div>
+              <div class="message-actions">
+                <el-button 
+                  type="danger" 
+                  size="small" 
+                  @click="handleDeleteMessage(message)"
+                  class="delete-btn"
+                >
+                  <el-icon><Delete /></el-icon>
+                  删除
+                </el-button>
+              </div>
             </el-card>
           </el-timeline-item>
         </el-timeline>
@@ -147,7 +158,7 @@
 </template>
 
 <script>
-import { User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDotRound, SwitchButton } from '@element-plus/icons-vue'
+import { User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDotRound, SwitchButton, Delete } from '@element-plus/icons-vue'
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import AvatarSelector from '@/components/AvatarSelector.vue';
@@ -158,7 +169,7 @@ import { th } from 'element-plus/es/locales.mjs';
 
 export default {
   components: {
-    User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDotRound, SwitchButton,
+    User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDotRound, SwitchButton, Delete,
     AvatarSelector
   },
   data() {
@@ -260,7 +271,7 @@ export default {
         return;
       }
 
-      axios.post('http://localhost:8080/api/v1/users/getUserCreationTime', {
+      axios.post(getApiUrl('users/getUserCreationTime'), {
         userId: parseInt(this.form.userId)
       }, {
         headers: {
@@ -473,7 +484,7 @@ export default {
       }
 
       // 调用API获取用户留言数据
-      axios.post(`getApiUrl(`users/getUserMessages`, {
+      axios.post(getApiUrl('users/getUserMessages'), {
         userId: parseInt(this.form.userId)
       }, {
         headers: {
@@ -484,8 +495,11 @@ export default {
           loading.close();
           
           if (response.data.code === 0) {
-            // 获取留言数据并排序
-            this.userMessages = (response.data.data || []).sort((a, b) => {
+            // 获取留言数据并排序，确保每条留言都有id字段
+            this.userMessages = (response.data.data || []).map(message => ({
+              ...message,
+              id: message.id || message.messageId // 使用id或messageId作为唯一标识
+            })).sort((a, b) => {
               return new Date(b.createTime) - new Date(a.createTime);
             });
             
@@ -580,6 +594,65 @@ export default {
           type: 'info',
           message: '已取消注销'
         });          
+      });
+    },
+
+    // 删除留言
+    handleDeleteMessage(message) {
+      this.$confirm('确定要删除这条留言吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 显示加载状态
+        const loading = this.$loading({
+          lock: true,
+          text: '删除中...',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
+
+        // 调用API删除留言
+        axios.post(getApiUrl('users/deleteMessage'), {
+          messageId: message.id
+        })
+        .then(response => {
+          loading.close();
+          
+          if (response.data.code === 0) {
+            // 从列表中移除该留言
+            this.userMessages = this.userMessages.filter(m => m.id !== message.id);
+            
+            this.$message({
+              type: 'success',
+              message: '留言已删除'
+            });
+          } else {
+            this.$message({
+              type: 'error',
+              message: response.data.message || '删除失败'
+            });
+          }
+        })
+        .catch(error => {
+          loading.close();
+          console.error('删除留言失败:', error);
+          
+          let errorMessage = '网络错误，请稍后重试';
+          if (error.response) {
+            errorMessage = error.response.data.message || `服务器错误 (${error.response.status})`;
+          }
+          
+          this.$message({
+            type: 'error',
+            message: errorMessage
+          });
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
       });
     }
   }
@@ -1014,6 +1087,31 @@ export default {
   background-color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.message-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.delete-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.delete-btn .el-icon {
+  margin-right: 4px;
+}
+
+.message-card {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.message-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 </style>
 
