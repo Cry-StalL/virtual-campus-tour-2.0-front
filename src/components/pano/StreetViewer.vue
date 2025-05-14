@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { ref, shallowRef } from 'vue';
-import PanoramaViewer from './base-components/PanoramaViewer.vue';
+import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 
 const props = defineProps<{ switchViewer: (name: string) => void }>();
 

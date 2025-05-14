@@ -79,14 +79,14 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, computed, watch } from 'vue';
 import { ArrowLeft, ChatDotRound } from '@element-plus/icons-vue';
-import PanoramaViewer from './base-components/PanoramaViewer.vue';
+import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { getApiUrl } from '@/config/config.ts';
 
 const panoramaViewerRef = ref(null);
 
-const props = defineProps<{ 
+const props = defineProps<{
   switchViewer: (name: string) => void,
   isLoggedIn?: boolean,
   userID?: string,
@@ -299,7 +299,7 @@ const fetchMessages = async () => {
 // 切换弹幕显示状态
 const toggleDanmaku = () => {
   showDanmaku.value = !showDanmaku.value;
-  
+
   if (showDanmaku.value) {
     // 重新启动弹幕循环
     startMessageCycle();
