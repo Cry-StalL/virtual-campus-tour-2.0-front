@@ -1,7 +1,7 @@
 <template>
   <div class="street-viewer">
     <!-- 使用基础 Viewer 组件 -->
-    <PanoramaViewer :scenes="scenes" />
+    <PanoramaViewer ref="panoramaViewerRef" :scenes="scenes" />
   </div>
 </template>
 
@@ -9,6 +9,7 @@
 import { ref, shallowRef } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 
+const panoramaViewerRef = ref(null);
 const props = defineProps<{ switchViewer: (name: string) => void }>();
 
 // 定义场景数据

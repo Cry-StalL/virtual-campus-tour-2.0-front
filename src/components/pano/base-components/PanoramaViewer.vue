@@ -22,6 +22,7 @@ const emit = defineEmits<{
   (e: 'hotspotClick', hotspot: HotSpot): void;
   (e: 'sceneChange', index: number): void;
   (e: 'error', message: string): void;
+  (e: 'coordinateSelected', coordinates: { longitude: number; latitude: number; sceneId: string }): void;
 }>();
 
 // 定义组件的props
@@ -342,6 +343,37 @@ const vector3ToLatLon = (point: THREE.Vector3): { longitude: number; latitude: n
   };
 };
 
+// 将二维屏幕坐标转换为三维经纬度坐标
+const convertScreenToSphericalCoordinates = (screenX: number, screenY: number): { longitude: number; latitude: number } | null => {
+  if (!camera || !renderer || !scene) return null;
+
+  // 计算归一化的设备坐标
+  const mouse = new THREE.Vector2();
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((screenX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((screenY - rect.top) / rect.height) * 2 + 1;
+
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(mouse, camera);
+
+  // 直接使用射线方向计算经纬度坐标
+  const direction = new THREE.Vector3();
+  raycaster.ray.direction.normalize();
+  direction.copy(raycaster.ray.direction);
+  
+  const coordinates = vector3ToLatLon(direction);
+  
+  // 修正经度值
+  const correctedLongitude = coordinates.longitude - 180;
+  // 规范化经度到 -180 到 180 范围内
+  const normalizedLongitude = ((correctedLongitude + 540) % 360) - 180;
+  
+  return {
+    longitude: parseFloat(normalizedLongitude.toFixed(2)),
+    latitude: coordinates.latitude
+  };
+};
+
 // 处理场景点击
 const handleSceneClick = (event: MouseEvent) => {
   if (!camera || !renderer || !scene) return;
@@ -365,42 +397,27 @@ const handleSceneClick = (event: MouseEvent) => {
     return;
   }
 
-  // 如果不是热点，且在debug模式下，则获取点击位置的坐标
+  // 获取点击位置的坐标
+  const coordinates = convertScreenToSphericalCoordinates(event.clientX, event.clientY);
+  
+  if (!coordinates) return;
+
+  // 创建完整的坐标数据，包含当前场景ID
+  const coordinateData = {
+    ...coordinates,
+    sceneId: currentSceneId.value
+  };
+
+  // 如果在debug模式下，打印到控制台
   if (props.debug) {
-    // 在全景图中，我们需要从相机发射一条射线到球体内表面
-    // 由于我们是在球体内部，需要直接计算射线与全景球的交点
-    const direction = new THREE.Vector3();
-    raycaster.ray.direction.normalize();
-    direction.copy(raycaster.ray.direction);
-    
-    // 直接使用射线方向来计算经纬度坐标
-    // 因为射线方向就是从相机（球心）指向球面的单位向量
-    const coordinates = vector3ToLatLon(direction);
-    
-    // 修正经度值，减去180度使其与热点坐标系统一致
-    const correctedLongitude = coordinates.longitude - 180;
-    // 规范化经度到 -180 到 180 范围内
-    const normalizedLongitude = ((correctedLongitude + 540) % 360) - 180;
-    
-    const coordText = `longitude: ${parseFloat(normalizedLongitude.toFixed(2))}, latitude: ${coordinates.latitude}`;
-    
-    // 复制到剪贴板
-    navigator.clipboard.writeText(coordText).then(() => {
-      ElMessage({
-        message: '坐标已复制到剪贴板',
-        type: 'success',
-        duration: 2000
-      });
-      console.log('点击位置坐标:', coordText);
-    }).catch(err => {
-      console.error('复制失败:', err);
-      ElMessage({
-        message: '复制坐标失败',
-        type: 'error',
-        duration: 2000
-      });
-    });
+    console.log('点击位置坐标:', coordinates);
   }
+  
+  // 触发坐标选择事件
+  emit('coordinateSelected', coordinateData);
+  
+  // 添加调试输出
+  console.log('坐标已选择:', coordinates);
 };
 
 // 添加鼠标移动事件处理
@@ -555,12 +572,25 @@ onBeforeUnmount(() => {
   controls = null;
 });
 
+// 获取3D坐标点
+const getCoordinateFromClick = (event: MouseEvent): { longitude: number; latitude: number; sceneId: string } | null => {
+  const coordinates = convertScreenToSphericalCoordinates(event.clientX, event.clientY);
+  if (!coordinates) return null;
+  
+  return {
+    ...coordinates,
+    sceneId: currentSceneId.value
+  };
+};
+
 // 暴露方法
 defineExpose({
   switchScene,
   showError,
   hideError,
-  getCurrentSceneId
+  getCurrentSceneId,
+  getCoordinateFromClick,
+  convertScreenToSphericalCoordinates
 });
 </script>
 
