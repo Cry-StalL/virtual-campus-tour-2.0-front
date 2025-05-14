@@ -25,9 +25,6 @@
       :style="{ left: previewPosition.x + 'px', top: previewPosition.y + 'px' }"
       @mousedown.stop.prevent="startDragging"
     >
-      <div class="message-preview-header">
-        <span>预览 - 拖动到想要的位置</span>
-      </div>
       <div class="message-preview-content">
         {{ messageForm.content || '拖动预览框到想要展示的位置' }}
       </div>
@@ -70,14 +67,8 @@
           <el-form-item>
             <span class="position-instruction">
               <el-icon><Position /></el-icon>
-              <span>{{ isDraggingMessage ? '拖动留言预览框到想要展示的位置' : '点击开启位置选择' }}</span>
+              <span>拖动留言预览框到想要展示的位置</span>
             </span>
-            <el-switch
-              v-model="isDraggingMessage"
-              active-text="位置选择"
-              inactive-text="取消选择"
-              class="position-switch"
-            />
           </el-form-item>
         </el-form>
       </div>
@@ -282,6 +273,14 @@ const selectedCoordinate = ref<{ longitude: number; latitude: number; sceneId: s
 const openMessageDialog = () => {
   if (isUserLoggedIn.value) {
     showMessageDialog.value = true;
+    // 自动启用位置选择
+    isDraggingMessage.value = true;
+    
+    // 初始化预览框位置到视窗中央
+    previewPosition.value = {
+      x: window.innerWidth / 2 - 150,
+      y: window.innerHeight / 2 - 50
+    };
   } else {
     ElMessage.warning('请先登录');
   }
@@ -516,14 +515,13 @@ const stopDraggingPanel = (event: MouseEvent) => {
 /* 留言预览框样式 */
 .message-preview {
   position: fixed;
-  width: 300px;
-  min-height: 80px;
+  width: 150px;
+  min-height: 40px;
   background: linear-gradient(135deg, rgba(255, 150, 50, 0.95) 0%, rgba(255, 102, 0, 0.95) 100%);
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   padding: 15px;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
   cursor: move;
   z-index: 2001; /* 确保在对话框之上 */
   user-select: none;
@@ -552,8 +550,12 @@ const stopDraggingPanel = (event: MouseEvent) => {
 }
 
 .message-preview-content {
-  margin-bottom: 20px;
-  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  min-height: 30px;
 }
 
 .message-preview-anchor {
@@ -626,7 +628,7 @@ const stopDraggingPanel = (event: MouseEvent) => {
 .custom-message-panel {
   position: fixed;
   width: 500px;
-  background-color: rgba(255, 255, 255, 0.65);
+  background-color: rgba(255, 255, 255, 0.40);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
