@@ -473,7 +473,7 @@ export default {
       }
 
       // 调用API获取用户留言数据
-      axios.post(`getApiUrl(`users/getUserMessages`, {
+      axios.post(getApiUrl('users/getUserMessages'), {
         userId: parseInt(this.form.userId)
       }, {
         headers: {
