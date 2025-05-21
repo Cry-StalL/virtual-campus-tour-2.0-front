@@ -10,44 +10,44 @@
         </div>
         <div class="image_line">
             <div class="image_button" @click="test(0)" v-show="is_show_image[0]">
-                <img class="image_img" :src="sites_in_a_page[0].siteURL"/>
-                <text class="image_text">{{sites_in_a_page[0].siteName}}</text>
+                <img class="image_img" :src="scenes_in_a_page[0].sceneURL"/>
+                <text class="image_text">{{scenes_in_a_page[0].sceneName}}</text>
             </div>
             <div class="image_button" @click="test(1)" v-show="is_show_image[1]">
-                <img class="image_img" :src="sites_in_a_page[1].siteURL"/>
-                <text class="image_text">{{sites_in_a_page[1].siteName}}</text>
+                <img class="image_img" :src="scenes_in_a_page[1].sceneURL"/>
+                <text class="image_text">{{scenes_in_a_page[1].sceneName}}</text>
             </div>
             <div class="image_button" @click="test(2)" v-show="is_show_image[2]">
-                <img class="image_img" :src="sites_in_a_page[2].siteURL"/>
-                <text class="image_text">{{sites_in_a_page[2].siteName}}</text>
+                <img class="image_img" :src="scenes_in_a_page[2].sceneURL"/>
+                <text class="image_text">{{scenes_in_a_page[2].sceneName}}</text>
             </div>
         </div>
         <div class="image_line">
             <div class="image_button" @click="test(3)" v-show="is_show_image[3]">
-                <img class="image_img" :src="sites_in_a_page[3].siteURL"/>
-                <text class="image_text">{{sites_in_a_page[3].siteName}}</text>
+                <img class="image_img" :src="scenes_in_a_page[3].sceneURL"/>
+                <text class="image_text">{{scenes_in_a_page[3].sceneName}}</text>
             </div>
             <div class="image_button" @click="test(4)" v-show="is_show_image[4]">
-                <img class="image_img" :src="sites_in_a_page[4].siteURL"/>
-                <text class="image_text">{{sites_in_a_page[4].siteName}}</text>
+                <img class="image_img" :src="scenes_in_a_page[4].sceneURL"/>
+                <text class="image_text">{{scenes_in_a_page[4].sceneName}}</text>
             </div>
             <div class="image_button" @click="test(5)" v-show="is_show_image[5]">
-                <img class="image_img" :src="sites_in_a_page[5].siteURL"/>
-                <text class="image_text">{{sites_in_a_page[5].siteName}}</text>
+                <img class="image_img" :src="scenes_in_a_page[5].sceneURL"/>
+                <text class="image_text">{{scenes_in_a_page[5].sceneName}}</text>
             </div>
         </div>
         <div class="image_line">
             <div class="image_button" @click="test(6)" v-show="is_show_image[6]">
-                <img class="image_img" :src="sites_in_a_page[6].siteURL"/>
-                <text class="image_text">{{sites_in_a_page[6].siteName}}</text>
+                <img class="image_img" :src="scenes_in_a_page[6].sceneURL"/>
+                <text class="image_text">{{scenes_in_a_page[6].sceneName}}</text>
             </div>
             <div class="image_button" @click="test(7)" v-show="is_show_image[7]">
-                <img class="image_img" :src="sites_in_a_page[7].siteURL"/>
-                <text class="image_text">{{sites_in_a_page[7].siteName}}</text>
+                <img class="image_img" :src="scenes_in_a_page[7].sceneURL"/>
+                <text class="image_text">{{scenes_in_a_page[7].sceneName}}</text>
             </div>
             <div class="image_button" @click="test(8)" v-show="is_show_image[8]">
-                <img class="image_img" :src="sites_in_a_page[8].siteURL"/>
-                <text class="image_text">{{sites_in_a_page[8].siteName}}</text>
+                <img class="image_img" :src="scenes_in_a_page[8].sceneURL"/>
+                <text class="image_text">{{scenes_in_a_page[8].sceneName}}</text>
             </div>
         </div>
         <div class="page_number" style="display: flex; flex-direction: row; ">
@@ -76,51 +76,52 @@
     ]);
 
     type SiteClass = {
-        siteID:   string;
-        siteName: string;
-        siteURL:  string;
+        sceneID:   string;
+        sceneName: string;
+        sceneURL:  string;
     };
-    const total_sites: SiteClass[] = [
-        { siteID: "1", siteName: "010101", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "2", siteName: "020202", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "3", siteName: "030303", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "4", siteName: "040404", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "5", siteName: "050505", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "6", siteName: "060606", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "7", siteName: "070707", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "8", siteName: "080808", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "9", siteName: "090909", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "10", siteName: "101010", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "11", siteName: "111111", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "12", siteName: "121212", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "13", siteName: "131313", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "14", siteName: "141414", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "15", siteName: "151515", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "16", siteName: "161616", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "17", siteName: "171717", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "18", siteName: "181818", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "19", siteName: "191919", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "20", siteName: "202020", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "21", siteName: "212121", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "22", siteName: "222222", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "23", siteName: "232323", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "24", siteName: "242424", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "25", siteName: "252525", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" }
+    const total_scenes: SiteClass[] = [
+        { sceneID: "1", sceneName: "010101", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "2", sceneName: "020202", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "3", sceneName: "030303", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "4", sceneName: "040404", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "5", sceneName: "050505", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "6", sceneName: "060606", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "7", sceneName: "070707", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "8", sceneName: "080808", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "9", sceneName: "090909", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "10", sceneName: "101010", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "11", sceneName: "111111", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "12", sceneName: "121212", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "13", sceneName: "131313", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "14", sceneName: "141414", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "15", sceneName: "151515", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "16", sceneName: "161616", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "17", sceneName: "171717", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "18", sceneName: "181818", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "19", sceneName: "191919", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "20", sceneName: "202020", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "21", sceneName: "212121", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "22", sceneName: "222222", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "23", sceneName: "232323", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "24", sceneName: "242424", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "25", sceneName: "252525", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
+        { sceneID: "25", sceneName: "252525", sceneURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" }
     ];
 
-    const sites_in_a_page: SiteClass[] = [
-        total_sites[0], total_sites[0], total_sites[0],
-        total_sites[0], total_sites[0], total_sites[0],
-        total_sites[0], total_sites[0], total_sites[0] 
+    const scenes_in_a_page: SiteClass[] = [
+        total_scenes[0], total_scenes[0], total_scenes[0],
+        total_scenes[0], total_scenes[0], total_scenes[0],
+        total_scenes[0], total_scenes[0], total_scenes[0] 
     ];
 
     onMounted(() => {
         get_images_from_back();
     });
     const get_images_from_back = () => { 
-        total_image_numbers.value = 25;
+        total_image_numbers.value = 26;
         base_Id.value = 0;
-        update_sites_in_a_page(base_Id.value, total_image_numbers.value);
+        update_scenes_in_a_page(base_Id.value, total_image_numbers.value);
         update_is_show_image(base_Id.value, total_image_numbers.value);
 
     };  
@@ -133,10 +134,10 @@
             }
         }
     };
-    const update_sites_in_a_page = (base_Id: number, total_image_numbers: number) => {
+    const update_scenes_in_a_page = (base_Id: number, total_image_numbers: number) => {
         for (let i = 0; i < 9; i++) {
             if (base_Id + i < total_image_numbers){
-                sites_in_a_page[i] = total_sites[base_Id + i];
+                scenes_in_a_page[i] = total_scenes[base_Id + i];
             }
         }
     };
@@ -158,13 +159,13 @@
     const add_page = () => {
         let tmp = base_Id.value;
         base_Id.value = tmp + 9;
-        update_sites_in_a_page(base_Id.value, total_image_numbers.value);
+        update_scenes_in_a_page(base_Id.value, total_image_numbers.value);
         update_is_show_image(base_Id.value, total_image_numbers.value);
     }
     const sub_page = () => {
         let tmp = base_Id.value;
         base_Id.value = tmp - 9;
-        update_sites_in_a_page(base_Id.value, total_image_numbers.value);
+        update_scenes_in_a_page(base_Id.value, total_image_numbers.value);
         update_is_show_image(base_Id.value, total_image_numbers.value);
     }
 
