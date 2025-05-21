@@ -2,9 +2,9 @@
   <div class="home">
     <div class="content">
       <!-- 全景导览 -->
-      <PanoramaViewerGroup 
-        :viewers="viewers" 
-        ref="viewerGroup" 
+      <PanoramaViewerGroup
+        :viewers="viewers"
+        ref="viewerGroup"
         initialViewerName="street"
         :isLoggedIn="isLoggedIn"
         :userID="userID"
@@ -15,7 +15,7 @@
 
     <!-- 调试按钮 -->
     <el-button
-      v-if="config.debug.enabled"
+      v-if="APP_CONFIG.debug.enabled"
       class="debug-btn"
       size="small"
       @click="showCurrentSceneId">
@@ -81,12 +81,12 @@ import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowDown, User, SwitchButton } from '@element-plus/icons-vue';
-import PanoramaViewerGroup from '@/components/base-components/PanoramaViewerGroup.vue';
+import PanoramaViewerGroup from '@/components/pano/base-components/PanoramaViewerGroup.vue';
 import Sidebar from '@/components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
-import { config } from '@/config/config';
-import StreetViewer from '@/components/StreetViewer.vue';
-import SceneViewer from '@/components/SceneViewer.vue';
+import { APP_CONFIG } from '@/config/config';
+import StreetViewer from '@/components/pano/StreetViewer.vue';
+import SceneViewer from '@/components/pano/SceneViewer.vue';
 import SiteChoose from '@/components/SiteChoose.vue';
 import usefulInfo from '@/components/usefulInfo.vue';
 import UsefulInfo from '@/components/usefulInfo.vue';
@@ -182,7 +182,7 @@ const handleSceneChange = (index: number) => {
     type: 'info',
     duration: 2000
   });
-  
+
   // 场景切换后获取该场景的历史留言已移动到 SceneViewer 中
   // fetchMessages();
 };
@@ -214,7 +214,7 @@ const toggleSidebar = () => {
   sidebarVisible.value = !sidebarVisible.value;
 };
 
-// 侧边栏点击显示地点跳转 
+// 侧边栏点击显示地点跳转
 const siteChooseVisible = ref(false);
 const usefulInfoVisible = ref(false);
 
@@ -334,7 +334,7 @@ body, html, #app {
 
   transition: transform 0.3s;
 
-  
+
 }
 
 /* 侧边栏样式 */
@@ -514,9 +514,9 @@ body, html, #app {
   top: 0;
   left: -80vw;
   width: 80vw;
-  top: 8vh;
+  top: 6vh;
   height: 90vh;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.3);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   transition: left 0.3s ease;
   z-index: 10;

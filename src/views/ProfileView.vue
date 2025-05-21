@@ -131,6 +131,8 @@
     <AvatarSelector 
       v-model:visible="showAvatarDialog"
       :current-avatar="form.avatar"
+      @confirm="handleAvatarConfirm"
+      @cancel="handleAvatarCancel"
     />
 
     <!-- 返回按钮 -->
@@ -149,6 +151,10 @@ import { User, Message, Lock, Edit, Check, Close, Back, Camera, Calendar, ChatDo
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import AvatarSelector from '@/components/AvatarSelector.vue';
+
+import { getApiUrl } from '@/config/config.ts';
+import { th } from 'element-plus/es/locales.mjs';
+
 
 export default {
   components: {
@@ -206,7 +212,7 @@ export default {
         email: '',
         pass: '',
         checkPass: '',
-        avatar: 'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+        avatar: '/images/avatar/avatar1.jpg',
         registerTime: ''
       },
       rules: {
@@ -241,6 +247,10 @@ export default {
       this.form.userId = Number(Cookies.get('userId') || 0);
       this.form.name = Cookies.get('username') || '';
       this.form.email = Cookies.get('email') || '';
+
+      const avatarId = Cookies.get('avatarId') || 'avatar1';
+      this.form.avatar = `/images/avatar/${avatarId}.jpg`;
+      
       this.fetchUserCreationTime();
     },
 
@@ -296,7 +306,7 @@ export default {
           });
           
           // 调用API更新用户名
-          axios.post('http://localhost:8080/api/v1/users/updateUsername', {
+          axios.post(getApiUrl('users/updateUsername'), {
             userId: this.form.userId,
             username: this.form.name
           })
@@ -367,7 +377,7 @@ export default {
           });
           
           // 调用API重置密码
-          axios.post('http://localhost:8080/api/v1/users/resetPassword', {
+          axios.post(getApiUrl('users/resetPassword'), {
             userId: this.form.userId,
             password: this.form.pass
           })
@@ -422,6 +432,25 @@ export default {
     openAvatarDialog() {
       this.showAvatarDialog = true;
     },
+
+    // 处理头像选择确认
+    handleAvatarConfirm(newAvatar) {
+      this.form.avatar = newAvatar;
+      // 从头像路径中提取ID
+      const avatarId = newAvatar.split('/').pop().replace('.jpg', '');
+      // 保存头像ID到cookies
+      Cookies.set('avatarId', avatarId);
+      this.$message({
+        message: '头像已更新',
+        type: 'success'
+      });
+      this.showAvatarDialog = false;
+    },
+
+    // 处理头像选择取消
+    handleAvatarCancel() {
+      this.showAvatarDialog = false;
+    },
     
     // 获取用户留言记录
     fetchUserMessages() {
@@ -444,7 +473,7 @@ export default {
       }
 
       // 调用API获取用户留言数据
-      axios.post(`http://localhost:8080/api/v1/users/getUserMessages`, {
+      axios.post(getApiUrl('users/getUserMessages'), {
         userId: parseInt(this.form.userId)
       }, {
         headers: {
@@ -530,42 +559,22 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        // 调用API注销账号
-        axios.post('http://localhost:8080/api/v1/users/logout', {
-          userId: this.form.userId
-        })
-        .then(response => {
-          if (response.data.code === 200) {
-            // 清除所有cookie
-            Cookies.remove('userId');
-            Cookies.remove('username');
-            Cookies.remove('email');
+          // 清除所有cookie
+          Cookies.remove('userId');
+          Cookies.remove('username');
+          Cookies.remove('email');
+          Cookies.remove('avatarId');
             
-            // 显示成功消息
-            this.$message({
-              type: 'success',  
-              message: '账号已注销'
-            });
-            
-            // 延迟跳转到登录页
-            setTimeout(() => {
-              this.$router.push('/login');
-            }, 500);
-          } else {
-            // 显示错误信息
-            this.$message({
-              message: response.data.message || '注销失败',
-              type: 'error' 
-            });
-          }
-        })
-        .catch(error => {
-          console.error('注销账号失败:', error);
+          // 显示成功消息
           this.$message({
-            message: '网络错误，请稍后重试',
-            type: 'error'
+            type: 'success',  
+            message: '账号已注销'
           });
-        });
+            
+          // 延迟跳转到登录页
+          setTimeout(() => {
+            this.$router.push('/login');
+          }, 500);
       }).catch(() => {
         this.$message({
           type: 'info',
