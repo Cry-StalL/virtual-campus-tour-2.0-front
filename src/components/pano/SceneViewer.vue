@@ -2,21 +2,6 @@
   <div class="scene-viewer">
     <!-- 使用基础 Viewer 组件 -->
     <PanoramaViewer ref="panoramaViewerRef" :scenes="scenes" />
-    <!-- 弹幕显示区域 -->
-    <div class="danmaku-container" v-show="showDanmaku">
-      <div
-        v-for="(message, index) in messages"
-        :key="index"
-        class="danmaku-item"
-        :style="{
-            top: `${message.top}%`,
-            '--duration': `${message.duration}s`,
-            color: message.color
-          }"
-      >
-        {{ message.content }}
-      </div>
-    </div>
     
     <!-- 可拖动留言预览框 -->
     <div 
@@ -34,10 +19,6 @@
     <!-- 留言按钮 -->
     <div class="message-button" @click="openMessageDialog">
       <el-icon><ChatDotRound /></el-icon>
-    </div>
-    <!-- 弹幕开关按钮 -->
-    <div class="danmaku-toggle-button" @click="toggleDanmaku">
-      <span>{{ showDanmaku ? '隐藏弹幕' : '开启弹幕' }}</span>
     </div>
 
     <!-- 自定义留言输入面板 (替代el-dialog) -->
@@ -250,24 +231,17 @@ const showMessageDialog = ref(false);
 const messageForm = ref({
   content: ''
 });
-const messages = ref<Array<{
-  content: string;
-  top: number;
-  duration: number;
-  color: string;
-}>>([]);
 const allMessages = ref<Array<{
   content: string;
   userId?: string;
   username?: string;
   panoramaId?: string;
+  position?: {
+    longitude: number;
+    latitude: number;
+  };
 }>>([]);
 const messageIntervalId = ref<number | null>(null);
-const showDanmaku = ref(true);
-
-// 坐标选择相关
-const isCoordinateSelectionMode = ref(false);
-const selectedCoordinate = ref<{ longitude: number; latitude: number; sceneId: string } | null>(null);
 
 //打开留言框
 const openMessageDialog = () => {
@@ -283,80 +257,6 @@ const openMessageDialog = () => {
     };
   } else {
     ElMessage.warning('请先登录');
-  }
-};
-
-// 开始循环播放留言
-const startMessageCycle = () => {
-  // 清除可能存在的旧定时器
-  if (messageIntervalId.value) {
-    clearInterval(messageIntervalId.value);
-  }
-
-  // 如果没有留言，不启动循环
-  if (allMessages.value.length === 0) {
-    return;
-  }
-
-  // 每 3 秒显示一条留言
-  const cycleInterval = 3 * 1000;
-  let currentIndex = 0;
-
-  // 只有当当前没有显示留言时，才立即显示第一条
-  if (messages.value.length === 0) {
-    displayMessage(currentIndex);
-  }
-
-  // 设置定时器，每隔5秒显示下一条
-  messageIntervalId.value = window.setInterval(() => {
-    // 移动到下一条留言
-    currentIndex = (currentIndex + 1) % allMessages.value.length;
-
-    displayMessage(currentIndex);
-  }, cycleInterval);
-};
-
-// 显示单条留言
-const displayMessage = (index: number) => {
-  if (index >= 0 && index < allMessages.value.length) {
-    const msg = allMessages.value[index];
-
-    // 创建新的留言，确保从右侧飘入
-    setTimeout(() => {
-      messages.value.push({
-        content: msg.content,
-        top: Math.random() * 80,
-        duration: 15 + Math.random() * 5, // 稍微延长显示时间
-        color: getRandomColor()
-      });
-    }, 10); // 短暂延迟，确保动画正确触发
-  }
-};
-
-// 生成随机颜色
-const getRandomColor = () => {
-  const colors = [
-    '#409EFF', '#67C23A', '#E6A23C', '#F56C6C',
-    '#909399', '#9B59B6', '#1ABC9C', '#3498DB'
-  ];
-  return colors[Math.floor(Math.random() * colors.length)];
-};
-
-// 切换弹幕显示状态
-const toggleDanmaku = () => {
-  showDanmaku.value = !showDanmaku.value;
-
-  if (showDanmaku.value) {
-    // 重新启动弹幕循环
-    startMessageCycle();
-  } else {
-    // 停止弹幕循环
-    if (messageIntervalId.value) {
-      clearInterval(messageIntervalId.value);
-      messageIntervalId.value = null;
-    }
-    // 清除现有弹幕
-    messages.value = [];
   }
 };
 
@@ -403,26 +303,34 @@ const submitMessage = async () => {
     const currentSceneId = panoramaViewer.getCurrentSceneId();
     
     // 准备要发送到后端的数据
-    // const messageData = {
-    //   content: messageForm.value.content,
-    //   userId: userId.value,
-    //   username: userName.value,
-    //   panoramaId: currentSceneId,
-    //   position: {
-    //     longitude: coordinates.longitude,
-    //     latitude: coordinates.latitude
-    //   }
-    // };
+    const messageData = {
+      content: messageForm.value.content,
+      userId: userId.value,
+      username: userName.value,
+      panoramaId: currentSceneId,
+      position: {
+        longitude: coordinates.longitude,
+        latitude: coordinates.latitude
+      }
+    };
     
-    // console.log('将发送到后端的数据:', messageData);
+    console.log('将发送到后端的数据:', messageData);
     
-    // TODO: 这里添加后端保存逻辑 (上面的作为参考，主要是三维坐标 coordinates.longitude 和 coordinates.latitude)
+    // 发送留言到后端
+    const response = await axios.post(getApiUrl('users/messages'), messageData);
     
-    // 临时模拟成功
-    ElMessage.success('留言提交成功');
-    showMessageDialog.value = false;
-    isDraggingMessage.value = false;
-    messageForm.value.content = '';
+    if (response.data.success) {
+      ElMessage.success('留言提交成功');
+      showMessageDialog.value = false;
+      isDraggingMessage.value = false;
+      messageForm.value.content = '';
+      
+      // 重新获取留言列表
+      await fetchMessages();
+      
+    } else {
+      throw new Error(response.data.message || '提交失败');
+    }
     
   } catch (error) {
     console.error('提交留言失败:', error);
@@ -435,17 +343,30 @@ const fetchMessages = async () => {
   try {
     const panoramaViewer = panoramaViewerRef.value as any;
     const currentSceneId = panoramaViewer?.getCurrentSceneId();
+    
     // 获取当前全景图的留言
     const response = await axios.get(getApiUrl(`users/messages?panoramaId=${currentSceneId}`));
     if (response.data.success) {
       // 保存所有留言
       allMessages.value = response.data.data || [];
 
-      // 重新启动循环播放
-      startMessageCycle();
+      console.log('allMessages', allMessages.value);
+      
+      // 重新加载当前场景以更新热点
+      panoramaViewer.switchScene(currentSceneId);
+      
+      // 为每条留言创建热点
+      allMessages.value.forEach(message => {
+        if (message.position) {
+          // 创建热点元素
+
+
+        }
+      });
     }
   } catch (error) {
     console.error('获取留言失败:', error);
+    ElMessage.error('获取留言失败，请稍后重试');
   }
 };
 
@@ -753,69 +674,5 @@ const stopDraggingPanel = (event: MouseEvent) => {
   margin-left: 10px;
 }
 
-/* 弹幕样式 */
-.danmaku-container {
-  position: absolute;
-  top: 60px;
-  left: 0;
-  width: 100%;
-  height: 25%; /* 减小区域高度，只占中间部分 */
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 50;
-}
 
-.danmaku-item {
-  position: absolute;
-  right: 0; /* Start position at the right edge */
-  white-space: nowrap;
-  font-size: 16px; /* 减小字体大小 */
-  font-weight: 500; /* 减轻字体粗细 */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  animation: danmaku linear forwards;
-  animation-duration: var(--duration, 15s);
-  padding: 4px 10px; /* 减小内边距 */
-  background-color: rgba(0, 0, 0, 0.3); /* 增加透明度 */
-  border-radius: 20px;
-  backdrop-filter: blur(2px);
-  z-index: 100;
-  transform: translateX(100%); /* Start off-screen */
-}
-
-@keyframes danmaku {
-  from {
-    transform: translateX(100%); /* Start off-screen to the right */
-  }
-  to {
-    transform: translateX(-100vw); /* Move left beyond the viewport */
-  }
-}
-
-/* 弹幕开关按钮样式 */
-.danmaku-toggle-button {
-  position: fixed;
-  right: 30px;
-  bottom: 5px;
-  padding: 4px 8px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #409EFF 0%, #53a8ff 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(64, 158, 255, 0.3);
-  transition: all 0.3s ease;
-  z-index: 1000;
-}
-
-.danmaku-toggle-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(64, 158, 255, 0.4);
-}
-
-.danmaku-toggle-button span {
-  font-size: 14px;
-  font-weight: 600;
-}
 </style>
