@@ -14,6 +14,7 @@
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { ElMessage, ElIcon } from 'element-plus';
 import { Warning } from '@element-plus/icons-vue';
 
@@ -74,6 +75,7 @@ const viewerContainer = ref<HTMLElement | null>(null);
 let scene: THREE.Scene | null = null;
 let camera: THREE.PerspectiveCamera | null = null;
 let renderer: THREE.WebGLRenderer | null = null;
+let labelRenderer: CSS2DRenderer | null = null;
 let controls: OrbitControls | null = null;
 let isAnimating = false;
 let targetFov = props.initialFov;
@@ -158,6 +160,7 @@ const createHotspot = (hotspot: HotSpot) => {
   if (!scene || !validateHotspot(hotspot)) return;
   
   let material: THREE.SpriteMaterial | THREE.MeshBasicMaterial;
+  let hotspotObject: THREE.Sprite | THREE.Mesh;
   
   if (hotspot.icon) {
     // 使用图标作为热点
@@ -184,8 +187,7 @@ const createHotspot = (hotspot: HotSpot) => {
     // 添加到场景
     scene.add(sprite);
     hotspotObjects.push(sprite as any);
-    
-    return sprite;
+    hotspotObject = sprite;
   } else {
     // 使用默认几何体作为热点
     const geometry = new THREE.SphereGeometry(5, 16, 16);
@@ -209,9 +211,29 @@ const createHotspot = (hotspot: HotSpot) => {
     // 添加到场景
     scene.add(hotspotMesh);
     hotspotObjects.push(hotspotMesh);
-    
-    return hotspotMesh;
+    hotspotObject = hotspotMesh;
   }
+
+  // 创建消息预览标签
+  if (hotspot.description) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message-hotspot-preview';
+    messageDiv.innerHTML = `
+      <div class="message-hotspot-content">
+        ${hotspot.description}
+      </div>
+      <div class="message-hotspot-anchor"></div>
+    `;
+    
+    const label = new CSS2DObject(messageDiv);
+    label.position.copy(hotspotObject.position);
+    label.position.y += 20; // 向上偏移，使标签显示在热点上方
+    
+    scene.add(label);
+    hotspotObjects.push(label as any);
+  }
+  
+  return hotspotObject;
 };
 
 // 显示错误信息
@@ -466,11 +488,17 @@ const initPanorama = () => {
   // 创建渲染器
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
-  // 设置渲染器的CSS样式
   renderer.domElement.style.cursor = 'default';
-  // 设置设备像素比以提高渲染质量
   renderer.setPixelRatio(window.devicePixelRatio);
   viewerContainer.value.appendChild(renderer.domElement);
+
+  // 创建CSS2D渲染器
+  labelRenderer = new CSS2DRenderer();
+  labelRenderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
+  labelRenderer.domElement.style.position = 'absolute';
+  labelRenderer.domElement.style.top = '0';
+  labelRenderer.domElement.style.pointerEvents = 'none';
+  viewerContainer.value.appendChild(labelRenderer.domElement);
   
   // 添加控制器
   controls = new OrbitControls(camera, renderer.domElement);
@@ -515,7 +543,7 @@ const onMouseWheel = (event: WheelEvent) => {
 };
 
 const animate = () => {
-  if (!scene || !camera || !renderer) return;
+  if (!scene || !camera || !renderer || !labelRenderer) return;
   
   isAnimating = true;
   
@@ -531,6 +559,7 @@ const animate = () => {
     
     controls?.update();
     renderer?.render(scene!, camera!);
+    labelRenderer?.render(scene!, camera!);
     requestAnimationFrame(animateFrame);
   };
   
@@ -538,11 +567,12 @@ const animate = () => {
 };
 
 const onWindowResize = () => {
-  if (!camera || !renderer || !viewerContainer.value) return;
+  if (!camera || !renderer || !labelRenderer || !viewerContainer.value) return;
   
   camera.aspect = viewerContainer.value.clientWidth / viewerContainer.value.clientHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
+  labelRenderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
 };
 
 onMounted(() => {
@@ -565,10 +595,15 @@ onBeforeUnmount(() => {
     viewerContainer.value.removeChild(renderer.domElement);
   }
   
+  if (labelRenderer && viewerContainer.value) {
+    viewerContainer.value.removeChild(labelRenderer.domElement);
+  }
+  
   controls?.dispose();
   scene = null;
   camera = null;
   renderer = null;
+  labelRenderer = null;
   controls = null;
 });
 
@@ -618,6 +653,60 @@ defineExpose({
 
 #panorama-viewer :deep(.hotspot) {
   cursor: pointer;
+}
+
+/* 消息预览框样式 */
+:deep(.message-hotspot-preview) {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #666666;
+  font-size: 13px;
+  min-width: 120px;
+  max-width: 180px;
+  min-height: 32px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(4px);
+  transform: translate(-50%, -100%);
+  margin-top: -16px;
+  pointer-events: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  line-height: 1.4;
+}
+
+:deep(.message-hotspot-content) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 24px;
+  word-break: break-word;
+  color: #666666;
+  font-weight: 500;
+}
+
+:deep(.message-hotspot-anchor) {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.5px;
+  height: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+:deep(.message-hotspot-anchor::after) {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: -3px;
+  width: 8px;
+  height: 8px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .error-overlay {
