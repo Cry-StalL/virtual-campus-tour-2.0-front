@@ -24,7 +24,7 @@ const scenes = ref([
         latitude: 10.72,
         icon: "/icons/scene_hotspot.png",
         title: '切换到场景视图',
-        description: '点击切换到场景视图',
+        description: '',
         onClick: () => {
           if (props.switchViewer && typeof props.switchViewer === 'function') {
             props.switchViewer('scene');

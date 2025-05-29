@@ -504,4 +504,57 @@ defineExpose({
   color: #303133;
   word-break: break-word;
 }
+
+/* 消息预览框样式 */
+:deep(.message-hotspot-preview) {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #666666;
+  font-size: 13px;
+  min-width: 120px;
+  max-width: 180px;
+  min-height: 32px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(4px);
+  transform: translate(-50%, -100%);
+  margin-top: -16px;
+  pointer-events: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  line-height: 1.4;
+}
+:deep(.message-hotspot-content) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 24px;
+  word-break: break-word;
+  color: #666666;
+  font-weight: 500;
+}
+:deep(.message-hotspot-anchor) {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.5px;
+  height: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+}
+:deep(.message-hotspot-anchor::after) {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: -3px;
+  width: 8px;
+  height: 8px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
 </style>
+
+
