@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 
-export function useErrorHandler(emit: (event: string, ...args: any[]) => void) {
+export function useErrorHandler(emit: (...args: any[]) => void) {
   const errorMessage = ref<string>('');
   let errorTimeout: number | null = null;
 

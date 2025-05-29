@@ -542,18 +542,17 @@ export default {
     formatTime(timestamp) {
       if (!timestamp) return '未知时间';
       
-      // 如果已经是格式化的时间字符串，直接返回
-      if (typeof timestamp === 'string' && timestamp.includes('-') && timestamp.includes(':')) {
-        return timestamp;
-      }
-      
       try {
         const date = new Date(timestamp);
+        // 检查日期是否有效
+        if (isNaN(date.getTime())) {
+          return '未知时间';
+        }
         return `${date.getFullYear()}-${padZero(date.getMonth() + 1)}-${padZero(date.getDate())} ${padZero(date.getHours())}:${padZero(date.getMinutes())}`;
       } catch (e) {
         return '未知时间';
       }
-      
+
       // 数字补零
       function padZero(num) {
         return num < 10 ? '0' + num : num;
@@ -1063,6 +1062,27 @@ export default {
   padding-left: 0;
   color: #909399;
   font-size: 12px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:deep(.el-timeline-item__timestamp::before),
+:deep(.el-timeline-item__timestamp::after) {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d9d9d9, transparent);
+  margin: 0 15px;
+}
+
+:deep(.el-timeline-item__timestamp::before) {
+  background: linear-gradient(90deg, transparent, #d9d9d9);
+}
+
+:deep(.el-timeline-item__timestamp::after) {
+  background: linear-gradient(90deg, #d9d9d9, transparent);
 }
 
 :deep(.custom-timeline-item) {
