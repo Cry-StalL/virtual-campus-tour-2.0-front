@@ -281,8 +281,8 @@ const submitMessage = async () => {
 
   try {
     // 获取白色圆点的精确位置（而不是预览框的位置）
-    // 圆点位于锚线的底部，锚线从预览框左下方延伸出来
-    const circleX = previewPosition.value.x + 15; // 锚点左偏移15px
+    // 圆点位于锚线的底部，锚线从预览框中央延伸出来
+    const circleX = previewPosition.value.x + 150 / 2; // 预览框宽度的一半（居中）
     const circleY = previewPosition.value.y + 40 + 20 + 5; // 预览框高度 + 锚线长度 + 圆点垂直偏移
     
     // 使用全景查看器提供的坐标转换接口获取三维坐标
@@ -537,7 +537,8 @@ const stopDraggingPanel = (event: MouseEvent) => {
 .message-preview-anchor {
   position: absolute;
   bottom: -20px;
-  left: 15px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 2px;
   height: 20px;
   background-color: white;

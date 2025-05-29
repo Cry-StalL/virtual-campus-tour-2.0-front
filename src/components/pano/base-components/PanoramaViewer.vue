@@ -507,20 +507,20 @@ defineExpose({
 
 /* 消息预览框样式 */
 :deep(.message-hotspot-preview) {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   padding: 8px 12px;
-  color: #666666;
+  color: #ffffff;
   font-size: 13px;
   min-width: 120px;
   max-width: 180px;
   min-height: 32px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(4px);
   transform: translate(-50%, -100%);
   margin-top: -16px;
   pointer-events: none;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   line-height: 1.4;
 }
 :deep(.message-hotspot-content) {
@@ -530,7 +530,7 @@ defineExpose({
   text-align: center;
   min-height: 24px;
   word-break: break-word;
-  color: #666666;
+  color: #ffffff;
   font-weight: 500;
 }
 :deep(.message-hotspot-anchor) {
