@@ -19,6 +19,7 @@ import { useCoordinateConverter } from './composables/useCoordinateConverter';
 import { useErrorHandler } from './composables/useErrorHandler';
 import type { PanoramaViewerProps, HotSpot, Scene } from './composables/types';
 import * as THREE from 'three';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
 // 定义事件
 const emit = defineEmits<{
@@ -50,6 +51,7 @@ const {
   scene,
   camera,
   renderer,
+  labelRenderer,
   controls,
   initThreeJs,
   animate,
@@ -57,6 +59,8 @@ const {
   onMouseWheel,
   disposeThreeJs,
 } = useThreeJsSetup(viewerContainer, props);
+
+let hotspotObject: THREE.Sprite | THREE.Mesh;
 
 // 初始化坐标转换工具
 const {
@@ -144,7 +148,8 @@ const createHotspot = (hotspot: HotSpot) => {
     newHotspots.push(sprite);
     hotspotObjects.value = newHotspots;
     
-    return sprite;
+    // return sprite;
+    hotspotObject = sprite;
   } else {
     // 使用默认几何体作为热点
     const geometry = new THREE.SphereGeometry(5, 16, 16);
@@ -167,14 +172,37 @@ const createHotspot = (hotspot: HotSpot) => {
     
     // 添加到场景
     scene.value.add(hotspotMesh);
+    hotspotObject = hotspotMesh;
+
     
     // 使用非响应式方式更新数组
     const newHotspots = [...hotspotObjects.value];
     newHotspots.push(hotspotMesh);
     hotspotObjects.value = newHotspots;
     
-    return hotspotMesh;
+    // return hotspotMesh;
   }
+
+  // 创建消息预览标签
+  if (hotspot.description) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message-hotspot-preview';
+    messageDiv.innerHTML = `
+      <div class="message-hotspot-content">
+        ${hotspot.description}
+      </div>
+      <div class="message-hotspot-anchor"></div>
+    `;
+
+    const label = new CSS2DObject(messageDiv);
+    label.position.copy(hotspotObject.position);
+    label.position.y += 20; // 向上偏移，使标签显示在热点上方
+    
+    scene.value.add(label);
+    hotspotObjects.value.push(label as any);
+  }
+  
+  return hotspotObject;
 };
 
 // 处理热点点击
@@ -476,4 +504,57 @@ defineExpose({
   color: #303133;
   word-break: break-word;
 }
+
+/* 消息预览框样式 */
+:deep(.message-hotspot-preview) {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #666666;
+  font-size: 13px;
+  min-width: 120px;
+  max-width: 180px;
+  min-height: 32px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(4px);
+  transform: translate(-50%, -100%);
+  margin-top: -16px;
+  pointer-events: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  line-height: 1.4;
+}
+:deep(.message-hotspot-content) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 24px;
+  word-break: break-word;
+  color: #666666;
+  font-weight: 500;
+}
+:deep(.message-hotspot-anchor) {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.5px;
+  height: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+}
+:deep(.message-hotspot-anchor::after) {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: -3px;
+  width: 8px;
+  height: 8px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
 </style>
+
+
