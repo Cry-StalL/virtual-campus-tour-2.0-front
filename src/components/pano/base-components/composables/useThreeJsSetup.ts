@@ -2,6 +2,7 @@ import { ref, shallowRef } from 'vue';
 import type { Ref } from 'vue';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
 // 定义Props接口
 interface ThreeJsProps {
@@ -21,6 +22,7 @@ export function useThreeJsSetup(
   const scene = shallowRef<THREE.Scene | null>(null);
   const camera = shallowRef<THREE.PerspectiveCamera | null>(null);
   const renderer = shallowRef<THREE.WebGLRenderer | null>(null);
+  const labelRenderer = shallowRef<CSS2DRenderer | null>(null);
   const controls = shallowRef<OrbitControls | null>(null);
   const isAnimating = ref<boolean>(false);
   
@@ -54,6 +56,14 @@ export function useThreeJsSetup(
     renderer.value.setPixelRatio(window.devicePixelRatio);
     viewerContainer.value.appendChild(renderer.value.domElement);
     
+    // 创建CSS2D渲染器
+    labelRenderer.value = new CSS2DRenderer();
+    labelRenderer.value.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
+    labelRenderer.value.domElement.style.position = 'absolute';
+    labelRenderer.value.domElement.style.top = '0';
+    labelRenderer.value.domElement.style.pointerEvents = 'none';
+    viewerContainer.value.appendChild(labelRenderer.value.domElement);
+    
     // 添加控制器
     controls.value = new OrbitControls(camera.value, renderer.value.domElement);
     controls.value.enableZoom = true;
@@ -81,7 +91,7 @@ export function useThreeJsSetup(
 
   // 动画循环
   const animate = () => {
-    if (!scene.value || !camera.value || !renderer.value) return;
+    if (!scene.value || !camera.value || !renderer.value || !labelRenderer.value) return;
     
     isAnimating.value = true;
     
@@ -97,6 +107,7 @@ export function useThreeJsSetup(
       
       controls.value?.update();
       renderer.value?.render(scene.value!, camera.value!);
+      labelRenderer.value?.render(scene.value!, camera.value!);
       requestAnimationFrame(animateFrame);
     };
     
@@ -105,11 +116,12 @@ export function useThreeJsSetup(
 
   // 处理窗口大小变化
   const onWindowResize = () => {
-    if (!camera.value || !renderer.value || !viewerContainer.value) return;
+    if (!camera.value || !renderer.value || !labelRenderer.value || !viewerContainer.value) return;
     
     camera.value.aspect = viewerContainer.value.clientWidth / viewerContainer.value.clientHeight;
     camera.value.updateProjectionMatrix();
     renderer.value.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
+    labelRenderer.value.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
   };
 
   // 停止动画
@@ -125,12 +137,17 @@ export function useThreeJsSetup(
       viewerContainer.value.removeChild(renderer.value.domElement);
     }
     
+    if (labelRenderer.value && viewerContainer.value) {
+      viewerContainer.value.removeChild(labelRenderer.value.domElement);
+    }
+    
     controls.value?.dispose();
     
     // 清空引用
     scene.value = null;
     camera.value = null;
     renderer.value = null;
+    labelRenderer.value = null;
     controls.value = null;
   };
   
@@ -138,6 +155,7 @@ export function useThreeJsSetup(
     scene,
     camera,
     renderer,
+    labelRenderer,
     controls,
     isAnimating,
     initThreeJs,

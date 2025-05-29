@@ -19,6 +19,7 @@ import { useCoordinateConverter } from './composables/useCoordinateConverter';
 import { useErrorHandler } from './composables/useErrorHandler';
 import type { PanoramaViewerProps, HotSpot, Scene } from './composables/types';
 import * as THREE from 'three';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
 // 定义事件
 const emit = defineEmits<{
@@ -50,6 +51,7 @@ const {
   scene,
   camera,
   renderer,
+  labelRenderer,
   controls,
   initThreeJs,
   animate,
@@ -57,6 +59,8 @@ const {
   onMouseWheel,
   disposeThreeJs,
 } = useThreeJsSetup(viewerContainer, props);
+
+let hotspotObject: THREE.Sprite | THREE.Mesh;
 
 // 初始化坐标转换工具
 const {
@@ -144,7 +148,8 @@ const createHotspot = (hotspot: HotSpot) => {
     newHotspots.push(sprite);
     hotspotObjects.value = newHotspots;
     
-    return sprite;
+    // return sprite;
+    hotspotObject = sprite;
   } else {
     // 使用默认几何体作为热点
     const geometry = new THREE.SphereGeometry(5, 16, 16);
@@ -167,14 +172,37 @@ const createHotspot = (hotspot: HotSpot) => {
     
     // 添加到场景
     scene.value.add(hotspotMesh);
+    hotspotObject = hotspotMesh;
+
     
     // 使用非响应式方式更新数组
     const newHotspots = [...hotspotObjects.value];
     newHotspots.push(hotspotMesh);
     hotspotObjects.value = newHotspots;
     
-    return hotspotMesh;
+    // return hotspotMesh;
   }
+
+  // 创建消息预览标签
+  if (hotspot.description) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message-hotspot-preview';
+    messageDiv.innerHTML = `
+      <div class="message-hotspot-content">
+        ${hotspot.description}
+      </div>
+      <div class="message-hotspot-anchor"></div>
+    `;
+
+    const label = new CSS2DObject(messageDiv);
+    label.position.copy(hotspotObject.position);
+    label.position.y += 20; // 向上偏移，使标签显示在热点上方
+    
+    scene.value.add(label);
+    hotspotObjects.value.push(label as any);
+  }
+  
+  return hotspotObject;
 };
 
 // 处理热点点击
