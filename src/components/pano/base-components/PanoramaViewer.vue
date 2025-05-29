@@ -11,6 +11,10 @@
 </template>
 
 <script setup lang="ts">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
+import { ElMessage, ElIcon } from 'element-plus';
 import { ref, onMounted, onBeforeUnmount, watch, shallowRef } from 'vue';
 import { ElIcon } from 'element-plus';
 import { Warning } from '@element-plus/icons-vue';
@@ -18,7 +22,6 @@ import { useThreeJsSetup } from './composables/useThreeJsSetup';
 import { useCoordinateConverter } from './composables/useCoordinateConverter';
 import { useErrorHandler } from './composables/useErrorHandler';
 import type { PanoramaViewerProps, HotSpot, Scene } from './composables/types';
-import * as THREE from 'three';
 
 // 定义事件
 const emit = defineEmits<{
@@ -113,6 +116,7 @@ const createHotspot = (hotspot: HotSpot) => {
   if (!scene.value || !validateHotspot(hotspot)) return null;
   
   let material: THREE.SpriteMaterial | THREE.MeshBasicMaterial;
+  let hotspotObject: THREE.Sprite | THREE.Mesh;
   
   if (hotspot.icon) {
     // 使用图标作为热点
@@ -166,6 +170,21 @@ const createHotspot = (hotspot: HotSpot) => {
     (hotspotMesh as any).userData = { class: 'hotspot' };
     
     // 添加到场景
+    scene.add(hotspotMesh);
+    hotspotObjects.push(hotspotMesh);
+    hotspotObject = hotspotMesh;
+  }
+
+  // 创建消息预览标签
+  if (hotspot.description) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message-hotspot-preview';
+    messageDiv.innerHTML = `
+      <div class="message-hotspot-content">
+        ${hotspot.description}
+      </div>
+      <div class="message-hotspot-anchor"></div>
+    `;
     scene.value.add(hotspotMesh);
     
     // 使用非响应式方式更新数组
@@ -173,8 +192,15 @@ const createHotspot = (hotspot: HotSpot) => {
     newHotspots.push(hotspotMesh);
     hotspotObjects.value = newHotspots;
     
-    return hotspotMesh;
+    const label = new CSS2DObject(messageDiv);
+    label.position.copy(hotspotObject.position);
+    label.position.y += 20; // 向上偏移，使标签显示在热点上方
+    
+    scene.add(label);
+    hotspotObjects.push(label as any);
   }
+  
+  return hotspotObject;
 };
 
 // 处理热点点击
@@ -380,8 +406,49 @@ onMounted(() => {
   // 初始化 Three.js 环境
   initThreeJs();
   
-  // 添加事件监听
-  viewerContainer.value?.addEventListener('wheel', onMouseWheel, { passive: false });
+  // 创建场景
+  scene = new THREE.Scene();
+  
+  // 创建相机
+  camera = new THREE.PerspectiveCamera(
+    props.initialFov,
+    viewerContainer.value.clientWidth / viewerContainer.value.clientHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(0, 0, 0.1);
+  currentFov = targetFov = camera.fov;
+  
+  // 创建渲染器
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
+  renderer.domElement.style.cursor = 'default';
+  renderer.setPixelRatio(window.devicePixelRatio);
+  viewerContainer.value.appendChild(renderer.domElement);
+
+  // 创建CSS2D渲染器
+  labelRenderer = new CSS2DRenderer();
+  labelRenderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
+  labelRenderer.domElement.style.position = 'absolute';
+  labelRenderer.domElement.style.top = '0';
+  labelRenderer.domElement.style.pointerEvents = 'none';
+  viewerContainer.value.appendChild(labelRenderer.domElement);
+  
+  // 添加控制器
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableZoom = true;
+  controls.enablePan = false;
+  controls.rotateSpeed = props.rotateSpeed;
+  controls.minDistance = 0.1;
+  controls.maxDistance = 100;
+  controls.zoomSpeed = props.zoomSpeed;
+  controls.enableDamping = true;
+  controls.dampingFactor = props.dampingFactor;
+  
+  // 添加鼠标滚轮事件监听
+  viewerContainer.value.addEventListener('wheel', onMouseWheel, { passive: false });
+  
+  // 添加热点点击事件监听
   viewerContainer.value?.addEventListener('click', handleSceneClick);
   viewerContainer.value?.addEventListener('mousemove', handleMouseMove);
   window.addEventListener('resize', onWindowResize);
@@ -393,14 +460,84 @@ onMounted(() => {
   
   // 开始动画循环
   animate();
+};
+
+// 处理鼠标滚轮事件
+const onMouseWheel = (event: WheelEvent) => {
+  event.preventDefault();
+  
+  if (!camera) return;
+  
+  const delta = Math.sign(event.deltaY);
+  targetFov += delta * props.zoomSpeed;
+  
+  // 限制目标FOV范围
+  targetFov = Math.max(props.minFov, Math.min(props.maxFov, targetFov));
+};
+
+const animate = () => {
+  if (!scene || !camera || !renderer || !labelRenderer) return;
+  
+  isAnimating = true;
+  
+  const animateFrame = () => {
+    if (!isAnimating) return;
+    
+    // 应用FOV缩放惯性
+    if (camera && Math.abs(currentFov - targetFov) > 0.01) {
+      currentFov += (targetFov - currentFov) * props.fovDampingFactor;
+      camera.fov = currentFov;
+      camera.updateProjectionMatrix();
+    }
+    
+    controls?.update();
+    renderer?.render(scene!, camera!);
+    labelRenderer?.render(scene!, camera!);
+    requestAnimationFrame(animateFrame);
+  };
+  
+  animateFrame();
+};
+
+const onWindowResize = () => {
+  if (!camera || !renderer || !labelRenderer || !viewerContainer.value) return;
+  
+  camera.aspect = viewerContainer.value.clientWidth / viewerContainer.value.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
+  labelRenderer.setSize(viewerContainer.value.clientWidth, viewerContainer.value.clientHeight);
+};
+
+onMounted(() => {
+  initPanorama();
+  // 添加鼠标移动事件监听
+  viewerContainer.value?.addEventListener('mousemove', handleMouseMove);
 });
 
 onBeforeUnmount(() => {
   // 移除事件监听
-  viewerContainer.value?.removeEventListener('wheel', onMouseWheel);
-  viewerContainer.value?.removeEventListener('click', handleSceneClick);
-  viewerContainer.value?.removeEventListener('mousemove', handleMouseMove);
+  if (viewerContainer.value) {
+    viewerContainer.value.removeEventListener('wheel', onMouseWheel);
+    viewerContainer.value.removeEventListener('click', handleSceneClick);
+    viewerContainer.value.removeEventListener('mousemove', handleMouseMove);
+  }
+  
   window.removeEventListener('resize', onWindowResize);
+  
+  if (renderer && viewerContainer.value) {
+    viewerContainer.value.removeChild(renderer.domElement);
+  }
+  
+  if (labelRenderer && viewerContainer.value) {
+    viewerContainer.value.removeChild(labelRenderer.domElement);
+  }
+  
+  controls?.dispose();
+  scene = null;
+  camera = null;
+  renderer = null;
+  labelRenderer = null;
+  controls = null;
   
   // 清理资源
   disposeThreeJs();
@@ -441,6 +578,60 @@ defineExpose({
 
 #panorama-viewer :deep(.hotspot) {
   cursor: pointer;
+}
+
+/* 消息预览框样式 */
+:deep(.message-hotspot-preview) {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #666666;
+  font-size: 13px;
+  min-width: 120px;
+  max-width: 180px;
+  min-height: 32px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(4px);
+  transform: translate(-50%, -100%);
+  margin-top: -16px;
+  pointer-events: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  line-height: 1.4;
+}
+
+:deep(.message-hotspot-content) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 24px;
+  word-break: break-word;
+  color: #666666;
+  font-weight: 500;
+}
+
+:deep(.message-hotspot-anchor) {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.5px;
+  height: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+}
+
+:deep(.message-hotspot-anchor::after) {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: -3px;
+  width: 8px;
+  height: 8px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .error-overlay {

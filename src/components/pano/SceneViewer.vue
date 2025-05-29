@@ -81,6 +81,24 @@ import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { getApiUrl } from '@/config/config.ts';
 
+// 定义热点接口
+interface HotSpot {
+  type: string;
+  longitude: number;
+  latitude: number;
+  icon?: string;
+  title?: string;
+  description?: string;
+  onClick?: () => void;
+}
+
+// 定义场景接口
+interface Scene {
+  sceneId: string;
+  imagePath: string;
+  hotspots: HotSpot[];
+}
+
 const panoramaViewerRef = ref(null);
 
 const props = defineProps<{
@@ -92,7 +110,7 @@ const props = defineProps<{
 
 // 使用 computed 属性来监控 props 的变化
 const isUserLoggedIn = computed(() => props.isLoggedIn === true);
-const userId = computed(() => props.userID || '0');
+const userId = computed(() => parseInt(props.userID || '0'));
 const userName = computed(() => props.username || '');
 
 // 调试输出
@@ -219,10 +237,11 @@ const handleReturn = () => {
 };
 
 // 定义场景数据
-const scenes = ref([
+const scenes = ref<Scene[]>([
   {
     sceneId: "scene1",
     imagePath: "/images/panorama.jpg",
+    hotspots: [] // 初始化热点数组
   },
 ]);
 
@@ -325,9 +344,31 @@ const submitMessage = async () => {
       isDraggingMessage.value = false;
       messageForm.value.content = '';
       
-      // 重新获取留言列表
-      await fetchMessages();
-      
+      // 直接添加新的留言热点
+      const newMessage = response.data.data;
+      if (newMessage && newMessage.position) {
+        const newHotspot = {
+          type: 'custom',
+          longitude: newMessage.position.longitude,
+          latitude: newMessage.position.latitude,
+          icon: '/icons/message_hotspot.png',     //没找到合适的图标
+          title: newMessage.username || '匿名用户',
+          description: newMessage.content,
+          onClick: () => {
+            ElMessage({
+              message: newMessage.username + ':' + newMessage.content,
+              type: 'info',
+              duration: 3000
+            });
+          }
+        };
+        
+        // 添加到当前场景的热点数组
+        scenes.value[0].hotspots.push(newHotspot);
+        
+        // 重新加载当前场景以显示新热点
+        panoramaViewer.switchScene(currentSceneId);
+      }
     } else {
       throw new Error(response.data.message || '提交失败');
     }
@@ -352,17 +393,29 @@ const fetchMessages = async () => {
 
       console.log('allMessages', allMessages.value);
       
+      // 更新场景的热点配置
+      scenes.value[0].hotspots = allMessages.value
+        .filter((message): message is typeof message & { position: { longitude: number; latitude: number } } => 
+          message.position !== undefined)
+        .map(message => ({
+          type: 'custom',
+          longitude: message.position.longitude,
+          latitude: message.position.latitude,
+          icon: '/icons/message_hotspot.png',    //没找到合适的图标
+          title: message.username || '匿名用户',
+          description: message.content,
+          onClick: () => {
+            // 点击热点时显示消息内容
+            ElMessage({
+              message: message.username + '：' + message.content,
+              type: 'info',
+              duration: 3000
+            });
+          }
+        }));
+      
       // 重新加载当前场景以更新热点
       panoramaViewer.switchScene(currentSceneId);
-      
-      // 为每条留言创建热点
-      allMessages.value.forEach(message => {
-        if (message.position) {
-          // 创建热点元素
-
-
-        }
-      });
     }
   } catch (error) {
     console.error('获取留言失败:', error);
@@ -674,5 +727,64 @@ const stopDraggingPanel = (event: MouseEvent) => {
   margin-left: 10px;
 }
 
+/* 留言热点样式 */
+.message-hotspot-preview {
+  position: absolute;
+  width: 150px;
+  min-height: 40px;
+  background: linear-gradient(135deg, rgba(255, 150, 50, 0.95) 0%, rgba(255, 102, 0, 0.95) 100%);
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  font-size: 14px;
+  z-index: 2001;
+  user-select: none;
+  transition: box-shadow 0.2s;
+  overflow: visible;
+  word-break: break-word;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  pointer-events: none;
+  margin-top: -60px;
+  margin-left: -75px;
+}
+
+.message-hotspot-preview:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.message-hotspot-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  min-height: 30px;
+}
+
+.message-hotspot-anchor {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 20px;
+  background-color: white;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  z-index: 2002;
+}
+
+.message-hotspot-anchor::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: -4px;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  z-index: 2002;
+}
 
 </style>
