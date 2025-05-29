@@ -657,20 +657,20 @@ defineExpose({
 
 /* 消息预览框样式 */
 :deep(.message-hotspot-preview) {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+  background: rgba(0, 0, 0, 0.35);
   border-radius: 8px;
   padding: 8px 12px;
-  color: #666666;
+  color: #ffffff;
   font-size: 13px;
   min-width: 120px;
   max-width: 180px;
   min-height: 32px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(4px);
   transform: translate(-50%, -100%);
   margin-top: -16px;
   pointer-events: none;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   line-height: 1.4;
 }
 
@@ -681,7 +681,7 @@ defineExpose({
   text-align: center;
   min-height: 24px;
   word-break: break-word;
-  color: #666666;
+  color: #ffffff;
   font-weight: 500;
 }
 
@@ -692,8 +692,8 @@ defineExpose({
   transform: translateX(-50%);
   width: 1.5px;
   height: 16px;
-  background-color: #ffffff;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
 :deep(.message-hotspot-anchor::after) {
@@ -703,10 +703,10 @@ defineExpose({
   left: -3px;
   width: 8px;
   height: 8px;
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 50%;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .error-overlay {
