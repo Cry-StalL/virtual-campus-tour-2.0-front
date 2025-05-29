@@ -11,17 +11,12 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { ElMessage, ElIcon } from 'element-plus';
-import { ref, onMounted, onBeforeUnmount, watch, shallowRef } from 'vue';
-import { ElIcon } from 'element-plus';
 import { Warning } from '@element-plus/icons-vue';
-import { useThreeJsSetup } from './composables/useThreeJsSetup';
-import { useCoordinateConverter } from './composables/useCoordinateConverter';
-import { useErrorHandler } from './composables/useErrorHandler';
-import type { PanoramaViewerProps, HotSpot, Scene } from './composables/types';
 
 // 定义事件
 const emit = defineEmits<{
@@ -32,7 +27,40 @@ const emit = defineEmits<{
 }>();
 
 // 定义组件的props
-const props = withDefaults(defineProps<PanoramaViewerProps>(), {
+interface Props {
+  scenes: Scene[]; // 场景数组
+  initialFov?: number; // 初始视场角
+  minFov?: number; // 最小视场角
+  maxFov?: number; // 最大视场角
+  rotateSpeed?: number; // 旋转速度
+  zoomSpeed?: number; // 缩放速度
+  dampingFactor?: number; // 阻尼系数
+  fovDampingFactor?: number; // FOV阻尼系数
+  debug?: boolean; // debug模式
+}
+
+// 定义场景接口
+interface Scene {
+  sceneId: string;     // 场景唯一标识符
+  imagePath: string;   // 全景图片的路径
+  hotspots?: HotSpot[]; // 热点数组
+}
+
+// 定义热点接口
+interface HotSpot {
+  id?: string;
+  type: string;        // 热点类型
+  longitude: number;   // 经度 (-180 到 180)
+  latitude: number;    // 纬度 (-90 到 90)
+  icon?: string;       // 图标路径
+  title?: string;      // 标题
+  description?: string; // 描述
+  targetSceneId?: string; // 目标场景ID（当type为"scene"时必填）
+  onClick?: (params?: any) => void; // 点击处理函数
+  onClickParams?: any; // 传递给点击处理函数的参数
+}
+
+const props = withDefaults(defineProps<Props>(), {
   initialFov: 75,
   minFov: 30,
   maxFov: 90,
@@ -44,38 +72,35 @@ const props = withDefaults(defineProps<PanoramaViewerProps>(), {
 });
 
 const viewerContainer = ref<HTMLElement | null>(null);
+let scene: THREE.Scene | null = null;
+let camera: THREE.PerspectiveCamera | null = null;
+let renderer: THREE.WebGLRenderer | null = null;
+let labelRenderer: CSS2DRenderer | null = null;
+let controls: OrbitControls | null = null;
+let isAnimating = false;
+let targetFov = props.initialFov;
+let currentFov = props.initialFov;
+let hotspotObjects: THREE.Mesh[] = []; // 存储热点对象的数组
+let currentSceneIndex = 0; // 当前场景索引
+let currentSceneId = ref<string>(''); // 当前场景ID
+let currentSphere: THREE.Mesh | null = null; // 当前全景球体
+const errorMessage = ref<string>(''); // 错误消息
+let errorTimeout: number | null = null; // 错误消息定时器
 
-// 初始化错误处理器
-const { errorMessage, showError, hideError } = useErrorHandler(emit);
-
-// 初始化 Three.js 环境
-const {
-  scene,
-  camera,
-  renderer,
-  controls,
-  initThreeJs,
-  animate,
-  onWindowResize,
-  onMouseWheel,
-  disposeThreeJs,
-} = useThreeJsSetup(viewerContainer, props);
-
-// 初始化坐标转换工具
-const {
-  latLonToVector3,
-  vector3ToLatLon,
-  convertScreenToSphericalCoordinates
-} = useCoordinateConverter(camera, renderer, scene);
-
-// 使用shallowRef保存Three.js对象，避免响应式系统代理干扰
-const hotspotObjects = shallowRef<THREE.Object3D[]>([]);
-const currentSceneIndex = ref<number>(0);
-const currentSceneId = ref<string>('');
-const currentSphere = shallowRef<THREE.Mesh | null>(null);
+// 将经纬度转换为3D坐标
+const latLonToVector3 = (lat: number, lon: number, radius: number): THREE.Vector3 => {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lon + 180) * (Math.PI / 180);
+  
+  const x = -(radius * Math.sin(phi) * Math.cos(theta));
+  const z = (radius * Math.sin(phi) * Math.sin(theta));
+  const y = (radius * Math.cos(phi));
+  
+  return new THREE.Vector3(x, y, z);
+};
 
 // 验证场景ID是否重复
-const validateSceneIds = (): boolean => {
+const validateSceneIds = () => {
   const sceneIds = new Set<string>();
   for (const scene of props.scenes) {
     if (sceneIds.has(scene.sceneId)) {
@@ -111,9 +136,28 @@ const validateHotspot = (hotspot: HotSpot): boolean => {
   return true;
 };
 
+// 处理热点点击
+const handleHotspotClick = (hotspot: HotSpot) => {
+  if (!validateHotspot(hotspot)) {
+    return;
+  }
+
+  if (hotspot.type === 'scene' && hotspot.targetSceneId) {
+    switchScene(hotspot.targetSceneId);
+  } else if (hotspot.type === 'custom') {
+    // 对于自定义热点，触发hotspotClick事件，由父组件处理
+    emit('hotspotClick', hotspot);
+    
+    // 如果提供了onClick回调，则调用它
+    if (typeof hotspot.onClick === 'function') {
+      hotspot.onClick(hotspot.onClickParams);
+    }
+  }
+};
+
 // 创建热点
 const createHotspot = (hotspot: HotSpot) => {
-  if (!scene.value || !validateHotspot(hotspot)) return null;
+  if (!scene || !validateHotspot(hotspot)) return;
   
   let material: THREE.SpriteMaterial | THREE.MeshBasicMaterial;
   let hotspotObject: THREE.Sprite | THREE.Mesh;
@@ -141,14 +185,9 @@ const createHotspot = (hotspot: HotSpot) => {
     (sprite as any).userData = { class: 'hotspot' };
     
     // 添加到场景
-    scene.value.add(sprite);
-    
-    // 使用非响应式方式更新数组
-    const newHotspots = [...hotspotObjects.value];
-    newHotspots.push(sprite);
-    hotspotObjects.value = newHotspots;
-    
-    return sprite;
+    scene.add(sprite);
+    hotspotObjects.push(sprite as any);
+    hotspotObject = sprite;
   } else {
     // 使用默认几何体作为热点
     const geometry = new THREE.SphereGeometry(5, 16, 16);
@@ -185,12 +224,6 @@ const createHotspot = (hotspot: HotSpot) => {
       </div>
       <div class="message-hotspot-anchor"></div>
     `;
-    scene.value.add(hotspotMesh);
-    
-    // 使用非响应式方式更新数组
-    const newHotspots = [...hotspotObjects.value];
-    newHotspots.push(hotspotMesh);
-    hotspotObjects.value = newHotspots;
     
     const label = new CSS2DObject(messageDiv);
     label.position.copy(hotspotObject.position);
@@ -203,39 +236,29 @@ const createHotspot = (hotspot: HotSpot) => {
   return hotspotObject;
 };
 
-// 处理热点点击
-const handleHotspotClick = (hotspot: HotSpot) => {
-  if (!validateHotspot(hotspot)) {
-    return;
-  }
-
-  if (hotspot.type === 'scene' && hotspot.targetSceneId) {
-    switchScene(hotspot.targetSceneId);
-  } else if (hotspot.type === 'custom') {
-    // 对于自定义热点，触发hotspotClick事件，由父组件处理
-    emit('hotspotClick', hotspot);
-    
-    // 如果提供了onClick回调，则调用它
-    if (typeof hotspot.onClick === 'function') {
-      hotspot.onClick(hotspot.onClickParams);
-    }
-  }
+// 显示错误信息
+const showError = (message: string) => {
+  errorMessage.value = message;
+  emit('error', message);
+  
+  // 停止动画循环
+  isAnimating = false;
 };
 
-// 清除所有热点
-const clearHotspots = () => {
-  if (!scene.value) return;
+// 隐藏错误信息
+const hideError = () => {
+  errorMessage.value = '';
   
-  for (const obj of hotspotObjects.value) {
-    scene.value?.remove(obj);
+  // 重新开始动画循环
+  if (scene && camera && renderer) {
+    isAnimating = true;
+    animate();
   }
-  
-  hotspotObjects.value = [];
 };
 
 // 切换场景
 const switchScene = (target: number | string) => {
-  if (!scene.value) return;
+  if (!scene) return;
   
   let targetIndex: number;
   
@@ -255,18 +278,21 @@ const switchScene = (target: number | string) => {
     }
   }
   
-  currentSceneIndex.value = targetIndex;
+  currentSceneIndex = targetIndex;
   const newScene = props.scenes[targetIndex];
   currentSceneId.value = newScene.sceneId;
   
   // 移除当前全景球体
-  if (currentSphere.value && scene.value) {
-    scene.value.remove(currentSphere.value);
-    currentSphere.value = null;
+  if (currentSphere) {
+    scene.remove(currentSphere);
+    currentSphere = null;
   }
   
   // 清除现有热点
-  clearHotspots();
+  hotspotObjects.forEach(obj => {
+    scene?.remove(obj);
+  });
+  hotspotObjects = [];
   
   // 加载新场景的全景图
   const textureLoader = new THREE.TextureLoader();
@@ -274,8 +300,6 @@ const switchScene = (target: number | string) => {
   textureLoader.load(
     newScene.imagePath,
     (texture: THREE.Texture) => {
-      if (!scene.value) return;
-      
       // 设置正确的色彩空间，防止图像过亮
       texture.colorSpace = THREE.SRGBColorSpace;
       
@@ -283,19 +307,18 @@ const switchScene = (target: number | string) => {
       texture.generateMipmaps = false;
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
-      texture.anisotropy = renderer.value?.capabilities.getMaxAnisotropy() || 1;
+      texture.anisotropy = renderer?.capabilities.getMaxAnisotropy() || 1;
       
       // 使用更高分辨率的球体几何体
-      const geometry = new THREE.SphereGeometry(500, 96, 64); 
+      const geometry = new THREE.SphereGeometry(500, 96, 64); // todo: 这里hard-code了球体面数，可以优化
       geometry.scale(-1, 1, 1); 
       
       const material = new THREE.MeshBasicMaterial({
         map: texture
       });
       
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.value.add(mesh);
-      currentSphere.value = mesh;
+      currentSphere = new THREE.Mesh(geometry, material);
+      scene?.add(currentSphere);
       
       // 初始化热点
       if (newScene.hotspots) {
@@ -320,26 +343,79 @@ const getCurrentSceneId = (): string => {
   return currentSceneId.value;
 };
 
-// 处理场景点击
-const handleSceneClick = (event: MouseEvent) => {
-  if (!camera.value || !renderer.value || !scene.value) return;
+// 监听场景数组变化
+watch(() => props.scenes, () => {
+  if (!validateSceneIds()) {
+    return;
+  }
+}, { deep: true });
+
+// 将3D坐标转换为经纬度
+const vector3ToLatLon = (point: THREE.Vector3): { longitude: number; latitude: number } => {
+  // 标准化向量
+  const normalized = point.clone().normalize();
+  
+  // 计算经纬度
+  const latitude = 90 - (Math.acos(normalized.y) * 180) / Math.PI;
+  const longitude = ((Math.atan2(normalized.z, -normalized.x) * 180) / Math.PI);
+  
+  return {
+    latitude: parseFloat(latitude.toFixed(2)),
+    longitude: parseFloat(longitude.toFixed(2))
+  };
+};
+
+// 将二维屏幕坐标转换为三维经纬度坐标
+const convertScreenToSphericalCoordinates = (screenX: number, screenY: number): { longitude: number; latitude: number } | null => {
+  if (!camera || !renderer || !scene) return null;
 
   // 计算归一化的设备坐标
   const mouse = new THREE.Vector2();
-  const rect = renderer.value.domElement.getBoundingClientRect();
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((screenX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((screenY - rect.top) / rect.height) * 2 + 1;
+
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(mouse, camera);
+
+  // 直接使用射线方向计算经纬度坐标
+  const direction = new THREE.Vector3();
+  raycaster.ray.direction.normalize();
+  direction.copy(raycaster.ray.direction);
+  
+  const coordinates = vector3ToLatLon(direction);
+  
+  // 修正经度值
+  const correctedLongitude = coordinates.longitude - 180;
+  // 规范化经度到 -180 到 180 范围内
+  const normalizedLongitude = ((correctedLongitude + 540) % 360) - 180;
+  
+  return {
+    longitude: parseFloat(normalizedLongitude.toFixed(2)),
+    latitude: coordinates.latitude
+  };
+};
+
+// 处理场景点击
+const handleSceneClick = (event: MouseEvent) => {
+  if (!camera || !renderer || !scene) return;
+
+  // 计算归一化的设备坐标
+  const mouse = new THREE.Vector2();
+  const rect = renderer.domElement.getBoundingClientRect();
   mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
   mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
   const raycaster = new THREE.Raycaster();
-  raycaster.setFromCamera(mouse, camera.value);
+  raycaster.setFromCamera(mouse, camera);
 
   // 首先检查是否点击到热点，是的话直接return
-  const hotspotIntersects = raycaster.intersectObjects(hotspotObjects.value);
+  const hotspotIntersects = raycaster.intersectObjects(hotspotObjects);
   if (hotspotIntersects.length > 0) {
     const hotspotData = (hotspotIntersects[0].object as any).hotspotData as HotSpot;
     handleHotspotClick(hotspotData);
     // 点击后立即重置光标样式
-    renderer.value.domElement.style.cursor = 'default';
+    renderer.domElement.style.cursor = 'default';
     return;
   }
 
@@ -361,50 +437,40 @@ const handleSceneClick = (event: MouseEvent) => {
   
   // 触发坐标选择事件
   emit('coordinateSelected', coordinateData);
+  
+  // 添加调试输出
+  console.log('坐标已选择:', coordinates);
 };
 
 // 添加鼠标移动事件处理
 const handleMouseMove = (event: MouseEvent) => {
-  if (!camera.value || !renderer.value || !scene.value) return;
+  if (!camera || !renderer || !scene) return;
 
   // 计算归一化的设备坐标
   const mouse = new THREE.Vector2();
-  const rect = renderer.value.domElement.getBoundingClientRect();
+  const rect = renderer.domElement.getBoundingClientRect();
   mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
   mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
   const raycaster = new THREE.Raycaster();
-  raycaster.setFromCamera(mouse, camera.value);
+  raycaster.setFromCamera(mouse, camera);
 
   // 检查是否悬停在热点上
-  const hotspotIntersects = raycaster.intersectObjects(hotspotObjects.value);
+  const hotspotIntersects = raycaster.intersectObjects(hotspotObjects);
   // 只有当鼠标移动时才更新光标样式
   if (event.type === 'mousemove') {
-    renderer.value.domElement.style.cursor = hotspotIntersects.length > 0 ? 'pointer' : 'default';
+    renderer.domElement.style.cursor = hotspotIntersects.length > 0 ? 'pointer' : 'default';
   }
 };
 
-// 获取3D坐标点
-const getCoordinateFromClick = (event: MouseEvent): { longitude: number; latitude: number; sceneId: string } | null => {
-  const coordinates = convertScreenToSphericalCoordinates(event.clientX, event.clientY);
-  if (!coordinates) return null;
+// 初始化全景图
+const initPanorama = () => {
+  if (!viewerContainer.value) return;
   
-  return {
-    ...coordinates,
-    sceneId: currentSceneId.value
-  };
-};
-
-// 监听场景数组变化
-watch(() => props.scenes, () => {
+  // 验证场景ID
   if (!validateSceneIds()) {
     return;
   }
-}, { deep: true });
-
-onMounted(() => {
-  // 初始化 Three.js 环境
-  initThreeJs();
   
   // 创建场景
   scene = new THREE.Scene();
@@ -450,15 +516,16 @@ onMounted(() => {
   
   // 添加热点点击事件监听
   viewerContainer.value?.addEventListener('click', handleSceneClick);
-  viewerContainer.value?.addEventListener('mousemove', handleMouseMove);
-  window.addEventListener('resize', onWindowResize);
   
   // 加载第一个场景
   if (props.scenes.length > 0) {
+    currentSceneId.value = props.scenes[0].sceneId;
     switchScene(0);
   }
   
-  // 开始动画循环
+  // 添加窗口大小变化监听
+  window.addEventListener('resize', onWindowResize);
+  
   animate();
 };
 
@@ -515,14 +582,14 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  // 移除事件监听
+  isAnimating = false;
+  window.removeEventListener('resize', onWindowResize);
+  
   if (viewerContainer.value) {
     viewerContainer.value.removeEventListener('wheel', onMouseWheel);
     viewerContainer.value.removeEventListener('click', handleSceneClick);
     viewerContainer.value.removeEventListener('mousemove', handleMouseMove);
   }
-  
-  window.removeEventListener('resize', onWindowResize);
   
   if (renderer && viewerContainer.value) {
     viewerContainer.value.removeChild(renderer.domElement);
@@ -538,10 +605,18 @@ onBeforeUnmount(() => {
   renderer = null;
   labelRenderer = null;
   controls = null;
-  
-  // 清理资源
-  disposeThreeJs();
 });
+
+// 获取3D坐标点
+const getCoordinateFromClick = (event: MouseEvent): { longitude: number; latitude: number; sceneId: string } | null => {
+  const coordinates = convertScreenToSphericalCoordinates(event.clientX, event.clientY);
+  if (!coordinates) return null;
+  
+  return {
+    ...coordinates,
+    sceneId: currentSceneId.value
+  };
+};
 
 // 暴露方法
 defineExpose({
