@@ -1,22 +1,7 @@
 <template>
     <div class="full_contain" ref="full_contain_ref">
-        <div class="contain_head">
-            <div class="contain_head_switch_button">
-                <el-radio-group v-model="radio1" size="large">
-                    <el-radio-button label="地图" value="New York" />
-                    <el-radio-button label="地点" value="Washington" />
-                </el-radio-group>
-            </div>
-            <div class="contain_head_title">
-                <text style="font-size: 2vw; font-weight: bold; color: black;">地点跳转</text>
-            </div>
-            <div class="contain_head_delete_button">
-                <el-button style="background-color: rgba(0, 0, 0, 0); border: 0; color: black;" @click="deleteSiteChooseView">
-                    <img style="width: 4vh; height: 4vh;" src="../../assets/icons/delete.png">
-                </el-button>
-            </div>
-        </div>
-        <div class="contain_body" ref="contain_body_ref"> 
+      
+        <div class="contain_body_map" ref="contain_body_ref" :style="{width: `${contain_body_map_ref_width}px`, height: `${contain_body_map_ref_height}px`}"> 
             <div class="popconfirm-group">
                 <el-popconfirm
                     v-for="location in locations"
@@ -27,7 +12,7 @@
                     trigger="hover"
                 >
                     <template #reference>
-                        <el-button style="position: absolute; background-color: rgba(0, 0, 0, 0); border: 0; padding: 0; margin: 0; width:30px; height: 30px;" :style="{left: `${left_px + contain_body_ref_width * location.left - 15}px`, top: `${top_px + contain_body_ref_height * location.top - 15}px`}">
+                        <el-button style="position: absolute; background-color: rgba(0, 0, 0, 0); border: 0; padding: 0; margin: 0; width:30px; height: 30px;" :style="{left: `${contain_body_map_padding_left + contain_body_map_ref_width * location.left - 15}px`, top: `${contain_body_map_ref_height * location.top - 15}px`}">
                             <img src="../../assets/icons/click.gif" style="width:30px; height: 30px;">
                         </el-button>
                     </template>
@@ -44,14 +29,15 @@
                 </el-popconfirm>
             </div>
         </div>
+
     </div>
 </template>
 
 
 <script setup lang="ts">
-    import { onMounted, ref } from 'vue';
-
     
+    import { onMounted, ref, computed } from 'vue';
+
     const locations = [
         { name: '南门', id: 1, left: 0.325, top: 0.7 },
         { name: '彩虹门', id: 2, left: 0.345, top: 0.66 },
@@ -95,75 +81,36 @@
         { name: '篮球场', id: 36, left: 0.48, top: 0.29 },
     ];
 
-    const full_contain_ref = ref<HTMLDivElement | null>(null)
-    const contain_body_ref = ref<HTMLDivElement | null>(null)
-    var contain_body_ref_width = ref(0);
-    var contain_body_ref_height = ref(0);
-    var left_px = ref(0);
-    var top_px = ref(0);
-
-    type SiteClass = {
-        siteID:   string;
-        siteName: string;
-        siteURL:  string;
-    };
-    const total_sites: SiteClass[] = [
-        { siteID: "1", siteName: "010101", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "2", siteName: "020202", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "3", siteName: "030303", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "4", siteName: "040404", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "5", siteName: "050505", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "6", siteName: "060606", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "7", siteName: "070707", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "8", siteName: "080808", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "9", siteName: "090909", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "10", siteName: "101010", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "11", siteName: "111111", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "12", siteName: "121212", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "13", siteName: "131313", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "14", siteName: "141414", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "15", siteName: "151515", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "16", siteName: "161616", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "17", siteName: "171717", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "18", siteName: "181818", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "19", siteName: "191919", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "20", siteName: "202020", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "21", siteName: "212121", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "22", siteName: "222222", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "23", siteName: "232323", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "24", siteName: "242424", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" },
-        { siteID: "25", siteName: "252525", siteURL: "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/library.png" }
-    ];
-
-
+    interface Site {
+        building_name: string
+        department_name: string
+        URL: string
+    }
 
     onMounted(() => {
         get_images_from_back();
     });
+
+    const full_contain_ref = ref<HTMLDivElement | null>(null)
+    var full_contain_ref_width = ref(0);
+    var full_contain_ref_height = ref(0);
+    var contain_body_map_ref_width = ref(0);    
+    var contain_body_map_ref_height = ref(0);
+    var contain_body_map_padding_left = ref(0);
     const get_images_from_back = () => { 
-        if (contain_body_ref.value) {
-
-            contain_body_ref_height.value = contain_body_ref.value.clientHeight
-            contain_body_ref_width.value = contain_body_ref.value.clientWidth
-
-            contain_body_ref.value.style.width = `${contain_body_ref_height.value * 1.4}px`
-            left_px.value = (full_contain_ref.value.clientWidth - contain_body_ref.value.clientHeight*1.4) / 2;
-            top_px.value = full_contain_ref.value.clientHeight * 0.11 / 9 * 10;
-            contain_body_ref_width.value = contain_body_ref.value.clientWidth
+        // 动态调整背景图片的宽度和高度
+        if (full_contain_ref.value){
+            full_contain_ref_height.value = full_contain_ref.value.clientHeight;
+            full_contain_ref_width.value = full_contain_ref.value.clientWidth;
+            contain_body_map_ref_height.value = full_contain_ref_height.value;
+            contain_body_map_ref_width.value = contain_body_map_ref_height.value / 5.0 * 7;
+            contain_body_map_padding_left.value = (full_contain_ref_width.value - contain_body_map_ref_width.value) / 2;
         }
     };  
 
     const handleConfirm = (location) => {
         alert(location.id)
     }
-   
-    const emit = defineEmits(['closeSiteChooseView']); // 添加 'closeSiteChooseView'
-    
-    const deleteSiteChooseView = () => {
-        emit('closeSiteChooseView'); // 现在是合法的
-    }
-
-    const radio1 = ref('New York')
 
 
 </script>
@@ -172,105 +119,24 @@
 <style>
 .full_contain{
     border-radius: 1vw;
-    width: 100%;
-    height: 100%;
-    display: flex;
     flex-direction: column;
     align-items: center;
-    /* justify-content: center; */
 }
 
-.contain_head{ 
-    /* background-color: aqua; */
-    width: 100%;
-    height: 6vh;
-    margin-top: 4.5vh;
-    margin-bottom: 0.5vh;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-.contain_head_switch_button{
-    margin-left: 15%;
-    width: 10%;
-    margin-right: 0%;
-    /* background-color: aqua; */
-}
-.contain_head_title{
-    width: 50%;
-    /* margin-left: 10%; */
-    height: 100%;
-}
-.contain_head_delete_button{
-    width: 6%;
-    height: 100%;
-    margin-left: 14%;
-    margin-right: 5%;
-}
-
-.contain_body{
+.contain_body_map{
     background-image: url("../../assets/background.jpg");
-    background-size: cover; /* 完全覆盖容器，可能会裁剪 */
-    background-position: center; /* 居中显示 */
-    background-repeat: no-repeat;/* 不重复 */
-    height: 75vh;
-    /* width: 1050px; */
+    background-size: cover; /*完全覆盖容器，可能会裁剪*/
+    background-position: center; /*居中显示 */
+    background-repeat: no-repeat; /* 不重复 */
+    height: 0;
+    width: 0;
 }
 
-
-
-.type_name{
-    width: 100%;
-    height: 15%;
-    /* background-color: blue; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.contain_body_site{
+    margin-top: 2vh;
+    width: 64vw; 
+    height: 100vh;
 }
-.image_line{
-    /* background-color: aqua; */
-    width: 100%;
-    height: 25%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-.image_button{
-    width: 15vw;
-    height: 13vw;
-    background-color: rgba(255, 255, 255, 0);
-    border: 0;
-    padding: 0%;
-    margin-left: 3vw;
-    margin-right: 3vw;
-}
-.image_img{
-    width: 15vw;
-    height: 10vw;
-}
-.image_text{
-    font-size: 1.5vw;
-    width: 15vw;
-    height: 3vw;
-}
-.single_image{
-    width: 14vw;
-    height: 8.3vw;
-    margin-left: 4vw;
-    margin-right: 4vw;
-    display: flex;
-    flex-direction: column;
-}
-.page_number{
-    width: 100%;
-    height: 5vw;
-    /* background-color: aqua; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 
 </style>
 
