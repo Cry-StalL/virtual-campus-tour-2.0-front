@@ -34,10 +34,12 @@
       <Sidebar @toggle-site-choose="toggleSiteChoose" @toggle-useful-info="toggleUsefulInfo" :clearSideBarChoose="clearSideBarChoose" />
     </div>
 
+
     <!-- 地点跳转 -->
     <div class="sitechoose" :class="{ active: siteChooseVisible }">
       <SiteChoose @closeSiteChooseView="closeSiteChoose"/>
     </div>
+
     <!-- 实用信息 -->
     <div class="usefulinfo" :class="{ active: usefulInfoVisible }">
       <UsefulInfo @closeUsefulInfoView="closeUsefulInfo"/>
@@ -88,8 +90,7 @@ import { APP_CONFIG } from '@/config/config';
 import StreetViewer from '@/components/pano/StreetViewer.vue';
 import SceneViewer from '@/components/pano/SceneViewer.vue';
 import SiteChoose from '@/components/SiteChoose.vue';
-import usefulInfo from '@/components/usefulInfo.vue';
-import UsefulInfo from '@/components/usefulInfo.vue';
+import UsefulInfo from '@/components/UsefulInfo.vue';
 
 // 导入HotSpot接口类型
 interface HotSpot {
@@ -509,13 +510,15 @@ body, html, #app {
 }
 
 /* 场景跳转 */
+
 .sitechoose {
   position: absolute;
   top: 0;
   left: -80vw;
   width: 80vw;
+  margin-left: 0vw;
   top: 6vh;
-  height: 90vh;
+  height: 92vh;
   background-color: rgba(255, 255, 255, 0.3);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   transition: left 0.3s ease;
