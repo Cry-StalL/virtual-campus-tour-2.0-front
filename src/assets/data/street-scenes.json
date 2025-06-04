@@ -1,0 +1,16 @@
+[
+  {
+    "sceneId": "scene",
+    "imagePath": "http://127.0.0.1:8080/assets/panos/streets/byy_road1/1.jpg",
+    "hotspots": [
+      {
+        "type": "custom",
+        "longitude": 10.24,
+        "latitude": 10.72,
+        "icon": "/icons/scene_hotspot.png",
+        "title": "切换到场景视图",
+        "description": ""
+      }
+    ]
+  }
+] 

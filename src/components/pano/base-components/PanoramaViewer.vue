@@ -38,7 +38,9 @@ const props = withDefaults(defineProps<PanoramaViewerProps>(), {
   zoomSpeed: 2.0,
   dampingFactor: 0.1,
   fovDampingFactor: 0.1,
-  debug: false
+  debug: false,
+  progressiveLoading: false,
+  resolutions: () => ["1920x960", "3840x1920", "7680x3840"]
 });
 
 const viewerContainer = ref<HTMLElement | null>(null);
@@ -235,6 +237,66 @@ const clearHotspots = () => {
   hotspotObjects.value = [];
 };
 
+// 渐进加载图片
+const loadImageProgressively = (baseImagePath: string, targetMesh: THREE.Mesh) => {
+  if (!scene.value) return;
+  
+  // 创建纹理加载器
+  const textureLoader = new THREE.TextureLoader();
+  
+  // 对每个分辨率的图片进行加载
+  props.resolutions.forEach((resolution, index) => {
+    // 简化路径构造，直接拼接格式
+    const imagePath = `${baseImagePath}/${resolution}.jpg`;
+    
+    if (props.debug) {
+      console.log(`加载分辨率图片: ${imagePath}`);
+    }
+    
+    // 加载当前分辨率的图片
+    textureLoader.load(
+      imagePath,
+      (texture: THREE.Texture) => {
+        if (!scene.value) return;
+        
+        // 设置正确的色彩空间
+        texture.colorSpace = THREE.SRGBColorSpace;
+        
+        // 提高纹理质量设置
+        texture.generateMipmaps = false;
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.anisotropy = renderer.value?.capabilities.getMaxAnisotropy() || 1;
+        
+        // 更新材质
+        const material = targetMesh.material as THREE.MeshBasicMaterial;
+        
+        // 只有当这是第一个加载的图片，或者当前图片的分辨率比已加载的更高时才应用
+        if (!material.map || index > props.resolutions.indexOf(
+          material.userData.currentResolution as string || props.resolutions[0]
+        )) {
+          material.map = texture;
+          material.needsUpdate = true;
+          
+          // 记录当前分辨率
+          material.userData.currentResolution = resolution;
+          
+          if (props.debug) {
+            console.log(`已加载分辨率: ${resolution}`);
+          }
+        }
+      },
+      undefined,
+      (err: unknown) => {
+        const errorMessage = err instanceof Error ? err.message : '未知错误';
+        if (props.debug) {
+          console.error(`加载分辨率 ${resolution} 失败: ${errorMessage}`);
+        }
+      }
+    );
+  });
+};
+
 // 切换场景
 const switchScene = (target: number | string) => {
   if (!scene.value) return;
@@ -270,51 +332,59 @@ const switchScene = (target: number | string) => {
   // 清除现有热点
   clearHotspots();
   
-  // 加载新场景的全景图
-  const textureLoader = new THREE.TextureLoader();
+  // 创建全景球体的标准几何体和材质
+  const geometry = new THREE.SphereGeometry(500, 96, 64); 
+  geometry.scale(-1, 1, 1); 
   
-  textureLoader.load(
-    newScene.imagePath,
-    (texture: THREE.Texture) => {
-      if (!scene.value) return;
-      
-      // 设置正确的色彩空间，防止图像过亮
-      texture.colorSpace = THREE.SRGBColorSpace;
-      
-      // 提高纹理质量设置
-      texture.generateMipmaps = false;
-      texture.minFilter = THREE.LinearFilter;
-      texture.magFilter = THREE.LinearFilter;
-      texture.anisotropy = renderer.value?.capabilities.getMaxAnisotropy() || 1;
-      
-      // 使用更高分辨率的球体几何体
-      const geometry = new THREE.SphereGeometry(500, 96, 64); 
-      geometry.scale(-1, 1, 1); 
-      
-      const material = new THREE.MeshBasicMaterial({
-        map: texture
-      });
-      
-      const mesh = new THREE.Mesh(geometry, material);
-      scene.value.add(mesh);
-      currentSphere.value = mesh;
-      
-      // 初始化热点
-      if (newScene.hotspots) {
-        newScene.hotspots.forEach(hotspot => {
-          createHotspot(hotspot);
-        });
+  const material = new THREE.MeshBasicMaterial();
+  
+  // 创建球体网格
+  const mesh = new THREE.Mesh(geometry, material);
+  scene.value.add(mesh);
+  currentSphere.value = mesh;
+  
+  // 根据是否启用渐进加载来处理图片加载
+  if (props.progressiveLoading) {
+    // 渐进加载模式
+    loadImageProgressively(newScene.imagePath, mesh);
+  } else {
+    // 标准加载模式
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load(
+      newScene.imagePath,
+      (texture: THREE.Texture) => {
+        if (!scene.value) return;
+        
+        // 设置正确的色彩空间
+        texture.colorSpace = THREE.SRGBColorSpace;
+        
+        // 提高纹理质量设置
+        texture.generateMipmaps = false;
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.anisotropy = renderer.value?.capabilities.getMaxAnisotropy() || 1;
+        
+        // 更新材质
+        material.map = texture;
+        material.needsUpdate = true;
+      },
+      undefined,
+      (err: unknown) => {
+        const errorMessage = err instanceof Error ? err.message : '未知错误';
+        showError(`加载场景图片失败: ${errorMessage}`);
       }
-      
-      // 触发场景切换事件
-      emit('sceneChange', targetIndex);
-    },
-    undefined,
-    (err: unknown) => {
-      const errorMessage = err instanceof Error ? err.message : '未知错误';
-      showError(`加载场景图片失败: ${errorMessage}`);
-    }
-  );
+    );
+  }
+  
+  // 初始化热点
+  if (newScene.hotspots) {
+    newScene.hotspots.forEach(hotspot => {
+      createHotspot(hotspot);
+    });
+  }
+  
+  // 触发场景切换事件
+  emit('sceneChange', targetIndex);
 };
 
 // 获取当前场景ID

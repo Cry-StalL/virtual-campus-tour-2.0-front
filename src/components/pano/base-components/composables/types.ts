@@ -30,4 +30,6 @@ export interface PanoramaViewerProps {
   dampingFactor?: number; // 阻尼系数
   fovDampingFactor?: number; // FOV阻尼系数
   debug?: boolean; // debug模式
+  progressiveLoading?: boolean; // 渐进加载模式
+  resolutions?: string[]; // 渐进加载的分辨率列表，如 ["1920x960", "3840x1920", "7680x3840"]
 } 

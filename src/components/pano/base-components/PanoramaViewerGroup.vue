@@ -7,6 +7,8 @@
       :isLoggedIn="isLoggedIn"
       :userID="userID"
       :username="username"
+      :progressiveLoading="progressiveLoading"
+      :resolutions="resolutions"
     />
   </div>
 </template>
@@ -26,13 +28,17 @@ const props = defineProps<{
   initialViewerName: string,
   isLoggedIn?: boolean,
   userID?: string,
-  username?: string
+  username?: string,
+  progressiveLoading?: boolean,
+  resolutions?: string[]
 }>();
 
 // 使用 computed 属性来监控 props 的变化
 const isLoggedIn = computed(() => props.isLoggedIn === true);
 const userID = computed(() => props.userID || '0');
 const username = computed(() => props.username || '');
+const progressiveLoading = computed(() => props.progressiveLoading || false);
+const resolutions = computed(() => props.resolutions || ["1920x960", "3840x1920", "7680x3840"]);
 
 // 管理 Viewer 实例
 const viewers = ref<Record<string, Viewer>>({});
