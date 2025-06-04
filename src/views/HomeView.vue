@@ -9,6 +9,8 @@
         :isLoggedIn="isLoggedIn"
         :userID="userID"
         :username="username"
+        :progressiveLoading="true"
+        :resolutions="resolutions"
       />
 
     </div>
@@ -102,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
+import { ref, onMounted, computed, onBeforeUnmount, markRaw } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowDown, User, SwitchButton } from '@element-plus/icons-vue';
@@ -219,6 +221,7 @@ const userID = ref('0');
 const username = ref('');
 const sidebarVisible = ref(false);
 const currentPanoramaId = ref('1');
+const resolutions = ref(["1920x960", "3840x1920", "7680x3840"]); // 定义分辨率列表
 const sectionsState = ref<SectionState>({
   location: false,
   info: false,
@@ -359,8 +362,8 @@ const showCurrentSceneId = () => {
 };
 
 const viewers = [
-  { name: 'street', component: StreetViewer },
-  { name: 'scene', component: SceneViewer }
+  { name: 'street', component: markRaw(StreetViewer) },
+  { name: 'scene', component: markRaw(SceneViewer) }
 ];
 
 onMounted(() => {

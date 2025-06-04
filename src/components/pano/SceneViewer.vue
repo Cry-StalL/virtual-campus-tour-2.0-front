@@ -1,7 +1,12 @@
 <template>
   <div class="scene-viewer">
     <!-- 使用基础 Viewer 组件 -->
-    <PanoramaViewer ref="panoramaViewerRef" :scenes="scenes" />
+    <PanoramaViewer 
+      ref="panoramaViewerRef" 
+      :scenes="scenes" 
+      :progressiveLoading="true"
+      :resolutions="['1920x960', '3840x1920', '7680x3840']"
+    />
     
     <!-- 可拖动留言预览框 -->
     <div 
@@ -223,7 +228,7 @@ const handleReturn = () => {
 const scenes = ref<Scene[]>([
   {
     sceneId: "scene1",
-    imagePath: "/images/panorama.jpg",
+    imagePath: "/images/panorama",
     hotspots: [] // 初始化热点数组
   },
 ]);
