@@ -62,7 +62,14 @@
 
 <script setup lang="ts">
   import { ref, onMounted, computed, watch } from 'vue';
-  const emit = defineEmits(['toggle-site-choose', 'toggle-useful-info']);
+  const emit = defineEmits([
+    'toggle-site-choose', 
+    'toggle-useful-info',
+    'toggle-help-view',
+    'toggle-about-view', 
+    'toggle-privacy-view',
+    'toggle-language-view'
+  ]);
   // Define types
   type SectionState = {
     location: boolean;
@@ -91,28 +98,21 @@
   const showInfo = () => {
     emit('toggle-useful-info'); 
   };
-  const navigateToPlace = (location: string) => {
-    console.log(`Navigating to ${location}`);
-  };
-
-  const navigateToInfo = (type: string) => {
-    console.log(`导航到实用信息: ${type}`);
-  };
 
   const navigateToHelp = (type: string) => {
-    console.log(`导航到帮助页面: ${type}`);
+    emit('toggle-help-view'); // 触发帮助页面显示事件
   };
 
   const navigateToAbout = (type: string) => {
-    console.log(`导航到关于我们页面: ${type}`);
+    emit('toggle-about-view'); // 触发关于我们页面显示事件
   };
 
   const navigateToLanguage = (type: string) => {
-    console.log(`导航到语言页面: ${type}`);
+    emit('toggle-language-view'); // 触发语言页面显示事件
   };
 
   const navigateToPrivacy = (type: string) => {
-    console.log(`导航到隐私政策页面: ${type}`);
+    emit('toggle-privacy-view'); // 触发隐私政策页面显示事件
   };
 
   const toggleSection = (section: string) => {

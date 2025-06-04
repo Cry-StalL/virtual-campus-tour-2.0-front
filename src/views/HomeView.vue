@@ -31,7 +31,15 @@
 
     <!-- 侧边栏 -->
     <div class="sidebar" :class="{ active: sidebarVisible }" >
-      <Sidebar @toggle-site-choose="toggleSiteChoose" @toggle-useful-info="toggleUsefulInfo" :clearSideBarChoose="clearSideBarChoose" />
+      <Sidebar 
+        @toggle-site-choose="toggleSiteChoose" 
+        @toggle-useful-info="toggleUsefulInfo" 
+        @toggle-help-view="toggleHelpView"
+        @toggle-about-view="toggleAboutView"
+        @toggle-privacy-view="togglePrivacyView"
+        @toggle-language-view="toggleLanguageView"
+        :clearSideBarChoose="clearSideBarChoose" 
+      />
     </div>
 
 
@@ -43,6 +51,21 @@
     <!-- 实用信息 -->
     <div class="usefulinfo" :class="{ active: usefulInfoVisible }">
       <UsefulInfo @closeUsefulInfoView="closeUsefulInfo"/>
+    </div>
+
+    <!-- 帮助界面 -->
+    <div class="helpview" :class="{ active: helpViewVisible }">
+      <Help @closeHelpView="closeHelpView"/>
+    </div>
+
+    <!-- 关于我们界面 -->
+    <div class="aboutview" :class="{ active: aboutViewVisible }">
+      <About @closeAboutView="closeAboutView"/>
+    </div>
+
+    <!-- 隐私政策界面 -->
+    <div class="privacyview" :class="{ active: privacyViewVisible }">
+      <Privacy @closePrivacyView="closePrivacyView"/>
     </div>
 
     <!-- 登录和注册 -->
@@ -91,6 +114,9 @@ import StreetViewer from '@/components/pano/StreetViewer.vue';
 import SceneViewer from '@/components/pano/SceneViewer.vue';
 import SiteChoose from '@/components/SiteChoose.vue';
 import UsefulInfo from '@/components/UsefulInfo.vue';
+import Help from '@/components/Help.vue';
+import About from '@/components/About.vue';
+import Privacy from '@/components/Privacy.vue';
 
 // 导入HotSpot接口类型
 interface HotSpot {
@@ -218,15 +244,54 @@ const toggleSidebar = () => {
 // 侧边栏点击显示地点跳转
 const siteChooseVisible = ref(false);
 const usefulInfoVisible = ref(false);
+const helpViewVisible = ref(false);
+const aboutViewVisible = ref(false);
+const privacyViewVisible = ref(false);
 
 let clearSideBarChoose = ref(false);
 const toggleSiteChoose = () => {
   siteChooseVisible.value = !siteChooseVisible.value; // 切换显示状态
   usefulInfoVisible.value = false;
+  helpViewVisible.value = false;
+  aboutViewVisible.value = false;
+  privacyViewVisible.value = false;
 };
 const toggleUsefulInfo = () => {
   usefulInfoVisible.value = !usefulInfoVisible.value; // 切换显示状态
   siteChooseVisible.value = false;
+  helpViewVisible.value = false;
+  aboutViewVisible.value = false;
+  privacyViewVisible.value = false;
+};
+const toggleHelpView = () => {
+  helpViewVisible.value = !helpViewVisible.value;
+  siteChooseVisible.value = false;
+  usefulInfoVisible.value = false;
+  aboutViewVisible.value = false;
+  privacyViewVisible.value = false;
+};
+const toggleAboutView = () => {
+  aboutViewVisible.value = !aboutViewVisible.value;
+  siteChooseVisible.value = false;
+  usefulInfoVisible.value = false;
+  helpViewVisible.value = false;
+  privacyViewVisible.value = false;
+};
+const togglePrivacyView = () => {
+  privacyViewVisible.value = !privacyViewVisible.value;
+  siteChooseVisible.value = false;
+  usefulInfoVisible.value = false;
+  helpViewVisible.value = false;
+  aboutViewVisible.value = false;
+};
+const toggleLanguageView = () => {
+  // 语言设置可以是一个简单的选择器，这里暂时用ElMessage显示
+  ElMessage({
+    message: '语言设置功能开发中...',
+    type: 'info',
+    duration: 2000
+  });
+  console.log('切换语言设置');
 };
 const closeSiteChoose = () => {
   clearSideBarChoose.value = !clearSideBarChoose.value;
@@ -235,6 +300,18 @@ const closeSiteChoose = () => {
 const closeUsefulInfo = () => {
   clearSideBarChoose.value = !clearSideBarChoose.value;
   usefulInfoVisible.value = !usefulInfoVisible.value; // 切换显示状态
+};
+const closeHelpView = () => {
+  clearSideBarChoose.value = !clearSideBarChoose.value;
+  helpViewVisible.value = !helpViewVisible.value;
+};
+const closeAboutView = () => {
+  clearSideBarChoose.value = !clearSideBarChoose.value;
+  aboutViewVisible.value = !aboutViewVisible.value;
+};
+const closePrivacyView = () => {
+  clearSideBarChoose.value = !clearSideBarChoose.value;
+  privacyViewVisible.value = !privacyViewVisible.value;
 };
 
 
@@ -546,6 +623,63 @@ body, html, #app {
 }
 
 .usefulinfo.active {
+  left: 18vw;
+}
+
+/* 帮助界面 */
+.helpview {
+  position: absolute;
+  top: 2vh;
+  bottom: 2vh;
+  left: -78vw;
+  width: 78vw;
+  height: auto;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease;
+  z-index: 15;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.helpview.active {
+  left: 18vw;
+}
+
+/* 关于我们界面 */
+.aboutview {
+  position: absolute;
+  top: 2vh;
+  bottom: 2vh;
+  left: -78vw;
+  width: 78vw;
+  height: auto;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease;
+  z-index: 15;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.aboutview.active {
+  left: 18vw;
+}
+
+/* 隐私政策界面 */
+.privacyview {
+  position: absolute;
+  top: 2vh;
+  bottom: 2vh;
+  left: -78vw;
+  width: 78vw;
+  height: auto;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease;
+  z-index: 15;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.privacyview.active {
   left: 18vw;
 }
 
