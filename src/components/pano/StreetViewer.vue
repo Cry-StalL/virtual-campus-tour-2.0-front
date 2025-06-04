@@ -1,7 +1,12 @@
 <template>
   <div class="street-viewer">
     <!-- 使用基础 Viewer 组件 -->
-    <PanoramaViewer ref="panoramaViewerRef" :scenes="scenes" />
+    <PanoramaViewer 
+      ref="panoramaViewerRef" 
+      :scenes="scenes" 
+      :progressiveLoading="true"
+      :resolutions="['1920x960', '3840x1920', '7680x3840']"
+    />
   </div>
 </template>
 
@@ -16,7 +21,7 @@ const props = defineProps<{ switchViewer: (name: string) => void }>();
 const scenes = ref([
   {
     sceneId: "scene",
-    imagePath: "http://127.0.0.1:8080/assets/panos/streets/byy_road1/1.jpg",
+    imagePath: "http://127.0.0.1:8080/assets/panos/streets/byy_road1/1",
     hotspots: [
       {
         type: 'custom',
