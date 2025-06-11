@@ -139,7 +139,160 @@
                     </div>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="饮食">饮食</el-tab-pane>
+            <el-tab-pane label="饮食">
+                <div style="width: 100%; height: 78vh; display: flex; flex-direction: row;">
+                    <div style="width: 19.2%; margin-right: 1vw; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            榕园食堂
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            开放时间：6:00-10:00，11:00-13:00，17:00-19:00
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            特色窗口：一楼自选、二楼石锅饭、二楼西北餐厅
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 3.5vh; text-align: left;">
+                            平均价格：8-15元
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            餐厅图片：
+                        </text>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 12.8vw;">点击前往榕园食堂街景</el-button>
+                        </div>
+                          
+                    </div>
+                    <div style="width: 19.2%; margin-right: 1vw; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            荔园食堂
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            开放时间：6:00-10:00，11:00-13:00，17:00-19:00
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            特色窗口：一楼拉面、二楼肯德基
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 3.5vh; text-align: left;">
+                            平均价格：12-18元
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            餐厅图片：
+                        </text>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 12.8vw;">点击前往荔园食堂街景</el-button>
+                        </div>
+                          
+                    </div>
+                    <div style="width: 19.2%; margin-right: 1vw; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            槿园食堂
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            开放时间：6:00-10:30，11:00-13:00，17:00-19:00
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            特色窗口：一楼面点、二楼自选、二楼烧腊、三楼东北盒饭
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.8vh; text-align: left;">
+                            平均价格：12-18元
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            餐厅图片：
+                        </text>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 12.8vw;">点击前往榕园食堂街景</el-button>
+                        </div>
+                          
+                    </div>
+                    <div style="width: 19.2%; margin-right: 1vw; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            若海食堂
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            开放时间：6:00-10:00，11:00-13:00，17:00-19:00
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            特色窗口：一楼必胜客、二楼烧腊、二楼自选
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 3.5vh; text-align: left;">
+                            平均价格：12-18元
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            餐厅图片：
+                        </text>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 12.8vw;">点击前往荔园食堂街景</el-button>
+                        </div>
+                          
+                    </div>
+                    <div style="width: 19.2%; margin-right: 1vw; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            校外美食
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            北门推荐美食：重庆小面、呱呱饺子
+                        </text>
+                        <text style="width: 95%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            华夏门推荐美食：唐家餸、渔记茶餐厅、白马烤鱼
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.8vh; text-align: left;">
+                            南门推荐美食：伟记私房菜、鸡山煲仔饭
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            餐厅图片：
+                        </text>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 12.8vw;">点击前往荔园食堂街景</el-button>
+                        </div>
+                          
+                    </div>
+                </div>
+            </el-tab-pane>
             <el-tab-pane label="住宿">住宿</el-tab-pane>
             <el-tab-pane label="交通">交通</el-tab-pane>
             <el-tab-pane label="就医">就医</el-tab-pane>
