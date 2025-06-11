@@ -534,7 +534,96 @@
                     </div>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="就医">就医</el-tab-pane>
+            <el-tab-pane label="就医">
+                <div style="width: 100%; height: 78vh; display: flex; flex-direction: row;">
+                    <div style="width: 28%; margin-right: 8%; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            校医院
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            具体地点：榕园、博雅苑附近
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            科室：发热门诊等
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            开放时间：全天
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            电话号码：0756-1201201
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-top: 3vw; margin-bottom: 0.5vh; text-align: left;">
+                            校医院图片：
+                        </text>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 100%;">点击前往校医院街景</el-button>
+                        </div>
+                          
+                    </div>
+                    <div style="width: 28%; margin-right: 8%; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            中大五院
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            具体地点：港湾大道、华子石东
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            科室：急诊、门诊等
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            开放时间：全天
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            电话号码：0756-1201202
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-top: 3vw; margin-bottom: 0.5vh; text-align: left;">
+                            中大五院图片：
+                        </text>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 100%;">点击前往校医院街景</el-button>
+                        </div>
+                          
+                    </div>
+                    <div style="width: 28%; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            学校保卫处
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            具体地点：荔园一号
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            电话号码：0756-1101101
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-top: 6.5vw; margin-bottom: 0.5vh; text-align: left;">
+                            保卫处图片：
+                        </text>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 100%;">点击前往荔园宿舍街景</el-button>
+                        </div>
+                    </div>
+                </div>
+            </el-tab-pane>
             <el-tab-pane label="校区管委会">校区管委会</el-tab-pane>
         </el-tabs>
 
