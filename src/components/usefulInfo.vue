@@ -399,7 +399,141 @@
                     </div>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="交通">交通</el-tab-pane>
+            <el-tab-pane label="交通">
+                <div style="width: 100%; height: 78vh; display: flex; flex-direction: row;">
+                    <div style="width: 19.2%; margin-right: 1vw; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            白埔路口公交车站
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            与学校距离：北门外200m
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            线路：3、10A、66、68、69、85、Z75
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            目的地：拱北口岸、港珠澳大桥口岸、珠海站、唐家湾站、九州港、官塘、宝龙城、万象城、扬名广场、格力海岸、圆明新园、中大五院等
+                        </text>
+                        
+                        <text style="width: 90%; margin-left: 0.8vw; margin-top: 5vw; margin-bottom: 0.5vh; text-align: left;">
+                            公交车站图片：
+                        </text>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 100%;">点击前往0街景</el-button>
+                        </div>
+                          
+                    </div>
+                    <div style="width: 19.2%; margin-right: 1vw; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            唐南路西公交车站
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            与学校距离：华夏门外200m
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            线路：3A
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            目的地：九州港、扬名广场、吉大等
+                        </text>
+                        
+                        <text style="width: 90%; margin-left: 0.8vw; margin-top: 11vw; margin-bottom: 0.5vh; text-align: left;">
+                            公交车站图片：
+                        </text>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 100%;">点击前往0街景</el-button>
+                        </div>
+                    </div>
+                    <div style="width: 19.2%; margin-right: 1vw; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            中山大学公交车站
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            与学校距离：南门外700m
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            线路：3、10A、66、68、69、85、Z75
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            目的地：拱北口岸、港珠澳大桥口岸、珠海站、唐家湾站、九州港、官塘、宝龙城、万象城、扬名广场、格力海岸、圆明新园、中大五院等
+                        </text>
+                        
+                        <text style="width: 90%; margin-left: 0.8vw; margin-top: 5vw; margin-bottom: 0.5vh; text-align: left;">
+                            公交车站图片：
+                        </text>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 100%;">点击前往0街景</el-button>
+                        </div>
+                    </div>
+                    <div style="width: 19.2%; margin-right: 1vw; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            唐家湾站高铁站
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            与学校距离：约7.5km
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            线路：广珠城际列车
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            目的地：珠海站、广州南站、中山站、顺德站、珠海机场站、明珠站等
+                        </text>
+                        
+                        <text style="width: 90%; margin-left: 0.8vw; margin-top: 10.7vw; margin-bottom: 0.5vh; text-align: left;">
+                            唐家湾站图片：
+                        </text>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 100%;">点击前往0街景</el-button>
+                        </div>
+                    </div>
+                    <div style="width: 19.2%; margin-right: 1vw; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            珠海金湾机场
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            与学校距离：约60km
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            线路：国内航班
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            目的地：北京、上海、成都、重庆、武汉、杭州等
+                        </text>
+                        
+                        <text style="width: 90%; margin-left: 0.8vw; margin-top: 12.1vw; margin-bottom: 0.5vh; text-align: left;">
+                            珠海金湾机场图片：
+                        </text>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <!-- <el-button style="width: 12.8vw;">点击前往图书馆网站</el-button> -->
+                        </div>
+                        <div style="width: 90%; margin-left: 5%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 100%;">点击前往0街景</el-button>
+                        </div>
+                    </div>
+                </div>
+            </el-tab-pane>
             <el-tab-pane label="就医">就医</el-tab-pane>
             <el-tab-pane label="校区管委会">校区管委会</el-tab-pane>
         </el-tabs>
