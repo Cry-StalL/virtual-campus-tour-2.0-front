@@ -293,7 +293,112 @@
                     </div>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="住宿">住宿</el-tab-pane>
+            <el-tab-pane label="住宿">
+                <div style="width: 100%; height: 78vh; display: flex; flex-direction: row;">
+                    <div style="width: 28%; margin-right: 8%; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            榕园宿舍
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            具体地点：翰林三号、华夏门附近
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            基础设施：四人寝、上床下桌、均安装有电梯
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            住宿费用：1000-1500元
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            热水供应时间：18:00-24:00
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            电力、网络供应时间：全天
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            宿舍图片：
+                        </text>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 100%;">点击前往榕园宿舍街景</el-button>
+                        </div>
+                          
+                    </div>
+                    <div style="width: 28%; margin-right: 8%; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            荔园宿舍
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            具体地点：翰林二号、教学楼附近
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            基础设施：四人寝、上床下桌、均安装有电梯
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            住宿费用：1000-1500元
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            热水供应时间：18:00-24:00，荔五全天
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            电力、网络供应时间：全天
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            宿舍图片：
+                        </text>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 100%;">点击前往荔园宿舍街景</el-button>
+                        </div>
+                          
+                    </div>
+                    <div style="width: 28%; height: 100%; background-color: #FFCC99; color: black; display: flex; flex-direction: column;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            槿园宿舍
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            具体地点：体育馆、北门附近
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            基础设施：一/二人寝、1m床、均安装有电梯
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            住宿费用：2000-5000元
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            热水供应时间：全天
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            电力、网络供应时间：全天
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            宿舍图片：
+                        </text>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                        </div>
+                        <div style="width: 70%; margin-left: 15%; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.6vw; width: 100%; height: 8vw;">
+                            <el-button style="width: 100%;">点击前往槿园宿舍街景</el-button>
+                        </div>
+                          
+                    </div>
+                </div>
+            </el-tab-pane>
             <el-tab-pane label="交通">交通</el-tab-pane>
             <el-tab-pane label="就医">就医</el-tab-pane>
             <el-tab-pane label="校区管委会">校区管委会</el-tab-pane>
