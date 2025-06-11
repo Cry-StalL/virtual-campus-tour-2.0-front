@@ -624,7 +624,46 @@
                     </div>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="校区管委会">校区管委会</el-tab-pane>
+            <el-tab-pane label="校区管委会">
+                <div style="width: 100%; height: 78vh; display: flex; flex-direction: column; background-color: #FFCC99;">
+                    <div style="display: flex; flex-direction: column; color: black;">
+                        <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: x-large; font-weight: bold;">
+                            中山大学珠海校区管委会
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            具体地点：翰林一号
+                        </text>
+                        <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left;">
+                            电话号码：0756-3668129
+                        </text>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        
+                        <div style="margin-left: 0vw; width: 15vw; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 12.8vw; height: 8vw;">
+                            <el-button style="width: 12.8vw;">点击前往管委会网站</el-button>
+                        </div>
+                        <div style="width: 15vw; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.png" style="margin-top: 0.8vw; width: 12vw; height: 8vw;">
+                            <el-button style="width: 12vw;">点击前往翰林一号街景</el-button>
+                        </div>
+                        <div style="margin-left: 0vw; width: 15vw; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 12.8vw; height: 8vw;">
+                            <el-button style="width: 12.8vw;">点击前往管委会公众号</el-button>
+                        </div>
+                        <div style="width: 15vw; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.png" style="margin-top: 0.8vw; width: 12vw; height: 8vw;">
+                            <el-button style="width: 12vw;">点击前往中大体育场馆预定</el-button>
+                        </div>
+                        <div style="margin-left: 0vw; width: 15vw; display: flex; align-items: center; display: flex; flex-direction: column;">
+                            <img src="../../assets/library.jpg" style="margin-top: 0.8vw; width: 12.8vw; height: 8vw;">
+                            <el-button style="width: 12.8vw;">点击前往水电费交费网站</el-button>
+                        </div>
+                       
+                    </div>
+
+                </div>
+            </el-tab-pane>
         </el-tabs>
 
     </div>
