@@ -38,9 +38,8 @@
             type="primary"
             @click="submitForm('ruleForm')"
             v-loading="loading" class="ttt">登录</el-button>
-          <router-link to="/" style="width: 30%;" >
-            <el-button style="width: 100%;">返回</el-button>
-
+          <router-link to="/" class="back-link">
+            <el-button class="back-btn">返回</el-button>
           </router-link>
         </div>
         <div class="divider">
@@ -357,6 +356,15 @@
     min-width: 120px; /* 最小宽度 */
   }
 
+  .back-link {
+    display: inline-block;
+  }
+
+  .back-btn {
+    width: 120px;
+    min-width: 120px;
+  }
+
   /* 响应式设计 */
   @media (max-width: 768px) {
     .box-card {
@@ -393,12 +401,14 @@
     }
   }
 
+  /* 18:9 手机屏幕适配 */
   @media (max-width: 480px) {
     .box-card {
-      width: 400px;
-      max-width: 95vw;
-      padding: 1rem;
-      margin: 0.5rem;
+      width: 100%;
+      max-width: 360px;
+      min-width: 300px;
+      padding: 1.5rem;
+      margin: 1rem auto;
     }
     
     h2 {
@@ -407,30 +417,38 @@
     }
     
     .btnGroup {
+      display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    
-    .ttt {
-      width: 100%;
-      max-width: 150px;  /* 限制最大宽度 */
-      min-width: auto;
+      align-items: center;
+      gap: 12px;
+      margin-top: 25px;
     }
     
     .btnGroup .el-button {
-      max-width: 150px;  /* 限制所有按钮最大宽度 */
+      width: 200px;
+      height: 40px;
+      font-size: 14px;
+      padding: 0;
+      border-radius: 8px;
+    }
+    
+    .ttt {
+      width: 200px;
+      min-width: 200px;
+    }
+
+    .back-link {
+      width: 200px;
+    }
+
+    .back-btn {
+      width: 200px;
+      min-width: 200px;
     }
     
     :deep(.el-input__inner) {
-      height: 38px;
+      height: 42px;
       font-size: 14px;
-    }
-    
-    :deep(.el-button) {
-      height: 36px;
-      font-size: 14px;
-      padding: 0 15px;
     }
     
     .divider {
@@ -443,12 +461,74 @@
     }
   }
 
-  /* 超小屏幕适配 */
-  @media (max-width: 320px) {
+  /* iPhone X/11/12/13/14 系列 */
+  @media (max-width: 414px) and (min-height: 800px) {
     .box-card {
-      width: 400px;
-      max-width: 98vw;
-      padding: 0.8rem;
+      width: 100%;
+      max-width: 340px;
+      min-width: 300px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+    }
+    
+    h2 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+    
+    .btnGroup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    
+    .btnGroup .el-button {
+      width: 220px;
+      height: 42px;
+      font-size: 15px;
+      padding: 0;
+      border-radius: 10px;
+    }
+    
+    .ttt {
+      width: 220px;
+      min-width: 220px;
+    }
+
+    .back-link {
+      width: 220px;
+    }
+
+    .back-btn {
+      width: 220px;
+      min-width: 220px;
+    }
+    
+    :deep(.el-input__inner) {
+      height: 44px;
+      font-size: 15px;
+    }
+    
+    .divider {
+      margin: 25px 0;
+    }
+    
+    .register-link {
+      margin-top: 25px;
+      font-size: 14px;
+    }
+  }
+
+  /* 小屏幕手机适配 */
+  @media (max-width: 375px) {
+    .box-card {
+      width: 100%;
+      max-width: 320px;
+      min-width: 280px;
+      padding: 1.2rem;
+      margin: 1rem auto;
     }
     
     h2 {
@@ -456,23 +536,108 @@
       margin-bottom: 20px;
     }
     
-    .ttt {
-      max-width: 120px;  /* 超小屏幕进一步限制 */
+    .btnGroup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 20px;
     }
     
     .btnGroup .el-button {
-      max-width: 120px;
+      width: 180px;
+      height: 38px;
+      font-size: 14px;
+      padding: 0;
+      border-radius: 8px;
+    }
+    
+    .ttt {
+      width: 180px;
+      min-width: 180px;
+    }
+
+    .back-link {
+      width: 180px;
+    }
+
+    .back-btn {
+      width: 180px;
+      min-width: 180px;
     }
     
     :deep(.el-input__inner) {
+      height: 40px;
+      font-size: 14px;
+    }
+    
+    .divider {
+      margin: 18px 0;
+    }
+    
+    .register-link {
+      margin-top: 18px;
+      font-size: 12px;
+    }
+  }
+
+  /* 超小屏幕适配 */
+  @media (max-width: 320px) {
+    .box-card {
+      width: 100%;
+      max-width: 300px;
+      min-width: 260px;
+      padding: 1rem;
+      margin: 0.5rem auto;
+    }
+    
+    h2 {
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+    
+    .btnGroup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    
+    .btnGroup .el-button {
+      width: 160px;
       height: 36px;
+      font-size: 13px;
+      padding: 0;
+      border-radius: 6px;
+    }
+    
+    .ttt {
+      width: 160px;
+      min-width: 160px;
+    }
+
+    .back-link {
+      width: 160px;
+    }
+
+    .back-btn {
+      width: 160px;
+      min-width: 160px;
+    }
+    
+    :deep(.el-input__inner) {
+      height: 38px;
       font-size: 13px;
     }
     
-    :deep(.el-button) {
-      height: 34px;
-      font-size: 13px;
-      padding: 0 12px;
+    .divider {
+      margin: 15px 0;
+    }
+    
+    .register-link {
+      margin-top: 15px;
+      font-size: 11px;
     }
   }
 </style>
