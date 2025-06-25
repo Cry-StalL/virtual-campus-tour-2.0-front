@@ -11,6 +11,7 @@
         />
       </div>
 
+        <!-- 背景图片 -->
       <img src="../../assets/background.jpg">
       
       <!-- 新增的弹出确认组 -->
@@ -42,15 +43,15 @@
                 style="width:30px; height: 30px;"
               >
               <img v-show="location.id % 4 === 1"
-                src="../../assets/icons/click-12.gif" 
+                src="../../assets/icons/click-0.gif" 
                 style="width:30px; height: 30px;"
               >
               <img v-show="location.id % 4 === 2"
-                src="../../assets/icons/click-24.gif" 
+                src="../../assets/icons/click-0.gif" 
                 style="width:30px; height: 30px;"
               >
               <img v-show="location.id % 4 === 3"
-                src="../../assets/icons/click-36.gif" 
+                src="../../assets/icons/click-0.gif" 
                 style="width:30px; height: 30px;"
               >
             </el-button>
@@ -95,15 +96,15 @@
                 style="width:30px; height: 30px;"
               >
               <img v-show="location.id % 4 === 1"
-                src="../../assets/icons/click-12.gif" 
+                src="../../assets/icons/click-0.gif" 
                 style="width:30px; height: 30px;"
               >
               <img v-show="location.id % 4 === 2"
-                src="../../assets/icons/click-24.gif" 
+                src="../../assets/icons/click-0.gif" 
                 style="width:30px; height: 30px;"
               >
               <img v-show="location.id % 4 === 3"
-                src="../../assets/icons/click-36.gif" 
+                src="../../assets/icons/click-0.gif" 
                 style="width:30px; height: 30px;"
               >
             </el-button>
@@ -129,9 +130,9 @@
     
     import { onMounted, ref, computed } from 'vue';
 
+    // 搜索相关
     const searchQuery = ref('');
     const searchResults = ref<Array<{name: string; text: string; id: number; left: number; top: number}>>([]);
-
     const showPopconfirm = computed(() => searchQuery.value.trim() === '');
     const handleSearch = () => {
         if (!searchQuery.value.trim()) {
@@ -145,12 +146,11 @@
         const results = locations.filter(location => 
             location.text.includes(searchQuery.value.trim())
         );
-
         searchResults.value = results;
         search_locations.value = results; // 将匹配结果赋值给 search_locations
-
     };
 
+    // 地点相关
     const locations = [
         { name: '南门', text: '南门', id: 1, left: 0.325, top: 0.7 },
         { name: '彩虹门', text: '彩虹门', id: 2, left: 0.345, top: 0.66 },
@@ -198,19 +198,14 @@
         { name: '华夏门', text: '华夏门', id: 39, left: 0.55, top: 0.09 },
         { name: '东南门', text: '东南门', id: 40, left: 0.535, top: 0.755 }
     ];
-
     const search_locations = ref([]);
 
-    interface Site {
-        building_name: string
-        department_name: string
-        URL: string
-    }
 
     onMounted(() => {
         get_images_from_back();
     });
 
+    // 计算闪烁点相关
     const full_contain_ref = ref<HTMLDivElement | null>(null)
     var full_contain_ref_width = ref(0);
     var full_contain_ref_height = ref(0);
@@ -228,6 +223,7 @@
         }
     };  
 
+    // 跳转相关
     const handleConfirm = (location) => {
         alert(location.id)
     }
@@ -240,11 +236,9 @@
 <style>
 .full_contain{
     border-radius: 0;
-
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
-    /* background-color: white; */
 }
 
 
@@ -252,7 +246,6 @@
     background-color: rgba(255, 255, 255, 1);
     border-radius: 0;
     overflow-y: auto;
-
     height: 100%;
     width: 100%;
 }
