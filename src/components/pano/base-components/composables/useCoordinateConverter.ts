@@ -6,27 +6,23 @@ export function useCoordinateConverter(
   renderer: Ref<THREE.WebGLRenderer | null>,
   scene: Ref<THREE.Scene | null>
 ) {
-  // 将经纬度转换为3D坐标
+  // 将经纬度转换为3D坐标（修正经度正方向为顺时针）
   const latLonToVector3 = (lat: number, lon: number, radius: number): THREE.Vector3 => {
     const phi = (90 - lat) * (Math.PI / 180);
-    const theta = (lon + 180) * (Math.PI / 180);
-    
+    // 修正：theta = (-lon + 180) * Math.PI / 180，使经度增加为顺时针
+    const theta = (-lon + 180) * Math.PI / 180;
     const x = -(radius * Math.sin(phi) * Math.cos(theta));
     const z = (radius * Math.sin(phi) * Math.sin(theta));
     const y = (radius * Math.cos(phi));
-    
     return new THREE.Vector3(x, y, z);
   };
 
-  // 将3D坐标转换为经纬度
+  // 将3D坐标转换为经纬度（修正经度正方向为顺时针）
   const vector3ToLatLon = (point: THREE.Vector3): { longitude: number; latitude: number } => {
-    // 标准化向量
     const normalized = point.clone().normalize();
-    
-    // 计算经纬度
     const latitude = 90 - (Math.acos(normalized.y) * 180) / Math.PI;
-    const longitude = ((Math.atan2(normalized.z, -normalized.x) * 180) / Math.PI);
-    
+    // 修正：经度 = -(atan2(z, -x) * 180 / Math.PI)
+    const longitude = -((Math.atan2(normalized.z, -normalized.x) * 180) / Math.PI);
     return {
       latitude: parseFloat(latitude.toFixed(2)),
       longitude: parseFloat(longitude.toFixed(2))
@@ -69,4 +65,4 @@ export function useCoordinateConverter(
     vector3ToLatLon,
     convertScreenToSphericalCoordinates
   };
-} 
+}
