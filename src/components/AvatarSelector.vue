@@ -2,7 +2,7 @@
   <el-dialog 
     title="选择头像" 
     v-model="dialogVisible" 
-    width="800px"
+    :width="dialogWidth"
     center
     custom-class="avatar-dialog"
     :close-on-click-modal="false"
@@ -65,7 +65,8 @@ export default {
   },
   data() {
     return {
-      selectedAvatar: ''
+      selectedAvatar: '',
+      windowWidth: 0
     }
   },
   computed: {
@@ -76,7 +77,22 @@ export default {
       set(value) {
         this.$emit('update:visible', value);
       }
+    },
+    dialogWidth() {
+      const width = this.windowWidth || (typeof window !== 'undefined' ? window.innerWidth : 800);
+      if (width <= 320) return '98%';
+      if (width <= 480) return '95%';
+      if (width <= 768) return '90%';
+      if (width <= 1200) return '700px';
+      return '800px';
     }
+  },
+  mounted() {
+    this.updateWindowWidth();
+    window.addEventListener('resize', this.updateWindowWidth);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.updateWindowWidth);
   },
   watch: {
     visible(newVal) {
@@ -86,6 +102,11 @@ export default {
     }
   },
   methods: {
+    updateWindowWidth() {
+      if (typeof window !== 'undefined') {
+        this.windowWidth = window.innerWidth;
+      }
+    },
     selectAvatar(avatar) {
       this.selectedAvatar = avatar;
     },
@@ -260,16 +281,176 @@ export default {
 }
 
 /* 响应式布局 */
+@media (max-width: 1200px) {
+  .avatar-gallery {
+    gap: 25px;
+    padding: 25px;
+  }
+  
+  .avatar-option {
+    padding: 18px;
+  }
+}
+
 @media (max-width: 768px) {
+  :deep(.avatar-dialog .el-dialog__title) {
+    font-size: 18px;
+  }
+  
+  :deep(.avatar-dialog .el-dialog__body) {
+    padding: 20px;
+  }
+  
   .avatar-gallery {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     padding: 20px;
   }
+  
+  .avatar-option {
+    padding: 15px;
+  }
+  
+  :deep(.el-avatar) {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  
+  .avatar-overlay .el-icon {
+    font-size: 20px;
+  }
+  
+  .dialog-footer-center {
+    margin-top: 25px;
+    gap: 15px;
+  }
+  
+  .dialog-footer-center .el-button {
+    padding: 10px 25px;
+    font-size: 15px;
+  }
+}
 
-  :deep(.avatar-dialog) {
-    width: 90% !important;
-    margin: 0 auto;
+@media (max-width: 480px) {
+  :deep(.avatar-dialog .el-dialog__header) {
+    padding: 15px;
+  }
+  
+  :deep(.avatar-dialog .el-dialog__title) {
+    font-size: 16px;
+  }
+  
+  :deep(.avatar-dialog .el-dialog__body) {
+    padding: 15px;
+  }
+  
+  .avatar-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .avatar-option {
+    padding: 12px;
+    border-radius: 12px;
+  }
+  
+  :deep(.el-avatar) {
+    width: 70px !important;
+    height: 70px !important;
+  }
+  
+  .avatar-overlay .el-icon {
+    font-size: 18px;
+  }
+  
+  .dialog-footer-center {
+    margin-top: 20px;
+    gap: 12px;
+    flex-direction: column;
+  }
+  
+  .dialog-footer-center .el-button {
+    width: 100%;
+    max-width: 200px;
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  :deep(.avatar-dialog .el-dialog__header) {
+    padding: 12px;
+  }
+  
+  :deep(.avatar-dialog .el-dialog__title) {
+    font-size: 15px;
+  }
+  
+  :deep(.avatar-dialog .el-dialog__body) {
+    padding: 12px;
+  }
+  
+  .avatar-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .avatar-option {
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  :deep(.el-avatar) {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  
+  .avatar-overlay .el-icon {
+    font-size: 16px;
+  }
+  
+  .dialog-footer-center {
+    margin-top: 15px;
+    gap: 10px;
+  }
+  
+  .dialog-footer-center .el-button {
+    width: 100%;
+    max-width: 180px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 280px) {
+  .avatar-gallery {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .avatar-option {
+    padding: 8px;
+  }
+  
+  :deep(.el-avatar) {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  
+  .avatar-overlay .el-icon {
+    font-size: 14px;
+  }
+  
+  .dialog-footer-center .el-button {
+    max-width: 160px;
+    padding: 6px 12px;
+    font-size: 12px;
   }
 }
 </style> 

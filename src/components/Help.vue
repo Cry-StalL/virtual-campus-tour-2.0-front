@@ -79,6 +79,11 @@ const closeHelpView = () => {
   z-index: 10;
 }
 
+.delete-button img {
+  width: 30px;
+  height: 30px;
+}
+
 .header {
   width: 100%;
   height: 12%;
@@ -92,14 +97,14 @@ const closeHelpView = () => {
 }
 
 .title {
-  font-size: 2.2vw;
+  font-size: 24px;
   font-weight: bold;
   color: white;
 }
 
 .content {
   flex: 1;
-  padding: 1.5vw;
+  padding: 20px;
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -107,10 +112,10 @@ const closeHelpView = () => {
 }
 
 .help-section {
-  margin-bottom: 2vw;
-  padding: 1.5vw;
+  margin-bottom: 30px;
+  padding: 20px;
   background-color: rgba(248, 249, 250, 0.8);
-  border-radius: 0.8vw;
+  border-radius: 12px;
   border-left: 4px solid #3498db;
   box-sizing: border-box;
   width: 100%;
@@ -119,19 +124,19 @@ const closeHelpView = () => {
 }
 
 .section-title {
-  font-size: 1.5vw;
+  font-size: 20px;
   font-weight: bold;
   color: #2c3e50;
-  margin-bottom: 1vw;
-  padding-bottom: 0.5vw;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
   border-bottom: 1px solid #bdc3c7;
 }
 
 .help-item, .faq-item {
-  margin-bottom: 1.2vw;
-  padding: 1vw;
+  margin-bottom: 18px;
+  padding: 15px;
   background-color: white;
-  border-radius: 0.5vw;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
   width: 100%;
@@ -140,17 +145,143 @@ const closeHelpView = () => {
 }
 
 .help-item h4, .faq-item h4 {
-  font-size: 1.2vw;
+  font-size: 16px;
   font-weight: 600;
   color: #34495e;
-  margin-bottom: 0.5vw;
+  margin-bottom: 8px;
 }
 
 .help-item p, .faq-item p {
-  font-size: 1vw;
+  font-size: 14px;
   line-height: 1.6;
   color: #555;
   margin: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .help-container {
+    border-radius: 12px;
+  }
+  
+  .delete-button img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .content {
+    padding: 15px;
+  }
+  
+  .help-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .help-item, .faq-item {
+    margin-bottom: 15px;
+    padding: 12px;
+  }
+  
+  .help-item h4, .faq-item h4 {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  
+  .help-item p, .faq-item p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .delete-button img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .title {
+    font-size: 18px;
+  }
+  
+  .content {
+    padding: 12px;
+  }
+  
+  .help-section {
+    margin-bottom: 20px;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .help-item, .faq-item {
+    margin-bottom: 12px;
+    padding: 10px;
+  }
+  
+  .help-item h4, .faq-item h4 {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+  
+  .help-item p, .faq-item p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 320px) {
+  .delete-button img {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .title {
+    font-size: 16px;
+  }
+  
+  .content {
+    padding: 10px;
+  }
+  
+  .help-section {
+    margin-bottom: 15px;
+    padding: 10px;
+  }
+  
+  .section-title {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  
+  .help-item, .faq-item {
+    margin-bottom: 10px;
+    padding: 8px;
+  }
+  
+  .help-item h4, .faq-item h4 {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  
+  .help-item p, .faq-item p {
+    font-size: 11px;
+    line-height: 1.4;
+  }
 }
 
 /* 滚动条美化 */

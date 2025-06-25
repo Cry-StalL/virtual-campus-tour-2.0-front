@@ -94,6 +94,11 @@ const closeAboutView = () => {
   z-index: 10;
 }
 
+.delete-button img {
+  width: 30px;
+  height: 30px;
+}
+
 .header {
   width: 100%;
   height: 12%;
@@ -107,13 +112,13 @@ const closeAboutView = () => {
 }
 
 .title {
-  font-size: 2.2vw;
+  font-size: 24px;
   font-weight: bold;
 }
 
 .content {
   flex: 1;
-  padding: 1.5vw;
+  padding: 20px;
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -121,72 +126,72 @@ const closeAboutView = () => {
 }
 
 .about-section {
-  margin-bottom: 2vw;
-  padding: 1.5vw;
+  margin-bottom: 30px;
+  padding: 20px;
   background-color: rgba(248, 249, 250, 0.8);
-  border-radius: 0.8vw;
+  border-radius: 12px;
   border-left: 4px solid #667eea;
 }
 
 .section-title {
-  font-size: 1.5vw;
+  font-size: 20px;
   font-weight: bold;
   color: #2c3e50;
-  margin-bottom: 1vw;
-  padding-bottom: 0.5vw;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
   border-bottom: 1px solid #bdc3c7;
 }
 
 .intro-content p {
-  font-size: 1.1vw;
+  font-size: 16px;
   line-height: 1.8;
   color: #555;
-  margin-bottom: 1vw;
+  margin-bottom: 15px;
 }
 
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-  gap: 1vw;
-  margin-top: 1.5vw;
+  gap: 15px;
+  margin-top: 20px;
 }
 
 .feature-item {
   display: flex;
   align-items: center;
-  padding: 1vw;
+  padding: 15px;
   background-color: white;
-  border-radius: 0.5vw;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .feature-icon {
-  font-size: 2vw;
-  margin-right: 1vw;
+  font-size: 24px;
+  margin-right: 15px;
 }
 
 .feature-item h4 {
-  font-size: 1.1vw;
+  font-size: 16px;
   font-weight: 600;
   color: #34495e;
-  margin: 0 0 0.3vw 0;
+  margin: 0 0 5px 0;
 }
 
 .feature-item p {
-  font-size: 0.9vw;
+  font-size: 14px;
   color: #666;
   margin: 0;
 }
 
 .tech-stack {
   background-color: white;
-  padding: 1.5vw;
-  border-radius: 0.5vw;
+  padding: 20px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .tech-category {
-  margin-bottom: 1.5vw;
+  margin-bottom: 20px;
 }
 
 .tech-category:last-child {
@@ -194,96 +199,96 @@ const closeAboutView = () => {
 }
 
 .tech-category h4 {
-  font-size: 1.2vw;
+  font-size: 18px;
   font-weight: 600;
   color: #34495e;
-  margin-bottom: 0.8vw;
+  margin-bottom: 12px;
 }
 
 .tech-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5vw;
+  gap: 8px;
 }
 
 .tech-tag {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 0.3vw 0.8vw;
-  border-radius: 1vw;
-  font-size: 0.9vw;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .team-info {
   background-color: white;
-  padding: 1.5vw;
-  border-radius: 0.5vw;
+  padding: 20px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .team-info p {
-  font-size: 1.1vw;
+  font-size: 16px;
   line-height: 1.6;
   color: #555;
-  margin-bottom: 1.5vw;
+  margin-bottom: 20px;
 }
 
 .team-stats {
   display: flex;
   justify-content: space-around;
-  gap: 1vw;
+  gap: 15px;
 }
 
 .stat-item {
   text-align: center;
-  padding: 1vw;
+  padding: 15px;
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  border-radius: 0.5vw;
+  border-radius: 8px;
   color: white;
   flex: 1;
 }
 
 .stat-number {
   display: block;
-  font-size: 1.8vw;
+  font-size: 24px;
   font-weight: bold;
-  margin-bottom: 0.3vw;
+  margin-bottom: 5px;
 }
 
 .stat-label {
-  font-size: 0.9vw;
+  font-size: 14px;
 }
 
 .contact-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
-  gap: 1vw;
+  gap: 15px;
 }
 
 .contact-item {
   display: flex;
   align-items: center;
-  padding: 1vw;
+  padding: 15px;
   background-color: white;
-  border-radius: 0.5vw;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .contact-icon {
-  font-size: 1.5vw;
-  margin-right: 1vw;
+  font-size: 20px;
+  margin-right: 15px;
 }
 
 .contact-item h4 {
-  font-size: 1vw;
+  font-size: 16px;
   font-weight: 600;
   color: #34495e;
-  margin: 0 0 0.3vw 0;
+  margin: 0 0 5px 0;
 }
 
 .contact-item p {
-  font-size: 0.9vw;
+  font-size: 14px;
   color: #666;
   margin: 0;
 }
@@ -300,6 +305,226 @@ const closeAboutView = () => {
   color: #764ba2;
   border-bottom: 1px solid #764ba2;
   text-decoration: none;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .about-container {
+    border-radius: 12px;
+  }
+  
+  .delete-button img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .content {
+    padding: 15px;
+  }
+  
+  .about-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+  }
+  
+  .intro-content p {
+    font-size: 15px;
+  }
+  
+  .features {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .feature-item {
+    padding: 12px;
+  }
+  
+  .feature-icon {
+    font-size: 20px;
+    margin-right: 12px;
+  }
+  
+  .feature-item h4 {
+    font-size: 15px;
+  }
+  
+  .feature-item p {
+    font-size: 13px;
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .contact-item {
+    padding: 12px;
+  }
+  
+  .contact-icon {
+    font-size: 18px;
+    margin-right: 12px;
+  }
+  
+  .contact-item h4 {
+    font-size: 15px;
+  }
+  
+  .contact-item p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .delete-button img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .title {
+    font-size: 18px;
+  }
+  
+  .content {
+    padding: 12px;
+  }
+  
+  .about-section {
+    margin-bottom: 20px;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .intro-content p {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .features {
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .feature-item {
+    padding: 10px;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .feature-icon {
+    font-size: 18px;
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+  
+  .feature-item h4 {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .feature-item p {
+    font-size: 12px;
+  }
+  
+  .contact-item {
+    padding: 10px;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .contact-icon {
+    font-size: 16px;
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+  
+  .contact-item h4 {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .contact-item p {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 320px) {
+  .delete-button img {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .title {
+    font-size: 16px;
+  }
+  
+  .content {
+    padding: 10px;
+  }
+  
+  .about-section {
+    margin-bottom: 15px;
+    padding: 10px;
+  }
+  
+  .section-title {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .intro-content p {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  
+  .feature-item {
+    padding: 8px;
+  }
+  
+  .feature-icon {
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  
+  .feature-item h4 {
+    font-size: 13px;
+  }
+  
+  .feature-item p {
+    font-size: 11px;
+  }
+  
+  .contact-item {
+    padding: 8px;
+  }
+  
+  .contact-icon {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  
+  .contact-item h4 {
+    font-size: 13px;
+  }
+  
+  .contact-item p {
+    font-size: 11px;
+  }
 }
 
 /* 滚动条美化 */

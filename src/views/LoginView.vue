@@ -16,11 +16,10 @@
             <el-input 
               type="email"
               v-model="ruleForm.email"
-              @input="handleInput"
               autocomplete="off"
             ><template #prefix>
-              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 1.1vw; font-weight: bold;">邮箱</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 16px; font-weight: bold;">邮箱</el-text>
               </template></el-input>
           </el-form-item>
           <el-form-item prop="password">
@@ -29,8 +28,8 @@
               v-model="ruleForm.password"
               autocomplete="off"
             ><template #prefix>
-              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 1.1vw; font-weight: bold;">密码</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 16px; font-weight: bold;">密码</el-text>
               </template></el-input>
           </el-form-item>
         </el-form>
@@ -207,18 +206,21 @@
     background-size: cover;
     background-position: center;
   }
-  /* login那一块 */
+  /* login */
   .box-card {
     margin: auto auto;
-    width: 24vw;   
-    /* height: 50vh; */
+    width: 400px;
+    min-width: 320px;
+    max-width: 400px;
+    min-height: 400px;
+    max-height: 450px;
     transition: all 0.3s ease;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     background-color: rgba(255, 255, 255, 0.88); /* 半透明背景色 */
-    padding: 2vw;
+    padding: 2rem; /* 使用rem单位 */
     position: relative; /* 添加 position 属性 */
-    z-index: 2; /* 确保卡片在伪元素之上 */
+    z-index: 2;
   }
 
   /* 鼠标放在login上会移动 */
@@ -230,7 +232,7 @@
   .login-from {
     /* background-color: #409EFF; */
     margin: auto auto;
-    width: 90%;
+    width: 100%;
     /* padding: 0 20px; */
   }
   
@@ -242,7 +244,7 @@
   :deep(.el-input__inner) {
     border-radius: 8px;
     height: 45px;
-    font-size: 1vw;
+    font-size: 16px; /* 固定字体大小 */
   }
   
   /* 移除多余的样式 */
@@ -269,6 +271,7 @@
     transition: all 0.3s ease;
     height: 40px;
     padding: 0 25px;
+    font-size: 16px; /* 固定字体大小 */
   }
   
   :deep(.el-button:hover) {
@@ -305,6 +308,7 @@
     justify-content: center;
     gap: 20px;
     margin-top: 35px;
+    flex-wrap: wrap; /* 允许按钮换行 */
   }
   
   /* 注册链接样式 */
@@ -349,7 +353,127 @@
   
   .ttt{
     /* background-color: #909399; */
-    width: 30%;
+    width: 120px; /* 固定按钮宽度 */
+    min-width: 120px; /* 最小宽度 */
+  }
+
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    .box-card {
+      width: 400px;
+      max-width: 90vw;
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+    
+    h2 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+    
+    .btnGroup {
+      gap: 15px;
+      margin-top: 25px;
+    }
+    
+    .ttt {
+      width: 100px;
+      min-width: 100px;
+    }
+    
+    :deep(.el-input__inner) {
+      height: 40px;
+      font-size: 14px;
+    }
+    
+    :deep(.el-button) {
+      height: 38px;
+      font-size: 14px;
+      padding: 0 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .box-card {
+      width: 400px;
+      max-width: 95vw;
+      padding: 1rem;
+      margin: 0.5rem;
+    }
+    
+    h2 {
+      font-size: 22px;
+      margin-bottom: 25px;
+    }
+    
+    .btnGroup {
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .ttt {
+      width: 100%;
+      max-width: 150px;  /* 限制最大宽度 */
+      min-width: auto;
+    }
+    
+    .btnGroup .el-button {
+      max-width: 150px;  /* 限制所有按钮最大宽度 */
+    }
+    
+    :deep(.el-input__inner) {
+      height: 38px;
+      font-size: 14px;
+    }
+    
+    :deep(.el-button) {
+      height: 36px;
+      font-size: 14px;
+      padding: 0 15px;
+    }
+    
+    .divider {
+      margin: 20px 0;
+    }
+    
+    .register-link {
+      margin-top: 20px;
+      font-size: 13px;
+    }
+  }
+
+  /* 超小屏幕适配 */
+  @media (max-width: 320px) {
+    .box-card {
+      width: 400px;
+      max-width: 98vw;
+      padding: 0.8rem;
+    }
+    
+    h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .ttt {
+      max-width: 120px;  /* 超小屏幕进一步限制 */
+    }
+    
+    .btnGroup .el-button {
+      max-width: 120px;
+    }
+    
+    :deep(.el-input__inner) {
+      height: 36px;
+      font-size: 13px;
+    }
+    
+    :deep(.el-button) {
+      height: 34px;
+      font-size: 13px;
+      padding: 0 12px;
+    }
   }
 </style>
 

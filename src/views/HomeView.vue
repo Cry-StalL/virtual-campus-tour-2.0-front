@@ -15,15 +15,6 @@
 
     </div>
 
-    <!-- 调试按钮 -->
-    <el-button
-      v-if="APP_CONFIG.debug.enabled"
-      class="debug-btn"
-      size="small"
-      @click="showCurrentSceneId">
-      调试按钮: 显示当前场景ID
-    </el-button>
-
     <!-- 侧边栏切换按钮 -->
     <div class="toggle-btn" @click="toggleSidebar">
       <div style="background-color: white; margin: auto auto; width: 100%; height: 100%; display: flex; align-items: center; border-radius: 50%;">
@@ -581,16 +572,7 @@ body, html, #app {
   text-overflow: ellipsis;
 }
 
-/* 调试按钮样式 */
-.debug-btn {
-  position: absolute;
-  bottom: 40px;
-  left: 15px;
-  z-index: 10;
-}
-
 /* 场景跳转 */
-
 .sitechoose {
   position: absolute;
   top: 0;
