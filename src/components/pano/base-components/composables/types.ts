@@ -3,6 +3,8 @@ export interface Scene {
   sceneId: string;     // 场景唯一标识符
   imagePath: string;   // 全景图片的路径
   hotspots?: HotSpot[]; // 热点数组
+  initialLongitude?: number; // 初始经度（可选，-180 到 180，决定初始视角）
+  initialLatitude?: number;  // 初始纬度（可选，-90 到 90，决定初始视角）
 }
 
 // 定义热点接口
@@ -32,4 +34,4 @@ export interface PanoramaViewerProps {
   debug?: boolean; // debug模式
   progressiveLoading?: boolean; // 渐进加载模式
   resolutions?: string[]; // 渐进加载的分辨率列表，如 ["1920x960", "3840x1920", "7680x3840"]
-} 
+}

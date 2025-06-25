@@ -8,13 +8,15 @@
       "hotspots": [
         {
           "type": "custom",
-          "longitude": 10.24,
+          "longitude": -10.24,
           "latitude": 10.72,
           "icon": "/icons/scene_hotspot.png",
           "title": "切换到场景视图",
           "description": ""
         }
-      ]
+      ],
+      "initialLongitude": -10.24,
+      "initialLatitude": 10.72
     }
   ]
 }
