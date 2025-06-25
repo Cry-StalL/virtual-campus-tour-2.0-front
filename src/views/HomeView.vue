@@ -49,6 +49,7 @@
     <div class="sitechoose" :class="{ active: siteChooseVisible }">
       <SiteChoose @closeSiteChooseView="closeSiteChoose"/>
     </div>
+    
 
     <!-- 实用信息 -->
     <div class="usefulinfo" :class="{ active: usefulInfoVisible }">
@@ -422,8 +423,8 @@ body, html, #app {
 .sidebar {
   position: absolute;
   top: 0;
-  left: -16%;
-  width: 16%;
+  left: -20vw;
+  width: 18vw;
   height: 100%;
   background-color: rgba(255, 255, 255, 1);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -558,7 +559,7 @@ body, html, #app {
 }
 
 .user-avatar {
-  background-color: #409EFF;
+  background-color: whi;
   color: white;
   font-weight: bold;
   margin-right: 8px;
@@ -590,19 +591,20 @@ body, html, #app {
 }
 
 /* 场景跳转 */
-
 .sitechoose {
-  position: absolute;
-  top: 0;
-  left: -80vw;
-  width: 80vw;
-  margin-left: 0vw;
-  top: 6vh;
-  height: 92vh;
-  background-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: left 0.3s ease;
   z-index: 10;
+  position: fixed;
+  top: 7vh;
+
+  height: 90vh;
+  width: 78vw;
+  left: -100vw;
+  margin-left: 2vw;
+
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 1vw;
+  transition: left 0.5s ease;
+  
   overflow-y: auto;
 }
 
