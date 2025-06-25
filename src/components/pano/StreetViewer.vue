@@ -13,6 +13,7 @@
       }))"
       :progressiveLoading="viewerconfig.progressiveLoading"
       :resolutions="viewerconfig.resolutions"
+      :switchViewer="props.switchViewer" 
     />
   </div>
 </template>
@@ -28,9 +29,7 @@ const props = defineProps<{ switchViewer: (name: string) => void }>();
 const { viewerconfig: viewerconfig, error } = useStreetViewerConfig();
 
 function handleHotspotClick(hotspot: any) {
-  if (hotspot.title === '切换到场景视图' && props.switchViewer && typeof props.switchViewer === 'function') {
-    props.switchViewer('scene');
-  }
+  // 这里不再处理切换到场景视图的逻辑，交由PanoramaViewer处理
 }
 </script>
 

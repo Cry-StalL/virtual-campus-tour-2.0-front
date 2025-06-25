@@ -92,9 +92,9 @@ const validateSceneIds = (): boolean => {
 
 // 验证热点配置
 const validateHotspot = (hotspot: HotSpot): boolean => {
-  if (hotspot.type === 'scene') {
+  if (hotspot.type === 'switchScene') {
     if (!hotspot.targetSceneId) {
-      showError(`热点配置错误: 热点ID "${hotspot.id}" 的类型为 "scene"，但未提供 targetSceneId`);
+      showError(`热点配置错误: 热点ID "${hotspot.id}" 的类型为 "switchScene"，但未提供 targetSceneId`);
       return false;
     }
     
@@ -106,7 +106,11 @@ const validateHotspot = (hotspot: HotSpot): boolean => {
   } else if (hotspot.type === 'custom') {
     // custom 类型不需要特别的验证，因为它完全依赖用户自定义的点击处理函数
     return true;
-  } else {
+  } else if (hotspot.type === 'enterSceneViewer') {
+    // enterSceneViewer 类型不需要额外验证
+    return true;
+  }
+  else {
     showError(`热点配置错误: 热点ID "${hotspot.id}" 的类型 "${hotspot.type}" 未知`);
     return false;
   }
@@ -213,9 +217,15 @@ const handleHotspotClick = (hotspot: HotSpot) => {
     return;
   }
 
-  if (hotspot.type === 'scene' && hotspot.targetSceneId) {
+  if (hotspot.type === 'switchScene' && hotspot.targetSceneId) {
     switchScene(hotspot.targetSceneId);
-  } else if (hotspot.type === 'custom') {
+  } 
+  else if (hotspot.type === 'enterSceneViewer') {
+    if (props.switchViewer && typeof props.switchViewer === 'function') {
+      props.switchViewer('scene');
+    }
+  }
+  else if (hotspot.type === 'custom') {
     // 对于自定义热点，触发hotspotClick事件，由父组件处理
     emit('hotspotClick', hotspot);
     
