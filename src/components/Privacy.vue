@@ -166,6 +166,11 @@ const closePrivacyView = () => {
   z-index: 10;
 }
 
+.delete-button img {
+  width: 30px;
+  height: 30px;
+}
+
 .header {
   width: 100%;
   height: 12%;
@@ -179,13 +184,13 @@ const closePrivacyView = () => {
 }
 
 .title {
-  font-size: 2.2vw;
+  font-size: 24px;
   font-weight: bold;
 }
 
 .content {
   flex: 1;
-  padding: 1.5vw;
+  padding: 20px;
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
@@ -193,60 +198,60 @@ const closePrivacyView = () => {
 }
 
 .privacy-section {
-  margin-bottom: 2vw;
-  padding: 1.5vw;
+  margin-bottom: 30px;
+  padding: 20px;
   background-color: rgba(248, 249, 250, 0.8);
-  border-radius: 0.8vw;
+  border-radius: 12px;
   border-left: 4px solid #ff6b6b;
 }
 
 .section-title {
-  font-size: 1.5vw;
+  font-size: 20px;
   font-weight: bold;
   color: #2c3e50;
-  margin-bottom: 1vw;
-  padding-bottom: 0.5vw;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
   border-bottom: 1px solid #bdc3c7;
 }
 
 .policy-content p {
-  font-size: 1vw;
+  font-size: 14px;
   line-height: 1.8;
   color: #555;
-  margin-bottom: 1vw;
+  margin-bottom: 15px;
   text-align: justify;
 }
 
 .info-grid, .rights-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-  gap: 1vw;
+  gap: 15px;
 }
 
 .info-item, .rights-item {
   display: flex;
   align-items: flex-start;
-  padding: 1vw;
+  padding: 15px;
   background-color: white;
-  border-radius: 0.5vw;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .info-icon, .rights-icon {
-  font-size: 1.5vw;
-  margin-right: 1vw;
-  margin-top: 0.2vw;
+  font-size: 20px;
+  margin-right: 15px;
+  margin-top: 3px;
 }
 
 .info-item h4, .rights-item h4 {
-  font-size: 1.1vw;
+  font-size: 16px;
   font-weight: 600;
   color: #34495e;
-  margin: 0 0 0.5vw 0;
+  margin: 0 0 8px 0;
 }
 
 .info-item p, .rights-item p {
-  font-size: 0.9vw;
+  font-size: 14px;
   color: #666;
   margin: 0;
   line-height: 1.5;
@@ -255,15 +260,15 @@ const closePrivacyView = () => {
 .purpose-list {
   display: flex;
   flex-direction: column;
-  gap: 1vw;
+  gap: 15px;
 }
 
 .purpose-item {
   display: flex;
   align-items: center;
-  padding: 1vw;
+  padding: 15px;
   background-color: white;
-  border-radius: 0.5vw;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -271,27 +276,27 @@ const closePrivacyView = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2vw;
-  height: 2vw;
+  width: 30px;
+  height: 30px;
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
   color: white;
   border-radius: 50%;
   font-weight: bold;
-  font-size: 1vw;
-  margin-right: 1vw;
+  font-size: 14px;
+  margin-right: 15px;
   flex-shrink: 0;
 }
 
 .purpose-item h4 {
-  font-size: 1.1vw;
+  font-size: 16px;
   font-weight: 600;
   color: #34495e;
-  margin: 0 0 0.5vw 0;
+  margin: 0 0 8px 0;
   text-align: center;
 }
 
 .purpose-item p {
-  font-size: 0.9vw;
+  font-size: 14px;
   color: #666;
   margin: 0;
   line-height: 1.5;
@@ -301,25 +306,25 @@ const closePrivacyView = () => {
 .protection-content {
   display: flex;
   flex-direction: column;
-  gap: 1vw;
+  gap: 15px;
 }
 
 .protection-item {
-  padding: 1vw;
+  padding: 15px;
   background-color: white;
-  border-radius: 0.5vw;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .protection-item h4 {
-  font-size: 1.1vw;
+  font-size: 16px;
   font-weight: 600;
   color: #34495e;
-  margin: 0 0 0.5vw 0;
+  margin: 0 0 8px 0;
 }
 
 .protection-item p {
-  font-size: 0.9vw;
+  font-size: 14px;
   color: #666;
   margin: 0;
   line-height: 1.6;
@@ -327,29 +332,29 @@ const closePrivacyView = () => {
 
 .cookie-content {
   background-color: white;
-  padding: 1.5vw;
-  border-radius: 0.5vw;
+  padding: 20px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .cookie-content p {
-  font-size: 1vw;
+  font-size: 14px;
   color: #555;
-  margin-bottom: 1vw;
+  margin-bottom: 15px;
   line-height: 1.6;
 }
 
 .cookie-list {
   list-style: none;
   padding: 0;
-  margin: 1vw 0;
+  margin: 15px 0;
 }
 
 .cookie-list li {
-  font-size: 0.9vw;
+  font-size: 14px;
   color: #666;
-  margin-bottom: 0.5vw;
-  padding-left: 1vw;
+  margin-bottom: 8px;
+  padding-left: 15px;
   position: relative;
   line-height: 1.5;
 }
@@ -357,51 +362,389 @@ const closePrivacyView = () => {
 .cookie-list li::before {
   content: "•";
   color: #ff6b6b;
-  font-size: 1.2vw;
+  font-size: 16px;
   position: absolute;
   left: 0;
 }
 
 .rights-content {
   background-color: white;
-  padding: 1.5vw;
-  border-radius: 0.5vw;
+  padding: 20px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .rights-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-  gap: 1vw;
+  gap: 15px;
 }
 
 .rights-item {
   display: flex;
   align-items: flex-start;
-  padding: 1vw;
+  padding: 15px;
   background-color: white;
-  border-radius: 0.5vw;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .rights-icon {
-  font-size: 1.5vw;
-  margin-right: 1vw;
-  margin-top: 0.2vw;
+  font-size: 20px;
+  margin-right: 15px;
+  margin-top: 3px;
 }
 
 .rights-item h4 {
-  font-size: 1.1vw;
+  font-size: 16px;
   font-weight: 600;
   color: #34495e;
-  margin: 0 0 0.5vw 0;
+  margin: 0 0 8px 0;
 }
 
 .rights-item p {
-  font-size: 0.9vw;
+  font-size: 14px;
   color: #666;
   margin: 0;
   line-height: 1.5;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .privacy-container {
+    border-radius: 12px;
+  }
+  
+  .delete-button img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .content {
+    padding: 15px;
+  }
+  
+  .privacy-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .policy-content p {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  
+  .info-grid, .rights-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .info-item, .rights-item {
+    padding: 12px;
+  }
+  
+  .info-icon, .rights-icon {
+    font-size: 18px;
+    margin-right: 12px;
+  }
+  
+  .info-item h4, .rights-item h4 {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  
+  .info-item p, .rights-item p {
+    font-size: 13px;
+  }
+  
+  .purpose-list {
+    gap: 12px;
+  }
+  
+  .purpose-item {
+    padding: 12px;
+  }
+  
+  .purpose-number {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+    margin-right: 12px;
+  }
+  
+  .purpose-item h4 {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  
+  .purpose-item p {
+    font-size: 13px;
+  }
+  
+  .protection-content {
+    gap: 12px;
+  }
+  
+  .protection-item {
+    padding: 12px;
+  }
+  
+  .protection-item h4 {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  
+  .protection-item p {
+    font-size: 13px;
+  }
+  
+  .cookie-content {
+    padding: 15px;
+  }
+  
+  .cookie-content p {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  
+  .cookie-list li {
+    font-size: 13px;
+    margin-bottom: 6px;
+    padding-left: 12px;
+  }
+  
+  .cookie-list li::before {
+    font-size: 15px;
+  }
+  
+  .rights-content {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .delete-button img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .title {
+    font-size: 18px;
+  }
+  
+  .content {
+    padding: 12px;
+  }
+  
+  .privacy-section {
+    margin-bottom: 20px;
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .section-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .policy-content p {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+  
+  .info-item, .rights-item {
+    padding: 10px;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .info-icon, .rights-icon {
+    font-size: 16px;
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+  
+  .info-item h4, .rights-item h4 {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .info-item p, .rights-item p {
+    font-size: 12px;
+  }
+  
+  .purpose-item {
+    padding: 10px;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .purpose-number {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+  
+  .purpose-item h4 {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .purpose-item p {
+    font-size: 12px;
+  }
+  
+  .protection-item {
+    padding: 10px;
+  }
+  
+  .protection-item h4 {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .protection-item p {
+    font-size: 12px;
+  }
+  
+  .cookie-content {
+    padding: 12px;
+  }
+  
+  .cookie-content p {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+  
+  .cookie-list li {
+    font-size: 12px;
+    margin-bottom: 4px;
+    padding-left: 10px;
+  }
+  
+  .cookie-list li::before {
+    font-size: 14px;
+  }
+  
+  .rights-content {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 320px) {
+  .delete-button img {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .title {
+    font-size: 16px;
+  }
+  
+  .content {
+    padding: 10px;
+  }
+  
+  .privacy-section {
+    margin-bottom: 15px;
+    padding: 10px;
+  }
+  
+  .section-title {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  
+  .policy-content p {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+  
+  .info-item, .rights-item {
+    padding: 8px;
+  }
+  
+  .info-icon, .rights-icon {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  
+  .info-item h4, .rights-item h4 {
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+  
+  .info-item p, .rights-item p {
+    font-size: 11px;
+  }
+  
+  .purpose-item {
+    padding: 8px;
+  }
+  
+  .purpose-number {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+  
+  .purpose-item h4 {
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+  
+  .purpose-item p {
+    font-size: 11px;
+  }
+  
+  .protection-item {
+    padding: 8px;
+  }
+  
+  .protection-item h4 {
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+  
+  .protection-item p {
+    font-size: 11px;
+  }
+  
+  .cookie-content {
+    padding: 10px;
+  }
+  
+  .cookie-content p {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+  
+  .cookie-list li {
+    font-size: 11px;
+    margin-bottom: 3px;
+    padding-left: 8px;
+  }
+  
+  .cookie-list li::before {
+    font-size: 13px;
+  }
+  
+  .rights-content {
+    padding: 10px;
+  }
 }
 
 /* 滚动条美化 */

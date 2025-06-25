@@ -1030,12 +1030,236 @@ export default {
   }
   
   .profile-card, .message-history-card {
-    max-width: 90%;
-    padding: 20px;
+    width: 400px;
+    max-width: 90vw;
+    padding: 1.5rem;
+    margin: 1rem;
   }
   
-  .message-list {
-    padding: 0 5px;
+  .profile-header h2, .message-header h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+  
+  .action-buttons {
+    gap: 15px;
+    margin-top: 25px;
+  }
+  
+  .action-buttons .el-button {
+    max-width: 150px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  
+  .username-edit-btn {
+    max-width: 150px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  
+  :deep(.username-edit-btn.el-button) {
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+    height: 36px !important;
+  }
+  
+  .username-action-btns .el-button {
+    max-width: 100px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  :deep(.el-input) {
+    max-width: 250px;
+  }
+  
+  :deep(.el-input__inner) {
+    height: 38px;
+    font-size: 14px;
+  }
+  
+  :deep(.el-button) {
+    height: 36px;
+    font-size: 13px;
+    padding: 0 16px;
+  }
+  
+  .back-button-container {
+    top: 15px;
+    right: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 20px;
+  }
+  
+  .profile-card, .message-history-card {
+    width: 400px;
+    max-width: 95vw;
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+  
+  .profile-header h2, .message-header h2 {
+    font-size: 22px;
+    margin-bottom: 25px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  
+  .action-buttons .el-button {
+    width: 100%;
+    max-width: 180px;
+    min-width: auto;
+    padding: 8px 12px;
+    font-size: 13px;
+    height: 36px;
+  }
+  
+  .username-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .username-edit-btn {
+    width: 100%;
+    max-width: 180px;
+    margin-left: 0;
+    margin-top: 8px;
+    align-self: center;
+    padding: 8px 12px;
+    font-size: 13px;
+    height: 36px;
+  }
+  
+  :deep(.username-edit-btn.el-button) {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    height: 36px !important;
+  }
+  
+  .username-action-btns {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+    margin-top: 8px;
+    gap: 8px;
+  }
+  
+  .username-action-btns .el-button {
+    max-width: 80px;
+    padding: 6px 8px;
+    font-size: 12px;
+    height: 32px;
+  }
+  
+  :deep(.el-input) {
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  :deep(.el-input__inner) {
+    height: 36px;
+    font-size: 14px;
+  }
+  
+  :deep(.el-button) {
+    height: 34px;
+    font-size: 13px;
+    padding: 0 12px;
+  }
+  
+  .back-button-container {
+    top: 10px;
+    right: 10px;
+  }
+  
+  .back-button-container .el-button {
+    padding: 6px 10px;
+    font-size: 13px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 320px) {
+  .profile-card, .message-history-card {
+    width: 400px;
+    max-width: 98vw;
+    padding: 0.8rem;
+  }
+  
+  .profile-header h2, .message-header h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .action-buttons .el-button {
+    max-width: 140px;
+    padding: 6px 10px;
+    font-size: 12px;
+    height: 32px;
+  }
+  
+  .username-edit-btn {
+    max-width: 140px;
+    padding: 6px 10px;
+    font-size: 12px;
+    height: 32px;
+  }
+  
+  :deep(.username-edit-btn.el-button) {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    height: 32px !important;
+  }
+  
+  .username-action-btns .el-button {
+    max-width: 60px;
+    padding: 4px 6px;
+    font-size: 11px;
+    height: 28px;
+  }
+  
+  :deep(.el-input__inner) {
+    height: 32px;
+    font-size: 13px;
+    padding: 0 8px;
+  }
+  
+  :deep(.el-button) {
+    height: 30px;
+    font-size: 12px;
+    padding: 0 8px;
+  }
+  
+  .back-button-container .el-button {
+    padding: 4px 8px;
+    font-size: 12px;
+    height: 28px;
+  }
+  
+  .avatar-container {
+    width: 80px;
+    height: 80px;
+  }
+  
+  :deep(.el-avatar) {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  
+  :deep(.el-form-item__label) {
+    font-size: 14px !important;
+    min-width: 60px !important;
   }
 }
 

@@ -12,8 +12,8 @@
         >
           <el-form-item prop="uname">
             <el-input v-model="ruleForm.uname"><template #prefix>
-              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 1.1vw; font-weight: bold; width: 3.5vw; text-align: left;">用户名</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; width: 3.5vw; text-align: left;">用户名</el-text>
               </template></el-input>
           </el-form-item>
           <el-form-item prop="email">
@@ -22,8 +22,8 @@
               v-model="ruleForm.email"
               autocomplete="off"
             ><template #prefix>
-              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 1.1vw; font-weight: bold; width: 3.5vw; text-align: left;">邮箱</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; width: 3.5vw; text-align: left;">邮箱</el-text>
               </template></el-input>
           </el-form-item>
           <el-form-item prop="code">
@@ -33,8 +33,8 @@
                 placeholder="请输入验证码"
                 autocomplete="off"
               ><template #prefix>
-              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 1.1vw; font-weight: bold; width: 3.5vw; text-align: left;">验证码</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; width: 3.5vw; text-align: left;">验证码</el-text>
               </template></el-input>
               <el-button 
                 type="primary" 
@@ -52,8 +52,8 @@
               v-model="ruleForm.pass"
               autocomplete="off"
             ><template #prefix>
-              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 1.1vw; font-weight: bold; width: 4.2vw; text-align: left;">密码</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; width: 4.2vw; text-align: left;">密码</el-text>
               </template></el-input>
           </el-form-item>
           <el-form-item prop="password">
@@ -62,8 +62,8 @@
               v-model="ruleForm.password"
               autocomplete="off"
             ><template #prefix>
-              <el-text style="font-size: 1.1vw; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 1.1vw; font-weight: bold; width: 4.2vw; text-align: left;">验证密码</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; width: 4.2vw; text-align: left;">验证密码</el-text>
               </template></el-input>
           </el-form-item>
         </el-form>
@@ -168,6 +168,7 @@
             { required: true, validator: validatePass2, trigger: "blur" },
           ],
         },
+        loading: false,
         isCodeButtonDisabled: false,
         codeButtonText: "获取验证码",
         countdown: 60,
@@ -371,11 +372,14 @@
     background-size: cover;
     background-position: center;
   }
-  /* register那一块 */
+  /* register */
   .box-card {
     margin: auto auto;
-    width: 28%;
-    height: 64vh;
+    width: 400px;
+    min-width: 320px;
+    max-width: 400px;
+    min-height: 500px;
+    max-height: 520px;
     padding: 40px;
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
@@ -540,5 +544,123 @@
     padding-top: 4px;
     font-size: 13px;
     color: #f56c6c;
+  }
+
+  @media (max-width: 768px) {
+    .box-card {
+      width: 400px;
+      max-width: 90vw;
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+    h2 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+    .btnGroup {
+      gap: 15px;
+      margin-top: 25px;
+    }
+    .btnGroup .el-button {
+      width: 100px;
+      min-width: 100px;
+      padding: 8px 16px;
+      font-size: 13px;
+      height: 36px;
+    }
+    .code-input .el-button {
+      padding: 8px 12px;
+      font-size: 13px;
+      height: 36px;
+    }
+    :deep(.el-input__inner) {
+      height: 40px;
+      font-size: 14px;
+    }
+    :deep(.el-button) {
+      height: 38px;
+      font-size: 14px;
+      padding: 0 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .box-card {
+      width: 400px;
+      max-width: 95vw;
+      padding: 1rem;
+      margin: 0.5rem;
+    }
+    h2 {
+      font-size: 22px;
+      margin-bottom: 25px;
+    }
+    .btnGroup {
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .btnGroup .el-button {
+      width: 100%;
+      max-width: 180px;
+      min-width: auto;
+      padding: 8px 12px;
+      font-size: 13px;
+      height: 36px;
+    }
+    .code-input {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .code-input .el-button {
+      width: 100%;
+      max-width: 120px;
+      padding: 6px 10px;
+      font-size: 12px;
+      height: 32px;
+      align-self: center;
+    }
+    :deep(.el-input__inner) {
+      height: 38px;
+      font-size: 14px;
+    }
+    :deep(.el-button) {
+      height: 36px;
+      font-size: 14px;
+      padding: 0 15px;
+    }
+  }
+
+  @media (max-width: 320px) {
+    .box-card {
+      width: 400px;
+      max-width: 98vw;
+      padding: 0.8rem;
+    }
+    h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .btnGroup .el-button {
+      max-width: 140px;
+      padding: 6px 10px;
+      font-size: 12px;
+      height: 32px;
+    }
+    .code-input .el-button {
+      max-width: 100px;
+      padding: 4px 8px;
+      font-size: 11px;
+      height: 28px;
+    }
+    :deep(.el-input__inner) {
+      height: 36px;
+      font-size: 13px;
+    }
+    :deep(.el-button) {
+      height: 34px;
+      font-size: 13px;
+      padding: 0 12px;
+    }
   }
   </style>
