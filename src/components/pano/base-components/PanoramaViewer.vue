@@ -385,6 +385,20 @@ const switchScene = (target: number | string) => {
   
   // 触发场景切换事件
   emit('sceneChange', targetIndex);
+
+  // 设置初始视角（如有配置）
+  if (controls.value && camera.value && newScene.initialLongitude !== undefined && newScene.initialLatitude !== undefined) {
+    // 复用latLonToVector3计算相机位置，修正：纬度取反，经度+180
+    const radius = controls.value.getDistance();
+    const camPos = latLonToVector3(-newScene.initialLatitude, newScene.initialLongitude + 180, radius);
+    controls.value.object.position.set(
+      controls.value.target.x + camPos.x,
+      controls.value.target.y + camPos.y,
+      controls.value.target.z + camPos.z
+    );
+    controls.value.object.lookAt(controls.value.target);
+    controls.value.update();
+  }
 };
 
 // 获取当前场景ID
