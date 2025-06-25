@@ -3,9 +3,16 @@
     <!-- 使用基础 Viewer 组件 -->
     <PanoramaViewer 
       ref="panoramaViewerRef" 
-      :scenes="scenes" 
-      :progressiveLoading="true"
-      :resolutions="['1920x960', '3840x1920', '7680x3840']"
+      v-if="viewerconfig"
+      :scenes="viewerconfig.scenes.map(scene => ({
+        ...scene,
+        hotspots: scene.hotspots.map(h => ({
+          ...h,
+          onClick: () => handleHotspotClick(h)
+        }))
+      }))"
+      :progressiveLoading="viewerconfig.progressiveLoading"
+      :resolutions="viewerconfig.resolutions"
     />
   </div>
 </template>
@@ -13,32 +20,18 @@
 <script setup lang="ts">
 import { ref, shallowRef } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
+import { useStreetViewerConfig } from './composables/useStreetViewerConfig';
 
 const panoramaViewerRef = ref(null);
 const props = defineProps<{ switchViewer: (name: string) => void }>();
 
-// 定义场景数据
-const scenes = ref([
-  {
-    sceneId: "scene",
-    imagePath: "http://127.0.0.1:8080/assets/panos/streets/byy_road1/1",
-    hotspots: [
-      {
-        type: 'custom',
-        longitude: 10.24,
-        latitude: 10.72,
-        icon: "/icons/scene_hotspot.png",
-        title: '切换到场景视图',
-        description: '',
-        onClick: () => {
-          if (props.switchViewer && typeof props.switchViewer === 'function') {
-            props.switchViewer('scene');
-          }
-        }
-      }
-    ]
-  },
-]);
+const { viewerconfig: viewerconfig, error } = useStreetViewerConfig();
+
+function handleHotspotClick(hotspot: any) {
+  if (hotspot.title === '切换到场景视图' && props.switchViewer && typeof props.switchViewer === 'function') {
+    props.switchViewer('scene');
+  }
+}
 </script>
 
 <style scoped>

@@ -1,0 +1,11 @@
+{
+  "progressiveLoading": true,
+  "resolutions": ["1920x960", "3840x1920", "7680x3840"],
+  "scenes": [
+    {
+      "sceneId": "scene1",
+      "imagePath": "/images/panorama",
+      "hotspots": []
+    }
+  ]
+}
