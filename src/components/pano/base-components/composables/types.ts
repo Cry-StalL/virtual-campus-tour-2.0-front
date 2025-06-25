@@ -34,4 +34,5 @@ export interface PanoramaViewerProps {
   debug?: boolean; // debug模式
   progressiveLoading?: boolean; // 渐进加载模式
   resolutions?: string[]; // 渐进加载的分辨率列表，如 ["1920x960", "3840x1920", "7680x3840"]
+  switchViewer?: (name: string) => void; // 切换视图方法
 }
