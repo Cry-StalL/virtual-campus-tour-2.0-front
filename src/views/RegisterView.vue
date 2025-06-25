@@ -13,7 +13,7 @@
           <el-form-item prop="uname">
             <el-input v-model="ruleForm.uname"><template #prefix>
               <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 16px; font-weight: bold; width: 3.5vw; text-align: left;">用户名</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; width: 60px; text-align: left;">用户名</el-text>
               </template></el-input>
           </el-form-item>
           <el-form-item prop="email">
@@ -23,7 +23,7 @@
               autocomplete="off"
             ><template #prefix>
               <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 16px; font-weight: bold; width: 3.5vw; text-align: left;">邮箱</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; width: 60px; text-align: left;">邮箱</el-text>
               </template></el-input>
           </el-form-item>
           <el-form-item prop="code">
@@ -34,11 +34,11 @@
                 autocomplete="off"
               ><template #prefix>
               <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 16px; font-weight: bold; width: 3.5vw; text-align: left;">验证码</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; width: 60px; text-align: left;">验证码</el-text>
               </template></el-input>
               <el-button 
                 type="primary" 
-                style="height: 36px; height: 80%; margin: auto auto;"
+                class="code-btn"
                 :disabled="isCodeButtonDisabled"
                 @click="getCode"
               >
@@ -53,7 +53,7 @@
               autocomplete="off"
             ><template #prefix>
               <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 16px; font-weight: bold; width: 4.2vw; text-align: left;">密码</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; width: 60px; text-align: left;">密码</el-text>
               </template></el-input>
           </el-form-item>
           <el-form-item prop="password">
@@ -63,18 +63,19 @@
               autocomplete="off"
             ><template #prefix>
               <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
-              <el-text style="font-size: 16px; font-weight: bold; width: 4.2vw; text-align: left;">验证密码</el-text>
+              <el-text style="font-size: 16px; font-weight: bold; width: 80px; text-align: left;">验证密码</el-text>
               </template></el-input>
           </el-form-item>
         </el-form>
         <div class="btnGroup">
           <el-button
             type="primary"
+            class="submit-btn"
             @click="submitForm('ruleForm')"
             v-loading="loading"
             >提交</el-button
           >
-          <el-button @click="goBack">返回</el-button>
+          <el-button class="back-btn" @click="goBack">返回</el-button>
         </div>
         <div style="height: 10vh;"></div>
       </el-card>
@@ -496,6 +497,12 @@
     box-shadow: 0 6px 15px rgba(64, 158, 255, 0.25);
   }
 
+  .code-btn {
+    height: 42px !important;
+    min-height: 42px !important;
+    flex-shrink: 0;
+  }
+
   .btnGroup {
     margin-top: 35px;
     display: flex;
@@ -513,6 +520,14 @@
     letter-spacing: 0.5px;
     font-size: 15px;
     height: 40px;
+  }
+
+  /* 桌面模式按钮对齐 */
+  .submit-btn, .back-btn {
+    width: 120px !important;
+    height: 40px !important;
+    min-width: 120px;
+    min-height: 40px;
   }
 
   .btnGroup .el-button--primary {
@@ -534,6 +549,16 @@
     color: #409eff;
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(64, 158, 255, 0.1);
+  }
+
+  /* 确保按钮完美对齐 */
+  .submit-btn, .back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 1;
   }
 
   :deep(.el-form-item.is-error .el-input__wrapper) {
@@ -584,83 +609,264 @@
     }
   }
 
+  /* 18:9 手机屏幕适配 */
   @media (max-width: 480px) {
     .box-card {
-      width: 400px;
-      max-width: 95vw;
-      padding: 1rem;
-      margin: 0.5rem;
+      width: 100%;
+      max-width: 360px;
+      min-width: 300px;
+      padding: 1.5rem;
+      margin: 1rem auto;
+      min-height: auto;
+      max-height: none;
     }
     h2 {
       font-size: 22px;
       margin-bottom: 25px;
     }
     .btnGroup {
+      display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-top: 20px;
+      align-items: center;
+      gap: 12px;
+      margin-top: 25px;
     }
     .btnGroup .el-button {
-      width: 100%;
-      max-width: 180px;
-      min-width: auto;
-      padding: 8px 12px;
-      font-size: 13px;
-      height: 36px;
+      width: 200px;
+      height: 40px;
+      font-size: 14px;
+      padding: 0;
+      border-radius: 8px;
+    }
+
+    .submit-btn, .back-btn {
+      width: 200px !important;
+      height: 40px !important;
+      min-width: 200px;
+      min-height: 40px;
     }
     .code-input {
+      display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
+      align-items: center;
+    }
+    .code-input .el-input {
+      width: 100%;
     }
     .code-input .el-button {
-      width: 100%;
-      max-width: 120px;
-      padding: 6px 10px;
-      font-size: 12px;
-      height: 32px;
-      align-self: center;
+      width: 150px;
+      height: 36px;
+      font-size: 13px;
+      padding: 0;
+      border-radius: 6px;
+    }
+
+    .code-btn {
+      height: 36px !important;
+      min-height: 36px !important;
     }
     :deep(.el-input__inner) {
-      height: 38px;
+      height: 42px;
       font-size: 14px;
     }
-    :deep(.el-button) {
-      height: 36px;
-      font-size: 14px;
-      padding: 0 15px;
+    :deep(.el-form-item) {
+      margin-bottom: 20px;
     }
   }
 
-  @media (max-width: 320px) {
+  /* iPhone X/11/12/13/14 系列 */
+  @media (max-width: 414px) and (min-height: 800px) {
     .box-card {
-      width: 400px;
-      max-width: 98vw;
-      padding: 0.8rem;
+      width: 100%;
+      max-width: 340px;
+      min-width: 300px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      min-height: auto;
+      max-height: none;
+    }
+    h2 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+    .btnGroup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    .btnGroup .el-button {
+      width: 220px;
+      height: 42px;
+      font-size: 15px;
+      padding: 0;
+      border-radius: 10px;
+    }
+
+    .submit-btn, .back-btn {
+      width: 220px !important;
+      height: 42px !important;
+      min-width: 220px;
+      min-height: 42px;
+    }
+    .code-input {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+    .code-input .el-input {
+      width: 100%;
+    }
+    .code-input .el-button {
+      width: 160px;
+      height: 38px;
+      font-size: 14px;
+      padding: 0;
+      border-radius: 8px;
+    }
+
+    .code-btn {
+      height: 38px !important;
+      min-height: 38px !important;
+    }
+    :deep(.el-input__inner) {
+      height: 44px;
+      font-size: 15px;
+    }
+    :deep(.el-form-item) {
+      margin-bottom: 22px;
+    }
+  }
+
+  /* 小屏幕手机适配 */
+  @media (max-width: 375px) {
+    .box-card {
+      width: 100%;
+      max-width: 320px;
+      min-width: 280px;
+      padding: 1.2rem;
+      margin: 1rem auto;
+      min-height: auto;
+      max-height: none;
     }
     h2 {
       font-size: 20px;
       margin-bottom: 20px;
     }
+    .btnGroup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
     .btnGroup .el-button {
-      max-width: 140px;
-      padding: 6px 10px;
-      font-size: 12px;
-      height: 32px;
+      width: 180px;
+      height: 38px;
+      font-size: 14px;
+      padding: 0;
+      border-radius: 8px;
+    }
+
+    .submit-btn, .back-btn {
+      width: 180px !important;
+      height: 38px !important;
+      min-width: 180px;
+      min-height: 38px;
+    }
+    .code-input {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .code-input .el-input {
+      width: 100%;
     }
     .code-input .el-button {
-      max-width: 100px;
-      padding: 4px 8px;
-      font-size: 11px;
-      height: 28px;
+      width: 130px;
+      height: 34px;
+      font-size: 12px;
+      padding: 0;
+      border-radius: 6px;
+    }
+
+    .code-btn {
+      height: 34px !important;
+      min-height: 34px !important;
     }
     :deep(.el-input__inner) {
+      height: 40px;
+      font-size: 14px;
+    }
+    :deep(.el-form-item) {
+      margin-bottom: 18px;
+    }
+  }
+
+  @media (max-width: 320px) {
+    .box-card {
+      width: 100%;
+      max-width: 300px;
+      min-width: 260px;
+      padding: 1rem;
+      margin: 0.5rem auto;
+    }
+    h2 {
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+    .btnGroup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btnGroup .el-button {
+      width: 160px;
       height: 36px;
       font-size: 13px;
+      padding: 0;
+      border-radius: 6px;
     }
-    :deep(.el-button) {
-      height: 34px;
+
+    .submit-btn, .back-btn {
+      width: 160px !important;
+      height: 36px !important;
+      min-width: 160px;
+      min-height: 36px;
+    }
+    .code-input {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+    .code-input .el-input {
+      width: 100%;
+    }
+    .code-input .el-button {
+      width: 110px;
+      height: 32px;
+      font-size: 11px;
+      padding: 0;
+      border-radius: 5px;
+    }
+
+    .code-btn {
+      height: 32px !important;
+      min-height: 32px !important;
+    }
+    :deep(.el-input__inner) {
+      height: 38px;
       font-size: 13px;
-      padding: 0 12px;
+    }
+    :deep(.el-form-item) {
+      margin-bottom: 15px;
     }
   }
   </style>
