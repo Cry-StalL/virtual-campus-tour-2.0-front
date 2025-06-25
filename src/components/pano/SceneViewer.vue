@@ -3,9 +3,10 @@
     <!-- 使用基础 Viewer 组件 -->
     <PanoramaViewer 
       ref="panoramaViewerRef" 
-      :scenes="scenes" 
-      :progressiveLoading="true"
-      :resolutions="['1920x960', '3840x1920', '7680x3840']"
+      v-if="viewerconfig"
+      :scenes="viewerconfig.scenes"
+      :progressiveLoading="viewerconfig.progressiveLoading"
+      :resolutions="viewerconfig.resolutions"
     />
     
     <!-- 可拖动留言预览框 -->
@@ -79,10 +80,11 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, computed, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref, computed, watch, nextTick } from 'vue';
 import { ArrowLeft, ChatDotRound, Position, Close } from '@element-plus/icons-vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
-import type { Scene, HotSpot } from '@/components/pano/base-components/composables/types';
+import { useSceneViewerConfig } from './composables/useSceneViewerConfig';
+import type { HotSpot } from '@/components/pano/base-components/composables/types';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { getApiUrl } from '@/config/config.ts';
@@ -187,7 +189,6 @@ const cancelMessage = () => {
 };
 
 onMounted(() => {
-  fetchMessages();
   console.log('SceneViewer mounted, isLoggedIn:', props.isLoggedIn);
   
   // 监听窗口大小变化
@@ -224,14 +225,10 @@ const handleReturn = () => {
   }
 };
 
-// 定义场景数据
-const scenes = ref<Scene[]>([
-  {
-    sceneId: "scene1",
-    imagePath: "/images/panorama",
-    hotspots: [] // 初始化热点数组
-  },
-]);
+const { viewerconfig, error } = useSceneViewerConfig();
+
+// scenes ref for easier access and reactivity
+const scenes = computed(() => viewerconfig.value?.scenes || []);
 
 // 留言相关
 const showMessageDialog = ref(false);
@@ -374,7 +371,7 @@ const submitMessage = async () => {
 const fetchMessages = async () => {
   try {
     const panoramaViewer = panoramaViewerRef.value as any;
-    const currentSceneId = panoramaViewer?.getCurrentSceneId();
+    const currentSceneId = panoramaViewer.getCurrentSceneId();
     
     // 获取当前全景图的留言
     const response = await axios.get(getApiUrl(`users/messages?panoramaId=${currentSceneId}`));
@@ -470,6 +467,20 @@ const stopDraggingPanel = (event: MouseEvent) => {
   
   console.log('拖拽结束');
 };
+
+// 监听 viewerconfig 加载和 PanoramaViewer 初始化后再调用 fetchMessages
+watch(
+  () => viewerconfig.value,
+  async (val) => {
+    if (val) {
+      await nextTick();
+      if (panoramaViewerRef.value && typeof panoramaViewerRef.value.getCurrentSceneId === 'function') {
+        fetchMessages();
+      }
+    }
+  },
+  { immediate: true }
+);
 
 </script>
 
