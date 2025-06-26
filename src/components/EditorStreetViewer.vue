@@ -2,15 +2,15 @@
   <div class="street-viewer">
     <PanoramaViewer 
       ref="panoramaViewerRef" 
-      v-if="viewerconfig"
-      :scenes="viewerconfig.scenes"
-      :progressiveLoading="viewerconfig.progressiveLoading"
-      :resolutions="viewerconfig.resolutions"
+      v-if="streetConfig"
+      :scenes="streetConfig.scenes"
+      :progressiveLoading="streetConfig.progressiveLoading"
+      :resolutions="streetConfig.resolutions"
       debug
       :switchViewer="props.switchViewer"
     />
-    <button class="add-scene-btn" @click="addScene" v-if="viewerconfig">添加场景</button>
-    <button class="show-scene-list-btn" @click="openSceneList" v-if="viewerconfig">显示场景列表</button>
+    <button class="add-scene-btn" @click="addScene" v-if="streetConfig">添加场景</button>
+    <button class="show-scene-list-btn" @click="openSceneList" v-if="streetConfig">显示场景列表</button>
 
     <div v-if="showSceneListModal" class="scene-list-modal">
       <div class="scene-list-content">
@@ -21,7 +21,10 @@
         <ul class="scene-list-ul">
           <li v-for="(scene, i) in sceneList" :key="i">
             <span>{{ i + 1 }}. {{ scene.sceneId || '(未设置sceneId)' }}</span>
-            <button class="delete-btn" @click="deleteScene(i)">删除</button>
+            <div>
+              <button class="jump-btn" @click="jumpToScene(i)">跳转</button>
+              <button class="delete-btn" @click="deleteScene(i)">删除</button>
+            </div>
           </li>
         </ul>
       </div>
@@ -35,30 +38,16 @@ import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue
 import { useStreetViewerConfig } from '@/components/pano/composables/useStreetViewerConfig';
 import type { SceneConfig } from '@/components/pano/composables/ViewerConfigTypes';
 
-const { viewerconfig, configFileName } = useStreetViewerConfig();
+const { viewerconfig: streetConfig, configFileName } = useStreetViewerConfig();
 const props = defineProps<{ switchViewer: (name: string) => void }>();
 
 const showSceneListModal = ref(false);
-
-const getSceneState = () => {
-  let state: any = null;
-  try {
-    if (window.opener && window.opener.streetConfigState) {
-      state = window.opener.streetConfigState;
-    }
-  } catch (e) {}
-  if (!state && typeof window !== 'undefined' && (window as any).streetConfigState) {
-    state = (window as any).streetConfigState;
-  }
-  return state;
-};
-
 const sceneList = ref<SceneConfig[]>([]);
+const panoramaViewerRef = ref();
 
 const openSceneList = () => {
-  const state = getSceneState();
-  if (!state || !Array.isArray(state.value.scenes)) return;
-  sceneList.value = state.value.scenes;
+  if (!streetConfig.value || !Array.isArray(streetConfig.value.scenes)) return;
+  sceneList.value = streetConfig.value.scenes;
   showSceneListModal.value = true;
 };
 
@@ -67,36 +56,23 @@ const closeSceneList = () => {
 };
 
 const deleteScene = (idx: number) => {
-  const state = getSceneState();
-  if (!state || !Array.isArray(state.value.scenes)) return;
-  const scene = state.value.scenes[idx];
+  if (!streetConfig.value || !Array.isArray(streetConfig.value.scenes)) return;
+  const scene = streetConfig.value.scenes[idx];
   if (!scene) return;
   const ok = window.confirm(`确定要删除场景“${scene.sceneId || '(未设置sceneId)'}”吗？`);
   if (ok) {
-    state.value.scenes.splice(idx, 1);
-    // 立即刷新弹窗内容
-    sceneList.value = state.value.scenes;
+    streetConfig.value.scenes.splice(idx, 1);
+    sceneList.value = streetConfig.value.scenes;
   }
 };
 
 const addScene = async () => {
-  let state: any = null;
-  try {
-    if (window.opener && window.opener.streetConfigState) {
-      state = window.opener.streetConfigState;
-    }
-  } catch (e) {}
-  if (!state && typeof window !== 'undefined' && (window as any).streetConfigState) {
-    state = (window as any).streetConfigState;
-  }
-  if (!state || !Array.isArray(state.value.scenes)) return;
-
-  const scenes = state.value.scenes;
+  if (!streetConfig.value || !Array.isArray(streetConfig.value.scenes)) return;
+  const scenes = streetConfig.value.scenes;
   let newSceneId = '';
   let autoSuggest = false;
   if (scenes.length > 0) {
     const lastId = scenes[scenes.length - 1].sceneId;
-    // 检查格式 location-x-y
     const match = lastId.match(/^(.*)-(\d+)-(\d+)$/);
     if (match) {
       const prefix = match[1];
@@ -105,30 +81,32 @@ const addScene = async () => {
       const nextNum2 = String(Number(num2) + 1);
       newSceneId = `${prefix}-${num1}-${nextNum2}`;
       autoSuggest = true;
-      // 弹窗询问
       const res = window.confirm(`自动设置sceneId为“${newSceneId}”？\n选择“确定”自动设置，选择“取消”手动输入。`);
       if (res) {
-        // 自动设置
-        state.value.scenes.push({
+        scenes.push({
           sceneId: newSceneId,
           relativeImagePath: '',
           hotspots: []
         });
         return;
       }
-      // 否则进入手动输入
     }
   }
-  // 手动输入
   let manualId = window.prompt('请输入新场景的sceneId：', '');
   if (manualId && manualId.trim()) {
-    state.value.scenes.push({
+    scenes.push({
       sceneId: manualId.trim(),
       relativeImagePath: '',
       hotspots: []
     });
   }
-  // 用户取消则不添加
+};
+
+const jumpToScene = (idx: number) => {
+  if (panoramaViewerRef.value && typeof panoramaViewerRef.value.switchScene === 'function') {
+    panoramaViewerRef.value.switchScene(idx);
+    closeSceneList();
+  }
 };
 
 // 计数器，保证只提示一次
@@ -227,6 +205,19 @@ onMounted(() => {
   padding: 8px 0;
   border-bottom: 1px solid #f0f0f0;
   font-size: 16px;
+}
+.jump-btn {
+  background: #67c23a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 14px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+.jump-btn:hover {
+  background: #85ce61;
 }
 .delete-btn {
   background: #f56c6c;

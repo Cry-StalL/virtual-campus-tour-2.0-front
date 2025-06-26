@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, markRaw, computed, watch } from 'vue';
+import { markRaw, watch, ref } from 'vue';
 import PanoramaViewerGroup from '@/components/pano/base-components/PanoramaViewerGroup.vue';
 import EditorStreetViewer from './EditorStreetViewer.vue';
 import EditorSceneViewer from './EditorSceneViewer.vue';
@@ -26,30 +26,13 @@ const viewers = [
   { name: 'scene', component: markRaw(EditorSceneViewer) }
 ];
 
-// 内存副本
-const streetConfigState = ref<any>(null);
-const sceneConfigState = ref<any>(null);
-
+// 直接使用响应式 streetConfig/sceneConfig
 const { viewerconfig: streetConfig, configFileName: streetFile } = useStreetViewerConfig();
 const { viewerconfig: sceneConfig, configFileName: sceneFile } = useSceneViewerConfig();
 
-// 弹窗显示状态
+// 弹窗显示状态（如有需要可保留）
 const showStreetJson = ref(false);
 const showSceneJson = ref(false);
-
-// 监听配置加载，存入内存并自动弹窗
-watch(streetConfig, (val) => {
-  if (val) {
-    streetConfigState.value = JSON.parse(JSON.stringify(val));
-    showStreetJson.value = true;
-  }
-}, { immediate: true });
-watch(sceneConfig, (val) => {
-  if (val) {
-    sceneConfigState.value = JSON.parse(JSON.stringify(val));
-    showSceneJson.value = true;
-  }
-}, { immediate: true });
 
 // 只在首次读取时弹出新窗口，后续每次json变更都自动刷新窗口内容
 let streetJsonWindow: Window | null = null;
@@ -83,8 +66,8 @@ function openOrUpdateJsonWindow(type: 'street' | 'scene', json: any) {
   // 定时同步主页面最新json
   setInterval(function(){
     try {
-      if(window.opener && window.opener.${type}ConfigState && window.opener.${type}ConfigState.value){
-        var latest = window.opener.${type}ConfigState.value;
+      if(window.opener && window.opener.${type}Config && window.opener.${type}Config.value){
+        var latest = window.opener.${type}Config.value;
         document.getElementById('json-pre').textContent = JSON.stringify(latest, null, 2);
         window.${varName} = latest;
       }
@@ -97,45 +80,44 @@ function openOrUpdateJsonWindow(type: 'street' | 'scene', json: any) {
 let streetJsonWindowInitialized = false;
 let sceneJsonWindowInitialized = false;
 
-watch(streetConfigState, (val) => {
+// 直接 watch 响应式对象
+watch(streetConfig, (val) => {
+  if (val && !streetJsonWindowInitialized) {
+    openOrUpdateJsonWindow('street', val);
+    streetJsonWindowInitialized = true;
+    showStreetJson.value = false;
+  }
+});
+watch(sceneConfig, (val) => {
+  if (val && !sceneJsonWindowInitialized) {
+    openOrUpdateJsonWindow('scene', val);
+    sceneJsonWindowInitialized = true;
+    showSceneJson.value = false;
+  }
+});
+// 每次变更都刷新窗口内容
+watch(streetConfig, (val) => {
   if (val && streetJsonWindow) {
     openOrUpdateJsonWindow('street', val);
   }
 });
-watch(sceneConfigState, (val) => {
+watch(sceneConfig, (val) => {
   if (val && sceneJsonWindow) {
     openOrUpdateJsonWindow('scene', val);
   }
 });
 
-watch(streetConfig, (val) => {
-  if (val && !streetJsonWindowInitialized) {
-    streetConfigState.value = JSON.parse(JSON.stringify(val));
-    openOrUpdateJsonWindow('street', val);
-    streetJsonWindowInitialized = true;
-    showStreetJson.value = false;
-  }
-}, { immediate: true });
-watch(sceneConfig, (val) => {
-  if (val && !sceneJsonWindowInitialized) {
-    sceneConfigState.value = JSON.parse(JSON.stringify(val));
-    openOrUpdateJsonWindow('scene', val);
-    sceneJsonWindowInitialized = true;
-    showSceneJson.value = false;
-  }
-}, { immediate: true });
-
 function saveJson(type: 'street' | 'scene') {
-  if (type === 'street' && streetConfigState.value) {
-    saveJsonToFile(streetConfigState.value, 'street-viewer-config');
-  } else if (type === 'scene' && sceneConfigState.value) {
-    saveJsonToFile(sceneConfigState.value, 'scene-viewer-config');
+  if (type === 'street' && streetConfig.value) {
+    saveJsonToFile(streetConfig.value, 'street-viewer-config');
+  } else if (type === 'scene' && sceneConfig.value) {
+    saveJsonToFile(sceneConfig.value, 'scene-viewer-config');
   }
 }
 // 让新窗口能通过 window.opener.saveJson 调用
 (window as any).saveJson = saveJson;
-(window as any).streetConfigState = streetConfigState;
-(window as any).sceneConfigState = sceneConfigState;
+(window as any).streetConfig = streetConfig;
+(window as any).sceneConfig = sceneConfig;
 
 /**
  * 获取当前viewer名称（'street' 或 'scene'）
