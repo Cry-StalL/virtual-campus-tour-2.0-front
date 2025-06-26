@@ -29,7 +29,7 @@
       </div>
     </div>
     <!-- 确认放置热点按钮，仅在placingHotspot且已放置热点时显示 -->
-    <button v-if="placingHotspot && placedHotspot" class="confirm-hotspot-btn" @click="confirmAddHotspot">确认放置热点</button>
+    <button v-if="placingHotspot && placedHotspot" class="confirm-hotspot-btn" @click="confirmPlacingHotspot">确认放置热点</button>
 
     <div v-if="showSceneListModal" class="scene-list-modal">
       <div class="scene-list-content">
@@ -46,6 +46,18 @@
             </div>
           </li>
         </ul>
+      </div>
+    </div>
+    <!-- 目标场景选择弹窗 -->
+    <div v-if="showTargetSceneModal" class="target-scene-modal">
+      <div class="target-scene-content">
+        <div class="target-scene-header">选择目标场景</div>
+        <ul class="target-scene-list">
+          <li v-for="scene in sceneList" :key="scene.sceneId || scene.id" @click="setTargetSceneId(scene.sceneId)">
+            {{ scene.sceneId || '(未设置sceneId)' }}
+          </li>
+        </ul>
+        <button class="cancel-btn" @click="showTargetSceneModal = false">取消</button>
       </div>
     </div>
     <div v-if="placingHotspot" class="hotspot-adding-modal" style="pointer-events:none;background:none;"></div>
@@ -155,31 +167,29 @@ const nextSetTargetScene = () => {
 const setTargetSceneId = (sceneId: string) => {
   tempHotspot.value.targetSceneId = sceneId;
   showTargetSceneModal.value = false;
-};
-
-// 确认放置热点
-const confirmAddHotspot = () => {
-  if (!tempHotspot.value.position || !tempHotspot.value.targetSceneId) {
-    window.alert('请完整设置热点位置和目标场景！');
-    return;
-  }
+  // 添加到当前场景的hotspots
   const scene = streetConfig.value?.scenes?.[currentSceneIdx.value];
   if (scene) {
     if (!Array.isArray(scene.hotspots)) scene.hotspots = [];
-    // 结构适配 HotspotConfig
     scene.hotspots.push({
       type: tempHotspot.value.type,
       longitude: tempHotspot.value.position.longitude,
       latitude: tempHotspot.value.position.latitude,
-      icon: 'icons/scene_hotspot.png', // 默认icon
+      icon: tempHotspot.value.icon || 'icons/scene_hotspot.png',
       title: '跳转场景',
       description: '',
-      targetSceneId: tempHotspot.value.targetSceneId
+      targetSceneId: sceneId
     });
-    window.alert('热点已添加！');
   }
+  // 结束添加流程
   placingHotspot.value = false;
   tempHotspot.value = null;
+};
+
+// 确认放置热点
+const confirmPlacingHotspot = () => {
+  // 进入选择目标场景弹窗
+  showTargetSceneModal.value = true;
 };
 
 // 取消添加
