@@ -79,6 +79,7 @@ import { ref, onMounted, defineEmits, nextTick, watch, computed } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import { useStreetViewerConfig } from '@/components/pano/composables/useStreetViewerConfig';
 import { useSceneEditor } from '@/components/pano/composables/useSceneEditor';
+import { add } from 'three/tsl';
 
 const { viewerconfig: streetConfig, configFileName } = useStreetViewerConfig();
 const props = defineProps<{ switchViewer: (name: string) => void }>();
@@ -202,6 +203,7 @@ const confirmPlacingHotspot = () => {
 
 // 取消添加
 const cancelAddHotspot = () => {
+  showHotspotTypeModal.value = false;
   placingHotspot.value = false;
   tempHotspot.value = null;
   showTargetSceneModal.value = false;
