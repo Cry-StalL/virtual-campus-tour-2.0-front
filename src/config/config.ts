@@ -20,4 +20,16 @@ export const API_CONFIG = {
 // 获取完整的API URL
 export const getApiUrl = (path: string): string => {
   return `${API_CONFIG.BASE_URL}/api/${API_CONFIG.API_VERSION}/${path}`;
-}; 
+};
+
+// 读取模式配置，fixed_file 或 newest_file
+export const VIEWER_CONFIG_MODE_KEY = 'viewer_config_mode';
+export type ViewerConfigMode = 'fixed_file' | 'newest_file';
+
+export const getViewerConfigMode = (): ViewerConfigMode => {
+  return (localStorage.getItem(VIEWER_CONFIG_MODE_KEY) as ViewerConfigMode) || 'fixed_file';
+};
+
+export const setViewerConfigMode = (mode: ViewerConfigMode) => {
+  localStorage.setItem(VIEWER_CONFIG_MODE_KEY, mode);
+};
