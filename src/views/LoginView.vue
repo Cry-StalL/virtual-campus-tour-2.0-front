@@ -461,66 +461,6 @@
     }
   }
 
-  /* iPhone X/11/12/13/14 系列 */
-  @media (max-width: 414px) and (min-height: 800px) {
-    .box-card {
-      width: 100%;
-      max-width: 340px;
-      min-width: 300px;
-      padding: 1.5rem;
-      margin: 2rem auto;
-    }
-    
-    h2 {
-      font-size: 24px;
-      margin-bottom: 30px;
-    }
-    
-    .btnGroup {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      margin-top: 30px;
-    }
-    
-    .btnGroup .el-button {
-      width: 220px;
-      height: 42px;
-      font-size: 15px;
-      padding: 0;
-      border-radius: 10px;
-    }
-    
-    .ttt {
-      width: 220px;
-      min-width: 220px;
-    }
-
-    .back-link {
-      width: 220px;
-    }
-
-    .back-btn {
-      width: 220px;
-      min-width: 220px;
-    }
-    
-    :deep(.el-input__inner) {
-      height: 44px;
-      font-size: 15px;
-    }
-    
-    .divider {
-      margin: 25px 0;
-    }
-    
-    .register-link {
-      margin-top: 25px;
-      font-size: 14px;
-    }
-  }
-
   /* 小屏幕手机适配 */
   @media (max-width: 375px) {
     .box-card {
@@ -578,66 +518,6 @@
     .register-link {
       margin-top: 18px;
       font-size: 12px;
-    }
-  }
-
-  /* 超小屏幕适配 */
-  @media (max-width: 320px) {
-    .box-card {
-      width: 100%;
-      max-width: 300px;
-      min-width: 260px;
-      padding: 1rem;
-      margin: 0.5rem auto;
-    }
-    
-    h2 {
-      font-size: 18px;
-      margin-bottom: 18px;
-    }
-    
-    .btnGroup {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-top: 18px;
-    }
-    
-    .btnGroup .el-button {
-      width: 160px;
-      height: 36px;
-      font-size: 13px;
-      padding: 0;
-      border-radius: 6px;
-    }
-    
-    .ttt {
-      width: 160px;
-      min-width: 160px;
-    }
-
-    .back-link {
-      width: 160px;
-    }
-
-    .back-btn {
-      width: 160px;
-      min-width: 160px;
-    }
-    
-    :deep(.el-input__inner) {
-      height: 38px;
-      font-size: 13px;
-    }
-    
-    .divider {
-      margin: 15px 0;
-    }
-    
-    .register-link {
-      margin-top: 15px;
-      font-size: 11px;
     }
   }
 </style>

@@ -366,9 +366,13 @@ export default {
   }
   
   .dialog-footer-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     margin-top: 20px;
     gap: 12px;
-    flex-direction: column;
+    width: 100%;
   }
   
   .dialog-footer-center .el-button {
@@ -376,6 +380,7 @@ export default {
     max-width: 200px;
     padding: 10px 20px;
     font-size: 14px;
+    margin: 0 auto;
   }
 }
 
@@ -414,8 +419,13 @@ export default {
   }
   
   .dialog-footer-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     margin-top: 15px;
     gap: 10px;
+    width: 100%;
   }
   
   .dialog-footer-center .el-button {
@@ -423,34 +433,7 @@ export default {
     max-width: 180px;
     padding: 8px 16px;
     font-size: 13px;
-  }
-}
-
-/* 超小屏幕优化 */
-@media (max-width: 280px) {
-  .avatar-gallery {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 10px;
-  }
-  
-  .avatar-option {
-    padding: 8px;
-  }
-  
-  :deep(.el-avatar) {
-    width: 50px !important;
-    height: 50px !important;
-  }
-  
-  .avatar-overlay .el-icon {
-    font-size: 14px;
-  }
-  
-  .dialog-footer-center .el-button {
-    max-width: 160px;
-    padding: 6px 12px;
-    font-size: 12px;
+    margin: 0 auto;
   }
 }
 </style> 
