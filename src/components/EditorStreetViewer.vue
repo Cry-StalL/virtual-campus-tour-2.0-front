@@ -22,8 +22,7 @@ import type { SceneConfig } from '@/components/pano/composables/ViewerConfigType
 const { viewerconfig, configFileName } = useStreetViewerConfig();
 const props = defineProps<{ switchViewer: (name: string) => void }>();
 
-const addScene = () => {
-  // 优先通过 window.opener 修改主页面 streetConfigState
+const addScene = async () => {
   let state: any = null;
   try {
     if (window.opener && window.opener.streetConfigState) {
@@ -33,13 +32,46 @@ const addScene = () => {
   if (!state && typeof window !== 'undefined' && (window as any).streetConfigState) {
     state = (window as any).streetConfigState;
   }
-  if (state && Array.isArray(state.value.scenes)) {
+  if (!state || !Array.isArray(state.value.scenes)) return;
+
+  const scenes = state.value.scenes;
+  let newSceneId = '';
+  let autoSuggest = false;
+  if (scenes.length > 0) {
+    const lastId = scenes[scenes.length - 1].sceneId;
+    // 检查格式 location-x-y
+    const match = lastId.match(/^(.*)-(\d+)-(\d+)$/);
+    if (match) {
+      const prefix = match[1];
+      const num1 = match[2];
+      const num2 = match[3];
+      const nextNum2 = String(Number(num2) + 1);
+      newSceneId = `${prefix}-${num1}-${nextNum2}`;
+      autoSuggest = true;
+      // 弹窗询问
+      const res = window.confirm(`自动设置sceneId为“${newSceneId}”？\n选择“确定”自动设置，选择“取消”手动输入。`);
+      if (res) {
+        // 自动设置
+        state.value.scenes.push({
+          sceneId: newSceneId,
+          relativeImagePath: '',
+          hotspots: []
+        });
+        return;
+      }
+      // 否则进入手动输入
+    }
+  }
+  // 手动输入
+  let manualId = window.prompt('请输入新场景的sceneId：', '');
+  if (manualId && manualId.trim()) {
     state.value.scenes.push({
-      sceneId: '',
+      sceneId: manualId.trim(),
       relativeImagePath: '',
       hotspots: []
     });
   }
+  // 用户取消则不添加
 };
 
 // 计数器，保证只提示一次
