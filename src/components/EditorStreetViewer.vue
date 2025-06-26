@@ -9,9 +9,9 @@
       debug
       :switchViewer="props.switchViewer"
     />
-    <button class="add-scene-btn" @click="addScene" v-if="streetConfig">添加场景</button>
+    <button class="add-scene-btn" @click="() => addScene(jumpToScene)" v-if="streetConfig">添加场景</button>
     <button class="show-scene-list-btn" @click="openSceneList" v-if="streetConfig">显示场景列表</button>
-
+    <button class="select-img-btn main" @click="selectPanoramaCurrent" v-if="streetConfig && currentSceneIdx >= 0">选择当前全景图</button>
     <div v-if="showSceneListModal" class="scene-list-modal">
       <div class="scene-list-content">
         <div class="scene-list-header">
@@ -22,106 +22,64 @@
           <li v-for="(scene, i) in sceneList" :key="i">
             <span>{{ i + 1 }}. {{ scene.sceneId || '(未设置sceneId)' }}</span>
             <div>
-              <button class="jump-btn" @click="jumpToScene(i)">跳转</button>
-              <button class="delete-btn" @click="deleteScene(i)">删除</button>
+              <button class="jump-btn" @click="() => jumpToScene(i)">跳转</button>
+              <button class="delete-btn" @click="() => deleteScene(i)">删除</button>
             </div>
           </li>
         </ul>
       </div>
     </div>
+    <input
+      ref="fileInputRef"
+      type="file"
+      :accept="fileMode === 'file' ? '.jpg' : undefined"
+      :webkitdirectory="fileMode === 'dir' ? true : undefined"
+      style="display:none"
+      @change="onFileChange"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, defineEmits } from 'vue';
+import { ref, onMounted, defineEmits, nextTick } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import { useStreetViewerConfig } from '@/components/pano/composables/useStreetViewerConfig';
-import type { SceneConfig } from '@/components/pano/composables/ViewerConfigTypes';
+import { useSceneEditor } from '@/components/pano/composables/useSceneEditor';
 
 const { viewerconfig: streetConfig, configFileName } = useStreetViewerConfig();
 const props = defineProps<{ switchViewer: (name: string) => void }>();
-
 const emit = defineEmits(['sceneChanged']);
 
-const showSceneListModal = ref(false);
-const sceneList = ref<SceneConfig[]>([]);
-const panoramaViewerRef = ref();
-
-const openSceneList = () => {
-  if (!streetConfig.value || !Array.isArray(streetConfig.value.scenes)) return;
-  sceneList.value = streetConfig.value.scenes;
-  showSceneListModal.value = true;
-};
-
-const closeSceneList = () => {
-  showSceneListModal.value = false;
-};
-
-const deleteScene = (idx: number) => {
-  if (!streetConfig.value || !Array.isArray(streetConfig.value.scenes)) return;
-  const scene = streetConfig.value.scenes[idx];
-  if (!scene) return;
-  const ok = window.confirm(`确定要删除场景“${scene.sceneId || '(未设置sceneId)'}”吗？`);
-  if (ok) {
-    streetConfig.value.scenes.splice(idx, 1);
-    sceneList.value = streetConfig.value.scenes;
-  }
-};
-
-const addScene = async () => {
-  if (!streetConfig.value || !Array.isArray(streetConfig.value.scenes)) return;
-  const scenes = streetConfig.value.scenes;
-  let newSceneId = '';
-  let autoSuggest = false;
-  let newIdx = scenes.length; // 新场景的索引
-  if (scenes.length > 0) {
-    const lastId = scenes[scenes.length - 1].sceneId;
-    const match = lastId.match(/^(.*)-(\d+)-(\d+)$/);
-    if (match) {
-      const prefix = match[1];
-      const num1 = match[2];
-      const num2 = match[3];
-      const nextNum2 = String(Number(num2) + 1);
-      newSceneId = `${prefix}-${num1}-${nextNum2}`;
-      autoSuggest = true;
-      const res = window.confirm(`自动设置sceneId为“${newSceneId}”？\n选择“确定”自动设置，选择“取消”手动输入。`);
-      if (res) {
-        scenes.push({
-          sceneId: newSceneId,
-          relativeImagePath: '',
-          hotspots: []
-        });
-        // 自动切换到新场景
-        jumpToScene(scenes.length - 1);
-        return;
-      }
-    }
-  }
-  let manualId = window.prompt('请输入新场景的sceneId：', '');
-  if (manualId && manualId.trim()) {
-    scenes.push({
-      sceneId: manualId.trim(),
-      relativeImagePath: '',
-      hotspots: []
-    });
-    // 自动切换到新场景
-    jumpToScene(scenes.length - 1);
-  }
-};
+// 使用 useSceneEditor 统一场景编辑逻辑
+const {
+  showSceneListModal,
+  sceneList,
+  panoramaViewerRef,
+  fileInputRef,
+  fileMode,
+  fileTargetIdx,
+  currentSceneIdx,
+  openSceneList,
+  closeSceneList,
+  deleteScene,
+  addScene,
+  selectPanoramaCurrent,
+  onFileChange
+} = useSceneEditor(streetConfig);
 
 const jumpToScene = (idx: number) => {
   if (panoramaViewerRef.value && typeof panoramaViewerRef.value.switchScene === 'function') {
     panoramaViewerRef.value.switchScene(idx);
+    currentSceneIdx.value = idx;
     emit('sceneChanged', idx); // 通知父组件场景已切换
-    console.log(`跳转到场景 ${idx}:`, sceneList.value[idx]);
     closeSceneList();
   }
 };
 
-// 计数器，保证只提示一次
+// 只提示一次配置文件名
 const promptCounter = window.__streetConfigPromptedCount = window.__streetConfigPromptedCount || { count: 0 };
-
 onMounted(() => {
+  currentSceneIdx.value = 0;
   if (promptCounter.count === 0 && configFileName.value) {
     alert('当前读取的Street配置文件：' + configFileName.value);
     promptCounter.count++;
@@ -240,6 +198,23 @@ onMounted(() => {
 }
 .delete-btn:hover {
   background: #ff7875;
+}
+.select-img-btn.main {
+  position: fixed;
+  right: 30px;
+  bottom: 210px;
+  background: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 32px;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 201;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.select-img-btn.main:hover {
+  background: #66b1ff;
 }
 </style>
 
