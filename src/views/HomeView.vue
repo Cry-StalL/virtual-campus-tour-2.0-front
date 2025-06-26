@@ -40,6 +40,7 @@
     <div class="sitechoose" :class="{ active: siteChooseVisible }">
       <SiteChoose @closeSiteChooseView="closeSiteChoose"/>
     </div>
+    
 
     <!-- 实用信息 -->
     <div class="usefulinfo" :class="{ active: usefulInfoVisible }">
@@ -111,27 +112,6 @@ import Help from '@/components/Help.vue';
 import About from '@/components/About.vue';
 import Privacy from '@/components/Privacy.vue';
 
-// 导入HotSpot接口类型
-interface HotSpot {
-  id?: string;
-  type: string;        // 热点类型
-  longitude: number;
-  latitude: number;
-  icon?: string;
-  title?: string;
-  description?: string;
-  targetSceneId?: string; // 目标场景ID（当type为"scene"时必填）
-  onClick?: (params?: any) => void;
-  params?: any;
-}
-
-// 定义场景接口
-interface Scene {
-  sceneId: string;
-  imagePath: string;
-  hotspots?: HotSpot[];
-}
-
 // Define types
 type SectionState = {
   location: boolean;
@@ -141,71 +121,7 @@ type SectionState = {
   [key: string]: boolean;
 };
 
-// 定义场景数据
-const scenes: Scene[] = [
-  {
-    sceneId: "1",
-    imagePath: "/images/panorama.jpg",
-    hotspots: [
-      {
-        type: 'scene',
-        longitude: 0.24,
-        latitude: -0.72,
-        icon: "/icons/arrow_hotspot.png",
-        title: '图书馆',
-        description: '这是图书馆的位置',
-        targetSceneId: "2"
-      },
-
-      {
-        type: 'custom',
-        longitude: 10.24,
-        latitude: 10.72,
-        icon: "/icons/scene_hotspot.png",
-        title: '图书馆',
-        description: '这是图书馆的位置',
-      }
-    ]
-  },
-
-  {
-    sceneId: "2",
-    imagePath: "/images/p1.jpg",
-    hotspots: [
-      {
-        type: 'scene',
-        longitude: 8,
-        latitude: -8,
-        icon: "/icons/arrow_hotspot.png",
-        title: '图书馆',
-        description: '这是图书馆的位置',
-        targetSceneId: "1"
-      },
-
-      {
-        type: 'custom',
-        longitude: -10.24,
-        latitude: -10.72,
-        icon: "/icons/scene_hotspot.png",
-      }
-    ]
-  },
-];
-
 const viewerGroup = ref();
-
-// 处理场景切换事件
-const handleSceneChange = (index: number) => {
-  console.log('场景已切换到:', index);
-  ElMessage({
-    message: `已切换到场景 ${index + 1}`,
-    type: 'info',
-    duration: 2000
-  });
-
-  // 场景切换后获取该场景的历史留言已移动到 SceneViewer 中
-  // fetchMessages();
-};
 
 const router = useRouter();
 const userID = ref('0');
@@ -413,8 +329,8 @@ body, html, #app {
 .sidebar {
   position: absolute;
   top: 0;
-  left: -16%;
-  width: 16%;
+  left: -20vw;
+  width: 18vw;
   height: 100%;
   background-color: rgba(255, 255, 255, 1);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -549,7 +465,7 @@ body, html, #app {
 }
 
 .user-avatar {
-  background-color: #409EFF;
+  background-color: whi;
   color: white;
   font-weight: bold;
   margin-right: 8px;
@@ -574,17 +490,19 @@ body, html, #app {
 
 /* 场景跳转 */
 .sitechoose {
-  position: absolute;
-  top: 0;
-  left: -80vw;
-  width: 80vw;
-  margin-left: 0vw;
-  top: 6vh;
-  height: 92vh;
-  background-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: left 0.3s ease;
   z-index: 10;
+  position: fixed;
+  top: 7vh;
+
+  height: 90vh;
+  width: 78vw;
+  left: -100vw;
+  margin-left: 2vw;
+
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 1vw;
+  transition: left 0.5s ease;
+  
   overflow-y: auto;
 }
 

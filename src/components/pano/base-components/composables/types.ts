@@ -1,7 +1,7 @@
 // 定义场景接口
 export interface Scene {
   sceneId: string;     // 场景唯一标识符
-  imagePath: string;   // 全景图片的路径
+  relativeImagePath: string;   // 全景图片的相对路径
   hotspots?: HotSpot[]; // 热点数组
   initialLongitude?: number; // 初始经度（可选，-180 到 180，决定初始视角）
   initialLatitude?: number;  // 初始纬度（可选，-90 到 90，决定初始视角）
