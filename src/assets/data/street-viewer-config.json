@@ -4,7 +4,7 @@
   "scenes": [
     {
       "sceneId": "scene",
-      "imagePath": "http://127.0.0.1:8080/assets/panos/streets/byy_road1/1",
+      "relativeImagePath": "assets/panos/streets/byy_road1/1",
       "hotspots": [
         {
           "type": "enterSceneViewer",
