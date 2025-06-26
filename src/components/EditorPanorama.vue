@@ -71,6 +71,13 @@ function openOrUpdateJsonWindow(type: 'street' | 'scene', json: any) {
   if (!win) return;
   // 生成唯一变量名，避免多窗口冲突
   const varName = `__${type}JsonData`;
+  // 如果窗口已存在则只刷新内容，不重新打开
+  if (win.document.body && win.document.getElementById('json-pre')) {
+    const pre = win.document.getElementById('json-pre');
+    if (pre) pre.textContent = JSON.stringify(json, null, 2);
+    (win as any)[varName] = json;
+    return;
+  }
   win.document.open();
   win.document.write(`<!DOCTYPE html><html><head><title>${type}-viewer-config.json</title><style>body{margin:0;background:#f8f8f8;}pre{padding:24px;font-size:15px;font-family:'Fira Mono','Consolas','Menlo',monospace;white-space:pre-wrap;word-break:break-all;background:#fff;border-radius:8px;max-width:90vw;max-height:90vh;overflow:auto;margin:40px auto 80px auto;box-shadow:0 4px 24px rgba(0,0,0,0.12);} .save-btn{position:fixed;right:40px;bottom:40px;z-index:1001;padding:12px 32px;background:#409eff;color:#fff;border:none;border-radius:6px;font-size:18px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.12);} .save-btn:hover{background:#66b1ff;}</style></head><body><pre id="json-pre">${JSON.stringify(json, null, 2)}</pre><button class='save-btn' id='saveBtn'>保存${type==='street'?'Street':'Scene'}配置</button><script>window.${varName} = ${JSON.stringify(json)};document.getElementById('saveBtn').onclick = function () { if(window.opener && typeof window.opener.saveJson === 'function'){ window.opener.saveJson('${type}'); } else { alert('主页面未找到 saveJson 方法'); } }<\/script></body></html>`);
   win.document.close();
