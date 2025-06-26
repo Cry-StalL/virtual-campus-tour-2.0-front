@@ -454,7 +454,7 @@
                     <div style="width: 100%; height: 68vh; display: flex; flex-direction: row;">
                         <!-- 校内出行 -->
                         <div class="traffic">
-                            <div style="height: 36vh; display: flex; flex-direction: column;">
+                            <div style="height: 33vh; display: flex; flex-direction: column;">
                                 <text style="width: 100%; margin-top: 3vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     校内出行
                                 </text>
@@ -977,7 +977,7 @@
 .traffic{
     width: 19.2%; 
     margin-right: 1%; 
-    height: 72vh; 
+    height: 70vh; 
     background-color: white; 
     color: black; 
     display: flex; 
