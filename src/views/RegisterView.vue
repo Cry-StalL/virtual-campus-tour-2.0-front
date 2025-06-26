@@ -447,12 +447,16 @@
     transition: all 0.3s ease;
     /* background-color: #409eff; */
     height: 5vh;
+    min-height: 45px;
     /* padding-left: 50px; */
     /* width: 20vw; */
   }
   
   :deep(.el-input__inner) {
     transition: all 0.3s ease;
+    min-height: 45px;
+    height: 45px;
+    font-size: 16px;
   }
   
   :deep(.el-input__wrapper) {
@@ -460,6 +464,7 @@
     border: 1px solid #dcdfe6;
     border-radius: 8px;
     transition: all 0.3s ease;
+    min-height: 45px;
   }
 
   :deep(.el-input__wrapper:hover) {
@@ -511,8 +516,8 @@
   }
 
   .btnGroup .el-button {
+    width: 120px;
     min-width: 120px;
-    width: 30%;
     border-radius: 8px;
     font-weight: 500;
     transition: all 0.3s ease;
@@ -520,6 +525,11 @@
     letter-spacing: 0.5px;
     font-size: 15px;
     height: 40px;
+    line-height: 40px;
+    padding: 0 25px;
+    margin: 0;
+    vertical-align: baseline;
+    box-sizing: border-box;
   }
 
   /* 桌面模式按钮对齐 */
@@ -528,6 +538,11 @@
     height: 40px !important;
     min-width: 120px;
     min-height: 40px;
+  }
+
+  .back-btn {
+    width: 120px;
+    min-width: 120px;
   }
 
   .btnGroup .el-button--primary {
@@ -672,72 +687,6 @@
     }
     :deep(.el-form-item) {
       margin-bottom: 20px;
-    }
-  }
-
-  /* iPhone X/11/12/13/14 系列 */
-  @media (max-width: 414px) and (min-height: 800px) {
-    .box-card {
-      width: 100%;
-      max-width: 340px;
-      min-width: 300px;
-      padding: 1.5rem;
-      margin: 2rem auto;
-      min-height: auto;
-      max-height: none;
-    }
-    h2 {
-      font-size: 24px;
-      margin-bottom: 30px;
-    }
-    .btnGroup {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      margin-top: 30px;
-    }
-    .btnGroup .el-button {
-      width: 220px;
-      height: 42px;
-      font-size: 15px;
-      padding: 0;
-      border-radius: 10px;
-    }
-
-    .submit-btn, .back-btn {
-      width: 220px !important;
-      height: 42px !important;
-      min-width: 220px;
-      min-height: 42px;
-    }
-    .code-input {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      align-items: center;
-    }
-    .code-input .el-input {
-      width: 100%;
-    }
-    .code-input .el-button {
-      width: 160px;
-      height: 38px;
-      font-size: 14px;
-      padding: 0;
-      border-radius: 8px;
-    }
-
-    .code-btn {
-      height: 38px !important;
-      min-height: 38px !important;
-    }
-    :deep(.el-input__inner) {
-      height: 44px;
-      font-size: 15px;
-    }
-    :deep(.el-form-item) {
-      margin-bottom: 22px;
     }
   }
 
