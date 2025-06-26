@@ -73,7 +73,8 @@ const currentViewerComponent = computed(() => {
 
 // 暴露方法
 defineExpose({
-  switchViewer
+  switchViewer,
+  getCurrentViewerName: () => currentViewer.value
 });
 </script>
 
@@ -82,4 +83,4 @@ defineExpose({
   width: 100%;
   height: 100%;
 }
-</style> 
+</style>

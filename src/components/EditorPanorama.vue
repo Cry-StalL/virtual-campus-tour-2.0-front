@@ -132,6 +132,13 @@ function handleSaveConfig() {
     }
   }
 }
+
+/**
+ * 获取当前viewer名称（'street' 或 'scene'）
+ */
+function getCurrentViewerName(): string {
+  return viewerGroup.value?.getCurrentViewerName?.() || 'street';
+}
 </script>
 
 <style scoped>
