@@ -26,6 +26,7 @@ import { API_CONFIG } from '@/config/config';
 const emit = defineEmits<{
   (e: 'hotspotClick', hotspot: HotSpot): void;
   (e: 'sceneChange', index: number): void;
+  (e: 'sceneChanged', index: number): void;
   (e: 'error', message: string): void;
   (e: 'coordinateSelected', coordinates: { longitude: number; latitude: number; sceneId: string }): void;
 }>();
@@ -381,6 +382,8 @@ const switchScene = (target: number | string) => {
   
   // 触发场景切换事件
   emit('sceneChange', targetIndex);
+  // 兼容旧写法，额外触发sceneChanged事件
+  emit('sceneChanged', targetIndex);
 
   // 设置初始视角（如有配置）
   if (controls.value && camera.value && newScene.initialLongitude !== undefined && newScene.initialLatitude !== undefined) {

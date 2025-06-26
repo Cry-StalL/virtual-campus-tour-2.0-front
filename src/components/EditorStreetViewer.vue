@@ -11,6 +11,7 @@
       @coordinateSelected="onPanoramaClick"
       :placingHotspot="placingHotspot"
       :tempHotspot="tempHotspot"
+      @sceneChanged="onSceneChangedByViewer"
     />
     <button class="add-scene-btn" @click="() => addScene(jumpToScene)" v-if="streetConfig">添加场景</button>
     <button class="show-scene-list-btn" @click="openSceneList" v-if="streetConfig">显示场景列表</button>
@@ -106,6 +107,12 @@ const jumpToScene = (idx: number) => {
     emit('sceneChanged', idx); // 通知父组件场景已切换
     closeSceneList();
   }
+};
+
+// 监听控件内场景切换事件，保持currentSceneIdx同步
+const onSceneChangedByViewer = (idx: number) => {
+  currentSceneIdx.value = idx;
+  emit('sceneChanged', idx);
 };
 
 // 响应 streetConfig 变化，自动刷新全景显示器，停留在当前场景
