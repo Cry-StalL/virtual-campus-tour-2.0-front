@@ -7,7 +7,6 @@
       :progressiveLoading="true"
       :resolutions="resolutions"
     />
-    <button class="save-btn" @click="handleSaveConfig">保存当前json文件</button>
     <JsonViewerModal
       :json="streetConfigState"
       title="Street Viewer 配置 (只读)"
@@ -68,30 +67,56 @@ watch(sceneConfig, (val) => {
   }
 }, { immediate: true });
 
-// 只在首次读取时自动弹出新窗口，不再弹出网页内弹窗
-function openJsonWindow(type: 'street' | 'scene', json: any) {
-  const win = window.open('', '_blank');
+// 只在首次读取时弹出新窗口，后续每次json变更都自动刷新窗口内容
+let streetJsonWindow: Window | null = null;
+let sceneJsonWindow: Window | null = null;
+
+function openOrUpdateJsonWindow(type: 'street' | 'scene', json: any) {
+  let win: Window | null;
+  if (type === 'street') {
+    if (!streetJsonWindow || streetJsonWindow.closed) {
+      streetJsonWindow = window.open('', '_blank');
+    }
+    win = streetJsonWindow;
+  } else {
+    if (!sceneJsonWindow || sceneJsonWindow.closed) {
+      sceneJsonWindow = window.open('', '_blank');
+    }
+    win = sceneJsonWindow;
+  }
   if (!win) return;
+  win.document.open();
   win.document.write(`<!DOCTYPE html><html><head><title>${type}-viewer-config.json</title><style>body{margin:0;background:#f8f8f8;}pre{padding:24px;font-size:15px;font-family:'Fira Mono','Consolas','Menlo',monospace;white-space:pre-wrap;word-break:break-all;background:#fff;border-radius:8px;max-width:90vw;max-height:90vh;overflow:auto;margin:40px auto;box-shadow:0 4px 24px rgba(0,0,0,0.12);}</style></head><body><pre>${JSON.stringify(json, null, 2)}</pre></body></html>`);
   win.document.close();
 }
 
-let streetJsonWindowOpened = false;
-let sceneJsonWindowOpened = false;
+let streetJsonWindowInitialized = false;
+let sceneJsonWindowInitialized = false;
 
-watch(streetConfig, (val, oldVal) => {
-  if (val && !streetJsonWindowOpened) {
+watch(streetConfigState, (val) => {
+  if (val && streetJsonWindow) {
+    openOrUpdateJsonWindow('street', val);
+  }
+});
+watch(sceneConfigState, (val) => {
+  if (val && sceneJsonWindow) {
+    openOrUpdateJsonWindow('scene', val);
+  }
+});
+
+watch(streetConfig, (val) => {
+  if (val && !streetJsonWindowInitialized) {
     streetConfigState.value = JSON.parse(JSON.stringify(val));
-    openJsonWindow('street', val);
-    streetJsonWindowOpened = true;
+    openOrUpdateJsonWindow('street', val);
+    streetJsonWindowInitialized = true;
     showStreetJson.value = false;
   }
 }, { immediate: true });
-watch(sceneConfig, (val, oldVal) => {
-  if (val && !sceneJsonWindowOpened) {
+watch(sceneConfig, (val) => {
+  if (val && !sceneJsonWindowInitialized) {
     sceneConfigState.value = JSON.parse(JSON.stringify(val));
-    openJsonWindow('scene', val);
-    sceneJsonWindowOpened = true;
+    openOrUpdateJsonWindow('scene', val);
+    sceneJsonWindowInitialized = true;
     showSceneJson.value = false;
   }
 }, { immediate: true });
