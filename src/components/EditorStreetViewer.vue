@@ -26,11 +26,12 @@
         <div class="hotspot-type-select">
           <button class="hotspot-type-btn" @click="selectHotspotType('switchScene')">切换场景（switchScene）</button>
         </div>
-        <button class="cancel-btn" @click="cancelHotspotTypeSelect">取消</button>
+        <button class="cancel-btn" @click="cancelAddHotspot">取消</button>
       </div>
     </div>
     <!-- 确认放置热点按钮，仅在placingHotspot且已放置热点时显示 -->
     <button v-if="placingHotspot && placedHotspot" class="confirm-hotspot-btn" @click="confirmPlacingHotspot">确认放置热点</button>
+    <button v-if="placingHotspot" class="cancel-hotspot-btn" @click="cancelAddHotspot">取消添加</button>
 
     <div v-if="showSceneListModal" class="scene-list-modal">
       <div class="scene-list-content">
@@ -58,7 +59,7 @@
             {{ scene.sceneId || '(未设置sceneId)' }}
           </li>
         </ul>
-        <button class="cancel-btn" @click="showTargetSceneModal = false">取消</button>
+        <button class="back-btn" @click="showTargetSceneModal = false">返回</button>
       </div>
     </div>
     <div v-if="placingHotspot" class="hotspot-adding-modal" style="pointer-events:none;background:none;"></div>
@@ -489,6 +490,25 @@ const cancelHotspotTypeSelect = () => {
 .confirm-hotspot-btn:hover {
   background: #85ce61;
 }
+.cancel-hotspot-btn {
+  position: fixed;
+  left: 30px;
+  bottom: 30px;
+  background: #f56c6c;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 7px 22px;
+  font-size: 15px;
+  min-width: 90px;
+  min-height: 36px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  z-index: 4101;
+}
+.cancel-hotspot-btn:hover {
+  background: #ff7875;
+}
 .hotspot-type-modal {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -542,6 +562,19 @@ const cancelHotspotTypeSelect = () => {
 }
 .cancel-btn:hover {
   background: #ff7875;
+}
+.back-btn {
+  background: #888;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 16px;
+}
+.back-btn:hover {
+  background: #b0b0b0;
 }
 </style>
 
