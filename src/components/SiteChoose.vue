@@ -2,7 +2,7 @@
   <div class="full_contain" ref="full_contain_ref">
     <div class="contain_body_map">
       <!-- 搜索框放在图片右上角 -->
-      <div style="position: absolute; right: 100px; top: 40px; z-index: 100;">
+      <div style="position: absolute; right: 8vw; top: 5vh; z-index: 100;">
         <el-input
           v-model="searchQuery"
           placeholder="搜索地点或学院名称"
