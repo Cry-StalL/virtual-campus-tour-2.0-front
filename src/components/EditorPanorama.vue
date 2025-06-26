@@ -7,18 +7,6 @@
       :progressiveLoading="true"
       :resolutions="resolutions"
     />
-    <JsonViewerModal
-      :json="streetConfigState"
-      title="Street Viewer 配置 (只读)"
-      :visible="showStreetJson"
-      @close="showStreetJson = false"
-    />
-    <JsonViewerModal
-      :json="sceneConfigState"
-      title="Scene Viewer 配置 (只读)"
-      :visible="showSceneJson"
-      @close="showSceneJson = false"
-    />
   </div>
 </template>
 
@@ -30,7 +18,6 @@ import EditorSceneViewer from './EditorSceneViewer.vue';
 import { saveJsonToFile } from '@/components/pano/composables/editorFileUtils';
 import { useStreetViewerConfig } from '@/components/pano/composables/useStreetViewerConfig';
 import { useSceneViewerConfig } from '@/components/pano/composables/useSceneViewerConfig';
-import JsonViewerModal from './JsonViewerModal.vue';
 
 const viewerGroup = ref();
 const resolutions = ["1920x960", "3840x1920", "7680x3840"];
@@ -45,9 +32,6 @@ const sceneConfigState = ref<any>(null);
 
 const { viewerconfig: streetConfig, configFileName: streetFile } = useStreetViewerConfig();
 const { viewerconfig: sceneConfig, configFileName: sceneFile } = useSceneViewerConfig();
-
-// 当前viewer类型
-const currentViewer = computed(() => viewerGroup.value?.currentViewer || 'street');
 
 // 弹窗显示状态
 const showStreetJson = ref(false);
@@ -85,8 +69,10 @@ function openOrUpdateJsonWindow(type: 'street' | 'scene', json: any) {
     win = sceneJsonWindow;
   }
   if (!win) return;
+  // 生成唯一变量名，避免多窗口冲突
+  const varName = `__${type}JsonData`;
   win.document.open();
-  win.document.write(`<!DOCTYPE html><html><head><title>${type}-viewer-config.json</title><style>body{margin:0;background:#f8f8f8;}pre{padding:24px;font-size:15px;font-family:'Fira Mono','Consolas','Menlo',monospace;white-space:pre-wrap;word-break:break-all;background:#fff;border-radius:8px;max-width:90vw;max-height:90vh;overflow:auto;margin:40px auto;box-shadow:0 4px 24px rgba(0,0,0,0.12);}</style></head><body><pre>${JSON.stringify(json, null, 2)}</pre></body></html>`);
+  win.document.write(`<!DOCTYPE html><html><head><title>${type}-viewer-config.json</title><style>body{margin:0;background:#f8f8f8;}pre{padding:24px;font-size:15px;font-family:'Fira Mono','Consolas','Menlo',monospace;white-space:pre-wrap;word-break:break-all;background:#fff;border-radius:8px;max-width:90vw;max-height:90vh;overflow:auto;margin:40px auto 80px auto;box-shadow:0 4px 24px rgba(0,0,0,0.12);} .save-btn{position:fixed;right:40px;bottom:40px;z-index:1001;padding:12px 32px;background:#409eff;color:#fff;border:none;border-radius:6px;font-size:18px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.12);} .save-btn:hover{background:#66b1ff;}</style></head><body><pre id="json-pre">${JSON.stringify(json, null, 2)}</pre><button class='save-btn' id='saveBtn'>保存${type==='street'?'Street':'Scene'}配置</button><script>window.${varName} = ${JSON.stringify(json)};document.getElementById('saveBtn').onclick = function () { if(window.opener && typeof window.opener.saveJson === 'function'){ window.opener.saveJson('${type}'); } else { alert('主页面未找到 saveJson 方法'); } }<\/script></body></html>`);
   win.document.close();
 }
 
@@ -121,17 +107,15 @@ watch(sceneConfig, (val) => {
   }
 }, { immediate: true });
 
-function handleSaveConfig() {
-  if (currentViewer.value === 'street') {
-    if (streetConfigState.value) {
-      saveJsonToFile(streetConfigState.value, 'street-viewer-config');
-    }
-  } else if (currentViewer.value === 'scene') {
-    if (sceneConfigState.value) {
-      saveJsonToFile(sceneConfigState.value, 'scene-viewer-config');
-    }
+function saveJson(type: 'street' | 'scene') {
+  if (type === 'street' && streetConfigState.value) {
+    saveJsonToFile(streetConfigState.value, 'street-viewer-config');
+  } else if (type === 'scene' && sceneConfigState.value) {
+    saveJsonToFile(sceneConfigState.value, 'scene-viewer-config');
   }
 }
+// 让新窗口能通过 window.opener.saveJson 调用
+(window as any).saveJson = saveJson;
 
 /**
  * 获取当前viewer名称（'street' 或 'scene'）
