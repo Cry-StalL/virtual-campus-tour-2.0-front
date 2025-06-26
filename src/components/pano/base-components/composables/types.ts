@@ -16,7 +16,7 @@ export interface HotSpot {
   icon?: string;       // 图标路径
   title?: string;      // 标题
   description?: string; // 描述
-  targetSceneId?: string; // 目标场景ID（当type为"scene"时必填）
+  targetSceneId?: string; // 目标场景ID（当type为"switchScene"时必填）
   onClick?: (params?: any) => void; // 点击处理函数
   onClickParams?: any; // 传递给点击处理函数的参数
 }
@@ -35,4 +35,7 @@ export interface PanoramaViewerProps {
   progressiveLoading?: boolean; // 渐进加载模式
   resolutions?: string[]; // 渐进加载的分辨率列表，如 ["1920x960", "3840x1920", "7680x3840"]
   switchViewer?: (name: string) => void; // 切换视图方法
+  // 新增，支持编辑器临时热点预览
+  placingHotspot?: boolean;
+  tempHotspot?: Partial<HotSpot>;
 }

@@ -78,6 +78,9 @@ const currentSceneIndex = ref<number>(0);
 const currentSceneId = ref<string>('');
 const currentSphere = shallowRef<THREE.Mesh | null>(null);
 
+// 临时热点预览对象
+let tempHotspotSprite: THREE.Sprite | null = null;
+
 // 获取完整的图片 URL
 const getFullImageUrl = (relativeImagePath: string): string => {
   const base = API_CONFIG.BASE_URL.replace(/\/$/, '');
@@ -480,6 +483,37 @@ watch(() => props.scenes, () => {
     return;
   }
 }, { deep: true });
+
+// 监听 props.placingHotspot 和 props.tempHotspot，动态渲染临时热点
+watch(
+  () => [props.placingHotspot, props.tempHotspot && props.tempHotspot.position],
+  ([placing, position]) => {
+    if (!scene.value) return;
+    // 移除旧的临时热点
+    if (tempHotspotSprite) {
+      scene.value.remove(tempHotspotSprite);
+      tempHotspotSprite = null;
+    }
+    if (placing && props.tempHotspot && props.tempHotspot.position) {
+      // 创建临时热点 sprite
+      const textureLoader = new THREE.TextureLoader();
+      const texture = textureLoader.load(props.tempHotspot.icon || 'icons/scene_hotspot.png');
+      const material = new THREE.SpriteMaterial({ 
+        map: texture,
+        transparent: true,
+        depthTest: false
+      });
+      const sprite = new THREE.Sprite(material);
+      sprite.scale.set(20, 20, 1);
+      // 经纬度转三维坐标
+      const pos = latLonToVector3(props.tempHotspot.position.latitude, props.tempHotspot.position.longitude, 490);
+      sprite.position.copy(pos);
+      scene.value.add(sprite);
+      tempHotspotSprite = sprite;
+    }
+  },
+  { immediate: true }
+);
 
 onMounted(() => {
   // 初始化 Three.js 环境

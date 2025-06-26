@@ -8,10 +8,29 @@
       :resolutions="streetConfig.resolutions"
       debug
       :switchViewer="props.switchViewer"
+      @coordinateSelected="onPanoramaClick"
+      :placingHotspot="placingHotspot"
+      :tempHotspot="tempHotspot"
     />
     <button class="add-scene-btn" @click="() => addScene(jumpToScene)" v-if="streetConfig">添加场景</button>
     <button class="show-scene-list-btn" @click="openSceneList" v-if="streetConfig">显示场景列表</button>
     <button class="select-img-btn main" @click="selectPanoramaCurrent" v-if="streetConfig && currentSceneIdx >= 0">更改当前全景图</button>
+    <button class="add-hotspot-btn" @click="startAddHotspot" v-if="streetConfig && currentSceneIdx >= 0">添加热点</button>
+    <span v-if="placingHotspot" class="hotspot-tip">请在全景图上点击选择热点位置</span>
+    
+    <!-- 热点类型选择弹窗 -->
+    <div v-if="showHotspotTypeModal" class="hotspot-type-modal">
+      <div class="hotspot-type-content">
+        <div class="hotspot-type-header">选择热点类型</div>
+        <div class="hotspot-type-select">
+          <button class="hotspot-type-btn" @click="selectHotspotType('switchScene')">切换场景（switchScene）</button>
+        </div>
+        <button class="cancel-btn" @click="cancelHotspotTypeSelect">取消</button>
+      </div>
+    </div>
+    <!-- 确认放置热点按钮，仅在placingHotspot且已放置热点时显示 -->
+    <button v-if="placingHotspot && placedHotspot" class="confirm-hotspot-btn" @click="confirmAddHotspot">确认放置热点</button>
+
     <div v-if="showSceneListModal" class="scene-list-modal">
       <div class="scene-list-content">
         <div class="scene-list-header">
@@ -29,6 +48,7 @@
         </ul>
       </div>
     </div>
+    <div v-if="placingHotspot" class="hotspot-adding-modal" style="pointer-events:none;background:none;"></div>
     <input
       ref="fileInputRef"
       type="file"
@@ -41,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, defineEmits, nextTick, watch } from 'vue';
+import { ref, onMounted, defineEmits, nextTick, watch, computed } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import { useStreetViewerConfig } from '@/components/pano/composables/useStreetViewerConfig';
 import { useSceneEditor } from '@/components/pano/composables/useSceneEditor';
@@ -99,6 +119,93 @@ onMounted(() => {
     promptCounter.count++;
   }
 });
+
+// 添加热点相关逻辑
+const placingHotspot = ref(false);
+const tempHotspot = ref<any>(null);
+const placedHotspot = computed(() => !!(tempHotspot.value && tempHotspot.value.position));
+const showTargetSceneModal = ref(false);
+// 新增：热点类型选择弹窗
+const showHotspotTypeModal = ref(false);
+
+// PanoramaViewer 需要支持 @click-on-panorama 事件，返回点击的坐标
+const onPanoramaClick = (coords: any) => {
+  if (!placingHotspot.value) return;
+  // 直接使用传入的经纬度（useCoordinateConverter已保证正确）
+  if (coords && (coords.longitude !== undefined && coords.latitude !== undefined)) {
+    tempHotspot.value.position = {
+      longitude: coords.longitude,
+      latitude: coords.latitude
+    };
+    tempHotspot.value.icon = 'icons/arrow_hotspot.png'; // 确保icon正确
+    tempHotspot.value.type = 'switchScene'; // 确保类型正确
+  }
+};
+
+// 进入选择目标场景
+const nextSetTargetScene = () => {
+  if (!tempHotspot.value.position) {
+    window.alert('请先选择热点位置！');
+    return;
+  }
+  showTargetSceneModal.value = true;
+};
+
+// 选择目标场景
+const setTargetSceneId = (sceneId: string) => {
+  tempHotspot.value.targetSceneId = sceneId;
+  showTargetSceneModal.value = false;
+};
+
+// 确认放置热点
+const confirmAddHotspot = () => {
+  if (!tempHotspot.value.position || !tempHotspot.value.targetSceneId) {
+    window.alert('请完整设置热点位置和目标场景！');
+    return;
+  }
+  const scene = streetConfig.value?.scenes?.[currentSceneIdx.value];
+  if (scene) {
+    if (!Array.isArray(scene.hotspots)) scene.hotspots = [];
+    // 结构适配 HotspotConfig
+    scene.hotspots.push({
+      type: tempHotspot.value.type,
+      longitude: tempHotspot.value.position.longitude,
+      latitude: tempHotspot.value.position.latitude,
+      icon: 'icons/scene_hotspot.png', // 默认icon
+      title: '跳转场景',
+      description: '',
+      targetSceneId: tempHotspot.value.targetSceneId
+    });
+    window.alert('热点已添加！');
+  }
+  placingHotspot.value = false;
+  tempHotspot.value = null;
+};
+
+// 取消添加
+const cancelAddHotspot = () => {
+  placingHotspot.value = false;
+  tempHotspot.value = null;
+  showTargetSceneModal.value = false;
+};
+
+// 修改 startAddHotspot：弹出类型选择弹窗
+const startAddHotspot = () => {
+  showHotspotTypeModal.value = true;
+};
+// 选择热点类型后进入选点流程
+const selectHotspotType = (type: string) => {
+  showHotspotTypeModal.value = false;
+  placingHotspot.value = true;
+  tempHotspot.value = {
+    type,
+    position: null,
+    targetSceneId: null
+  };
+};
+const cancelHotspotTypeSelect = () => {
+  showHotspotTypeModal.value = false;
+};
 </script>
 
 <style scoped>
@@ -229,6 +336,195 @@ onMounted(() => {
 }
 .select-img-btn.main:hover {
   background: #66b1ff;
+}
+.add-hotspot-btn {
+  position: fixed;
+  right: 30px;
+  bottom: 270px;
+  z-index: 200;
+  font-size: 16px;
+  padding: 12px 24px;
+  background: #e6a23c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.add-hotspot-btn:hover {
+  background: #f7c24d;
+}
+.hotspot-tip {
+  position: fixed;
+  right: 30px;
+  bottom: 320px;
+  background: #fffbe6;
+  color: #e6a23c;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 16px;
+  z-index: 210;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.hotspot-adding-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hotspot-adding-content {
+  background: #fff;
+  border-radius: 10px;
+  min-width: 300px;
+  max-width: 500px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 24px;
+  position: relative;
+}
+.hotspot-adding-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+.hotspot-type-select {
+  margin-bottom: 16px;
+}
+.hotspot-position-preview {
+  margin-bottom: 16px;
+}
+.next-btn, .confirm-btn, .cancel-btn {
+  background: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.next-btn:hover, .confirm-btn:hover, .cancel-btn:hover {
+  background: #66b1ff;
+}
+.target-scene-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.target-scene-content {
+  background: #fff;
+  border-radius: 10px;
+  min-width: 300px;
+  max-width: 500px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 24px;
+  position: relative;
+}
+.target-scene-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+.target-scene-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.target-scene-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  font-size: 16px;
+}
+.target-scene-list li:hover {
+  background: #f5f5f5;
+}
+
+.confirm-hotspot-btn {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 30px;
+  background: #67c23a;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 7px 22px;
+  font-size: 15px;
+  min-width: 90px;
+  min-height: 36px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  z-index: 4101;
+}
+.confirm-hotspot-btn:hover {
+  background: #85ce61;
+}
+.hotspot-type-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 4100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hotspot-type-content {
+  background: #fff;
+  border-radius: 10px;
+  min-width: 300px;
+  max-width: 400px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hotspot-type-header {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
+.hotspot-type-select {
+  margin-bottom: 18px;
+}
+.hotspot-type-btn {
+  background: #e6a23c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 32px;
+  font-size: 17px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.hotspot-type-btn:hover {
+  background: #f7c24d;
+}
+.cancel-btn {
+  background: #f56c6c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.cancel-btn:hover {
+  background: #ff7875;
 }
 </style>
 
