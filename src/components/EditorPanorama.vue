@@ -79,7 +79,18 @@ function openOrUpdateJsonWindow(type: 'street' | 'scene', json: any) {
     return;
   }
   win.document.open();
-  win.document.write(`<!DOCTYPE html><html><head><title>${type}-viewer-config.json</title><style>body{margin:0;background:#f8f8f8;}pre{padding:24px;font-size:15px;font-family:'Fira Mono','Consolas','Menlo',monospace;white-space:pre-wrap;word-break:break-all;background:#fff;border-radius:8px;max-width:90vw;max-height:90vh;overflow:auto;margin:40px auto 80px auto;box-shadow:0 4px 24px rgba(0,0,0,0.12);} .save-btn{position:fixed;right:40px;bottom:40px;z-index:1001;padding:12px 32px;background:#409eff;color:#fff;border:none;border-radius:6px;font-size:18px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.12);} .save-btn:hover{background:#66b1ff;}</style></head><body><pre id="json-pre">${JSON.stringify(json, null, 2)}</pre><button class='save-btn' id='saveBtn'>保存${type==='street'?'Street':'Scene'}配置</button><script>window.${varName} = ${JSON.stringify(json)};document.getElementById('saveBtn').onclick = function () { if(window.opener && typeof window.opener.saveJson === 'function'){ window.opener.saveJson('${type}'); } else { alert('主页面未找到 saveJson 方法'); } }<\/script></body></html>`);
+  win.document.write(`<!DOCTYPE html><html><head><title>${type}-viewer-config.json</title><style>body{margin:0;background:#f8f8f8;}pre{padding:24px;font-size:15px;font-family:'Fira Mono','Consolas','Menlo',monospace;white-space:pre-wrap;word-break:break-all;background:#fff;border-radius:8px;max-width:90vw;max-height:90vh;overflow:auto;margin:40px auto 80px auto;box-shadow:0 4px 24px rgba(0,0,0,0.12);} .save-btn{position:fixed;right:40px;bottom:40px;z-index:1001;padding:12px 32px;background:#409eff;color:#fff;border:none;border-radius:6px;font-size:18px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.12);} .save-btn:hover{background:#66b1ff;}</style></head><body><pre id="json-pre">${JSON.stringify(json, null, 2)}</pre><button class='save-btn' id='saveBtn'>保存${type==='street'?'Street':'Scene'}配置</button><script>window.${varName} = ${JSON.stringify(json)};document.getElementById('saveBtn').onclick = function () { if(window.opener && typeof window.opener.saveJson === 'function'){ window.opener.saveJson('${type}'); } else { alert('主页面未找到 saveJson 方法'); } };
+  // 定时同步主页面最新json
+  setInterval(function(){
+    try {
+      if(window.opener && window.opener.${type}ConfigState && window.opener.${type}ConfigState.value){
+        var latest = window.opener.${type}ConfigState.value;
+        document.getElementById('json-pre').textContent = JSON.stringify(latest, null, 2);
+        window.${varName} = latest;
+      }
+    } catch(e){}
+  }, 500);
+  <\/script></body></html>`);
   win.document.close();
 }
 
@@ -123,6 +134,8 @@ function saveJson(type: 'street' | 'scene') {
 }
 // 让新窗口能通过 window.opener.saveJson 调用
 (window as any).saveJson = saveJson;
+(window as any).streetConfigState = streetConfigState;
+(window as any).sceneConfigState = sceneConfigState;
 
 /**
  * 获取当前viewer名称（'street' 或 'scene'）
