@@ -23,14 +23,24 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import { useSceneViewerConfig } from '@/components/pano/composables/useSceneViewerConfig';
 
-const { viewerconfig } = useSceneViewerConfig();
+const { viewerconfig, configFileName } = useSceneViewerConfig();
 
 const props = defineProps<{
   switchViewer: (name: string) => void;
 }>();
+
+const hasPrompted = ref(false);
+
+onMounted(() => {
+  if (!hasPrompted.value && configFileName.value) {
+    alert('当前读取的Scene配置文件：' + configFileName.value);
+    hasPrompted.value = true;
+  }
+});
 
 // 处理返回按钮点击
 const handleReturn = () => {

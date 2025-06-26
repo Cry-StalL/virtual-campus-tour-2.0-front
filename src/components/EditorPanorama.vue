@@ -13,13 +13,13 @@
 <script setup lang="ts">
 import { ref, markRaw } from 'vue';
 import PanoramaViewerGroup from '@/components/pano/base-components/PanoramaViewerGroup.vue';
-import StreetViewer from '@/components/pano/StreetViewer.vue';
+import EditorStreetViewer from './EditorStreetViewer.vue';
 import EditorSceneViewer from './EditorSceneViewer.vue';
 
 const viewerGroup = ref();
 const resolutions = ["1920x960", "3840x1920", "7680x3840"];
 const viewers = [
-  { name: 'street', component: markRaw(StreetViewer) },
+  { name: 'street', component: markRaw(EditorStreetViewer) },
   { name: 'scene', component: markRaw(EditorSceneViewer) }
 ];
 </script>
