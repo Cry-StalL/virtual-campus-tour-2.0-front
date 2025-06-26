@@ -2,16 +2,17 @@ import { ref, onMounted } from 'vue';
 import type { StreetViewerConfig } from './ViewerConfigTypes';
 import { getViewerConfigMode } from '@/config/config';
 
-async function fetchNewestConfigFile(prefix: string): Promise<any> {
-  const base = '/src/assets/data/';
-  const res = await fetch(base);
-  const text = await res.text();
-  // 匹配带时间戳的和无时间戳的
-  const regex = new RegExp(`${prefix}(-\\d+)?\\.json`, 'g');
-  const matches = Array.from(text.matchAll(regex)).map(m => m[0]);
-  if (matches.length === 0) throw new Error('未找到任何配置文件');
+// 使用 Vite 的 import.meta.glob 获取本地所有配置文件
+const configFiles = import.meta.glob('/src/assets/data/scene-viewer-config*.json', { eager: true, import: 'default' });
+
+function getNewestConfigData(prefix: string): any {
+  // 匹配 scene-viewer-config.json 和 scene-viewer-config-时间戳.json
+  const regex = new RegExp(`${prefix}(-\\d+)?\\.json$`);
+  const matched = Object.keys(configFiles).filter(f => regex.test(f));
+  console.log('匹配到的配置文件:', matched);
+  if (matched.length === 0) throw new Error('未找到任何配置文件');
   // 优先找最新时间戳，没有则用无后缀
-  const sorted = matches.sort((a, b) => {
+  const sorted = matched.sort((a, b) => {
     const getTs = (f: string) => {
       const m = f.match(/-(\\d+)\\.json$/);
       return m ? parseInt(m[1]) : 0;
@@ -19,9 +20,7 @@ async function fetchNewestConfigFile(prefix: string): Promise<any> {
     return getTs(b) - getTs(a);
   });
   const newest = sorted[0];
-  const configRes = await fetch(base + newest);
-  if (!configRes.ok) throw new Error('最新配置文件加载失败');
-  return await configRes.json();
+  return configFiles[newest];
 }
 
 export function useSceneViewerConfig() {
@@ -33,13 +32,12 @@ export function useSceneViewerConfig() {
       const mode = getViewerConfigMode();
       let data;
       if (mode === 'fixed_file') {
-        const res = await fetch('/src/assets/data/scene-viewer-config.json');
-        if (!res.ok) throw new Error('配置文件加载失败');
-        data = await res.json();
+        // 直接读取固定文件
+        data = configFiles['/src/assets/data/scene-viewer-config.json'];
+        if (!data) throw new Error('配置文件加载失败');
       } else {
-        data = await fetchNewestConfigFile('scene-viewer-config');
+        data = getNewestConfigData('scene-viewer-config');
       }
-
       // 简单类型检查
       if (
         typeof data.progressiveLoading === 'boolean' &&
