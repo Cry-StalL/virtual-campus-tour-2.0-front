@@ -112,27 +112,6 @@ import Help from '@/components/Help.vue';
 import About from '@/components/About.vue';
 import Privacy from '@/components/Privacy.vue';
 
-// 导入HotSpot接口类型
-interface HotSpot {
-  id?: string;
-  type: string;        // 热点类型
-  longitude: number;
-  latitude: number;
-  icon?: string;
-  title?: string;
-  description?: string;
-  targetSceneId?: string; // 目标场景ID（当type为"scene"时必填）
-  onClick?: (params?: any) => void;
-  params?: any;
-}
-
-// 定义场景接口
-interface Scene {
-  sceneId: string;
-  imagePath: string;
-  hotspots?: HotSpot[];
-}
-
 // Define types
 type SectionState = {
   location: boolean;
@@ -142,71 +121,7 @@ type SectionState = {
   [key: string]: boolean;
 };
 
-// 定义场景数据
-const scenes: Scene[] = [
-  {
-    sceneId: "1",
-    imagePath: "/images/panorama.jpg",
-    hotspots: [
-      {
-        type: 'scene',
-        longitude: 0.24,
-        latitude: -0.72,
-        icon: "/icons/arrow_hotspot.png",
-        title: '图书馆',
-        description: '这是图书馆的位置',
-        targetSceneId: "2"
-      },
-
-      {
-        type: 'custom',
-        longitude: 10.24,
-        latitude: 10.72,
-        icon: "/icons/scene_hotspot.png",
-        title: '图书馆',
-        description: '这是图书馆的位置',
-      }
-    ]
-  },
-
-  {
-    sceneId: "2",
-    imagePath: "/images/p1.jpg",
-    hotspots: [
-      {
-        type: 'scene',
-        longitude: 8,
-        latitude: -8,
-        icon: "/icons/arrow_hotspot.png",
-        title: '图书馆',
-        description: '这是图书馆的位置',
-        targetSceneId: "1"
-      },
-
-      {
-        type: 'custom',
-        longitude: -10.24,
-        latitude: -10.72,
-        icon: "/icons/scene_hotspot.png",
-      }
-    ]
-  },
-];
-
 const viewerGroup = ref();
-
-// 处理场景切换事件
-const handleSceneChange = (index: number) => {
-  console.log('场景已切换到:', index);
-  ElMessage({
-    message: `已切换到场景 ${index + 1}`,
-    type: 'info',
-    duration: 2000
-  });
-
-  // 场景切换后获取该场景的历史留言已移动到 SceneViewer 中
-  // fetchMessages();
-};
 
 const router = useRouter();
 const userID = ref('0');
