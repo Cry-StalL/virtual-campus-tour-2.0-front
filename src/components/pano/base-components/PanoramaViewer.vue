@@ -20,6 +20,7 @@ import { useErrorHandler } from './composables/useErrorHandler';
 import type { PanoramaViewerProps, HotSpot, Scene } from './composables/types';
 import * as THREE from 'three';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
+import { API_CONFIG } from '@/config/config';
 
 // 定义事件
 const emit = defineEmits<{
@@ -76,6 +77,13 @@ const hotspotObjects = shallowRef<THREE.Object3D[]>([]);
 const currentSceneIndex = ref<number>(0);
 const currentSceneId = ref<string>('');
 const currentSphere = shallowRef<THREE.Mesh | null>(null);
+
+// 获取完整的图片 URL
+const getFullImageUrl = (relativeImagePath: string): string => {
+  const base = API_CONFIG.BASE_URL.replace(/\/$/, '');
+  const rel = relativeImagePath.replace(/^\//, '');
+  return `${base}/${rel}`;
+};
 
 // 验证场景ID是否重复
 const validateSceneIds = (): boolean => {
@@ -250,47 +258,28 @@ const clearHotspots = () => {
 // 渐进加载图片
 const loadImageProgressively = (baseImagePath: string, targetMesh: THREE.Mesh) => {
   if (!scene.value) return;
-  
-  // 创建纹理加载器
   const textureLoader = new THREE.TextureLoader();
-  
-  // 对每个分辨率的图片进行加载
   props.resolutions.forEach((resolution, index) => {
-    // 简化路径构造，直接拼接格式
-    const imagePath = `${baseImagePath}/${resolution}.jpg`;
-    
+    const imagePath = getFullImageUrl(`${baseImagePath}/${resolution}.jpg`);
     if (props.debug) {
       console.log(`加载分辨率图片: ${imagePath}`);
     }
-    
-    // 加载当前分辨率的图片
     textureLoader.load(
       imagePath,
       (texture: THREE.Texture) => {
         if (!scene.value) return;
-        
-        // 设置正确的色彩空间
         texture.colorSpace = THREE.SRGBColorSpace;
-        
-        // 提高纹理质量设置
         texture.generateMipmaps = false;
         texture.minFilter = THREE.LinearFilter;
         texture.magFilter = THREE.LinearFilter;
         texture.anisotropy = renderer.value?.capabilities.getMaxAnisotropy() || 1;
-        
-        // 更新材质
         const material = targetMesh.material as THREE.MeshBasicMaterial;
-        
-        // 只有当这是第一个加载的图片，或者当前图片的分辨率比已加载的更高时才应用
         if (!material.map || index > props.resolutions.indexOf(
           material.userData.currentResolution as string || props.resolutions[0]
         )) {
           material.map = texture;
           material.needsUpdate = true;
-          
-          // 记录当前分辨率
           material.userData.currentResolution = resolution;
-          
           if (props.debug) {
             console.log(`已加载分辨率: ${resolution}`);
           }
@@ -356,25 +345,19 @@ const switchScene = (target: number | string) => {
   // 根据是否启用渐进加载来处理图片加载
   if (props.progressiveLoading) {
     // 渐进加载模式
-    loadImageProgressively(newScene.imagePath, mesh);
+    loadImageProgressively(newScene.relativeImagePath, mesh);
   } else {
     // 标准加载模式
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(
-      newScene.imagePath,
+      getFullImageUrl(`${newScene.relativeImagePath}/1920x960.jpg`),
       (texture: THREE.Texture) => {
         if (!scene.value) return;
-        
-        // 设置正确的色彩空间
         texture.colorSpace = THREE.SRGBColorSpace;
-        
-        // 提高纹理质量设置
         texture.generateMipmaps = false;
         texture.minFilter = THREE.LinearFilter;
         texture.magFilter = THREE.LinearFilter;
         texture.anisotropy = renderer.value?.capabilities.getMaxAnisotropy() || 1;
-        
-        // 更新材质
         material.map = texture;
         material.needsUpdate = true;
       },

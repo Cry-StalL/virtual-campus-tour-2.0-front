@@ -9,7 +9,7 @@ export interface HotspotConfig {
 
 export interface SceneConfig {
   sceneId: string;
-  imagePath: string;
+  relativeImagePath: string;
   hotspots: HotspotConfig[];
 }
 
