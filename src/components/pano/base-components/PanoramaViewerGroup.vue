@@ -9,12 +9,13 @@
       :username="username"
       :progressiveLoading="progressiveLoading"
       :resolutions="resolutions"
+      @sceneChanged="onSceneChangedProxy"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineProps } from 'vue';
+import { ref, computed, defineProps, getCurrentInstance } from 'vue';
 
 // 定义 Viewer 类型
 interface Viewer {
@@ -70,6 +71,12 @@ const switchViewer = (name: string) => {
 const currentViewerComponent = computed(() => {
   return currentViewer.value ? viewers.value[currentViewer.value].component : null;
 });
+
+// 事件透传
+const instance = getCurrentInstance();
+function onSceneChangedProxy(idx: number) {
+  instance?.emit('sceneChanged', idx);
+}
 
 // 暴露方法
 defineExpose({

@@ -1,17 +1,21 @@
 <template>
   <div class="editor-viewer">
+    <div class="scene-id-bar">
+      当前 sceneId：{{ currentSceneIdDisplay }}
+    </div>
     <PanoramaViewerGroup
       :viewers="viewers"
       ref="viewerGroup"
       initialViewerName="street"
       :progressiveLoading="true"
       :resolutions="resolutions"
+      @sceneChanged="onSceneChanged"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { markRaw, watch, ref } from 'vue';
+import { markRaw, watch, ref, computed } from 'vue';
 import PanoramaViewerGroup from '@/components/pano/base-components/PanoramaViewerGroup.vue';
 import EditorStreetViewer from './EditorStreetViewer.vue';
 import EditorSceneViewer from './EditorSceneViewer.vue';
@@ -29,6 +33,9 @@ const viewers = [
 // 直接使用响应式 streetConfig/sceneConfig
 const { viewerconfig: streetConfig, configFileName: streetFile } = useStreetViewerConfig();
 const { viewerconfig: sceneConfig, configFileName: sceneFile } = useSceneViewerConfig();
+
+// 当前场景索引
+const currentSceneIdx = ref(0);
 
 // 弹窗显示状态（如有需要可保留）
 const showStreetJson = ref(false);
@@ -125,6 +132,21 @@ function saveJson(type: 'street' | 'scene') {
 function getCurrentViewerName(): string {
   return viewerGroup.value?.getCurrentViewerName?.() || 'street';
 }
+
+const dummySceneChange = ref(0);
+function onSceneChanged(idx: number) {
+  currentSceneIdx.value = idx;
+}
+
+// 获取当前 sceneId
+const currentSceneIdDisplay = computed(() => {
+  const viewerName = getCurrentViewerName();
+  let config = viewerName === 'street' ? streetConfig.value : sceneConfig.value;
+  if (!config || !Array.isArray(config.scenes) || config.scenes.length === 0) return '无';
+  let idx = currentSceneIdx.value;
+  if (idx < 0 || idx >= config.scenes.length) idx = 0;
+  return config.scenes[idx]?.sceneId || '无';
+});
 </script>
 
 <style scoped>
@@ -133,6 +155,20 @@ function getCurrentViewerName(): string {
   height: 100vh;
   overflow: hidden;
   background: #222;
+}
+.scene-id-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  background: #f0f0f0;
+  color: #111;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 32px 10px 20px;
+  border-bottom-right-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  user-select: none;
 }
 .save-btn {
   position: absolute;

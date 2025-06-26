@@ -33,13 +33,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineEmits } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import { useStreetViewerConfig } from '@/components/pano/composables/useStreetViewerConfig';
 import type { SceneConfig } from '@/components/pano/composables/ViewerConfigTypes';
 
 const { viewerconfig: streetConfig, configFileName } = useStreetViewerConfig();
 const props = defineProps<{ switchViewer: (name: string) => void }>();
+
+const emit = defineEmits(['sceneChanged']);
 
 const showSceneListModal = ref(false);
 const sceneList = ref<SceneConfig[]>([]);
@@ -105,6 +107,8 @@ const addScene = async () => {
 const jumpToScene = (idx: number) => {
   if (panoramaViewerRef.value && typeof panoramaViewerRef.value.switchScene === 'function') {
     panoramaViewerRef.value.switchScene(idx);
+    emit('sceneChanged', idx); // 通知父组件场景已切换
+    console.log(`跳转到场景 ${idx}:`, sceneList.value[idx]);
     closeSceneList();
   }
 };
