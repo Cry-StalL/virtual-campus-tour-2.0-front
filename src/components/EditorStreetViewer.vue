@@ -73,6 +73,7 @@ const addScene = async () => {
   const scenes = streetConfig.value.scenes;
   let newSceneId = '';
   let autoSuggest = false;
+  let newIdx = scenes.length; // 新场景的索引
   if (scenes.length > 0) {
     const lastId = scenes[scenes.length - 1].sceneId;
     const match = lastId.match(/^(.*)-(\d+)-(\d+)$/);
@@ -90,6 +91,8 @@ const addScene = async () => {
           relativeImagePath: '',
           hotspots: []
         });
+        // 自动切换到新场景
+        jumpToScene(scenes.length - 1);
         return;
       }
     }
@@ -101,6 +104,8 @@ const addScene = async () => {
       relativeImagePath: '',
       hotspots: []
     });
+    // 自动切换到新场景
+    jumpToScene(scenes.length - 1);
   }
 };
 
