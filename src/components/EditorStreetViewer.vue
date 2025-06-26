@@ -11,7 +11,7 @@
     />
     <button class="add-scene-btn" @click="() => addScene(jumpToScene)" v-if="streetConfig">添加场景</button>
     <button class="show-scene-list-btn" @click="openSceneList" v-if="streetConfig">显示场景列表</button>
-    <button class="select-img-btn main" @click="selectPanoramaCurrent" v-if="streetConfig && currentSceneIdx >= 0">选择当前全景图</button>
+    <button class="select-img-btn main" @click="selectPanoramaCurrent" v-if="streetConfig && currentSceneIdx >= 0">更改当前全景图</button>
     <div v-if="showSceneListModal" class="scene-list-modal">
       <div class="scene-list-content">
         <div class="scene-list-header">
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, defineEmits, nextTick } from 'vue';
+import { ref, onMounted, defineEmits, nextTick, watch } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import { useStreetViewerConfig } from '@/components/pano/composables/useStreetViewerConfig';
 import { useSceneEditor } from '@/components/pano/composables/useSceneEditor';
@@ -75,6 +75,20 @@ const jumpToScene = (idx: number) => {
     closeSceneList();
   }
 };
+
+// 响应 streetConfig 变化，自动刷新全景显示器，停留在当前场景
+watch(
+  () => streetConfig.value,
+  (newVal, oldVal) => {
+    if (panoramaViewerRef.value && typeof panoramaViewerRef.value.switchScene === 'function') {
+      // 保持 currentSceneIdx 不变
+      nextTick(() => {
+        panoramaViewerRef.value.switchScene(currentSceneIdx.value || 0);
+      });
+    }
+  },
+  { deep: true }
+);
 
 // 只提示一次配置文件名
 const promptCounter = window.__streetConfigPromptedCount = window.__streetConfigPromptedCount || { count: 0 };

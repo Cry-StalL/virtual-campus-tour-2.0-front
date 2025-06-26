@@ -8,7 +8,7 @@
       :resolutions="sceneConfig.resolutions"
       debug
     />
-    <button class="select-img-btn main" @click="selectPanoramaCurrent" v-if="sceneConfig && currentSceneIdx >= 0">选择当前全景图</button>
+    <button class="select-img-btn main" @click="selectPanoramaCurrent" v-if="sceneConfig && currentSceneIdx >= 0">更改当前全景图</button>
     <button class="add-scene-btn" @click="() => addScene(jumpToScene)" v-if="sceneConfig">添加场景</button>
     <button class="show-scene-list-btn" @click="openSceneList" v-if="sceneConfig">显示场景列表</button>
     <div v-if="showSceneListModal" class="scene-list-modal">
@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, defineEmits } from 'vue';
+import { ref, onMounted, defineEmits, watch, nextTick } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import { useSceneViewerConfig } from '@/components/pano/composables/useSceneViewerConfig';
 import { useSceneEditor } from '@/components/pano/composables/useSceneEditor';
@@ -85,6 +85,19 @@ const jumpToScene = (idx: number) => {
     closeSceneList();
   }
 };
+
+// 响应 sceneConfig 变化，自动刷新全景显示器，停留在当前场景
+watch(
+  () => sceneConfig.value,
+  (newVal, oldVal) => {
+    if (panoramaViewerRef.value && typeof panoramaViewerRef.value.switchScene === 'function') {
+      nextTick(() => {
+        panoramaViewerRef.value.switchScene(currentSceneIdx.value || 0);
+      });
+    }
+  },
+  { deep: true }
+);
 
 const hasPrompted = ref(false);
 onMounted(() => {
