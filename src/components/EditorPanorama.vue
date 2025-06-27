@@ -21,9 +21,9 @@
         <button class="confirm-btn" @click="confirmInitialView">确认</button>
       </div>
     </div>
-    <button class="set-initial-view-btn" @click="startSetInitialView(getCurrentViewerName() === 'street' ? 'street' : 'scene')">设置初始视角</button>
+    <!-- <button class="set-initial-view-btn" @click="startSetInitialView(getCurrentViewerName() === 'street' ? 'street' : 'scene')">设置初始视角</button>
     <button v-if="settingInitialView" class="confirm-initial-view-btn" @click="confirmInitialView">确认初始视角</button>
-    <button v-if="settingInitialView" class="cancel-initial-view-btn" @click="cancelInitialView">取消</button>
+    <button v-if="settingInitialView" class="cancel-initial-view-btn" @click="cancelInitialView">取消</button> -->
   </div>
 </template>
 
