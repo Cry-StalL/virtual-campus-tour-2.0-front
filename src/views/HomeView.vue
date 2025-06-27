@@ -512,16 +512,19 @@ body, html, #app {
 
 /* 实用信息 */
 .usefulinfo {
-  position: absolute;
-  top: 0;
-  left: -80vw;
-  width: 80vw;
-  top: 8vh;
-  height: 90vh;
-  background-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: left 0.3s ease;
   z-index: 10;
+  position: fixed;
+  top: 7vh;
+
+  height: 90vh;
+  width: 78vw;
+  left: -100vw;
+  margin-left: 2vw;
+
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 1vw;
+  transition: left 0.5s ease;
+  
   overflow-y: auto;
 }
 

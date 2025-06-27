@@ -133,7 +133,16 @@ const validateHotspot = (hotspot: HotSpot): boolean => {
 // 创建热点
 const createHotspot = (hotspot: HotSpot) => {
   if (!scene.value || !validateHotspot(hotspot)) return null;
-  
+
+  // 自动绑定icon
+  if (!hotspot.icon) {
+    if (hotspot.type === 'switchScene') {
+      hotspot.icon = '/icons/arrow_hotspot.png';
+    } else if (hotspot.type === 'enterSceneViewer') {
+      hotspot.icon = '/icons/scene_hotspot.png';
+    }
+  }
+
   let material: THREE.SpriteMaterial | THREE.MeshBasicMaterial;
   
   if (hotspot.icon) {

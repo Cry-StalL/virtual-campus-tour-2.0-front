@@ -1052,6 +1052,47 @@ export default {
     font-size: 13px;
   }
   
+  /* 用户名输入框与按钮同行布局 */
+  .username-item :deep(.el-form-item__label) {
+    margin-bottom: 8px !important;
+  }
+  
+  .username-item :deep(.el-form-item__content) {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+  
+  .username-item :deep(.el-input) {
+    flex: 1 !important;
+    max-width: 200px !important;
+  }
+  
+  .username-item .username-edit-btn {
+    width: 110px !important;
+    height: 38px !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+    font-size: 13px !important;
+    padding: 0 !important;
+    border-radius: 6px !important;
+  }
+  
+  .username-item .username-action-btns {
+    display: flex !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .username-item .username-action-btns .el-button {
+    width: 55px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    font-size: 12px !important;
+  }
+  
   .username-edit-btn {
     max-width: 150px;
     padding: 8px 16px;
@@ -1091,18 +1132,20 @@ export default {
   }
 }
 
+/* 18:9 手机屏幕适配  */
 @media (max-width: 480px) {
   .profile {
     flex-direction: column;
-    padding: 1rem;
-    gap: 20px;
+    padding: 1.5rem;
+    gap: 25px;
   }
   
   .profile-card, .message-history-card {
-    width: 400px;
-    max-width: 95vw;
-    padding: 1rem;
-    margin: 0.5rem;
+    width: 100%;
+    max-width: 360px;
+    min-width: 300px;
+    padding: 1.5rem;
+    margin: 1rem auto;
   }
   
   .profile-header h2, .message-header h2 {
@@ -1111,55 +1154,166 @@ export default {
   }
   
   .action-buttons {
+    display: flex;
     flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+    width: 100%;
+  }
+  
+  .action-buttons .el-button {
+    width: 180px;
+    height: 40px;
+    font-size: 14px;
+    padding: 0;
+    border-radius: 8px;
+    margin: 0 auto;
+  }
+  
+  .username-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  .username-item :deep(.el-form-item__label) {
+    margin-bottom: 8px !important;
+  }
+  
+  .username-item :deep(.el-form-item__content) {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+  
+  .username-item :deep(.el-input) {
+    flex: 1 !important;
+    max-width: 200px !important;
+  }
+  
+  .username-item .username-edit-btn {
+    width: 100px !important;
+    height: 38px !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+    font-size: 12px !important;
+    padding: 0 !important;
+    border-radius: 6px !important;
+  }
+  
+  .username-item .username-action-btns {
+    display: flex !important;
+    gap: 6px !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .username-item .username-action-btns .el-button {
+    width: 50px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    font-size: 12px !important;
+  }
+  
+  .username-action-btns .el-button {
+    width: 75px;
+    height: 32px;
+    padding: 0;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+  
+  :deep(.el-input) {
+    max-width: 220px;
+    width: 220px;
+  }
+  
+  :deep(.el-input__inner) {
+    height: 38px;
+    font-size: 14px;
+  }
+  
+
+}
+
+/* 小屏幕手机适配 */
+@media (max-width: 375px) {
+  .profile {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 20px;
+  }
+  
+  .profile-card, .message-history-card {
+    width: 100%;
+    max-width: 320px;
+    min-width: 280px;
+    padding: 1.2rem;
+    margin: 1rem auto;
+  }
+  
+  .profile-header h2, .message-header h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
     margin-top: 20px;
   }
   
   .action-buttons .el-button {
-    width: 100%;
-    max-width: 180px;
-    min-width: auto;
-    padding: 8px 12px;
-    font-size: 13px;
-    height: 36px;
+    width: 180px;
+    height: 38px;
+    font-size: 14px;
+    padding: 0;
+    border-radius: 8px;
   }
   
   .username-item {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
   }
   
   .username-edit-btn {
-    width: 100%;
-    max-width: 180px;
+    width: 180px;
+    height: 38px;
     margin-left: 0;
-    margin-top: 8px;
+    margin-top: 0;
     align-self: center;
-    padding: 8px 12px;
-    font-size: 13px;
-    height: 36px;
+    font-size: 14px;
+    padding: 0;
+    border-radius: 8px;
   }
   
   :deep(.username-edit-btn.el-button) {
-    padding: 8px 12px !important;
-    font-size: 13px !important;
-    height: 36px !important;
+    width: 180px !important;
+    height: 38px !important;
+    padding: 0 !important;
+    font-size: 14px !important;
   }
   
   .username-action-btns {
     width: 100%;
     justify-content: center;
     margin-left: 0;
-    margin-top: 8px;
-    gap: 8px;
+    margin-top: 0;
+    gap: 10px;
   }
   
   .username-action-btns .el-button {
-    max-width: 80px;
-    padding: 6px 8px;
+    width: 80px;
+    height: 34px;
+    padding: 0;
     font-size: 12px;
-    height: 32px;
+    border-radius: 6px;
   }
   
   :deep(.el-input) {
@@ -1168,98 +1322,20 @@ export default {
   }
   
   :deep(.el-input__inner) {
-    height: 36px;
+    height: 40px;
     font-size: 14px;
   }
   
-  :deep(.el-button) {
-    height: 34px;
-    font-size: 13px;
-    padding: 0 12px;
-  }
-  
-  .back-button-container {
-    top: 10px;
-    right: 10px;
-  }
-  
-  .back-button-container .el-button {
-    padding: 6px 10px;
-    font-size: 13px;
-    height: 32px;
-  }
-}
 
-@media (max-width: 320px) {
-  .profile-card, .message-history-card {
-    width: 400px;
-    max-width: 98vw;
-    padding: 0.8rem;
-  }
-  
-  .profile-header h2, .message-header h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-  }
-  
-  .action-buttons .el-button {
-    max-width: 140px;
-    padding: 6px 10px;
-    font-size: 12px;
-    height: 32px;
-  }
-  
-  .username-edit-btn {
-    max-width: 140px;
-    padding: 6px 10px;
-    font-size: 12px;
-    height: 32px;
-  }
-  
-  :deep(.username-edit-btn.el-button) {
-    padding: 6px 10px !important;
-    font-size: 12px !important;
-    height: 32px !important;
-  }
-  
-  .username-action-btns .el-button {
-    max-width: 60px;
-    padding: 4px 6px;
-    font-size: 11px;
-    height: 28px;
-  }
-  
-  :deep(.el-input__inner) {
-    height: 32px;
-    font-size: 13px;
-    padding: 0 8px;
-  }
-  
-  :deep(.el-button) {
-    height: 30px;
-    font-size: 12px;
-    padding: 0 8px;
-  }
-  
-  .back-button-container .el-button {
-    padding: 4px 8px;
-    font-size: 12px;
-    height: 28px;
-  }
   
   .avatar-container {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
   }
   
   :deep(.el-avatar) {
-    width: 80px !important;
-    height: 80px !important;
-  }
-  
-  :deep(.el-form-item__label) {
-    font-size: 14px !important;
-    min-width: 60px !important;
+    width: 100px !important;
+    height: 100px !important;
   }
 }
 
@@ -1325,12 +1401,60 @@ export default {
   background-color: rgba(255, 255, 255, 0.9);
   border: none;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .back-button-container .el-button:hover {
   background-color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 手机屏幕返回按钮适配 */
+@media (max-width: 480px) {
+  .back-button-container {
+    top: 15px !important;
+    right: 15px !important;
+  }
+  
+  .back-button-container .el-button {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    height: 36px !important;
+    min-width: 80px !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .back-button-container .el-button:hover {
+    background-color: #fff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .back-button-container {
+    top: 15px !important;
+    right: 15px !important;
+  }
+  
+  .back-button-container .el-button {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    height: 32px !important;
+    min-width: 70px !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid #e0e0e0 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .back-button-container .el-button:hover {
+    background-color: #fff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15) !important;
+  }
 }
 
 .message-actions {
