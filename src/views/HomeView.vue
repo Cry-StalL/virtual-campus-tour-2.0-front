@@ -214,8 +214,11 @@ const toggleLanguageView = () => {
   console.log('切换语言设置');
 };
 const closeSiteChoose = () => {
-  clearSideBarChoose.value = !clearSideBarChoose.value;
+  alert(siteChooseVisible.value)
   siteChooseVisible.value = !siteChooseVisible.value; // 切换显示状态
+  clearSideBarChoose.value = !clearSideBarChoose.value;
+  alert(siteChooseVisible.value)
+
 };
 const closeUsefulInfo = () => {
   clearSideBarChoose.value = !clearSideBarChoose.value;

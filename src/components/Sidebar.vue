@@ -98,7 +98,7 @@
     privacy: false,
     about: false
   });
-  const showPlace = () => {
+  const change_Show_Place = () => {
     emit('toggle-site-choose'); // 触发自定义事件，通知父组件
   };
   const showInfo = () => {
@@ -122,39 +122,45 @@
   };
 
   const toggleSection = (section: string) => {
-    sectionsState.value['location'] = false;
-    sectionsState.value['info'] = false;
-    sectionsState.value['help'] = false;
-    sectionsState.value['language'] = false;
-    sectionsState.value['privacy'] = false;
-    sectionsState.value['about'] = false;
-    sectionsState.value[section] = true;
+    if (!sectionsState.value[section]){// 原来是false
+      sectionsState.value['location'] = false;
+      sectionsState.value['info'] = false;
+      sectionsState.value['help'] = false;
+      sectionsState.value['language'] = false;
+      sectionsState.value['privacy'] = false;
+      sectionsState.value['about'] = false;
+      sectionsState.value[section] = true;
+    }else{// 原来是true
+      sectionsState.value['location'] = false;
+      sectionsState.value['info'] = false;
+      sectionsState.value['help'] = false;
+      sectionsState.value['language'] = false;
+      sectionsState.value['privacy'] = false;
+      sectionsState.value['about'] = false;
+    }
+    
+    
   };
 
   // 监听 sectionsState 的变化
-  watch(
-    sectionsState.value,
-    (newValue) => {
-      if (newValue.location == true) {
-        showPlace();
+  const watchSection = (sectionKey: keyof SectionState, callback: () => void) => {
+    watch(
+      () => sectionsState.value[sectionKey],
+      (newVal, oldVal) => {
+        if (newVal !== oldVal) {
+          callback();
+        }
       }
-      if (newValue.info == true) {
-        showInfo();
-      }
-      if (newValue.help == true) {
-        navigateToHelp('help');
-      }
-      if (newValue.language == true) {
-        navigateToLanguage('language');
-      }
-      if (newValue.privacy == true) {
-        navigateToPrivacy('privacy');
-      }
-      if (newValue.about == true) {
-        navigateToAbout('about');
-      }
-    },
-  );
+    );
+  };
+
+  watchSection('location', change_Show_Place);
+  watchSection('info', showInfo);
+  watchSection('help', () => navigateToHelp('help'));
+  watchSection('language', () => navigateToLanguage('language'));
+  watchSection('privacy', () => navigateToPrivacy('privacy'));
+  watchSection('about', () => navigateToAbout('about'));
+
   const props = defineProps({
     clearSideBarChoose: {
       type: Boolean,
