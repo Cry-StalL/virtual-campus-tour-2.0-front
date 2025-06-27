@@ -10,7 +10,7 @@
           "type": "switchScene",
           "longitude": 0,
           "latitude": 0,
-          "targetSceneId": "scene"
+          "targetSceneId": "byy-1-1"
         },
         {
           "type": "enterSceneViewer",

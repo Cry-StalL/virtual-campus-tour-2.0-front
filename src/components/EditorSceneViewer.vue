@@ -116,11 +116,116 @@ const handleReturn = () => {
 </script>
 
 <style scoped>
+.add-scene-btn {
+  position: fixed;
+  right: 30px;
+  bottom: 90px;
+  z-index: 200;
+  font-size: 16px;
+  padding: 12px 24px;
+  background: #67c23a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.add-scene-btn:hover {
+  background: #85ce61;
+}
+.show-scene-list-btn {
+  position: fixed;
+  right: 30px;
+  bottom: 150px;
+  z-index: 200;
+  font-size: 16px;
+  padding: 12px 24px;
+  background: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.show-scene-list-btn:hover {
+  background: #66b1ff;
+}
+.scene-list-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scene-list-content {
+  background: #fff;
+  border-radius: 10px;
+  min-width: 340px;
+  min-height: 180px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 24px 24px 12px 24px;
+  position: relative;
+}
+.scene-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: #888;
+}
+.scene-list-ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.scene-list-ul li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 16px;
+}
+.jump-btn {
+  background: #67c23a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 14px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+.jump-btn:hover {
+  background: #85ce61;
+}
+.delete-btn {
+  background: #f56c6c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 14px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-left: 12px;
+}
+.delete-btn:hover {
+  background: #ff7875;
+}
 .select-img-btn.main {
   position: fixed;
-  left: 50%;
-  bottom: 220px;
-  transform: translateX(-50%);
+  right: 30px;
+  bottom: 210px;
   background: #409eff;
   color: #fff;
   border: none;
@@ -133,5 +238,251 @@ const handleReturn = () => {
 }
 .select-img-btn.main:hover {
   background: #66b1ff;
+}
+.add-hotspot-btn {
+  position: fixed;
+  right: 30px;
+  bottom: 270px;
+  z-index: 200;
+  font-size: 16px;
+  padding: 12px 24px;
+  background: #e6a23c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.add-hotspot-btn:hover {
+  background: #f7c24d;
+}
+.hotspot-tip {
+  position: fixed;
+  right: 30px;
+  bottom: 320px;
+  background: #fffbe6;
+  color: #e6a23c;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 16px;
+  z-index: 210;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.hotspot-adding-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hotspot-adding-content {
+  background: #fff;
+  border-radius: 10px;
+  min-width: 300px;
+  max-width: 500px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 24px;
+  position: relative;
+}
+.hotspot-adding-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+.hotspot-type-select {
+  margin-bottom: 16px;
+}
+.hotspot-position-preview {
+  margin-bottom: 16px;
+}
+.next-btn, .confirm-btn, .cancel-btn {
+  background: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.next-btn:hover, .confirm-btn:hover, .cancel-btn:hover {
+  background: #66b1ff;
+}
+.target-scene-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.target-scene-content {
+  background: #fff;
+  border-radius: 10px;
+  min-width: 300px;
+  max-width: 500px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 24px;
+  position: relative;
+}
+.target-scene-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+.target-scene-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.target-scene-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  font-size: 16px;
+}
+.target-scene-list li:hover {
+  background: #f5f5f5;
+}
+
+.confirm-hotspot-btn {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 30px;
+  background: #67c23a;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 7px 22px;
+  font-size: 15px;
+  min-width: 90px;
+  min-height: 36px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  z-index: 4101;
+}
+.confirm-hotspot-btn:hover {
+  background: #85ce61;
+}
+.cancel-hotspot-btn {
+  position: fixed;
+  left: 30px;
+  bottom: 30px;
+  background: #f56c6c;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 7px 22px;
+  font-size: 15px;
+  min-width: 90px;
+  min-height: 36px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  z-index: 4101;
+}
+.cancel-hotspot-btn:hover {
+  background: #ff7875;
+}
+.hotspot-type-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 4100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hotspot-type-content {
+  background: #fff;
+  border-radius: 10px;
+  min-width: 300px;
+  max-width: 400px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 24px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hotspot-type-header {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
+.hotspot-type-select {
+  margin-bottom: 18px;
+}
+.hotspot-type-btn {
+  background: #e6a23c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 32px;
+  font-size: 17px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.hotspot-type-btn:hover {
+  background: #f7c24d;
+}
+.cancel-btn {
+  background: #f56c6c;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.cancel-btn:hover {
+  background: #ff7875;
+}
+.back-btn {
+  background: #888;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 16px;
+}
+.back-btn:hover {
+  background: #b0b0b0;
+}
+
+.return-button {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: rgba(64, 158, 255, 0.9);
+  border: none;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.return-button:hover {
+  background-color: rgba(64, 158, 255, 1);
+  transform: scale(1.05);
+}
+
+.return-button .el-icon {
+  margin-right: 5px;
 }
 </style>
