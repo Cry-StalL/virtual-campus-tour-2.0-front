@@ -235,6 +235,8 @@
 
 <style>
 .full_contain{
+    /* background-color: rgb(242, 245, 252); */
+    background-image: url('../../assets/background.png');
     border-radius: 0;
     flex-direction: column;
     align-items: center;
@@ -243,7 +245,7 @@
 
 
 .contain_body_map{
-    background-color: rgba(255, 255, 255, 1);
+    /* background-color: rgb(242, 245, 252); */
     border-radius: 0;
     overflow-y: auto;
     height: 100%;

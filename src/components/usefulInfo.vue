@@ -331,7 +331,7 @@
                 <el-tab-pane label="住宿">
                     <div style="width: 100%; height: 78vh; display: flex; flex-direction: row;">
                         <!-- 榕园 -->
-                        <div class="dormitory ">
+                        <div class="dormitory" style="margin-left: 2%; margin-right: 6%;">
                             <div style="height: 32vh; display: flex; flex-direction: column; ">
                                 <text style="width: 100%; margin-top: 2.5vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     榕园宿舍
@@ -371,7 +371,7 @@
                             </div>
                         </div>
                         <!-- 荔园 -->
-                        <div class="dormitory ">
+                        <div class="dormitory" style="margin-left: 4vh; margin-right: 4vh;">
                             <div style="height: 32vh; display: flex; flex-direction: column; ">
                                 <text style="width: 100%; margin-top: 2.5vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     荔园宿舍
@@ -411,7 +411,7 @@
                             </div>
                         </div>
                         <!-- 荔园 -->
-                        <div class="dormitory" style="margin-right: 0;">
+                        <div class="dormitory" style="margin-left: 6vh;margin-right: 2vh;">
                             <div style="height: 32vh; display: flex; flex-direction: column; ">
                                 <text style="width: 100%; margin-top: 2.5vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     荔园宿舍
@@ -606,7 +606,7 @@
                 <el-tab-pane label="就医与保卫">
                     <div style="width: 100%; height: 78vh; display: flex; flex-direction: row;">
                         <!-- 校医院 -->
-                        <div class="hospital ">
+                        <div class="hospital " style="margin-left: 2vh; margin-right: 6vh;">
                             <div style="height: 25vh; display: flex; flex-direction: column; ">
                                 <text style="width: 100%; margin-top: 2.5vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     校医院
@@ -643,7 +643,7 @@
                             </div>
                         </div>
                         <!-- 中大五院 -->
-                        <div class="hospital ">
+                        <div class="hospital " style="margin-left: 4vh; margin-right: 4vh;">
                             <div style="height: 25vh; display: flex; flex-direction: column; ">
                                 <text style="width: 100%; margin-top: 2.5vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     中大五院
@@ -680,7 +680,7 @@
                             </div>
                         </div>
                         <!-- 中大五院 -->
-                        <div class="hospital" style="margin-right: 0;" >
+                        <div class="hospital"  style="margin-left: 6vh; margin-right: 2vh;">
                             <div style="height: 25vh; display: flex; flex-direction: column; ">
                                 <text style="width: 100%; margin-top: 2.5vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     学校保卫处
@@ -1068,6 +1068,7 @@
     margin-right: 1%; 
     height: 74vh; 
     background-color: white; 
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     color: black; 
     display: flex; 
     flex-direction: column;
@@ -1080,6 +1081,7 @@
     margin-right: 8%; 
     height: 74vh; 
     background-color: white; 
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     color: black; 
     display: flex; 
     flex-direction: column;
@@ -1092,6 +1094,7 @@
     margin-right: 1%; 
     height: 60vh; 
     background-color: white; 
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     color: black; 
     display: flex; 
     flex-direction: column;
@@ -1104,6 +1107,7 @@
     margin-right: 8%; 
     height: 68vh; 
     background-color: white; 
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     color: black; 
     display: flex; 
     flex-direction: column;
@@ -1115,6 +1119,7 @@
     width: 100%; 
     height: 72vh; 
     background-color: white; 
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     color: black; 
     display: flex; 
     flex-direction: column;
@@ -1123,9 +1128,6 @@
 
 .el-button {
   font-size: 1.5vh ;
-  /* border-top: 0; */
-  /* border-left: 0; */
-  /* border-right: 0; */
 }
 </style>
 
