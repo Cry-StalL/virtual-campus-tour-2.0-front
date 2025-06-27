@@ -12,7 +12,7 @@
                                 具体地点：中山大学珠海校区南门
                             </text>
                             <text style="width: 66vh; margin-bottom: 0.2vh; text-align: left; color: black; font-size: 1.5vh;" >
-                                开放时间：7:00-22:00
+                                开放时间：8:00-22:30
                             </text>
                             <text style="width: 66vh; margin-bottom: 0.2vh; text-align: left; color: black; font-size: 1.5vh;" >
                                 纸质资源：纸质藏书逾300万册，订购报纸128种，期刊1625种
@@ -26,19 +26,19 @@
                         </div>
                         
                         <div style="width: 25vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                            <img src="../../assets/library-website.jpg" style="margin-top: 1.5vh; width: 22.4vh; height: 14vh;">
-                            <el-button style="width: 22.4vh; height: 2.5vh;">点击前往图书馆网站</el-button>
+                            <img src="../../assets/xx-tsg-1.jpg" style="margin-top: 1.5vh; width: 22.4vh; height: 14vh;">
+                            <el-button style="width: 22.4vh; height: 3vh;" @click="redirectTo_xx_tsg">点击前往图书馆网站</el-button>
                         </div>
                         <div style="width: 25vh; padding-right: 2vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                            <img src="../../assets/library.png" style="margin-top: 1.5vh; width: 21vh; height: 14vh;">
-                            <el-button style="width: 21vh; height: 2.5vh;">点击前往图书馆街景</el-button>
+                            <img src="../../assets/xx-tsg-2.jpg" style="margin-top: 1.5vh; width: 21vh; height: 14vh;">
+                            <el-button style="width: 21vh; height: 3vh;">点击前往图书馆街景</el-button>
                         </div>
                         
                     </div>
                     <div style="display: flex; flex-direction: row;">
                         <div class="study_teaching_building ">
                             <div style="display: flex; flex-direction: column; justify-content: center; margin-left: 4vh;">
-                                <text style="margin-top: 5vh; margin-bottom: 0.5vh; text-align: left; font-weight: bold; color: black; font-size: 2vh;" >
+                                <text style="margin-top: 3vh; margin-bottom: 0.5vh; text-align: left; font-weight: bold; color: black; font-size: 2vh;" >
                                     教学楼
                                 </text>
                                 <text style="margin-bottom: 0.5vh; text-align: left; color: black; font-size: 1.5vh;" >
@@ -55,7 +55,7 @@
                                 </text>
                                 <el-table
                                     :data="tableData"
-                                    style="width: 64vh; height: 13vh;"
+                                    style="width: 64vh; height: 18vh;"
                                     :row-style="{ height: '3.25vh' }"
                                     :cell-style="{ padding: '0px', fontSize: '1.2vh' }"
                                     :header-cell-style="{ background: 'transparent' }"
@@ -75,16 +75,16 @@
                             </div>
                             <div style="display: flex; flex-direction: row; justify-content: center;">
                                 <div style="width: 21.3vh; margin-right: 2vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                                    <img src="../../assets/classroom1.jpg" style="margin-top: 1vh; width: 21.3vh; height: 12vh;">
-                                    <el-button style="width: 21.3vh; height: 2.5vh;">点击前往中山大学教务系统</el-button>
+                                    <img src="../../assets/xx-jxl-1.jpg" style="margin-top: 1vh; width: 21.3vh; height: 12vh;">
+                                    <el-button style="width: 21.3vh; height: 3vh;" @click="redirectTo_xx_jwxt">点击前往中山大学教务系统</el-button>
                                 </div>
                                 <div style="width: 21.3vh; margin-right: 2vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                                    <img src="../../assets/classroom2.jpg" style="margin-top: 1vh; width: 21.3vh; height: 12vh;">
-                                    <el-button style="width: 21.3vh; height: 2.5vh;">点击前往中山大学珠海校区简介</el-button>
+                                    <img src="../../assets/xx-jxl-2.jpg" style="margin-top: 1vh; width: 21.3vh; height: 12vh;">
+                                    <el-button style="width: 21.3vh; height: 3vh;" @click="redirectTo_xx_jj">点击前往珠海校区简介</el-button>
                                 </div>
                                 <div style="width: 18vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                                    <img src="../../assets/library.png" style="margin-top: 1vh; width: 18vh; height: 12vh;">
-                                    <el-button style="width: 18vh; height: 2.5vh;">点击前往教学楼街景</el-button>
+                                    <img src="../../assets/xx-jxl-3.jpg" style="margin-top: 1vh; width: 18vh; height: 12vh;">
+                                    <el-button style="width: 18vh; height: 3vh;">点击前往教学楼街景</el-button>
                                 </div>
                             </div>
                             
@@ -107,22 +107,22 @@
                                     部分学院自习室：
                                 </text>
                                 <text style="margin-bottom: 0.5vh; text-align: left; color: black; font-size: 1.5vh;" >
-                                    微电子学院：A211、A217
+                                    微电子学院：A211
                                 </text>
                                 <text style="margin-bottom: 0.5vh; text-align: left; color: black; font-size: 1.5vh;" >
                                     软件工程学院：A311、A317
                                 </text>
                                 <text style="margin-bottom: 0.5vh; text-align: left; color: black; font-size: 1.5vh;" >
-                                    人工智能学院：A411、A417
+                                    人工智能学院：A402
                                 </text>
                                 <text style="margin-bottom: 0.5vh; text-align: left; color: black; font-size: 1.5vh;" >
-                                    微电子学院：A211、A217
+                                    国际金融学院：A4120
                                 </text>
                                 <text style="margin-bottom: 0.5vh; text-align: left; color: black; font-size: 1.5vh;" >
-                                    软件工程学院：A311、A317
+                                    旅游学院：A513
                                 </text>
                                 <text style="margin-bottom: 0.5vh; text-align: left; color: black; font-size: 1.5vh;" >
-                                    人工智能学院：A411、A417
+                                    国际关系学院：B208
                                 </text>
                                 
                                 
@@ -130,14 +130,14 @@
                             <div style="display: flex; flex-direction: row;">
                                 <div style="display: flex; flex-direction: row; justify-content: center; ">
                                     <div style="width: 18vh; margin-left: 4vh; margin-right: 2vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library.png" style="margin-top: 1vh; width: 18vh; height: 12vh;">
-                                        <el-button style="width: 18vh;">点击前往翰林二号街景</el-button>
+                                        <img src="../../assets/xx-hleh.jpg" style="margin-top: 1vh; width: 18vh; height: 12vh;">
+                                        <el-button style="width: 18vh; height: 3vh;">点击前往翰林二号街景</el-button>
                                     </div>
                                 </div>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
                                     <div style="width: 18vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library.png" style="margin-top: 1vh; width: 18vh; height: 12vh;">
-                                        <el-button style="width: 18vh;">点击前往海琴五号街景</el-button>
+                                        <img src="../../assets/xx-hqlh.jpg" style="margin-top: 1vh; width: 18vh; height: 12vh;">
+                                        <el-button style="width: 18vh; height: 3vh;">点击前往海琴六号街景</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -170,13 +170,13 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-ry-1.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-ry-2.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-ry-3.jpg" style="width: 100%; height: 100%;">
                                         <el-button style="width: 18vh; height: 3vh;">点击前往榕园食堂街景</el-button>
                                     </div>
                                    
@@ -207,13 +207,13 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-ly-1.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-ly-2.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-ly-3.jpg" style="width: 100%; height: 100%;">
                                         <el-button style="width: 18vh; height: 3vh;">点击前往荔园食堂街景</el-button>
                                     </div>
                                    
@@ -223,7 +223,7 @@
                         <!-- 槿园 -->
                          <div class="canteen">
                             <div style="height: 28vh; display: flex; flex-direction: column;">
-                                <text style="width: 100%; margin-top: 1vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
+                                <text style="width: 100%; margin-top: 2vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     槿园食堂
                                 </text>
                                 <text style="width: 90%; margin-left: 0.8vw; margin-bottom: 0.5vh; text-align: left; font-size: 1.8vh;">
@@ -242,13 +242,13 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-jy-1.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-jy-2.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-jy-3.jpg" style="width: 100%; height: 100%;">
                                         <el-button style="width: 18vh; height: 3vh;">点击前往槿园食堂街景</el-button>
                                     </div>
                                    
@@ -277,13 +277,13 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-rh-1.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-rh-2.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-rh-3.jpg" style="width: 100%; height: 100%;">
                                         <el-button style="width: 18vh; height: 3vh;">点击前往槿园食堂街景</el-button>
                                     </div>
                                    
@@ -312,13 +312,13 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-xwms-1.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-xwms-2.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/ys-xwms-3.jpg" style="width: 100%; height: 100%;">
                                         <el-button style="width: 18vh; height: 3vh;">点击前往北门街景</el-button>
                                     </div>
                                    
@@ -358,10 +358,10 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 24vh; height: 16vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/zs-ry-1.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 24vh; height: 19vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/zs-ry-2.jpg" style="width: 100%; height: 100%;">
                                         <el-button style="width: 24vh; height: 3vh;">点击前往榕园宿舍街景</el-button>
                                     </div>
                                    
@@ -398,10 +398,10 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 24vh; height: 16vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/zs-ly-1.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 24vh; height: 19vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/zs-ly-2.jpg" style="width: 100%; height: 100%;">
                                         <el-button style="width: 24vh; height: 3vh;">点击前往荔园宿舍街景</el-button>
                                     </div>
                                    
@@ -438,10 +438,10 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 24vh; height: 16vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/zs-jy-1.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 24vh; height: 19vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/zs-jy-2.jpg" style="width: 100%; height: 100%;">
                                         <el-button style="width: 24vh; height: 3vh;">点击前往槿园宿舍街景</el-button>
                                     </div>
                                    
@@ -454,7 +454,7 @@
                     <div style="width: 100%; height: 68vh; display: flex; flex-direction: row;">
                         <!-- 校内出行 -->
                         <div class="traffic">
-                            <div style="height: 33vh; display: flex; flex-direction: column;">
+                            <div style="height: 23vh; display: flex; flex-direction: column;">
                                 <text style="width: 100%; margin-top: 3vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     校内出行
                                 </text>
@@ -469,16 +469,16 @@
                                 </text>
                             </div>
                             <div style="display: flex; flex-direction: column;">
-                                <text style="width: 90%; margin-left: 0.8vw; text-align: left; font-size: 1.8vh;">
-                                    岐关车上车点图片：
+                                <text style="width: 90%; margin-left: 0.8vw; height: 2.5vh; text-align: left; font-size: 1.8vh;">
+                                    岐关车上车点：
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/jt-jxlscd.jpg" style="width: 100%; height: 100%;">
                                         <el-button style="width: 18vh; height: 3vh;">点击前往教学楼上车点</el-button>
                                     </div>
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/jt-byyscd.jpg" style="width: 100%; height: 100%;">
                                         <el-button style="width: 18vh; height: 3vh;">点击前往博雅苑上车点</el-button>
                                     </div>
                                 </div>
@@ -486,7 +486,7 @@
                         </div>
                         <!-- 白埔路口 -->
                         <div class="traffic">
-                            <div style="height: 36vh; display: flex; flex-direction: column;">
+                            <div style="height: 39vh; display: flex; flex-direction: column;">
                                 <text style="width: 100%; margin-top: 3vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     白埔路口公交车站
                                 </text>
@@ -501,16 +501,13 @@
                                 </text>
                             </div>
                             <div style="display: flex; flex-direction: column;">
-                                <text style="width: 90%; margin-left: 0.8vw; text-align: left; font-size: 1.8vh;">
-                                    公交车站图片：
-                                </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
-                                    <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
-                                    </div>
+                                    <text style="width: 90%; margin-left: 5%; height: 2.5vh; text-align: left; font-size: 1.8vh;">
+                                        最近校门：
+                                    </text>
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往榕园食堂街景</el-button>
+                                        <img src="../../assets/jt-bm.jpg" style="width: 100%; height: 100%;">
+                                        <el-button style="width: 18vh; height: 3vh;">点击前往北门街景</el-button>
                                     </div>
                                    
                                 </div>
@@ -518,7 +515,7 @@
                         </div>
                         <!-- 唐南路西 -->
                         <div class="traffic">
-                            <div style="height: 36vh; display: flex; flex-direction: column;">
+                            <div style="height: 39vh; display: flex; flex-direction: column;">
                                 <text style="width: 100%; margin-top: 3vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     唐南路西公交车站
                                 </text>
@@ -534,22 +531,19 @@
                             </div>
                             <div style="display: flex; flex-direction: column;">
                                 <text style="width: 90%; margin-left: 0.8vw; text-align: left; font-size: 1.8vh;">
-                                    公交车站图片：
+                                    最近校门：
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
-                                    <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
-                                    </div>
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往榕园食堂街景</el-button>
+                                        <img src="../../assets/jt-hxm.jpg" style="width: 100%; height: 100%;">
+                                        <el-button style="width: 18vh; height: 3vh;">点击前往华夏门街景</el-button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- 中山大学 -->
                         <div class="traffic">
-                            <div style="height: 36vh; display: flex; flex-direction: column;">
+                            <div style="height: 39vh; display: flex; flex-direction: column;">
                                 <text style="width: 100%; margin-top: 3vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     中山大学公交车站
                                 </text>
@@ -565,22 +559,19 @@
                             </div>
                             <div style="display: flex; flex-direction: column;">
                                 <text style="width: 90%; margin-left: 0.8vw; text-align: left; font-size: 1.8vh;">
-                                    公交车站图片：
+                                    最近校门：
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
-                                    <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
-                                    </div>
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往榕园食堂街景</el-button>
+                                        <img src="../../assets/jt-nm.jpg" style="width: 100%; height: 100%;">
+                                        <el-button style="width: 18vh; height: 3vh;">点击前往南门街景</el-button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- 唐家湾站 -->
                         <div class="traffic">
-                            <div style="height: 36vh; display: flex; flex-direction: column;">
+                            <div style="height: 26vh; display: flex; flex-direction: column;">
                                 <text style="width: 100%; margin-top: 3vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                     唐家湾站高铁站
                                 </text>
@@ -600,11 +591,11 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/jt-tjwz.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往榕园食堂街景</el-button>
+                                        <img src="../../assets/jt-hxm.jpg" style="width: 100%; height: 100%;">
+                                        <el-button style="width: 18vh; height: 3vh;">点击前往华夏门街景</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -630,7 +621,7 @@
                                     开放时间：全天
                                 </text>
                                 <text style="width: 84%; margin-left: 10%; margin-bottom: 0.5vh; text-align: left; font-size: 1.8vh;">
-                                    电话号码：0756-1201201
+                                    电话号码：0756-3668120
                                 </text>
                             </div>
                             <div style="display: flex; flex-direction: column;">
@@ -639,10 +630,10 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 24vh; height: 16vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/jyybw-xyy-1.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 24vh; height: 19vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/jyybw-xyy-2.jpg" style="width: 100%; height: 100%;">
                                         <el-button style="width: 24vh; height: 3vh;">点击前往校医院街景</el-button>
                                     </div>
                                    
@@ -667,7 +658,7 @@
                                     开放时间：全天
                                 </text>
                                 <text style="width: 84%; margin-left: 10%; margin-bottom: 0.5vh; text-align: left; font-size: 1.8vh;">
-                                    电话号码：0756-1201202
+                                    电话号码：0756-2528888
                                 </text>
                             </div>
                             <div style="display: flex; flex-direction: column;">
@@ -676,11 +667,11 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 24vh; height: 16vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/jyybw-zdwy-1.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 24vh; height: 19vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 24vh; height: 3vh;">点击前往中大五院官网</el-button>
+                                        <img src="../../assets/jyybw-zdwy-2.jpg" style="width: 100%; height: 100%;">
+                                        <el-button style="width: 24vh; height: 3vh;" @click="redirectTo_jyybw_zdwy">点击前往中大五院官网</el-button>
                                     </div>
                                    
                                 </div>
@@ -698,7 +689,7 @@
                                     具体地点：荔园一号
                                 </text>
                                 <text style="width: 84%; margin-left: 10%; margin-bottom: 0.5vh; text-align: left; font-size: 1.8vh;">
-                                    电话号码：0756-1101101
+                                    电话号码：0756-3668006
                                 </text>
                             </div>
                             <div style="display: flex; flex-direction: column;">
@@ -707,11 +698,11 @@
                                 </text>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 24vh; height: 16vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
+                                        <img src="../../assets/jyybw-bwc-1.jpg" style="width: 100%; height: 100%;">
                                     </div>
                                     <div style="width: 24vh; height: 19vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
-                                        <img src="../../assets/library-website.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 24vh; height: 3vh;">点击前往学校保卫处官网</el-button>
+                                        <img src="../../assets/jyybw-bwc-2.jpg" style="width: 100%; height: 100%;">
+                                        <el-button style="width: 24vh; height: 3vh;">点击前往荔园一号街景</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -738,28 +729,28 @@
                         
                         <div style="margin-top: 2vh; display: flex; flex-direction: row; align-items: center; justify-content: center;">
                             <div style="width: 28vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                                <img src="../../assets/library-website.jpg" style="margin-top: 1vh; width: 24vh; height: 16vh;">
-                                <el-button style="width: 24vh;">点击前往翰林一号街景</el-button>
+                                <img src="../../assets/xqgwh-hlyh.jpg" style="margin-top: 1vh; width: 24vh; height: 16vh;">
+                                <el-button style="width: 24vh; height: 3vh;">点击前往翰林一号街景</el-button>
                             </div>
                             <div style="width: 28vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                                <img src="../../assets/library-website.jpg" style="margin-top: 1vh; width: 24vh; height: 16vh;">
-                                <el-button style="width: 24vh;">点击前往管委会网站</el-button>
+                                <img src="../../assets/xqgwh-gwh.jpg" style="margin-top: 1vh; width: 24vh; height: 16vh;">
+                                <el-button style="width: 24vh; height: 3vh;" @click="redirectTo_xqgwh_gwh">点击前往管委会网站</el-button>
                             </div>
                             <div style="width: 28vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                                <img src="../../assets/library-website.jpg" style="margin-top: 1vh; width: 24vh; height: 16vh;">
-                                <el-button style="width: 24vh;">点击前往管委会公众号</el-button>
+                                <img src="../../assets/xqgwh-gzh.jpg" style="margin-top: 1vh; width: 16vh; height: 16vh;">
+                                <el-button style="width: 18vh; height: 3vh;" @click="redirectTo_xqgwh_wxgzh">点击前往管委会公众号</el-button>
                             </div>
                             
                         </div>
                         <div style="margin-top: 2vh; display: flex; flex-direction: row; align-items: center; justify-content: center;">
                             <div style="width: 28vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                                <img src="../../assets/library-website.jpg" style="margin-top: 1vh; width: 24vh; height: 16vh;">
-                                <el-button style="width: 24vh;">点击前往中大体育场馆预定</el-button>
+                                <img src="../../assets/xqgwh-gym.jpg" style="margin-top: 1vh; width: 24vh; height: 16vh;">
+                                <el-button style="width: 24vh; height: 3vh;" @click="redirectTo_xqgwh_gym">点击前往中大体育场馆预定</el-button>
                             </div>
                             
                             <div style="width: 28vh; display: flex; align-items: center; display: flex; flex-direction: column;">
-                                <img src="../../assets/library-website.jpg" style="margin-top: 1vh; width: 24vh; height: 16vh;">
-                                <el-button style="width: 24vh;">点击前往水电费交费网站</el-button>
+                                <img src="../../assets/xqgwh-ewpay.jpg" style="margin-top: 1vh; width: 24vh; height: 16vh;">
+                                <el-button style="width: 24vh; height: 3vh;" @click="redirectTo_xqgwh_ewpay">点击前往水电费交费网站</el-button>
                             </div>
                         </div>
                     </div>
@@ -794,6 +785,32 @@
         // alert("3:"+full_contain_ref_vh.value);
     };  
 
+    const redirectTo_xx_tsg = () => {
+        window.open('https://library.sysu.edu.cn/');
+    };
+    const redirectTo_xx_jwxt = () => {
+        window.open('https://jwxt.sysu.edu.cn/jwxt/');
+    };
+    const redirectTo_xx_jj = () => {
+        window.open('https://fgw.sysu.edu.cn/zhuhai/about');
+    };
+    const redirectTo_jyybw_zdwy = () => {
+        window.open('http://www.sysu5.cn/');
+    };
+    const redirectTo_xqgwh_gwh = () => {
+        window.open('https://fgw.sysu.edu.cn/zhuhai/');
+    };
+    const redirectTo_xqgwh_wxgzh = () => {
+        window.open('https://wx.qq.com/');
+    };
+    const redirectTo_xqgwh_gym = () => {
+        window.open('https://tiyu.sysu.edu.cn/node/39');
+    };
+    const redirectTo_xqgwh_ewpay = () => {
+        window.open('http://ewpay.sysu.edu.cn/ewpay/index.jsp');
+    };
+    
+
 
 
 
@@ -805,52 +822,148 @@
 
     const tableData = [
     {
-        aaa: 'A301',
-        bbb: 'A302',
-        ccc: 'A303',
-        ddd: 'A304',
-        eee: 'A305',
-        fff: 'A306',
-        ggg: 'A307',
-        hhh: 'A308',
-        iii: 'A309',
-        jjj: 'A310'
+        aaa: 'B203',
+        bbb: 'B303',
+        ccc: 'B503',
+        ddd: 'C201',
+        eee: 'C203',
+        fff: 'C205',
+        ggg: 'C207',
+        hhh: 'C210',
+        iii: 'C301',
+        jjj: 'C302'
     },
     {
-        aaa: 'A401',
-        bbb: 'A402',
-        ccc: 'A403',
-        ddd: 'A404',
-        eee: 'A405',
-        fff: 'A406',
-        ggg: 'A407',
-        hhh: 'A408',
-        iii: 'A409',
-        jjj: 'A410'
+        aaa: 'C303',
+        bbb: 'C305',
+        ccc: 'C307',
+        ddd: 'C310',
+        eee: 'C312',
+        fff: 'C402',
+        ggg: 'C403',
+        hhh: 'C405',
+        iii: 'C407',
+        jjj: 'C408'
     },
     {
-        aaa: 'A501',
-        bbb: 'A502',
-        ccc: 'A503',
-        ddd: 'A504',
-        eee: 'A505',
-        fff: 'A506',
-        ggg: 'A507',
-        hhh: 'A508',
-        iii: 'A509',
-        jjj: 'A510'
+        aaa: 'C410',
+        bbb: 'C412',
+        ccc: 'C501',
+        ddd: 'C502',
+        eee: 'C503',
+        fff: 'C505',
+        ggg: 'C507',
+        hhh: 'C508',
+        iii: 'C510',
+        jjj: 'C512'
     },
     {
-        aaa: 'A601',
-        bbb: 'A602',
-        ccc: 'A603',
-        ddd: 'A604',
-        eee: 'A605',
-        fff: 'A606',
-        ggg: 'A607',
-        hhh: 'A608',
-        iii: 'A609',
-        jjj: 'A610'
+        aaa: 'D201',
+        bbb: 'D204',
+        ccc: 'D206',
+        ddd: 'D207',
+        eee: 'D208',
+        fff: 'D209',
+        ggg: 'D301',
+        hhh: 'D304',
+        iii: 'D306',
+        jjj: 'D307'
+    },
+    {
+        aaa: 'D308',
+        bbb: 'D309',
+        ccc: 'D404',
+        ddd: 'D406',
+        eee: 'D407',
+        fff: 'D408',
+        ggg: 'D409',
+        hhh: 'D501',
+        iii: 'D504',
+        jjj: 'D506'
+    },
+    {
+        aaa: 'D507',
+        bbb: 'D508',
+        ccc: 'E201',
+        ddd: 'E202',
+        eee: 'E203',
+        fff: 'E204',
+        ggg: 'E205',
+        hhh: 'E206',
+        iii: 'E207',
+        jjj: 'E209'
+    },
+    {
+        aaa: 'E301',
+        bbb: 'E302',
+        ccc: 'E303',
+        ddd: 'E304',
+        eee: 'E305',
+        fff: 'E306',
+        ggg: 'E307',
+        hhh: 'E309',
+        iii: 'E402',
+        jjj: 'E404'
+    },
+    {
+        aaa: 'E406',
+        bbb: 'E501',
+        ccc: 'E502',
+        ddd: 'E504',
+        eee: 'E506',
+        fff: 'F201',
+        ggg: 'F202',
+        hhh: 'F203',
+        iii: 'F204',
+        jjj: 'F205'
+    },
+    {
+        aaa: 'F206',
+        bbb: 'F207',
+        ccc: 'F208',
+        ddd: 'F209',
+        eee: 'F212',
+        fff: 'F301',
+        ggg: 'F303',
+        hhh: 'F304',
+        iii: 'F305',
+        jjj: 'F306'
+    },
+    {
+        aaa: 'F307',
+        bbb: 'F309',
+        ccc: 'F317',
+        ddd: 'F402',
+        eee: 'F403',
+        fff: 'F404',
+        ggg: 'F405',
+        hhh: 'F406',
+        iii: 'F407',
+        jjj: 'F408'
+    },
+    {
+        aaa: 'F410',
+        bbb: 'F412',
+        ccc: 'F414',
+        ddd: 'F416',
+        eee: 'F418',
+        fff: 'F420',
+        ggg: 'F501',
+        hhh: 'F502',
+        iii: 'F504',
+        jjj: 'F508'
+    },
+    {
+        aaa: 'F509',
+        bbb: 'F512',
+        ccc: 'F514',
+        ddd: 'F516',
+        eee: '',
+        fff: '',
+        ggg: '',
+        hhh: '',
+        iii: '',
+        jjj: ''
     }]
 
 </script>
@@ -977,7 +1090,7 @@
 .traffic{
     width: 19.2%; 
     margin-right: 1%; 
-    height: 70vh; 
+    height: 60vh; 
     background-color: white; 
     color: black; 
     display: flex; 
@@ -1006,6 +1119,13 @@
     display: flex; 
     flex-direction: column;
     border-radius: 1vh;
+}
+
+.el-button {
+  font-size: 1.5vh ;
+  /* border-top: 0; */
+  /* border-left: 0; */
+  /* border-right: 0; */
 }
 </style>
 
