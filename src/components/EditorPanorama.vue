@@ -1,8 +1,8 @@
 <template>
   <div class="editor-viewer">
-    <div class="scene-id-bar">
+    <!-- <div class="scene-id-bar">
       当前 sceneId：{{ currentSceneIdDisplay }}
-    </div>
+    </div> -->
     <PanoramaViewerGroup
       :viewers="viewers"
       ref="viewerGroup"
