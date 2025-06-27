@@ -12,6 +12,8 @@ export interface SceneConfig {
   sceneId: string;
   relativeImagePath: string;
   hotspots: HotspotConfig[];
+  initialLongitude?: number;
+  initialLatitude?: number;
 }
 
 export interface StreetViewerConfig {

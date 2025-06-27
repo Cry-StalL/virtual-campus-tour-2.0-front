@@ -11,6 +11,19 @@
       :resolutions="resolutions"
       @sceneChanged="onSceneChanged"
     />
+    <div v-if="settingInitialView" class="initial-view-setting">
+      <div class="setting-header">
+        设置初始视角
+        <button class="close-btn" @click="cancelInitialView">×</button>
+      </div>
+      <div class="setting-content">
+        <p>当前视角：经度 {{ currentLongitude }}, 纬度 {{ currentLatitude }}</p>
+        <button class="confirm-btn" @click="confirmInitialView">确认</button>
+      </div>
+    </div>
+    <button class="set-initial-view-btn" @click="startSetInitialView(getCurrentViewerName() === 'street' ? 'street' : 'scene')">设置初始视角</button>
+    <button v-if="settingInitialView" class="confirm-initial-view-btn" @click="confirmInitialView">确认初始视角</button>
+    <button v-if="settingInitialView" class="cancel-initial-view-btn" @click="cancelInitialView">取消</button>
   </div>
 </template>
 
@@ -22,6 +35,7 @@ import EditorSceneViewer from './EditorSceneViewer.vue';
 import { saveJsonToFile } from '@/components/pano/composables/editorFileUtils';
 import { useStreetViewerConfig } from '@/components/pano/composables/useStreetViewerConfig';
 import { useSceneViewerConfig } from '@/components/pano/composables/useSceneViewerConfig';
+import { useCoordinateConverter } from '@/components/pano/base-components/composables/useCoordinateConverter';
 
 const viewerGroup = ref();
 const resolutions = ["1920x960", "3840x1920", "7680x3840"];
@@ -128,8 +142,10 @@ function saveJson(type: 'street' | 'scene') {
 
 /**
  * 获取当前viewer名称（'street' 或 'scene'）
+ * 直接通过 viewerGroup.value.getCurrentViewerName() 获取
  */
 function getCurrentViewerName(): string {
+  // 兼容性处理，确保 ref 存在且方法可用
   return viewerGroup.value?.getCurrentViewerName?.() || 'street';
 }
 
@@ -140,14 +156,73 @@ function onSceneChanged(idx: number) {
 
 // 获取当前 sceneId
 const currentSceneIdDisplay = computed(() => {
-  const viewerName = getCurrentViewerName();
+  const viewerName = setInitialViewTarget.value;
   let config = viewerName === 'street' ? streetConfig.value : sceneConfig.value;
   if (!config || !Array.isArray(config.scenes) || config.scenes.length === 0) return '无';
   let idx = currentSceneIdx.value;
   if (idx < 0 || idx >= config.scenes.length) idx = 0;
   return config.scenes[idx]?.sceneId || '无';
 });
+
+// 设置初始视角相关逻辑
+const settingInitialView = ref(false);
+const setInitialViewTarget = ref<'street' | 'scene' | null>(null);
+
+function startSetInitialView(target: 'street' | 'scene') {
+  setInitialViewTarget.value = target;
+  settingInitialView.value = true;
+}
+
+function confirmInitialView() {
+  // 获取当前viewer
+  const viewerName = setInitialViewTarget.value;
+  if (!viewerName) return;
+  // 获取当前视角
+  const { longitude, latitude } = getCurrentViewAngles();
+  // 写入对应config
+  let config = viewerName === 'street' ? streetConfig.value : sceneConfig.value;
+  if (!config || !Array.isArray(config.scenes)) return;
+  let idx = currentSceneIdx.value;
+  if (idx < 0 || idx >= config.scenes.length) idx = 0;
+  config.scenes[idx].initialLongitude = longitude;
+  config.scenes[idx].initialLatitude = latitude;
+  settingInitialView.value = false;
+  setInitialViewTarget.value = null;
+}
+
+function cancelInitialView() {
+  settingInitialView.value = false;
+  setInitialViewTarget.value = null;
+}
+
+// 获取当前视角（经纬度）
+function getCurrentViewAngles(): { longitude: number; latitude: number } {
+  const group = viewerGroup.value;
+  if (!group) return { longitude: 0, latitude: 0 };
+  // 直接获取 currentViewer
+  const viewerInstance = group.currentViewer;
+  if (!viewerInstance) return { longitude: 0, latitude: 0 };
+  // 通过useCoordinateConverter获取camera
+  const camera = viewerInstance.camera;
+  const renderer = viewerInstance.renderer;
+  const scene = viewerInstance.scene;
+  if (!camera || !renderer || !scene) return { longitude: 0, latitude: 0 };
+  const { vector3ToLatLon } = useCoordinateConverter(camera, renderer, scene);
+  // 相机位置转经纬度
+  return vector3ToLatLon(camera.position);
+}
+
+// 计算当前视角（用于显示在设置初始视角的弹窗中）
+const currentLongitude = computed(() => {
+  if (!settingInitialView.value) return 0;
+  return getCurrentViewAngles().longitude;
+});
+const currentLatitude = computed(() => {
+  if (!settingInitialView.value) return 0;
+  return getCurrentViewAngles().latitude;
+});
 </script>
+
 
 <style scoped>
 .editor-viewer {
@@ -165,17 +240,23 @@ const currentSceneIdDisplay = computed(() => {
   color: #111;
   font-size: 18px;
   font-weight: bold;
-  padding: 10px 32px 10px 20px;
-  border-bottom-right-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.save-btn {
-  position: absolute;
-  top: 20px;
-  right: 40px;
-  z-index: 1001;
-  padding: 8px 20px;
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+.setting-content {
+  padding: 16px;
+  text-align: center;
+}
+.confirm-btn {
+  padding: 10px 20px;
   background: #409eff;
   color: #fff;
   border: none;
@@ -184,7 +265,62 @@ const currentSceneIdDisplay = computed(() => {
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-.save-btn:hover {
+.confirm-btn:hover {
   background: #66b1ff;
+}
+.set-initial-view-btn {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 100px;
+  background: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 16px;
+  margin: 0 10px 0 0;
+  cursor: pointer;
+  z-index: 2200;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.set-initial-view-btn:hover {
+  background: #66b1ff;
+}
+.confirm-initial-view-btn {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 40px;
+  background: #67c23a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 2201;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.confirm-initial-view-btn:hover {
+  background: #85ce61;
+}
+.cancel-initial-view-btn {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 60px;
+  background: #f56c6c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 2201;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+.cancel-initial-view-btn:hover {
+  background: #ff7875;
 }
 </style>
