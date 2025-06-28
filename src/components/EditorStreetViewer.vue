@@ -450,11 +450,14 @@ const cancelHotspotTypeSelect = () => {
 .target-scene-content {
   background: #fff;
   border-radius: 10px;
-  min-width: 300px;
-  max-width: 500px;
+  min-width: 340px;
+  min-height: 180px;
+  max-height: 80vh; /* 限制整体弹窗最大高度 */
   box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-  padding: 24px;
+  padding: 24px 24px 12px 24px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 .target-scene-header {
   display: flex;
@@ -468,6 +471,9 @@ const cancelHotspotTypeSelect = () => {
   list-style: none;
   padding: 0;
   margin: 0;
+  overflow-y: auto;      /* 超出时出现滚动条 */
+  flex: 1 1 auto;        /* 填充剩余空间 */
+  max-height: 80vh;      /* 列表最大高度，超出滚动 */
 }
 .target-scene-list li {
   padding: 10px 0;
