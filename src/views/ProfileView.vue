@@ -702,7 +702,7 @@ export default {
   width: 100%;
   height: 70vh;
   max-width: 500px;
-  /* height: fit-content; */
+  height: fit-content;
   margin-bottom: 15vh;
   padding: 30px;
   border-radius: 15px;
