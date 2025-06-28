@@ -31,7 +31,7 @@
         @toggle-help-view="toggleHelpView"
         @toggle-about-view="toggleAboutView"
         @toggle-privacy-view="togglePrivacyView"
-        @toggle-language-view="toggleLanguageView"
+        @toggle-email-view="toggleemailView"
         :clearSideBarChoose="clearSideBarChoose" 
       />
     </div>
@@ -204,7 +204,7 @@ const togglePrivacyView = () => {
   helpViewVisible.value = false;
   aboutViewVisible.value = false;
 };
-const toggleLanguageView = () => {
+const toggleemailView = () => {
   // 语言设置可以是一个简单的选择器，这里暂时用ElMessage显示
   ElMessage({
     message: '语言设置功能开发中...',
