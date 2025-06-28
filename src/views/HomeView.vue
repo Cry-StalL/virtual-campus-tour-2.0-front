@@ -493,6 +493,8 @@ body, html, #app {
   border-radius: 22px;
   padding: 4px 8px 4px 4px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  height: 4vh;
+
 }
 
 .user-avatar {
