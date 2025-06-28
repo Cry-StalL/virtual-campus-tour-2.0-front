@@ -1,5 +1,12 @@
 <template>
   <div class="full_contain" ref="full_contain_ref">
+    <!-- 删除按钮 -->
+    <div class="delete-button">
+      <el-button style="background-color: rgba(0, 0, 0, 0); position: absolute; right: 1vw; top: 3vh; border: 0;" @click="closeSiteChooseView">
+        <img style="width: 2vw; height: 2vw;" src="../../assets/icons/delete.png">
+      </el-button>
+    </div>
+
     <div class="contain_body_map">
       <!-- 搜索框放在图片右上角 -->
       <div style="position: absolute; right: 8vw; top: 5vh; z-index: 100;">
@@ -7,11 +14,15 @@
           v-model="searchQuery"
           placeholder="搜索地点或学院名称"
           @input="handleSearch"
-          style="width: 200px;"
-        />
+          style="width: 12vw;"
+        >
+          <template #prefix>
+            <img src="../../assets/icons/search.png" alt="搜索图标" style="width: 1.2vh; height: 1.2vh;">
+          </template>
+        </el-input>
       </div>
 
-        <!-- 背景图片 -->
+      <!-- 背景图片 -->
       <img src="../../assets/background.jpg">
       
       <!-- 新增的弹出确认组 -->
@@ -32,7 +43,8 @@
                      padding: 0; 
                      margin: 0; 
                      width:30px; 
-                     height: 30px;"
+                     height: 30px;
+                     "
               :style="{
                 left: `${contain_body_map_padding_left + contain_body_map_ref_width * location.left - 15}px`, 
                 top: `${contain_body_map_ref_height * location.top - 15}px`
@@ -61,7 +73,7 @@
             <el-container style="height: 8px; display: flex; align-items: center; justify-content: space-between;">
               <el-text>{{ location.name }}</el-text>
               <div>
-                <el-button size="small" @click="handleConfirm(location)">点击跳转</el-button>
+                <el-button style="width: 80px; height: 25px; font-size: 15px;" @click="handleConfirm(location)">点击跳转</el-button>
               </div>
             </el-container>
             <el-container style="width: 100%; height: 5px;"></el-container>
@@ -129,6 +141,7 @@
 <script setup lang="ts">
     
     import { onMounted, ref, computed } from 'vue';
+
 
     // 搜索相关
     const searchQuery = ref('');
@@ -225,8 +238,18 @@
 
     // 跳转相关
     const handleConfirm = (location) => {
-        alert(location.id)
+        console.log(window.streetViewer);
+        // 跳转到对应的场景
+        window.streetViewer?.switchScene(location.name); // 这里还要补充一个场景名称-sceneId的映射
     }
+
+    // 删除
+    const emit = defineEmits([
+      'closeSiteChooseView',
+    ]);
+    const closeSiteChooseView = () => {
+        emit('closeSiteChooseView');
+    };
 
 
 
@@ -235,6 +258,8 @@
 
 <style>
 .full_contain{
+    /* background-color: rgb(242, 245, 252); */
+    background-image: url('../../assets/background.png');
     border-radius: 0;
     flex-direction: column;
     align-items: center;
@@ -243,7 +268,7 @@
 
 
 .contain_body_map{
-    background-color: rgba(255, 255, 255, 1);
+    /* background-color: rgb(242, 245, 252); */
     border-radius: 0;
     overflow-y: auto;
     height: 100%;
@@ -255,6 +280,10 @@
   height: 100%;
   object-fit: contain; /* 确保图片完整显示不裁剪 */
   display: block;      /* 去除底部空白间隙 */
+}
+
+.el-input__wrapper:focus {
+  border-color: #F1F0EB !important;
 }
 
 .contain_body_site{

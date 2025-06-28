@@ -38,4 +38,5 @@ export interface PanoramaViewerProps {
   // 新增，支持编辑器临时热点预览
   placingHotspot?: boolean;
   tempHotspot?: Partial<HotSpot>;
+  initialScene?: number | string; // 初始场景索引
 }

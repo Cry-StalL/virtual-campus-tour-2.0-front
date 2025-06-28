@@ -20,4 +20,5 @@ export interface StreetViewerConfig {
   progressiveLoading: boolean;
   resolutions: string[];
   scenes: SceneConfig[];
+  initialScene?: number | string; // 初始场景索引
 }

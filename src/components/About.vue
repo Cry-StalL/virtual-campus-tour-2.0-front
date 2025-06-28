@@ -14,7 +14,7 @@
       <div class="about-section">
         <h3 class="section-title">项目介绍</h3>
         <div class="intro-content">
-          <p>Virtual Campus Tour 2.0 是一个创新的虚拟校园导览系统，旨在为用户提供沉浸式的校园体验。</p>
+          <p>Virtual Campus Tour（云游中珠）是一个创新的虚拟校园导览系统，旨在为用户提供沉浸式的校园体验。</p>
           <p>通过先进的3D技术和全景展示，我们让您能够足不出户就能深入了解美丽的校园环境，获得身临其境的参观体验。</p>
           <div class="features">
             <div class="feature-item">

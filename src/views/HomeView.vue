@@ -18,7 +18,8 @@
     <!-- 侧边栏切换按钮 -->
     <div class="toggle-btn" @click="toggleSidebar">
       <div style="background-color: white; margin: auto auto; width: 100%; height: 100%; display: flex; align-items: center; border-radius: 50%;">
-        <img class="toggle-icon" src="/icons/SideBar/more.png" >
+        <img class="toggle-icon" v-show="!sidebarVisible" src="/icons/SideBar/more.png" >
+        <img class="toggle-icon" v-show="sidebarVisible" src="../../assets/icons/close.png" >
       </div>
     </div>
 
@@ -146,11 +147,6 @@ const isLoggedIn = computed(() => {
   return Number(userID.value) !== 0;
 });
 
-// 切换侧边栏显示状态
-const toggleSidebar = () => {
-  sidebarVisible.value = !sidebarVisible.value;
-};
-
 // 侧边栏点击显示地点跳转
 const siteChooseVisible = ref(false);
 const usefulInfoVisible = ref(false);
@@ -159,6 +155,20 @@ const aboutViewVisible = ref(false);
 const privacyViewVisible = ref(false);
 
 let clearSideBarChoose = ref(false);
+
+// 切换侧边栏显示状态
+const toggleSidebar = () => {
+  sidebarVisible.value = !sidebarVisible.value;
+  if (!sidebarVisible.value) {
+    siteChooseVisible.value = false;
+    usefulInfoVisible.value = false;
+    helpViewVisible.value = false;
+    aboutViewVisible.value = false;
+    privacyViewVisible.value = false;
+  }
+};
+
+
 const toggleSiteChoose = () => {
   siteChooseVisible.value = !siteChooseVisible.value; // 切换显示状态
   usefulInfoVisible.value = false;
@@ -204,8 +214,11 @@ const toggleLanguageView = () => {
   console.log('切换语言设置');
 };
 const closeSiteChoose = () => {
-  clearSideBarChoose.value = !clearSideBarChoose.value;
+  // alert(siteChooseVisible.value)
   siteChooseVisible.value = !siteChooseVisible.value; // 切换显示状态
+  clearSideBarChoose.value = !clearSideBarChoose.value;
+  // alert(siteChooseVisible.value)
+
 };
 const closeUsefulInfo = () => {
   clearSideBarChoose.value = !clearSideBarChoose.value;
@@ -315,7 +328,6 @@ body, html, #app {
   width: 3vw;
   height: 3vw;
 
-  /* background-color: #409EFF; */
 
 
   z-index: 999;
@@ -331,7 +343,7 @@ body, html, #app {
   top: 0;
   left: -20vw;
   width: 18vw;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(255, 255, 255, 1);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   transition: left 0.3s ease;
@@ -371,6 +383,8 @@ body, html, #app {
   width: 65%;
   height: 65%;
   margin: auto;
+  /* background-color: #F1F0EB; */
+
 }
 
 .menu-section {
@@ -432,18 +446,33 @@ body, html, #app {
 }
 
 .login-btn {
-  border-radius: 20px;
+  /* border-radius: 20px; */
   padding: 8px 20px;
+  height: 3vh;
+  width: 4vw;
+  font-size: 0.8vw;
+  border-radius: 0.5vw;
   font-weight: 500;
   box-shadow: 0 2px 4px rgba(64, 158, 255, 0.2);
+  background-color: #7F0000;
+  border-color: #7F0000;
+}
+.login-btn:hover {
+  background-color: #AF0000;
+  border-color: #AF0000;
+  /* color: #409EFF; */
 }
 
 .register-btn {
-  border-radius: 20px;
+  /* border-radius: 20px; */
   padding: 8px 20px;
+  height: 3vh;
+  width: 4vw;
+  font-size: 0.8vw;
+  border-radius: 0.5vw;
   font-weight: 500;
   background-color: white;
-  color: #409EFF;
+  color: #D8915C;
   border: 1px solid #d9ecff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -534,17 +563,20 @@ body, html, #app {
 
 /* 帮助界面 */
 .helpview {
-  position: absolute;
-  top: 2vh;
-  bottom: 2vh;
-  left: -78vw;
+  z-index: 10;
+  position: fixed;
+  top: 7vh;
+
+  height: 90vh;
   width: 78vw;
-  height: auto;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: left 0.3s ease;
-  z-index: 15;
+  left: -100vw;
+  margin-left: 2vw;
+
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 1vw;
+  transition: left 0.5s ease;
+  
   overflow-y: auto;
-  overflow-x: hidden;
 }
 
 .helpview.active {
@@ -553,17 +585,20 @@ body, html, #app {
 
 /* 关于我们界面 */
 .aboutview {
-  position: absolute;
-  top: 2vh;
-  bottom: 2vh;
-  left: -78vw;
+  z-index: 10;
+  position: fixed;
+  top: 7vh;
+
+  height: 90vh;
   width: 78vw;
-  height: auto;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: left 0.3s ease;
-  z-index: 15;
+  left: -100vw;
+  margin-left: 2vw;
+
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 1vw;
+  transition: left 0.5s ease;
+  
   overflow-y: auto;
-  overflow-x: hidden;
 }
 
 .aboutview.active {
@@ -572,17 +607,20 @@ body, html, #app {
 
 /* 隐私政策界面 */
 .privacyview {
-  position: absolute;
-  top: 2vh;
-  bottom: 2vh;
-  left: -78vw;
+  z-index: 10;
+  position: fixed;
+  top: 7vh;
+
+  height: 90vh;
   width: 78vw;
-  height: auto;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: left 0.3s ease;
-  z-index: 15;
+  left: -100vw;
+  margin-left: 2vw;
+
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 1vw;
+  transition: left 0.5s ease;
+  
   overflow-y: auto;
-  overflow-x: hidden;
 }
 
 .privacyview.active {
