@@ -7,7 +7,7 @@
     </div>
     
     <div class="header">
-      <text class="title">帮助中心</text>
+      <text class="title" style="color: #005826; font-size: 1.8vw; margin-top: 1vh;">帮助中心</text>
     </div>
     
     <div class="content">
@@ -91,8 +91,8 @@ const closeHelpView = () => {
   justify-content: center;
   align-items: center;
   border-bottom: 2px solid #e0e0e0;
-  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-  color: white;
+  background: white;
+  color: w#005826;
   flex-shrink: 0;
 }
 
@@ -103,6 +103,7 @@ const closeHelpView = () => {
 }
 
 .content {
+  background-image: url(../../assets/background.png);
   flex: 1;
   padding: 20px;
   overflow-y: auto;

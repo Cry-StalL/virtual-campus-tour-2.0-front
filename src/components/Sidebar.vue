@@ -32,13 +32,6 @@
         </button>
       </div>
       
-      <!-- 语言 -->
-      <div class="menu-section">
-        <button class="menu-button" @click="toggleSection('language')" :class="{ active: sectionsState.language }">
-          <img class="menu-icon" :src="sectionsState.language ? '/icons/SideBar/language_selected.png' : '/icons/SideBar/language.png'" />
-          <text class="menu-text" :style="{ color: sectionsState.language?'#005826':'black'}">Language</text>
-        </button>
-      </div>
       
       <!-- 隐私政策 -->
       <div class="menu-section">
@@ -56,10 +49,19 @@
           <text class="menu-text" :style="{ color: sectionsState.about?'#005826':'black'}">关于我们</text>
         </button>
       </div>
+
+      <!-- 联系我们 -->
+      <div class="menu-section">
+        <button class="menu-button" @click="toggleSection('email')" :class="{ active: sectionsState.email }">
+          <img class="menu-icon" :src="sectionsState.email ? '../../assets/icons/email_selected.png' : '../../assets/icons/email.png'" />
+          <text class="menu-text" :style="{ color: sectionsState.email?'#005826':'black'}">联系我们</text>
+        </button>
+      </div>
+
     </div>
 
     <div style="display: flex; flex-direction: column; justify-content: center; padding-top: 4vh; height: 20vh;" >
-        <img src="../../assets/xiaoxun.png" style="width: 75%; margin-left: 10%; ">
+        <img src="../../assets/xiaoxun.png" style="width: 70%; margin-left: 15%; ">
     </div>
 
 
@@ -74,14 +76,14 @@
     'toggle-help-view',
     'toggle-about-view', 
     'toggle-privacy-view',
-    'toggle-language-view'
+    'toggle-email-view'
   ]);
   // Define types
   type SectionState = {
     location: boolean;
     info: boolean;
     help: boolean;
-    language: boolean;
+    email: boolean;
     privacy: boolean;
     about: boolean;
 
@@ -94,7 +96,7 @@
     location: false,
     info: false,
     help: false,
-    language: false,
+    email: false,
     privacy: false,
     about: false
   });
@@ -113,8 +115,8 @@
     emit('toggle-about-view'); // 触发关于我们页面显示事件
   };
 
-  const navigateToLanguage = (type: string) => {
-    emit('toggle-language-view'); // 触发语言页面显示事件
+  const navigateToemail = (type: string) => {
+    emit('toggle-email-view'); // 触发语言页面显示事件
   };
 
   const navigateToPrivacy = (type: string) => {
@@ -126,7 +128,7 @@
       sectionsState.value['location'] = false;
       sectionsState.value['info'] = false;
       sectionsState.value['help'] = false;
-      sectionsState.value['language'] = false;
+      sectionsState.value['email'] = false;
       sectionsState.value['privacy'] = false;
       sectionsState.value['about'] = false;
       sectionsState.value[section] = true;
@@ -134,7 +136,7 @@
       sectionsState.value['location'] = false;
       sectionsState.value['info'] = false;
       sectionsState.value['help'] = false;
-      sectionsState.value['language'] = false;
+      sectionsState.value['email'] = false;
       sectionsState.value['privacy'] = false;
       sectionsState.value['about'] = false;
     }
@@ -157,7 +159,7 @@
   watchSection('location', change_Show_Place);
   watchSection('info', showInfo);
   watchSection('help', () => navigateToHelp('help'));
-  watchSection('language', () => navigateToLanguage('language'));
+  watchSection('email', () => navigateToemail('email'));
   watchSection('privacy', () => navigateToPrivacy('privacy'));
   watchSection('about', () => navigateToAbout('about'));
 
@@ -175,14 +177,14 @@ watch(
       sectionsState.value['location'] = false;
       sectionsState.value['info'] = false;
       sectionsState.value['help'] = false;
-      sectionsState.value['language'] = false;
+      sectionsState.value['email'] = false;
       sectionsState.value['privacy'] = false;
       sectionsState.value['about'] = false;
     }else{
       sectionsState.value['location'] = false;
       sectionsState.value['info'] = false;
       sectionsState.value['help'] = false;
-      sectionsState.value['language'] = false;
+      sectionsState.value['email'] = false;
       sectionsState.value['privacy'] = false;
       sectionsState.value['about'] = false;
     }
@@ -248,7 +250,7 @@ watch(
 .project-name {
   height: 3vw;
   width: 12vw;
-  margin-left: 0vw;
+  margin-left: 1vw;
   font-size: 1.4vw;
   font-weight: bold;
 
@@ -266,8 +268,8 @@ watch(
 
 .menu-button {
   border: 0;
-  margin-left: 20%;
-  width: 80%;
+  margin-left: 25%;
+  width: 70%;
   height: 80%;
   background-color: rgba(255, 255, 255, 0);
 
