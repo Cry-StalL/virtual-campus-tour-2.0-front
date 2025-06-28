@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+    <div class="home">
     <div class="content" @click="handleContentClick">
       <!-- 全景导览 -->
       <PanoramaViewerGroup
@@ -11,7 +11,19 @@
         :username="username"
         :progressiveLoading="true"
         :resolutions="resolutions"
+        class="panorama-container"
       />
+
+      <!-- 全景图旋转视频 -->
+      <div v-if="showIntroVideo" class="intro-video-container">
+        <video 
+          src="/111.mp4" 
+          autoplay 
+          muted 
+          @ended="onVideoEnded"
+          @error="onVideoError"
+        ></video>
+      </div>
 
     </div>
 
@@ -129,6 +141,9 @@ const username = ref('');
 const sidebarVisible = ref(false);
 const currentPanoramaId = ref('1');
 const resolutions = ref(["1920x960", "3840x1920", "7680x3840"]); // 定义分辨率列表
+
+// 视频播放状态控制
+const showIntroVideo = ref(true);
 const sectionsState = ref<SectionState>({
   location: false,
   info: false,
@@ -283,6 +298,18 @@ const showCurrentSceneId = () => {
   console.log('当前场景ID:', currentSceneId);
 };
 
+// 视频播放控制方法
+const onVideoEnded = () => {
+  // 视频播放完后停留1秒
+  setTimeout(() => {
+    showIntroVideo.value = false;
+  }, 1000);
+};
+
+const onVideoError = () => {
+  showIntroVideo.value = false;
+};
+
 const viewers = [
   { name: 'street', component: markRaw(StreetViewer) },
   { name: 'scene', component: markRaw(SceneViewer) }
@@ -329,14 +356,8 @@ body, html, #app {
   left: 1.5%;
   width: 3vw;
   height: 3vw;
-
-
-
   z-index: 999;
-
   transition: transform 0.3s;
-
-
 }
 
 /* 侧边栏样式 */
@@ -381,12 +402,10 @@ body, html, #app {
   transform: scale(1.1);
 }
 
-.toggle-icon{
+.toggle-icon {
   width: 65%;
   height: 65%;
   margin: auto;
-  /* background-color: #F1F0EB; */
-
 }
 
 .menu-section {
@@ -629,6 +648,33 @@ body, html, #app {
 
 .privacyview.active {
   left: 18vw;
+}
+
+/* 全景图容器样式 */
+.panorama-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* 全景图视频容器样式 */
+.intro-video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  z-index: 15;
+}
+
+.intro-video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 </style>
