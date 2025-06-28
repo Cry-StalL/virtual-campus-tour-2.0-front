@@ -238,7 +238,9 @@
 
     // 跳转相关
     const handleConfirm = (location) => {
-        alert(location.id)
+        console.log(window.streetViewer);
+        // 跳转到对应的场景
+        window.streetViewer?.switchScene(location.name); // 这里还要补充一个场景名称-sceneId的映射
     }
 
     // 删除

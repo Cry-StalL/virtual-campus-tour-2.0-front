@@ -50,13 +50,6 @@
         </button>
       </div>
 
-      <!-- 联系我们 -->
-      <!-- <div class="menu-section">
-        <button class="menu-button" @click="toggleSection('email')" :class="{ active: sectionsState.email }">
-          <img class="menu-icon" :src="sectionsState.email ? '../../assets/icons/email_selected.png' : '../../assets/icons/email.png'" />
-          <text class="menu-text" :style="{ color: sectionsState.email?'#005826':'black'}">联系我们</text>
-        </button>
-      </div> -->
 
     </div>
 
@@ -71,19 +64,17 @@
 <script setup lang="ts">
   import { ref, onMounted, computed, watch } from 'vue';
   const emit = defineEmits([
-    'toggle-site-choose', 
+        'toggle-site-choose',
     'toggle-useful-info',
     'toggle-help-view',
     'toggle-about-view', 
-    'toggle-privacy-view',
-    'toggle-email-view'
+    'toggle-privacy-view'
   ]);
   // Define types
   type SectionState = {
     location: boolean;
     info: boolean;
     help: boolean;
-    email: boolean;
     privacy: boolean;
     about: boolean;
 
@@ -96,7 +87,6 @@
     location: false,
     info: false,
     help: false,
-    email: false,
     privacy: false,
     about: false
   });
@@ -115,9 +105,7 @@
     emit('toggle-about-view'); // 触发关于我们页面显示事件
   };
 
-  const navigateToemail = (type: string) => {
-    emit('toggle-email-view'); // 触发语言页面显示事件
-  };
+
 
   const navigateToPrivacy = (type: string) => {
     emit('toggle-privacy-view'); // 触发隐私政策页面显示事件
@@ -128,7 +116,6 @@
       sectionsState.value['location'] = false;
       sectionsState.value['info'] = false;
       sectionsState.value['help'] = false;
-      sectionsState.value['email'] = false;
       sectionsState.value['privacy'] = false;
       sectionsState.value['about'] = false;
       sectionsState.value[section] = true;
@@ -136,7 +123,6 @@
       sectionsState.value['location'] = false;
       sectionsState.value['info'] = false;
       sectionsState.value['help'] = false;
-      sectionsState.value['email'] = false;
       sectionsState.value['privacy'] = false;
       sectionsState.value['about'] = false;
     }
@@ -159,7 +145,6 @@
   watchSection('location', change_Show_Place);
   watchSection('info', showInfo);
   watchSection('help', () => navigateToHelp('help'));
-  watchSection('email', () => navigateToemail('email'));
   watchSection('privacy', () => navigateToPrivacy('privacy'));
   watchSection('about', () => navigateToAbout('about'));
 
@@ -177,14 +162,12 @@ watch(
       sectionsState.value['location'] = false;
       sectionsState.value['info'] = false;
       sectionsState.value['help'] = false;
-      sectionsState.value['email'] = false;
       sectionsState.value['privacy'] = false;
       sectionsState.value['about'] = false;
     }else{
       sectionsState.value['location'] = false;
       sectionsState.value['info'] = false;
       sectionsState.value['help'] = false;
-      sectionsState.value['email'] = false;
       sectionsState.value['privacy'] = false;
       sectionsState.value['about'] = false;
     }

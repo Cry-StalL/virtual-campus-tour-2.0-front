@@ -1,21 +1,64 @@
 {
   "progressiveLoading": true,
-  "resolutions": ["1920x960", "3840x1920", "7680x3840"],
+  "resolutions": ["1920x960", "7680x3840"],
   "scenes": [
     {
-      "sceneId": "scene",
+      "sceneId": "scene0",
       "relativeImagePath": "assets/panos/streets/byy_road1/1",
       "hotspots": [
         {
           "type": "switchScene",
           "longitude": 0,
           "latitude": 0,
-          "targetSceneId": "scene"
+          "targetSceneId": "scene1"
         },
         {
           "type": "enterSceneViewer",
           "longitude": -10.24,
-          "latitude": 10.72
+          "latitude": 10.72,
+          "targetSceneViewerSceneId": "tsg"
+        }
+      ],
+      "initialLongitude": -10.24,
+      "initialLatitude": 10.72
+    },
+
+    {
+      "sceneId": "scene1",
+      "relativeImagePath": "assets/panos/streets/ry_road1/1",
+      "hotspots": [
+        {
+          "type": "switchScene",
+          "longitude": 0,
+          "latitude": 0,
+          "targetSceneId": "scene2"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude": -10.24,
+          "latitude": 10.72,
+          "targetSceneViewerSceneId": "hl_2"
+        }
+      ],
+      "initialLongitude": -10.24,
+      "initialLatitude": 10.72
+    },
+
+    {
+      "sceneId": "scene2",
+      "relativeImagePath": "assets/panos/streets/hq_road1/1",
+      "hotspots": [
+        {
+          "type": "switchScene",
+          "longitude": 0,
+          "latitude": 0,
+          "targetSceneId": "scene0"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude": -10.24,
+          "latitude": 10.72,
+          "targetSceneViewerSceneId": "hq_4"
         }
       ],
       "initialLongitude": -10.24,
