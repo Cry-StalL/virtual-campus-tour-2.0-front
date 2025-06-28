@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="register">
-      <el-card class="box-card">
-        <h2>注册</h2>
+      <img src="../../assets/login_background.jpg" />
+      <el-card class="box-card" >
+        <h2 style="margin-top: 0vh;">注册</h2>
         <el-form
           :model="ruleForm"
           status-icon
@@ -30,7 +31,7 @@
             <div class="code-input">
               <el-input
                 v-model="ruleForm.code"
-                placeholder="请输入验证码"
+                placeholder="请输入"
                 autocomplete="off"
               ><template #prefix>
               <el-text style="font-size: 16px; font-weight: bold; color: red;">*&nbsp;</el-text>
@@ -361,21 +362,33 @@
   
 
 
-  <style scoped>
+<style scoped>
+
+  
+
   /* 整个页面 */
   .register {
-    display: grid;
-    place-items: center;
-    width: 100%;
-    height: 100vh;
-    /* background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); */
-    background-image: url('123.jpg');
-    background-size: cover;
-    background-position: center;
-  }
+  display: grid;
+  place-items: center;
+  width: 100vw;       /* 占满整个视口宽度 */
+  height: 100vh;      /* 占满整个视口高度 */
+  overflow: hidden;   /* 禁止滚动 */
+  position: relative;
+}
+
+.register img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* 裁剪图片以填满整个容器 */
+  z-index: 1;
+}
+
   /* register */
   .box-card {
-    margin: auto auto;
+    /* margin: auto auto; */
     width: 400px;
     min-width: 320px;
     max-width: 400px;
@@ -384,9 +397,12 @@
     padding: 40px;
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-    background: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.78);
     /* backdrop-filter: blur(10px); */
     transition: all 0.4s ease;
+    z-index: 100;
+    position: relative;
+    
   }
   
   .box-card:hover {
@@ -396,7 +412,7 @@
 
   .box-card h2 {
     text-align: center;
-    color: #409eff;
+    color: #C83F39;
     font-size: 28px;
     margin-bottom: 38px;
     font-weight: 600;
@@ -414,7 +430,7 @@
     transform: translateX(-50%);
     width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, #409eff, #3a8ee6);
+    background: linear-gradient(90deg, #C83F39, #C83F39);
     border-radius: 3px;
   }
   /* 5行表格 */
@@ -445,7 +461,7 @@
   
   :deep(.el-input) {
     transition: all 0.3s ease;
-    /* background-color: #409eff; */
+    /* background-color: #C83F39; */
     height: 5vh;
     min-height: 45px;
     /* padding-left: 50px; */
@@ -468,12 +484,12 @@
   }
 
   :deep(.el-input__wrapper:hover) {
-    border-color: #409eff;
+    border-color: #C83F39;
     box-shadow: 0 3px 10px rgba(64, 158, 255, 0.15) !important;
   }
 
   :deep(.el-input__wrapper.is-focus) {
-    border-color: #409eff;
+    border-color: #C83F39;
     box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2) !important;
     transform: translateY(-1px);
   }
@@ -506,6 +522,8 @@
     height: 42px !important;
     min-height: 42px !important;
     flex-shrink: 0;
+    background-color: #C83F39;
+    border-color: #C83F39;
   }
 
   .btnGroup {
@@ -546,7 +564,7 @@
   }
 
   .btnGroup .el-button--primary {
-    background: linear-gradient(135deg, #409eff 0%, #3a8ee6 100%);
+    background: linear-gradient(135deg, #C83F39 0%, #C83F39 100%);
     border: none;
   }
 
@@ -560,8 +578,8 @@
   }
 
   .btnGroup .el-button--default:hover {
-    border-color: #409eff;
-    color: #409eff;
+    border-color: #C83F39;
+    color: #C83F39;
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(64, 158, 255, 0.1);
   }
@@ -584,6 +602,13 @@
     padding-top: 4px;
     font-size: 13px;
     color: #f56c6c;
+  }
+
+  :deep(.back-btn:hover) {
+    transform: translateY(-2px);
+    /* box-shadow: 0 4px 12px rgba(200, 63, 57, 0.1); */
+    /* background-color: rgba(200, 63, 57, 0.7); */
+    /* color: #C83F39; */
   }
 
   @media (max-width: 768px) {
