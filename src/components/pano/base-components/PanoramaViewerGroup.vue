@@ -9,6 +9,8 @@
       :username="username"
       :progressiveLoading="progressiveLoading"
       :resolutions="resolutions"
+      :initialScene="viewerInitialScene[currentViewer!]"
+      :handleReturnToStreet="handleReturnToStreet"
     />
   </div>
 </template>
@@ -43,6 +45,10 @@ const resolutions = computed(() => props.resolutions || ["1920x960", "3840x1920"
 // 管理 Viewer 实例
 const viewers = ref<Record<string, Viewer>>({});
 const currentViewer = ref<string | null>(props.initialViewerName || null);
+const viewerInitialScene = ref<Record<string, string | number | undefined>>({});
+
+// 记录上一次 street viewer 的 sceneId
+const lastStreetSceneId = ref<string | number | undefined>(undefined);
 
 // 初始化 Viewer
 props.viewers.forEach(viewer => {
@@ -57,13 +63,34 @@ if (props.initialViewerName && viewers.value[props.initialViewerName]) {
 }
 
 // 切换 Viewer
-const switchViewer = (name: string) => {
-  if (viewers.value[name]) {
-    currentViewer.value = name;
-    console.log(`Switched to viewer: ${name}`);
-  } else {
-    console.error(`Viewer not found: ${name}`);
+const switchViewer = (targetViewerName: string, targetSceneId?: string) => {
+  if (!viewers.value[targetViewerName]) {
+    console.error(`Viewer not found: ${targetViewerName}`);
+    return;
   }
+
+  // 如果从 street 跳到 scene，记录当前 street 的 sceneId
+  if (currentViewer.value === 'street' && targetViewerName === 'scene') {
+    // 尝试通过 window.streetViewer 获取当前 sceneId
+    const streetViewer = window.streetViewer as any;
+    if (streetViewer && typeof streetViewer.getCurrentSceneId === 'function') {
+      lastStreetSceneId.value = streetViewer.getCurrentSceneId();
+    }
+  }
+
+  // 先切换 viewer
+  currentViewer.value = targetViewerName;
+  console.log(`Switched to viewer: ${targetViewerName}`);
+
+  // 切换到目标场景（如有指定）
+  if (targetSceneId) {
+    viewerInitialScene.value[targetViewerName] = targetSceneId;
+  }
+};
+
+// 提供一个方法用于返回街景时恢复 sceneId
+const handleReturnToStreet = () => {
+  switchViewer('street', lastStreetSceneId.value);
 };
 
 // 获取当前 Viewer 组件
@@ -73,7 +100,8 @@ const currentViewerComponent = computed(() => {
 
 // 暴露方法
 defineExpose({
-  switchViewer
+  switchViewer,
+  handleReturnToStreet
 });
 </script>
 
@@ -82,4 +110,4 @@ defineExpose({
   width: 100%;
   height: 100%;
 }
-</style> 
+</style>
