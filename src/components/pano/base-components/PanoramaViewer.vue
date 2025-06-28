@@ -534,8 +534,18 @@ watch(
         transparent: true,
         depthTest: false
       });
-      const sprite = new THREE.Sprite(material);
-      sprite.scale.set(20, 20, 1);
+      const sprite = new THREE.Sprite(material as THREE.SpriteMaterial);
+    // 根据图片实际尺寸设置sprite缩放
+      textureLoader.load(props.tempHotspot.icon || 'icons/scene_hotspot.png', (texture) => {
+        const { image } = texture;
+        if (image && image.width && image.height) {
+          const scale = 40; // 基准缩放（可根据实际需求调整）
+          const aspect = image.width / image.height;
+          sprite.scale.set(scale * aspect, scale, 1);
+        } else {
+          sprite.scale.set(40, 40, 1); // 默认缩放
+        }
+      });
       // 经纬度转三维坐标
       const pos = latLonToVector3(props.tempHotspot.position.latitude, props.tempHotspot.position.longitude, 490);
       sprite.position.copy(pos);
