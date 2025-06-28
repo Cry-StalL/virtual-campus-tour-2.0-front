@@ -7,60 +7,115 @@
     </div>
     
     <div class="header">
-      <text class="title">关于我们</text>
+      <text class="title" style="color: #005826; font-size: 1.8vw; margin-top: 1vh;">隐私政策</text>
     </div>
     
     <div class="content">
-      <div class="about-section">
-        <h3 class="section-title">项目介绍</h3>
-        <div class="intro-content">
-          <p>Virtual Campus Tour（云游中珠）是一个创新的虚拟校园导览系统，旨在为用户提供沉浸式的校园体验。</p>
-          <p>通过先进的3D技术和全景展示，我们让您能够足不出户就能深入了解美丽的校园环境，获得身临其境的参观体验。</p>
-          <div class="features">
-            <div class="feature-item">
-              <span class="feature-icon">🏫</span>
-              <div>
-                <h4>全景校园</h4>
-                <p>360度全景展示校园各个角落</p>
-              </div>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">🎮</span>
-              <div>
-                <h4>交互体验</h4>
-                <p>流畅的3D导航和交互操作</p>
-              </div>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">🌐</span>
-              <div>
-                <h4>多语言</h4>
-                <p>支持多种语言，服务全球用户</p>
-              </div>
-            </div>
-          </div>
+      <div class="about-section" style="height: 22vh;">
+        <text class="section-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          项目介绍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </text>
+        <div class="intro-content" style="display: flex; flex-direction: column; align-items: center; ">
+          <text style="width: 60%; text-align: center; font-size: 0.8vw; margin-bottom: 1vh; ">云游中珠（Virtual Campus Tour）是一个全景校园游览系统，包含街景云游、实用信息、发布弹幕等功能，旨在为中山大学珠海校区的师生同学、校友访客等提供沉浸式的校园体验。</text>
+          
+          <text style="width: 60%; text-align: center; font-size: 0.8vw; margin-bottom: 1vh; ">云游中珠诞生于中山大学软件工程学院综合实训，系统使用基于Three.js的自研3D全景架构，以及Vue3和Golang语言编写，部署于阿里云服务器，域名为https:sysu.site。</text>
+          
+          <text style="width: 60%; text-align: center; font-size: 0.8vw; margin-bottom: 1vh; ">在此感谢各位参与此项目的各位指导老师和测试用户的支持！</text>
+
         </div>
       </div>
       
-      <div class="about-section">
-        <h3 class="section-title">联系方式</h3>
+      <div class="about-section" style="height: 27vh;">
+        <text class="section-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          开发团队&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </text>
+        <div class="contact-grid">
+          <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="display: flex; flex-direction: column; ">
+              <img src="../../assets//developer1.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">Mark.G</text>
+            </div>
+          </div>
+
+          <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="display: flex; flex-direction: column; ">
+              <img src="../../assets//developer2.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">Sitan Han</text>
+            </div>
+          </div>
+
+          <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="display: flex; flex-direction: column; ">
+              <img src="../../assets//developer3.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">duanchy3</text>
+            </div>
+          </div>
+
+          <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="display: flex; flex-direction: column; ">
+              <img src="../../assets//developer4.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">小高</text>
+            </div>
+          </div>
+
+          <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="display: flex; flex-direction: column; ">
+              <img src="../../assets//developer5.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">luozhj33</text>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="about-section" style="height: 15vh;">
+        <text class="section-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          联系方式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </text>
         <div class="contact-grid">
           <div class="contact-item">
-            <span class="contact-icon">📧</span>
-            <div>
-              <h4>邮箱</h4>
-              <p>info@virtualcampus.edu.cn</p>
+            <span class="contact-icon" style="margin-left: 20%;">📧</span>
+            <div style="width: 40%; margin-right: 30%; display: flex; flex-direction: column; ">
+              <text style="width: 100%; text-align: center; font-size: 0.6vw; font-weight: bold; margin-top: 1vh; margin-bottom: 0.5vh;">邮箱</text>
+              <text style="width: 100%; text-align: center; font-size: 0.6vw; margin-bottom: 1vh; height: 0.8vw;">442085931@qq.com</text>
             </div>
           </div>
           <div class="contact-item">
             <span class="contact-icon">🐙</span>
-            <div>
-              <h4>GitHub</h4>
-              <p><a href="https://github.com/Cry-StalL/virtual-campus-tour-2.0-front" target="_blank" class="contact-link">github.com/virtual-campus-tour</a></p>
+            <div style="width: 50%; margin-right: 20%; display: flex; flex-direction: column; ">
+              <text style="width: 100%; text-align: center; font-size: 0.6vw; font-weight: bold; margin-top: 1vh; margin-bottom: 0.5vh;">GitHub</text>
+              <div style="display: flex; flex-direction: row;">
+                <el-button style="font-size: 1.2vh; width: 5vw; height: 2.3vh; margin-bottom: 1vh;" @click="redirectTo_front">
+                  前端仓库
+                </el-button>
+                <el-button style="font-size: 1.2vh; width: 5vw; height: 2.3vh; margin-bottom: 1vh;" @click="redirectTo_back">
+                  后端仓库
+                </el-button>
+              </div>  
+              
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -70,6 +125,14 @@ const emit = defineEmits(['closeAboutView']);
 
 const closeAboutView = () => {
   emit('closeAboutView');
+};
+
+const redirectTo_front = () => {
+    window.open('https://github.com/Cry-StalL/virtual-campus-tour-2.0-front');
+};
+
+const redirectTo_back = () => {
+    window.open('https://github.com/Cry-StalL/virtual-campus-tour-2.0-back');
 };
 </script>
 
@@ -101,45 +164,60 @@ const closeAboutView = () => {
 
 .header {
   width: 100%;
-  height: 12%;
+  height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
   border-bottom: 2px solid #e0e0e0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: white;
+  color: #005826;
   flex-shrink: 0;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 4vh;
   font-weight: bold;
+  color: white;
 }
 
 .content {
+  background-image: url(../../assets/background.png);
   flex: 1;
-  padding: 20px;
-  overflow-y: auto;
+  padding: 0vh;
+  /* overflow-y: auto; */
   overflow-x: hidden;
   box-sizing: border-box;
   width: 100%;
+  height: 70vh;
+  background-color: blue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .about-section {
-  margin-bottom: 30px;
-  padding: 20px;
-  background-color: rgba(248, 249, 250, 0.8);
+  margin-top: 2vh;
+  margin-bottom: 2vh;
   border-radius: 12px;
-  border-left: 4px solid #667eea;
+  width: 60vw;
+  height: 20vh;
+  background-color: white;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .section-title {
-  font-size: 20px;
+  font-size: 2vh;
   font-weight: bold;
   color: #2c3e50;
-  margin-bottom: 15px;
-  padding-bottom: 8px;
+  margin-top: 0.5vh;
+  margin-bottom: 1.5vh;
   border-bottom: 1px solid #bdc3c7;
+  /* text-align: left; */
 }
 
 .intro-content p {
@@ -261,23 +339,34 @@ const closeAboutView = () => {
 }
 
 .contact-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 15px;
 }
 
 .contact-item {
   display: flex;
-  align-items: center;
-  padding: 15px;
+  align-items: flex-start;
+  margin-bottom: 1vh;
+  width: 28%;
+  height: 6vh;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  /* justify-content: center; */
 }
 
 .contact-icon {
   font-size: 20px;
-  margin-right: 15px;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 0.5vh;
+  width: 10%;
 }
 
 .contact-item h4 {

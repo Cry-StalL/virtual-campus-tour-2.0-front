@@ -10,42 +10,59 @@
       <text class="title" style="color: #005826; font-size: 1.8vw; margin-top: 1vh;">帮助中心</text>
     </div>
     
-    <div class="content">
-      <div class="help-section">
-        <h3 class="section-title">如何使用虚拟校园导览</h3>
-        <div class="help-item">
-          <h4>📍 地点导航</h4>
-          <p>点击左侧边栏的"地点跳转"可以选择想要参观的校园地点，系统会自动为您导航到对应位置。</p>
+    <div class="content" >
+      <div class="help-section" >
+        <text class="section-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          如何使用虚拟校园导览
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+        </text>
+        <div class="help-item" >
+          <text style="width: 90%; text-align: center; font-size: 0.8vw;">🎮 街景云游 ——— 在主页面：点击下方蓝色箭头即可实现前进与后退；点击望远镜图标即可进入场景的沉浸式高清观赏。</text>
         </div>
         <div class="help-item">
-          <h4>🎮 操作控制</h4>
-          <p>使用鼠标拖拽可以改变视角，滚轮可以缩放视图（VR模式有待开发）。</p>
+          <text style="width: 90%; text-align: center; font-size: 0.8vw;">📍 地点导航 ——— 在左侧边栏：点击"地点跳转"，可在地图上选择闪动的红点或通过搜索框搜索，跳转到对应地点。</text>
         </div>
         <div class="help-item">
-          <h4>ℹ️ 实用信息</h4>
-          <p>点击"实用信息"可以查看校园各个区域的详细介绍。</p>
+          <text style="width: 90%; text-align: center; font-size: 0.8vw;">ℹ️ 实用信息 ——— 在左侧边栏：点击"实用信息"，可以查看学习、饮食、住宿、交通等校园信息介绍。</text>
         </div>
         <div class="help-item">
-          <h4>👤 个人设置</h4>
-          <p>您可以自定义虚拟形象，选择合适的语言设置，获得更好的体验。</p>
+          <text style="width: 90%; text-align: center; font-size: 0.8vw;">👤 个人设置 ——— 在右上角：您可以点击注册按钮，使用邮箱进行注册；登陆后可自定义头像，在沉浸式场景发表弹幕等。</text>
         </div>
       </div>
       
       <div class="help-section">
-        <h3 class="section-title">常见问题</h3>
-        <div class="faq-item">
-          <h4>Q: 为什么页面加载很慢？</h4>
-          <p>A: 虚拟导览需要加载3D模型和全景图片，建议使用稳定的网络连接。首次访问可能需要较长加载时间。</p>
+        <text class="section-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          常见问题
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </text>
+        <div class="help-item" >
+          <text style="width: 90%; text-align: center; font-size: 0.8vw; font-weight: bold; margin-bottom: 0.5vh; text-align: left; margin-left: 5vw;">Q: 为什么页面加载很慢？</text>
+          <text style="width: 90%; text-align: center; font-size: 0.7vw; text-align: left; margin-left: 5vw;">A: 全景导览需要加载3D模型和全景图片，建议使用稳定的网络连接。首次访问可能需要较长加载时间。</text>
         </div>
-        <div class="faq-item">
-          <h4>Q: 如何获得最佳体验？</h4>
-          <p>A: 建议使用浏览器有 Chrome、Firefox、Safari 等。</p>
+        <div class="help-item">
+          <text style="width: 90%; text-align: center; font-size: 0.8vw; font-weight: bold; margin-bottom: 0.5vh; text-align: left; margin-left: 5vw;">Q: 如何获得最佳页面显示体验？</text>
+          <text style="width: 90%; text-align: center; font-size: 0.7vw; text-align: left; margin-left: 5vw;">A: 建议使用Chrome、Edge、Safari等浏览器，在16:9的4K屏幕上游览。</text>
         </div>
-        <div class="faq-item">
-          <h4>Q: 支持哪些设备？</h4>
-          <p>A: 目前仅支持电脑设备。</p>
+        <div class="help-item">
+          <text style="width: 90%; text-align: center; font-size: 0.8vw; font-weight: bold; margin-bottom: 0.5vh; text-align: left; margin-left: 5vw;">Q: 支持哪些设备？</text>
+          <text style="width: 90%; text-align: center; font-size: 0.7vw; text-align: left; margin-left: 5vw;">A: 目前仅支持电脑设备。如需在平板电脑及手机上使用请选择横屏，以减小屏幕比例带来的显示问题。</text>
         </div>
       </div>
+
+     
     </div>
   </div>
 </template>
@@ -86,18 +103,18 @@ const closeHelpView = () => {
 
 .header {
   width: 100%;
-  height: 12%;
+  height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
   border-bottom: 2px solid #e0e0e0;
   background: white;
-  color: w#005826;
+  color: #005826;
   flex-shrink: 0;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 4vh;
   font-weight: bold;
   color: white;
 }
@@ -105,44 +122,68 @@ const closeHelpView = () => {
 .content {
   background-image: url(../../assets/background.png);
   flex: 1;
-  padding: 20px;
-  overflow-y: auto;
+  padding: 0vh;
+  /* overflow-y: auto; */
   overflow-x: hidden;
   box-sizing: border-box;
   width: 100%;
+  height: 70vh;
+  background-color: blue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .help-section {
-  margin-bottom: 30px;
-  padding: 20px;
-  background-color: rgba(248, 249, 250, 0.8);
+  
+  /* margin-bottom: 30px; */
+  /* padding: 20px; */
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  /* background-color: rgba(248, 249, 250, 0.8); */
   border-radius: 12px;
-  border-left: 4px solid #3498db;
+  width: 60vw;
+  height: 35vh;
+  background-color: white;
+  /* border-left: 4px solid #3498db; */
   box-sizing: border-box;
-  width: 100%;
+  /* width: 100%; */
   word-wrap: break-word;
   overflow-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* background-color: #005826; */
+
 }
 
 .section-title {
-  font-size: 20px;
+  font-size: 2vh;
   font-weight: bold;
   color: #2c3e50;
-  margin-bottom: 15px;
-  padding-bottom: 8px;
+  margin-top: 0.5vh;
+  margin-bottom: 1.5vh;
+  /* padding-bottom: 8px; */
   border-bottom: 1px solid #bdc3c7;
+  text-align: center;
+  /* width: 50%; */
+  /* margin-left: 15vw; */
+  /* background-color: #005826; */
 }
 
 .help-item, .faq-item {
-  margin-bottom: 18px;
-  padding: 15px;
+  margin-bottom: 2vh;
+  padding: 1.5vh;
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-  width: 100%;
+  width: 90%;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .help-item h4, .faq-item h4 {

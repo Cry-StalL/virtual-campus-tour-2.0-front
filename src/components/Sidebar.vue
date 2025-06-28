@@ -6,7 +6,7 @@
     </div>
     <div style="height: 6vh; "></div>
 
-    <div class="sidebar-menu" style="height: 44vh;">
+    <div class="sidebar-menu" style="height: 41vh;">
       <!-- 地点跳转 -->
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('location')" :class="{ active: sectionsState.location }">
@@ -28,7 +28,7 @@
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('help')" :class="{ active: sectionsState.help }">
           <img class="menu-icon" :src="sectionsState.help ? '/icons/SideBar/help_selected.png' : '/icons/SideBar/help.png'" />
-          <text class="menu-text" :style="{ color: sectionsState.help?'#005826':'black'}" >帮助</text>
+          <text class="menu-text" :style="{ color: sectionsState.help?'#005826':'black'}" >帮助中心</text>
         </button>
       </div>
       
@@ -49,7 +49,6 @@
           <text class="menu-text" :style="{ color: sectionsState.about?'#005826':'black'}">关于我们</text>
         </button>
       </div>
-
 
 
     </div>
@@ -215,8 +214,8 @@ watch(
   background-image: linear-gradient(
     to bottom,
     transparent 25vh,
-    #F1F0EB 25vh,
-    #F1F0EB 73vh,
+    #FCFCF9 25vh,
+    #FCFCF9 73vh,
     #005826 73vh,
     #005826 100vh,
     transparent 100vh
@@ -226,6 +225,7 @@ watch(
 
 .sidebar-menu {
   /* height: 60vh; */
+  margin-top: 3vh;
   flex-direction: column;
 }
 
