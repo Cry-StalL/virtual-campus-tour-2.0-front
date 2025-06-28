@@ -7,7 +7,7 @@
     </div>
     
     <div class="header">
-      <text class="title" style="color: #005826; font-size: 1.8vw; margin-top: 1vh;">隐私政策</text>
+      <text class="title" style="color: #005826; font-size: 1.8vw; margin-top: 1vh;">关于我们</text>
     </div>
     
     <div class="content">

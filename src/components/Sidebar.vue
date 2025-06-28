@@ -231,8 +231,8 @@ watch(
   background-image: linear-gradient(
     to bottom,
     transparent 25vh,
-    #FCFCF9 25vh,
-    #FCFCF9 73vh,
+    #F1F0EA 25vh,
+    #F1F0EA 73vh,
     #005826 73vh,
     #005826 100vh,
     transparent 100vh
