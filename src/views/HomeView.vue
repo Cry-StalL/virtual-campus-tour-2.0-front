@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="content">
+    <div class="content" @click="handleContentClick">
       <!-- 全景导览 -->
       <PanoramaViewerGroup
         :viewers="viewers"
@@ -16,7 +16,7 @@
     </div>
 
     <!-- 侧边栏切换按钮 -->
-    <div class="toggle-btn" @click="toggleSidebar">
+    <div class="toggle-btn" @click.stop="toggleSidebar">
       <div style="background-color: white; margin: auto auto; width: 100%; height: 100%; display: flex; align-items: center; border-radius: 50%;">
         <img class="toggle-icon" v-show="!sidebarVisible" src="/icons/SideBar/more.png" >
         <img class="toggle-icon" v-show="sidebarVisible" src="../../assets/icons/close.png" >
@@ -24,47 +24,46 @@
     </div>
 
     <!-- 侧边栏 -->
-    <div class="sidebar" :class="{ active: sidebarVisible }" >
+    <div class="sidebar" :class="{ active: sidebarVisible }" @click.stop>
       <Sidebar 
         @toggle-site-choose="toggleSiteChoose" 
         @toggle-useful-info="toggleUsefulInfo" 
         @toggle-help-view="toggleHelpView"
         @toggle-about-view="toggleAboutView"
         @toggle-privacy-view="togglePrivacyView"
-        @toggle-email-view="toggleemailView"
         :clearSideBarChoose="clearSideBarChoose" 
       />
     </div>
 
 
     <!-- 地点跳转 -->
-    <div class="sitechoose" :class="{ active: siteChooseVisible }">
+    <div class="sitechoose" :class="{ active: siteChooseVisible }" @click.stop>
       <SiteChoose @closeSiteChooseView="closeSiteChoose"/>
     </div>
     
 
     <!-- 实用信息 -->
-    <div class="usefulinfo" :class="{ active: usefulInfoVisible }">
+    <div class="usefulinfo" :class="{ active: usefulInfoVisible }" @click.stop>
       <UsefulInfo @closeUsefulInfoView="closeUsefulInfo"/>
     </div>
 
     <!-- 帮助界面 -->
-    <div class="helpview" :class="{ active: helpViewVisible }">
+    <div class="helpview" :class="{ active: helpViewVisible }" @click.stop>
       <Help @closeHelpView="closeHelpView"/>
     </div>
 
     <!-- 关于我们界面 -->
-    <div class="aboutview" :class="{ active: aboutViewVisible }">
+    <div class="aboutview" :class="{ active: aboutViewVisible }" @click.stop>
       <About @closeAboutView="closeAboutView"/>
     </div>
 
     <!-- 隐私政策界面 -->
-    <div class="privacyview" :class="{ active: privacyViewVisible }">
+    <div class="privacyview" :class="{ active: privacyViewVisible }" @click.stop>
       <Privacy @closePrivacyView="closePrivacyView"/>
     </div>
 
     <!-- 登录和注册 -->
-    <div class="btnGroup1">
+    <div class="btnGroup1" @click.stop>
       <template v-if="isLoggedIn">
         <div class="user-info">
           <el-avatar :size="32" class="user-avatar">{{ username.charAt(0) }}</el-avatar>
@@ -168,6 +167,18 @@ const toggleSidebar = () => {
   }
 };
 
+// 处理点击内容区域
+const handleContentClick = () => {
+  if (sidebarVisible.value) {
+    sidebarVisible.value = false;
+    siteChooseVisible.value = false;
+    usefulInfoVisible.value = false;
+    helpViewVisible.value = false;
+    aboutViewVisible.value = false;
+    privacyViewVisible.value = false;
+  }
+};
+
 
 const toggleSiteChoose = () => {
   siteChooseVisible.value = !siteChooseVisible.value; // 切换显示状态
@@ -203,15 +214,6 @@ const togglePrivacyView = () => {
   usefulInfoVisible.value = false;
   helpViewVisible.value = false;
   aboutViewVisible.value = false;
-};
-const toggleemailView = () => {
-  // 语言设置可以是一个简单的选择器，这里暂时用ElMessage显示
-  ElMessage({
-    message: '语言设置功能开发中...',
-    type: 'info',
-    duration: 2000
-  });
-  console.log('切换语言设置');
 };
 const closeSiteChoose = () => {
   // alert(siteChooseVisible.value)
