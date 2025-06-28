@@ -9,6 +9,7 @@
       :username="username"
       :progressiveLoading="progressiveLoading"
       :resolutions="resolutions"
+      :initialScene="viewerInitialScene[currentViewer]"
     />
   </div>
 </template>
@@ -43,6 +44,7 @@ const resolutions = computed(() => props.resolutions || ["1920x960", "3840x1920"
 // 管理 Viewer 实例
 const viewers = ref<Record<string, Viewer>>({});
 const currentViewer = ref<string | null>(props.initialViewerName || null);
+const viewerInitialScene = ref<Record<string, string | number | undefined>>({});
 
 // 初始化 Viewer
 props.viewers.forEach(viewer => {
@@ -57,12 +59,19 @@ if (props.initialViewerName && viewers.value[props.initialViewerName]) {
 }
 
 // 切换 Viewer
-const switchViewer = (name: string) => {
-  if (viewers.value[name]) {
-    currentViewer.value = name;
-    console.log(`Switched to viewer: ${name}`);
-  } else {
-    console.error(`Viewer not found: ${name}`);
+const switchViewer = (targetViewerName: string, targetSceneId?: string) => {
+  if (!viewers.value[targetViewerName]) {
+    console.error(`Viewer not found: ${targetViewerName}`);
+    return;
+  }
+
+  // 切换到目标场景（如有指定）
+  if (targetSceneId) {
+    viewerInitialScene.value[targetViewerName] = targetSceneId;
+
+  // 切换 viewer
+  currentViewer.value = targetViewerName;
+  console.log(`Switched to viewer: ${targetViewerName}`);
   }
 };
 
@@ -82,4 +91,4 @@ defineExpose({
   width: 100%;
   height: 100%;
 }
-</style> 
+</style>

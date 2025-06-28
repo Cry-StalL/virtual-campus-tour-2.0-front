@@ -41,7 +41,8 @@ const props = withDefaults(defineProps<PanoramaViewerProps>(), {
   fovDampingFactor: 0.1,
   debug: false,
   progressiveLoading: false,
-  resolutions: () => ["1920x960", "3840x1920", "7680x3840"]
+  resolutions: () => ["1920x960", "3840x1920", "7680x3840"],
+  initialScene: 0
 });
 
 const viewerContainer = ref<HTMLElement | null>(null);
@@ -152,7 +153,17 @@ const createHotspot = (hotspot: HotSpot) => {
     });
     
     const sprite = new THREE.Sprite(material as THREE.SpriteMaterial);
-    sprite.scale.set(20, 20, 1);
+    // 根据图片实际尺寸设置sprite缩放
+    textureLoader.load(hotspot.icon, (texture) => {
+      const { image } = texture;
+      if (image && image.width && image.height) {
+        const scale = 40; // 基准缩放（可根据实际需求调整）
+        const aspect = image.width / image.height;
+        sprite.scale.set(scale * aspect, scale, 1);
+      } else {
+        sprite.scale.set(40, 40, 1); // 默认缩放
+      }
+    });
     
     // 设置热点位置
     const position = latLonToVector3(hotspot.latitude, hotspot.longitude, 490);
@@ -239,7 +250,15 @@ const handleHotspotClick = (hotspot: HotSpot) => {
   } 
   else if (hotspot.type === 'enterSceneViewer') {
     if (props.switchViewer && typeof props.switchViewer === 'function') {
-      props.switchViewer('scene');
+      if (hotspot.targetSceneViewerSceneId) {
+        // console.log(`切换到场景视图，目标场景ID: ${hotspot.targetSceneViewerSceneId}`);
+        // 切换到场景视图
+        props.switchViewer('scene', hotspot.targetSceneViewerSceneId);
+      } else {
+        showError(`热点ID "${hotspot.id}" 的类型为 "enterSceneViewer"，但未提供 targetSceneViewerSceneId`);
+        // props.switchViewer('scene');
+      }
+      
     }
   }
   else if (hotspot.type === 'custom') {
@@ -500,9 +519,9 @@ onMounted(() => {
   viewerContainer.value?.addEventListener('mousemove', handleMouseMove);
   window.addEventListener('resize', onWindowResize);
   
-  // 加载第一个场景
+  // 加载指定的初始场景
   if (props.scenes.length > 0) {
-    switchScene(0);
+    switchScene(props.initialScene);
   }
   
   // 开始动画循环

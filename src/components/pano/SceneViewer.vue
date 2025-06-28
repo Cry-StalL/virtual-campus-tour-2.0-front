@@ -7,6 +7,7 @@
       :scenes="viewerconfig.scenes"
       :progressiveLoading="viewerconfig.progressiveLoading"
       :resolutions="viewerconfig.resolutions"
+      :initialScene="props.initialScene ?? viewerconfig.initialScene"
     />
     
     <!-- 可拖动留言预览框 -->
@@ -95,7 +96,8 @@ const props = defineProps<{
   switchViewer: (name: string) => void,
   isLoggedIn?: boolean,
   userID?: string,
-  username?: string
+  username?: string,
+  initialScene?: string | number
 }>();
 
 // 使用 computed 属性来监控 props 的变化
@@ -107,6 +109,27 @@ const userName = computed(() => props.username || '');
 watch(() => props.isLoggedIn, (newVal, oldVal) => {
   console.log(`isLoggedIn changed from ${oldVal} to ${newVal}`);
 }, { immediate: true });
+
+onMounted(() => {
+  window.sceneViewer = {
+    switchScene: (name: string) => {
+      if (panoramaViewerRef.value) {
+        panoramaViewerRef.value.switchScene(name);
+      }
+    }
+  };
+});
+
+defineExpose(
+  // 暴露子组件的switchScene
+  {
+    switchScene: (name: string) => {
+      if (panoramaViewerRef.value) {
+        panoramaViewerRef.value.switchScene(name);
+      }
+    }
+  }
+);
 
 // 留言预览相关
 const isDraggingMessage = ref(false);

@@ -1,5 +1,5 @@
 <template>
-  <div ref="streetViewerRef" class="street-viewer">
+  <div class="street-viewer">
     <!-- 使用基础 Viewer 组件 -->
     <PanoramaViewer 
       ref="panoramaViewerRef" 
@@ -14,6 +14,7 @@
       :progressiveLoading="viewerconfig.progressiveLoading"
       :resolutions="viewerconfig.resolutions"
       :switchViewer="props.switchViewer" 
+      :initialScene="props.initialScene ?? viewerconfig.initialScene"
     />
   </div>
 </template>
@@ -24,8 +25,10 @@ import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue
 import { useStreetViewerConfig } from './composables/useStreetViewerConfig';
 
 const panoramaViewerRef = ref(null);
-const streetViewerRef = ref(null);
-const props = defineProps<{ switchViewer: (name: string) => void }>();
+const props = defineProps<{ 
+  switchViewer: (name: string) => void;
+  initialScene?: number | string;
+}>();
 
 const { viewerconfig: viewerconfig, error } = useStreetViewerConfig();
 
