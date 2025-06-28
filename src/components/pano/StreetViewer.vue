@@ -1,5 +1,5 @@
 <template>
-  <div class="street-viewer">
+  <div ref="streetViewerRef" class="street-viewer">
     <!-- 使用基础 Viewer 组件 -->
     <PanoramaViewer 
       ref="panoramaViewerRef" 
@@ -19,11 +19,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue';
+import { onMounted, ref, shallowRef } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import { useStreetViewerConfig } from './composables/useStreetViewerConfig';
 
 const panoramaViewerRef = ref(null);
+const streetViewerRef = ref(null);
 const props = defineProps<{ switchViewer: (name: string) => void }>();
 
 const { viewerconfig: viewerconfig, error } = useStreetViewerConfig();
@@ -31,6 +32,27 @@ const { viewerconfig: viewerconfig, error } = useStreetViewerConfig();
 function handleHotspotClick(hotspot: any) {
   // 这里不再处理切换到场景视图的逻辑，交由PanoramaViewer处理
 }
+
+onMounted(() => {
+  window.streetViewer = {
+    switchScene: (name: string) => {
+      if (panoramaViewerRef.value) {
+        panoramaViewerRef.value.switchScene(name);
+      }
+    }
+  };
+});
+
+defineExpose(
+  // 暴露子组件的switchScene
+  {
+    switchScene: (name: string) => {
+      if (panoramaViewerRef.value) {
+        panoramaViewerRef.value.switchScene(name);
+      }
+    }
+  }
+);
 </script>
 
 <style scoped>
