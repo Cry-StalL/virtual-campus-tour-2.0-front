@@ -254,7 +254,7 @@
 </script>
 
 
-<style>
+<style >
 .full_contain{
     /* background-color: rgb(242, 245, 252); */
     background-image: url('../../assets/background.png');
