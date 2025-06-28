@@ -45,7 +45,7 @@
           "type": "switchScene",
           "longitude": 0,
           "latitude": 0,
-          "targetSceneId": "scene1"
+          "targetSceneId": "scene0"
         }
       ],
       "initialLongitude": -10.24,
