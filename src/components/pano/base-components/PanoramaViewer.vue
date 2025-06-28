@@ -81,7 +81,7 @@ const currentSphere = shallowRef<THREE.Mesh | null>(null);
 
 // 获取完整的图片 URL
 const getFullImageUrl = (relativeImagePath: string): string => {
-  const base = API_CONFIG.BASE_URL.replace(/\/$/, '');
+  const base = import.meta.env.VITE_OSS_BASE_URL
   const rel = relativeImagePath.replace(/^\//, '');
   return `${base}/${rel}`;
 };
