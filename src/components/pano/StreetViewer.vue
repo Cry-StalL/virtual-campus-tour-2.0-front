@@ -14,23 +14,60 @@
       :progressiveLoading="viewerconfig.progressiveLoading"
       :resolutions="viewerconfig.resolutions"
       :switchViewer="props.switchViewer" 
+      :initialScene="props.initialScene ?? viewerconfig.initialScene"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue';
+import { onMounted, ref, shallowRef } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import { useStreetViewerConfig } from './composables/useStreetViewerConfig';
 
 const panoramaViewerRef = ref(null);
-const props = defineProps<{ switchViewer: (name: string) => void }>();
+const props = defineProps<{ 
+  switchViewer: (name: string) => void;
+  initialScene?: number | string;
+}>();
 
 const { viewerconfig: viewerconfig, error } = useStreetViewerConfig();
 
 function handleHotspotClick(hotspot: any) {
   // 这里不再处理切换到场景视图的逻辑，交由PanoramaViewer处理
 }
+
+onMounted(() => {
+  window.streetViewer = {
+    switchScene: (name: string) => {
+      if (panoramaViewerRef.value) {
+        panoramaViewerRef.value.switchScene(name);
+      }
+    },
+    getCurrentSceneId: () => {
+      if (panoramaViewerRef.value && typeof panoramaViewerRef.value.getCurrentSceneId === 'function') {
+        return panoramaViewerRef.value.getCurrentSceneId();
+      }
+      return undefined;
+    }
+  };
+});
+
+defineExpose(
+  // 暴露子组件的switchScene和getCurrentSceneId
+  {
+    switchScene: (name: string) => {
+      if (panoramaViewerRef.value) {
+        panoramaViewerRef.value.switchScene(name);
+      }
+    },
+    getCurrentSceneId: () => {
+      if (panoramaViewerRef.value && typeof panoramaViewerRef.value.getCurrentSceneId === 'function') {
+        return panoramaViewerRef.value.getCurrentSceneId();
+      }
+      return undefined;
+    }
+  }
+);
 </script>
 
 <style scoped>

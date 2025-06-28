@@ -108,7 +108,7 @@ import { APP_CONFIG } from '@/config/config';
 import StreetViewer from '@/components/pano/StreetViewer.vue';
 import SceneViewer from '@/components/pano/SceneViewer.vue';
 import SiteChoose from '@/components/SiteChoose.vue';
-import UsefulInfo from '@/components/UsefulInfo.vue';
+import UsefulInfo from '@/components/usefulInfo.vue';
 import Help from '@/components/Help.vue';
 import About from '@/components/About.vue';
 import Privacy from '@/components/Privacy.vue';
@@ -214,10 +214,10 @@ const toggleemailView = () => {
   console.log('切换语言设置');
 };
 const closeSiteChoose = () => {
-  alert(siteChooseVisible.value)
+  // alert(siteChooseVisible.value)
   siteChooseVisible.value = !siteChooseVisible.value; // 切换显示状态
   clearSideBarChoose.value = !clearSideBarChoose.value;
-  alert(siteChooseVisible.value)
+  // alert(siteChooseVisible.value)
 
 };
 const closeUsefulInfo = () => {

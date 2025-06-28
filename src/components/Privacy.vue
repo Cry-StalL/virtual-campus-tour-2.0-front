@@ -1,8 +1,8 @@
 <template>
   <div class="privacy-container">
     <div class="delete-button">
-      <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click="closePrivacyView">
-        <img style="width: 3vw; height: 3vw;" src="../../assets/icons/delete.png">
+      <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click.stop="closePrivacyView">
+        <img style="width: 2vw; height: 2vw;" src="../../assets/icons/delete.png">
       </el-button>
     </div>
     

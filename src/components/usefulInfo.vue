@@ -1,5 +1,10 @@
 <template>
     <div class="full_contain" ref="full_contain_ref">
+        <div class="delete-button">
+            <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click.stop="closeUsefulInfoView">
+                <img style="width: 2vw; height: 2vw;" src="../../assets/icons/delete.png">
+            </el-button>
+        </div>
         <!-- <div style="width: 100%; height: 100%;"> -->
             <el-tabs  class="demo-tabs">
                 <el-tab-pane label="学习">
@@ -814,11 +819,11 @@
 
 
 
-    const emit = defineEmits(['deleteSiteChooseView']);
-    const deleteSiteChooseView = () => {
-        // alert("delete")
+    const emit = defineEmits(['closeUsefulInfoView']);
+    
+    const closeUsefulInfoView = () => {
         emit('closeUsefulInfoView');
-    }
+    };
 
     const tableData = [
     {
@@ -977,6 +982,19 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+
+.delete-button {
+    position: absolute;
+    right: 2%;
+    top: 2%;
+    z-index: 10;
+}
+
+.delete-button img {
+    width: 30px;
+    height: 30px;
 }
 .delete_button{
     padding: 0%;
