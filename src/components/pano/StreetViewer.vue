@@ -42,17 +42,29 @@ onMounted(() => {
       if (panoramaViewerRef.value) {
         panoramaViewerRef.value.switchScene(name);
       }
+    },
+    getCurrentSceneId: () => {
+      if (panoramaViewerRef.value && typeof panoramaViewerRef.value.getCurrentSceneId === 'function') {
+        return panoramaViewerRef.value.getCurrentSceneId();
+      }
+      return undefined;
     }
   };
 });
 
 defineExpose(
-  // 暴露子组件的switchScene
+  // 暴露子组件的switchScene和getCurrentSceneId
   {
     switchScene: (name: string) => {
       if (panoramaViewerRef.value) {
         panoramaViewerRef.value.switchScene(name);
       }
+    },
+    getCurrentSceneId: () => {
+      if (panoramaViewerRef.value && typeof panoramaViewerRef.value.getCurrentSceneId === 'function') {
+        return panoramaViewerRef.value.getCurrentSceneId();
+      }
+      return undefined;
     }
   }
 );

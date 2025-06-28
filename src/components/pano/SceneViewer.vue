@@ -8,6 +8,7 @@
       :progressiveLoading="viewerconfig.progressiveLoading"
       :resolutions="viewerconfig.resolutions"
       :initialScene="props.initialScene ?? viewerconfig.initialScene"
+      :handleReturnToStreet="handleReturnToStreet"
     />
     
     <!-- 可拖动留言预览框 -->
@@ -94,6 +95,7 @@ const panoramaViewerRef = ref(null);
 
 const props = defineProps<{
   switchViewer: (name: string) => void,
+  handleReturnToStreet?: () => void, // 可选的返回街景方法
   isLoggedIn?: boolean,
   userID?: string,
   username?: string,
@@ -243,8 +245,13 @@ onBeforeUnmount(() => {
 
 // 处理返回按钮点击
 const handleReturn = () => {
-  if (props.switchViewer) {
-    props.switchViewer('street');
+  // 优先调用父组件暴露的 handleReturnToStreet 方法（如果有）
+  if ((props as any).handleReturnToStreet) {
+    (props as any).handleReturnToStreet();
+    
+  } else if (props.switchViewer) {
+    console.log('切换到街景视图，默认场景为0')
+    props.switchViewer('street', 0); // 切换到街景视图，默认场景为0
   }
 };
 
