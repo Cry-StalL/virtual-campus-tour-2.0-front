@@ -1,10 +1,22 @@
 {
   "progressiveLoading": true,
-  "resolutions": ["1920x960", "3840x1920", "7680x3840"],
+  "resolutions": ["3000x1500", "12000x6000"],
   "scenes": [
     {
-      "sceneId": "scene1",
-      "relativeImagePath": "assets/panos/streets/byy_road1/1",
+      "sceneId": "hl_2",
+      "relativeImagePath": "assets/panos/scenes/hl_2",
+      "hotspots": []
+    },
+    {
+      "sceneId": "hq_4",
+      "relativeImagePath": "assets/panos/scenes/hq_4",
+      "hotspots": [],
+      "initialLongitude": -180,
+      "initialLatitude": -10
+    },
+    {
+      "sceneId": "tsg",
+      "relativeImagePath": "assets/panos/scenes/tsg",
       "hotspots": []
     }
   ]

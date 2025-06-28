@@ -15,7 +15,8 @@
         {
           "type": "enterSceneViewer",
           "longitude": -10.24,
-          "latitude": 10.72
+          "latitude": 10.72,
+          "targetSceneViewerSceneId": "tsg"
         }
       ],
       "initialLongitude": -10.24,
@@ -31,6 +32,12 @@
           "longitude": 0,
           "latitude": 0,
           "targetSceneId": "scene2"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude": -10.24,
+          "latitude": 10.72,
+          "targetSceneViewerSceneId": "hl_2"
         }
       ],
       "initialLongitude": -10.24,
@@ -46,6 +53,12 @@
           "longitude": 0,
           "latitude": 0,
           "targetSceneId": "scene0"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude": -10.24,
+          "latitude": 10.72,
+          "targetSceneViewerSceneId": "hq_4"
         }
       ],
       "initialLongitude": -10.24,

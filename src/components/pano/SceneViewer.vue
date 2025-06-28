@@ -4,7 +4,10 @@
     <PanoramaViewer 
       ref="panoramaViewerRef" 
       v-if="viewerconfig"
-      :scenes="viewerconfig.scenes"
+      :scenes="viewerconfig.scenes.map(scene => ({
+        ...scene,
+        hotspots: (scene.hotspots || []).map(h => ({ ...h }))
+      }))"
       :progressiveLoading="viewerconfig.progressiveLoading"
       :resolutions="viewerconfig.resolutions"
       :initialScene="props.initialScene ?? viewerconfig.initialScene"
