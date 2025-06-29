@@ -30,6 +30,34 @@ export function useThreeJsSetup(
   let currentFov = props.initialFov;
   let targetFov = props.initialFov;
 
+  // 自动旋转相关状态
+  const autoRotate = ref<boolean>(false);
+  const autoRotateSpeed = ref<number>(-0.5); // 自动旋转速度，负值为顺时针旋转
+  let autoRotateTimer: number | null = null;
+  const autoRotateDelay = 5000; // 5秒无操作后开始自动旋转
+
+  // 启动自动旋转定时器
+  const startAutoRotateTimer = () => {
+    stopAutoRotateTimer(); // 先清除之前的定时器
+    autoRotateTimer = window.setTimeout(() => {
+      autoRotate.value = true;
+    }, autoRotateDelay);
+  };
+
+  // 停止自动旋转定时器
+  const stopAutoRotateTimer = () => {
+    if (autoRotateTimer) {
+      window.clearTimeout(autoRotateTimer);
+      autoRotateTimer = null;
+    }
+  };
+
+  // 停止自动旋转并重置定时器
+  const resetAutoRotate = () => {
+    autoRotate.value = false;
+    startAutoRotateTimer();
+  };
+
   // 初始化 Three.js 环境
   const initThreeJs = () => {
     if (!viewerContainer.value) return;
@@ -74,6 +102,9 @@ export function useThreeJsSetup(
     controls.value.zoomSpeed = props.zoomSpeed;
     controls.value.enableDamping = true;
     controls.value.dampingFactor = props.dampingFactor;
+
+    // 启动自动旋转定时器
+    startAutoRotateTimer();
   };
 
   // 处理鼠标滚轮事件
@@ -87,6 +118,9 @@ export function useThreeJsSetup(
     
     // 限制目标FOV范围
     targetFov = Math.max(props.minFov, Math.min(props.maxFov, targetFov));
+
+    // 重置自动旋转
+    resetAutoRotate();
   };
 
   // 动画循环
@@ -103,6 +137,12 @@ export function useThreeJsSetup(
         currentFov += (targetFov - currentFov) * props.fovDampingFactor;
         camera.value.fov = currentFov;
         camera.value.updateProjectionMatrix();
+      }
+
+      // 自动旋转逻辑
+      if (controls.value) {
+        controls.value.autoRotate = autoRotate.value;
+        controls.value.autoRotateSpeed = autoRotate.value ? autoRotateSpeed.value : 0;
       }
       
       controls.value?.update();
@@ -127,6 +167,7 @@ export function useThreeJsSetup(
   // 停止动画
   const stopAnimation = () => {
     isAnimating.value = false;
+    stopAutoRotateTimer();
   };
 
   // 释放资源
@@ -165,6 +206,12 @@ export function useThreeJsSetup(
     stopAnimation,
     disposeThreeJs,
     targetFov,
-    currentFov
+    currentFov,
+    // 自动旋转相关方法
+    autoRotate,
+    autoRotateSpeed,
+    resetAutoRotate,
+    startAutoRotateTimer,
+    stopAutoRotateTimer
   };
 } 
