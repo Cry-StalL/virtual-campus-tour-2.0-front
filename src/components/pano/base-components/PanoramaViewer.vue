@@ -534,7 +534,7 @@ const switchScene = (target: number | string) => {
 
   // 在场景切换后重新应用视角限制
   nextTick(() => {
-    console.log('场景切换后重新应用视角限制');
+    // console.log('场景切换后重新应用视角限制');
     applyViewLimits();
   });
 };
@@ -644,16 +644,16 @@ watch(
 // 应用视角限制的函数
 const applyViewLimits = () => {
   if (!controls.value) {
-    console.log('OrbitControls未初始化，跳过视角限制应用');
+    // console.log('OrbitControls未初始化，跳过视角限制应用');
     return;
   }
   
-  console.log('开始应用视角限制:', {
-    minLatitude: props.minLatitude,
-    maxLatitude: props.maxLatitude,
-    minLongitude: props.minLongitude,
-    maxLongitude: props.maxLongitude
-  });
+  // console.log('开始应用视角限制:', {
+  //   minLatitude: props.minLatitude,
+  //   maxLatitude: props.maxLatitude,
+  //   minLongitude: props.minLongitude,
+  //   maxLongitude: props.maxLongitude
+  // });
 
   // 重置角度限制为默认值（无限制）
   controls.value.minAzimuthAngle = -Infinity;
@@ -672,24 +672,24 @@ const applyViewLimits = () => {
 
   // 应用纬度限制（极角限制）
   if (props.minLatitude !== undefined) {
-    console.log('应用最小纬度限制:', props.minLatitude);
+    // console.log('应用最小纬度限制:', props.minLatitude);
     const { polarAngle } = latLonToOrbitAngles(props.minLatitude, 0);
     controls.value.maxPolarAngle = Math.min(Math.PI, polarAngle);
-    console.log('设置maxPolarAngle为:', controls.value.maxPolarAngle, '弧度，约', THREE.MathUtils.radToDeg(controls.value.maxPolarAngle), '度');
-    console.log('这意味着最低只能看到纬度:', props.minLatitude, '度');
+    // console.log('设置maxPolarAngle为:', controls.value.maxPolarAngle, '弧度，约', THREE.MathUtils.radToDeg(controls.value.maxPolarAngle), '度');
+    // console.log('这意味着最低只能看到纬度:', props.minLatitude, '度');
   }
   
   if (props.maxLatitude !== undefined) {
-    console.log('应用最大纬度限制:', props.maxLatitude);
+    // console.log('应用最大纬度限制:', props.maxLatitude);
     const { polarAngle } = latLonToOrbitAngles(props.maxLatitude, 0);
     controls.value.minPolarAngle = Math.max(0, polarAngle);
-    console.log('设置minPolarAngle为:', controls.value.minPolarAngle, '弧度，约', THREE.MathUtils.radToDeg(controls.value.minPolarAngle), '度');
-    console.log('这意味着最高只能看到纬度:', props.maxLatitude, '度');
+    // console.log('设置minPolarAngle为:', controls.value.minPolarAngle, '弧度，约', THREE.MathUtils.radToDeg(controls.value.minPolarAngle), '度');
+    // console.log('这意味着最高只能看到纬度:', props.maxLatitude, '度');
   }
 
   // 应用经度限制（方位角限制）
   if (props.minLongitude !== undefined && props.maxLongitude !== undefined) {
-    console.log('应用经度限制:', props.minLongitude, 'to', props.maxLongitude);
+    // console.log('应用经度限制:', props.minLongitude, 'to', props.maxLongitude);
     const { azimuthAngle: minAzimuth } = latLonToOrbitAngles(0, props.maxLongitude);
     const { azimuthAngle: maxAzimuth } = latLonToOrbitAngles(0, props.minLongitude);
     
@@ -697,21 +697,21 @@ const applyViewLimits = () => {
     controls.value.maxAzimuthAngle = maxAzimuth;
   }
 
-  console.log('视角限制已应用:', {
-    minLongitude: props.minLongitude,
-    maxLongitude: props.maxLongitude,
-    minLatitude: props.minLatitude,
-    maxLatitude: props.maxLatitude,
-    minAzimuthAngle: controls.value.minAzimuthAngle,
-    maxAzimuthAngle: controls.value.maxAzimuthAngle,
-    minPolarAngle: controls.value.minPolarAngle,
-    maxPolarAngle: controls.value.maxPolarAngle
-  });
+  // console.log('视角限制已应用:', {
+  //   minLongitude: props.minLongitude,
+  //   maxLongitude: props.maxLongitude,
+  //   minLatitude: props.minLatitude,
+  //   maxLatitude: props.maxLatitude,
+  //   minAzimuthAngle: controls.value.minAzimuthAngle,
+  //   maxAzimuthAngle: controls.value.maxAzimuthAngle,
+  //   minPolarAngle: controls.value.minPolarAngle,
+  //   maxPolarAngle: controls.value.maxPolarAngle
+  // });
 
   // 强制更新controls以应用新的限制
   controls.value.update();
   
-  console.log('视角限制应用完成');
+  // console.log('视角限制应用完成');
 };
 
 onMounted(() => {
@@ -733,12 +733,12 @@ onMounted(() => {
   
   // 在nextTick中应用视角限制，确保controls已初始化
   nextTick(() => {
-    console.log('在nextTick中调用applyViewLimits');
+    // console.log('在nextTick中调用applyViewLimits');
     applyViewLimits();
     
     // 再添加一个延迟调用，确保OrbitControls完全初始化
     setTimeout(() => {
-      console.log('延迟500ms后再次调用applyViewLimits');
+      // console.log('延迟500ms后再次调用applyViewLimits');
       applyViewLimits();
     }, 500);
   });
