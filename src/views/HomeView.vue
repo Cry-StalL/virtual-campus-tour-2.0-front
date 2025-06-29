@@ -15,7 +15,7 @@
       />
 
       <!-- 全景图旋转视频 -->
-      <div v-if="showIntroVideo" class="intro-video-container">
+      <!-- <div v-if="showIntroVideo" class="intro-video-container">
         <video 
           src="/111.mp4" 
           autoplay 
@@ -23,7 +23,7 @@
           @ended="onVideoEnded"
           @error="onVideoError"
         ></video>
-      </div>
+      </div> -->
 
     </div>
 
@@ -310,10 +310,10 @@ const showCurrentSceneId = () => {
 const onVideoEnded = () => {
   // 标记视频已播放过
   sessionStorage.setItem('hasPlayedIntroVideo', 'true');
-  // 视频播放完后停留1秒
+  // 视频播放完后停留0.3秒
   setTimeout(() => {
     showIntroVideo.value = false;
-  }, 1000);
+  }, 300);
 };
 
 const onVideoError = () => {
