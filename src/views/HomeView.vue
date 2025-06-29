@@ -151,7 +151,6 @@ import UsefulInfo from '@/components/usefulInfo.vue';
 import Help from '@/components/Help.vue';
 import About from '@/components/About.vue';
 import Privacy from '@/components/Privacy.vue';
-import { fa } from 'element-plus/es/locale';
 
 // Define types
 type SectionState = {
@@ -268,9 +267,8 @@ const togglePrivacyView = () => {
   aboutViewVisible.value = false;
 };
 const closeSiteChoose = () => {
-  if(siteChooseVisible.value){
-    siteChooseVisible.value = false;
-  }
+  // 复用现有的关闭逻辑，同时关闭sidebar和所有页面
+  handleContentClick();
 };
 const closeUsefulInfo = () => {
   if(usefulInfoVisible.value){
@@ -371,6 +369,14 @@ onMounted(() => {
   
   const ua = navigator.userAgent
   isMobileDevice.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
+  
+  // 将viewerGroup暴露到全局window对象，供SiteChoose组件使用
+  nextTick(() => {
+    if (viewerGroup.value) {
+      (window as any).viewerGroup = viewerGroup.value;
+      console.log('viewerGroup已暴露到全局window对象');
+    }
+  });
 });
 
 </script>

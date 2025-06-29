@@ -115,11 +115,12 @@ const currentViewerComponent = computed(() => {
   return currentViewer.value ? viewers.value[currentViewer.value].component : null;
 });
 
-// 暴露方法
+// 暴露方法和属性
 defineExpose({
   switchViewer,
   handleReturnToStreet,
-  handleReturnToAerial
+  handleReturnToAerial,
+  currentViewer
 });
 
 // onMounted(() => {

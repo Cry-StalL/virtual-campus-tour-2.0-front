@@ -59,7 +59,7 @@
             <el-container style="height: 8px; display: flex; align-items: center; justify-content: space-between;">
               <el-text>{{ location.name }}</el-text>
               <div>
-                <el-button style="width: 80px; height: 25px; font-size: 15px;" @click="handleConfirm(location)">点击跳转</el-button>
+                <el-button style="width: 80px; height: 25px; font-size: 15px;" @click="confirm(); handleConfirm(location)">点击跳转</el-button>
               </div>
             </el-container>
             <el-container style="width: 100%; height: 5px;"></el-container>
@@ -96,7 +96,7 @@
             <el-container style="height: 8px; display: flex; align-items: center; justify-content: space-between;">
               <el-text>{{ location.name }}</el-text>
               <div>
-                <el-button size="small" @click="handleConfirm(location)">点击跳转</el-button>
+                <el-button size="small" @click="confirm(); handleConfirm(location)">点击跳转</el-button>
               </div>
             </el-container>
             <el-container style="width: 100%; height: 5px;"></el-container>
@@ -110,12 +110,30 @@
 
 <script setup lang="ts">
     
-    import { onMounted, ref, computed } from 'vue';
+    import { onMounted, onBeforeUnmount, ref, computed } from 'vue';
+
+    // 定义地点类型
+    interface Location {
+        name: string;
+        text: string;
+        id: number;
+        left: number;
+        top: number;
+    }
+
+    // 声明window上的streetViewer属性
+    declare global {
+        interface Window {
+            streetViewer?: {
+                switchScene: (name: string) => void;
+            };
+        }
+    }
 
 
     // 搜索相关
     const searchQuery = ref('');
-    const searchResults = ref<Array<{name: string; text: string; id: number; left: number; top: number}>>([]);
+    const searchResults = ref<Location[]>([]);
     const showPopconfirm = computed(() => searchQuery.value.trim() === '');
     const handleSearch = () => {
         if (!searchQuery.value.trim()) {
@@ -135,8 +153,8 @@
 
     // 地点相关
     const locations = [
-        { name: '南门', text: '南门', id: 1, left: 0.325, top: 0.7 },
-        { name: '彩虹门', text: '彩虹门', id: 2, left: 0.345, top: 0.66 },
+        { name: '南门', streetSceneId: 'rh-1-36', text: '南门', id: 1, left: 0.325, top: 0.7 },
+        { name: '彩虹门', streetSceneId: 'rh-1-33', text: '彩虹门', id: 2, left: 0.345, top: 0.66 },
         { name: '图书馆', text: '图书馆', id: 3, left: 0.385, top: 0.58 },
 
         { name: '若海', text: '若海', id: 4, left: 0.535, top: 0.56 },
@@ -181,7 +199,7 @@
         { name: '华夏门', text: '华夏门', id: 39, left: 0.55, top: 0.09 },
         { name: '东南门', text: '东南门', id: 40, left: 0.535, top: 0.755 }
     ];
-    const search_locations = ref([]);
+    const search_locations = ref<Location[]>([]);
 
 
     onMounted(() => {
@@ -207,10 +225,45 @@
     };  
 
     // 跳转相关
-    const handleConfirm = (location) => {
-        console.log(window.streetViewer);
-        // 跳转到对应的场景
-        window.streetViewer?.switchScene(location.name); // 这里还要补充一个场景名称-sceneId的映射
+    const handleConfirm = (location: Location) => {
+        console.log('正在跳转到:', location.name, location.streetSceneId);
+        
+        // 先关闭sidebar和地图
+        emit('closeSiteChooseView');
+        
+        // 延迟后开始跳转逻辑
+        setTimeout(() => {
+            // 获取当前的viewer组件
+            const viewerGroup = (window as any).viewerGroup;
+            if (!viewerGroup) {
+                console.error('无法获取viewerGroup');
+                return;
+            }
+            
+            // 检查当前是否在street viewer中
+            const currentViewer = viewerGroup.currentViewer;
+            console.log('当前viewer:', currentViewer);
+            
+            if (currentViewer !== 'street') {
+                // 如果不在street viewer中，先切换到street viewer
+                console.log('当前不在street viewer，先切换到street viewer');
+                viewerGroup.switchViewer('street');
+                
+                // 等待切换完成后再跳转场景
+                setTimeout(() => {
+                    if ((window as any).streetViewer && location.streetSceneId) {
+                        console.log('切换到street viewer完成，跳转场景:', location.streetSceneId);
+                        (window as any).streetViewer.switchScene(location.streetSceneId);
+                    }
+                }, 500); // 给一点时间让viewer切换完成
+            } else {
+                // 如果已经在street viewer中，直接跳转场景
+                if ((window as any).streetViewer && location.streetSceneId) {
+                    console.log('已在street viewer中，直接跳转场景:', location.streetSceneId);
+                    (window as any).streetViewer.switchScene(location.streetSceneId);
+                }
+            }
+        }, 300); // 先等待页面关闭动画完成，再开始跳转
     }
 
     // 删除
@@ -268,6 +321,26 @@
     width: 20px !important;
     height: 20px !important;
   }
+}
+
+/* 加速悬浮框关闭动画 */
+:deep(.el-popper) {
+  transition: all 0.1s ease !important;
+}
+
+:deep(.el-popconfirm) {
+  transition: all 0.1s ease !important;
+}
+
+/* 针对淡入淡出动画 */
+:deep(.el-popper.is-pure) {
+  transition: opacity 0.1s ease !important;
+}
+
+/* 针对Vue的transition动画 */
+:deep(.fade-in-linear-enter-active),
+:deep(.fade-in-linear-leave-active) {
+  transition: opacity 0.1s ease !important;
 }
 
 </style>
