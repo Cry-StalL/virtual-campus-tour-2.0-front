@@ -15,7 +15,7 @@
       />
 
       <!-- 全景图旋转视频 -->
-      <!-- <div v-if="showIntroVideo" class="intro-video-container">
+      <div v-if="showIntroVideo" class="intro-video-container">
         <video 
           src="/111.mp4" 
           autoplay 
@@ -23,7 +23,7 @@
           @ended="onVideoEnded"
           @error="onVideoError"
         ></video>
-      </div> -->
+      </div>
 
     </div>
 
@@ -238,6 +238,11 @@ const toggleSiteChoose = () => {
   helpViewVisible.value = false;
   aboutViewVisible.value = false;
   privacyViewVisible.value = false;
+  
+  // 移动端下，当组件显示时自动隐藏侧边栏
+  if (isMobileDevice.value && siteChooseVisible.value) {
+    sidebarVisible.value = false;
+  }
 };
 const toggleUsefulInfo = () => {
   usefulInfoVisible.value = !usefulInfoVisible.value; // 切换显示状态
@@ -245,6 +250,10 @@ const toggleUsefulInfo = () => {
   helpViewVisible.value = false;
   aboutViewVisible.value = false;
   privacyViewVisible.value = false;
+  
+  if (isMobileDevice.value && usefulInfoVisible.value) {
+    sidebarVisible.value = false;
+  }
 };
 const toggleHelpView = () => {
   helpViewVisible.value = !helpViewVisible.value;
@@ -252,6 +261,10 @@ const toggleHelpView = () => {
   usefulInfoVisible.value = false;
   aboutViewVisible.value = false;
   privacyViewVisible.value = false;
+  
+  if (isMobileDevice.value && helpViewVisible.value) {
+    sidebarVisible.value = false;
+  }
 };
 const toggleAboutView = () => {
   aboutViewVisible.value = !aboutViewVisible.value;
@@ -259,6 +272,10 @@ const toggleAboutView = () => {
   usefulInfoVisible.value = false;
   helpViewVisible.value = false;
   privacyViewVisible.value = false;
+  
+  if (isMobileDevice.value && aboutViewVisible.value) {
+    sidebarVisible.value = false;
+  }
 };
 const togglePrivacyView = () => {
   privacyViewVisible.value = !privacyViewVisible.value;
@@ -266,6 +283,10 @@ const togglePrivacyView = () => {
   usefulInfoVisible.value = false;
   helpViewVisible.value = false;
   aboutViewVisible.value = false;
+  
+  if (isMobileDevice.value && privacyViewVisible.value) {
+    sidebarVisible.value = false;
+  }
 };
 const closeSiteChoose = () => {
   if(siteChooseVisible.value){
