@@ -110,12 +110,30 @@
 
 <script setup lang="ts">
     
-    import { onMounted, ref, computed } from 'vue';
+    import { onMounted, onBeforeUnmount, ref, computed } from 'vue';
+
+    // 定义地点类型
+    interface Location {
+        name: string;
+        text: string;
+        id: number;
+        left: number;
+        top: number;
+    }
+
+    // 声明window上的streetViewer属性
+    declare global {
+        interface Window {
+            streetViewer?: {
+                switchScene: (name: string) => void;
+            };
+        }
+    }
 
 
     // 搜索相关
     const searchQuery = ref('');
-    const searchResults = ref<Array<{name: string; text: string; id: number; left: number; top: number}>>([]);
+    const searchResults = ref<Location[]>([]);
     const showPopconfirm = computed(() => searchQuery.value.trim() === '');
     const handleSearch = () => {
         if (!searchQuery.value.trim()) {
@@ -181,7 +199,7 @@
         { name: '华夏门', text: '华夏门', id: 39, left: 0.55, top: 0.09 },
         { name: '东南门', text: '东南门', id: 40, left: 0.535, top: 0.755 }
     ];
-    const search_locations = ref([]);
+    const search_locations = ref<Location[]>([]);
 
 
     onMounted(() => {
@@ -207,7 +225,7 @@
     };  
 
     // 跳转相关
-    const handleConfirm = (location) => {
+    const handleConfirm = (location: Location) => {
         console.log('正在跳转到:', location.name, location.streetSceneId);
         
         // 获取当前的viewer组件
