@@ -49,7 +49,7 @@ const aerialScenes: Scene[] = [
         type: 'aerial',
         longitude: 0,
         latitude: 0,
-        icon: '/icons/aerial_hotspot.gif',
+        icon: '/icons/aerial_hotspot.png',
         targetStreetSceneId: 'ry-1-16' // 对应街景场景ID
       }
     ]
@@ -62,7 +62,7 @@ const aerialScenes: Scene[] = [
         type: 'aerial',
         longitude: 45,
         latitude: 0,
-        icon: '/icons/aerial_hotspot.gif',
+        icon: '/icons/aerial_hotspot.png',
         targetStreetSceneId: 'byy-1-16' // 对应街景场景ID
       }
     ]
@@ -75,7 +75,7 @@ const aerialScenes: Scene[] = [
         type: 'aerial',
         longitude: -45,
         latitude: 0,
-        icon: '/icons/aerial_hotspot.gif',
+        icon: '/icons/aerial_hotspot.png',
         targetStreetSceneId: 'ry-2-1' // 对应街景场景ID
       }
     ]
