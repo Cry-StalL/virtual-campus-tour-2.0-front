@@ -210,36 +210,42 @@
     const handleConfirm = (location) => {
         console.log('正在跳转到:', location.name, location.streetSceneId);
         
-        // 获取当前的viewer组件
-        const viewerGroup = (window as any).viewerGroup;
-        if (!viewerGroup) {
-            console.error('无法获取viewerGroup');
-            return;
-        }
+        // 先关闭sidebar和地图
+        emit('closeSiteChooseView');
         
-        // 检查当前是否在street viewer中
-        const currentViewer = viewerGroup.currentViewer;
-        console.log('当前viewer:', currentViewer);
-        
-        if (currentViewer !== 'street') {
-            // 如果不在street viewer中，先切换到street viewer
-            console.log('当前不在street viewer，先切换到street viewer');
-            viewerGroup.switchViewer('street');
-            
-            // 等待切换完成后再跳转场景
-            setTimeout(() => {
-                if (window.streetViewer && location.streetSceneId) {
-                    console.log('切换到street viewer完成，跳转场景:', location.streetSceneId);
-                    window.streetViewer.switchScene(location.streetSceneId);
-                }
-            }, 500); // 给一点时间让viewer切换完成
-        } else {
-            // 如果已经在street viewer中，直接跳转场景
-            if (window.streetViewer && location.streetSceneId) {
-                console.log('已在street viewer中，直接跳转场景:', location.streetSceneId);
-                window.streetViewer.switchScene(location.streetSceneId);
+        // 延迟后开始跳转逻辑
+        setTimeout(() => {
+            // 获取当前的viewer组件
+            const viewerGroup = (window as any).viewerGroup;
+            if (!viewerGroup) {
+                console.error('无法获取viewerGroup');
+                return;
             }
-        }
+            
+            // 检查当前是否在street viewer中
+            const currentViewer = viewerGroup.currentViewer;
+            console.log('当前viewer:', currentViewer);
+            
+            if (currentViewer !== 'street') {
+                // 如果不在street viewer中，先切换到street viewer
+                console.log('当前不在street viewer，先切换到street viewer');
+                viewerGroup.switchViewer('street');
+                
+                // 等待切换完成后再跳转场景
+                setTimeout(() => {
+                    if ((window as any).streetViewer && location.streetSceneId) {
+                        console.log('切换到street viewer完成，跳转场景:', location.streetSceneId);
+                        (window as any).streetViewer.switchScene(location.streetSceneId);
+                    }
+                }, 500); // 给一点时间让viewer切换完成
+            } else {
+                // 如果已经在street viewer中，直接跳转场景
+                if ((window as any).streetViewer && location.streetSceneId) {
+                    console.log('已在street viewer中，直接跳转场景:', location.streetSceneId);
+                    (window as any).streetViewer.switchScene(location.streetSceneId);
+                }
+            }
+        }, 300); // 先等待页面关闭动画完成，再开始跳转
     }
 
     // 删除

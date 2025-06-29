@@ -172,7 +172,6 @@ import axios from 'axios';
 import AvatarSelector from '@/components/AvatarSelector.vue';
 
 import { getApiUrl } from '@/config/config.ts';
-import { th } from 'element-plus/es/locales.mjs';
 
 
 export default {
