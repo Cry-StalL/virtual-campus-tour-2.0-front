@@ -143,7 +143,7 @@ const currentPanoramaId = ref('1');
 const resolutions = ref(["1920x960", "3840x1920", "7680x3840"]); // 定义分辨率列表
 
 // 视频播放状态控制
-const showIntroVideo = ref(true);
+const showIntroVideo = ref(false); // 默认为false，通过检查来决定是否显示
 const sectionsState = ref<SectionState>({
   location: false,
   info: false,
@@ -155,6 +155,14 @@ const sectionsState = ref<SectionState>({
 const checkLoginStatus = () => {
   username.value = Cookies.get('username') || '';
   userID.value = Cookies.get('userId') || '0';
+};
+
+// 检查视频是否已经播放过
+const checkVideoPlayStatus = () => {
+  const hasPlayedIntro = sessionStorage.getItem('hasPlayedIntroVideo');
+  if (!hasPlayedIntro) {
+    showIntroVideo.value = true;
+  }
 };
 
 const isLoggedIn = computed(() => {
@@ -300,6 +308,8 @@ const showCurrentSceneId = () => {
 
 // 视频播放控制方法
 const onVideoEnded = () => {
+  // 标记视频已播放过
+  sessionStorage.setItem('hasPlayedIntroVideo', 'true');
   // 视频播放完后停留1秒
   setTimeout(() => {
     showIntroVideo.value = false;
@@ -307,6 +317,7 @@ const onVideoEnded = () => {
 };
 
 const onVideoError = () => {
+  sessionStorage.setItem('hasPlayedIntroVideo', 'true');
   showIntroVideo.value = false;
 };
 
@@ -317,6 +328,7 @@ const viewers = [
 
 onMounted(() => {
   checkLoginStatus();
+  checkVideoPlayStatus();
 });
 
 </script>
