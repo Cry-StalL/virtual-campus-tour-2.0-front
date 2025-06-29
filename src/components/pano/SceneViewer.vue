@@ -9,6 +9,7 @@
       :resolutions="viewerconfig.resolutions"
       :initialScene="props.initialScene ?? viewerconfig.initialScene"
       :handleReturnToStreet="handleReturnToStreet"
+      :debug="APP_CONFIG.debug.enabled"
     />
     
     <!-- 可拖动留言预览框 -->
@@ -89,7 +90,7 @@ import { useSceneViewerConfig } from './composables/useSceneViewerConfig';
 import type { HotSpot } from '@/components/pano/base-components/composables/types';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
-import { getApiUrl } from '@/config/config.ts';
+import { getApiUrl, APP_CONFIG } from '@/config/config.ts';
 
 const panoramaViewerRef = ref(null);
 

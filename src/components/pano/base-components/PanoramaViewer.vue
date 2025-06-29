@@ -7,12 +7,33 @@
         <div class="error-message">{{ errorMessage }}</div>
       </div>
     </div>
+
+    <!-- 加载进度条 -->
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">
+          正在加载全景图<span class="loading-dots">
+            <span>.</span><span>.</span><span>.</span>
+          </span>
+        </div>
+        <div class="loading-progress-container">
+          <div class="loading-progress-bar">
+            <div 
+              class="loading-progress-fill" 
+              :style="{ width: loadingProgress + '%' }"
+            ></div>
+          </div>
+          <div class="loading-progress-text">{{ Math.round(loadingProgress) }}%</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch, shallowRef, nextTick } from 'vue';
-import { ElIcon } from 'element-plus';
+import { ElIcon, ElMessage } from 'element-plus';
 import { Warning } from '@element-plus/icons-vue';
 import { useThreeJsSetup } from './composables/useThreeJsSetup';
 import { useCoordinateConverter } from './composables/useCoordinateConverter';
@@ -20,7 +41,7 @@ import { useErrorHandler } from './composables/useErrorHandler';
 import type { PanoramaViewerProps, HotSpot, Scene } from './composables/types';
 import * as THREE from 'three';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
-import { API_CONFIG } from '@/config/config';
+import { APP_CONFIG, API_CONFIG } from '@/config/config';
 
 // 定义事件
 const emit = defineEmits<{
@@ -46,6 +67,10 @@ const props = withDefaults(defineProps<PanoramaViewerProps>(), {
 });
 
 const viewerContainer = ref<HTMLElement | null>(null);
+
+// 加载进度状态
+const isLoading = ref(false);
+const loadingProgress = ref(0);
 
 // 初始化错误处理器
 const { errorMessage, showError, hideError } = useErrorHandler(emit);
@@ -160,7 +185,7 @@ const createHotspot = (hotspot: HotSpot) => {
     } else if (hotspot.type === 'enterSceneViewer') {
       hotspot.icon = '/icons/scene_hotspot.png';
     } else if (hotspot.type === 'aerial') {
-      hotspot.icon = '/icons/arrow_hotspot.png';
+      hotspot.icon = '/icons/aerial_hotspot.png';
     }
   }
 
@@ -319,16 +344,23 @@ const clearHotspots = () => {
 
 // 渐进加载图片
 const loadImageProgressively = (baseImagePath: string, targetMesh: THREE.Mesh) => {
-  // alert('渐进加载图片');
   if (!scene.value) return;
+  
+  isLoading.value = true;
+  loadingProgress.value = 0;
+  
   const textureLoader = new THREE.TextureLoader();
+  let firstImageLoaded = false;
+  
   props.resolutions.forEach((resolution, index) => {
     const imagePath = getFullImageUrl(`${baseImagePath}/${resolution}.jpg`);
     if (props.debug) {
       console.log(`加载分辨率图片: ${imagePath}`);
     }
+    
     textureLoader.load(
       imagePath,
+      // onLoad
       (texture: THREE.Texture) => {
         if (!scene.value) return;
         texture.colorSpace = THREE.SRGBColorSpace;
@@ -347,12 +379,36 @@ const loadImageProgressively = (baseImagePath: string, targetMesh: THREE.Mesh) =
             console.log(`已加载分辨率: ${resolution}`);
           }
         }
+        
+        // 第一个分辨率（较模糊版本）加载完成后立即隐藏进度条
+        if (index === 0 && !firstImageLoaded) {
+          firstImageLoaded = true;
+          loadingProgress.value = 100;
+          setTimeout(() => {
+            isLoading.value = false;
+            loadingProgress.value = 0;
+          }, 300); // 短暂延迟让用户看到完成状态
+        }
       },
-      undefined,
+      // onProgress - 只跟踪第一个分辨率（较模糊版本）的详细进度
+      index === 0 ? (progressEvent: ProgressEvent) => {
+        if (progressEvent.lengthComputable && !firstImageLoaded) {
+          loadingProgress.value = (progressEvent.loaded / progressEvent.total) * 100;
+        }
+      } : undefined,
+      // onError
       (err: unknown) => {
         const errorMessage = err instanceof Error ? err.message : '未知错误';
         if (props.debug) {
           console.error(`加载分辨率 ${resolution} 失败: ${errorMessage}`);
+        }
+        
+        // 如果第一个分辨率加载失败，隐藏进度条并显示错误
+        if (index === 0 && !firstImageLoaded) {
+          firstImageLoaded = true;
+          isLoading.value = false;
+          loadingProgress.value = 0;
+          showError(`加载场景图片失败: ${errorMessage}`);
         }
       }
     );
@@ -411,11 +467,13 @@ const switchScene = (target: number | string) => {
     loadImageProgressively(newScene.relativeImagePath, mesh);
   } else {
     // 标准加载模式
-    // alert('标注加载图片');
+    isLoading.value = true;
+    loadingProgress.value = 0;
 
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(
       getFullImageUrl(`${newScene.relativeImagePath}/1920x960.jpg`),
+      // onLoad
       (texture: THREE.Texture) => {
         if (!scene.value) return;
         texture.colorSpace = THREE.SRGBColorSpace;
@@ -425,11 +483,27 @@ const switchScene = (target: number | string) => {
         texture.anisotropy = renderer.value?.capabilities.getMaxAnisotropy() || 1;
         material.map = texture;
         material.needsUpdate = true;
+        
+        // 加载完成，隐藏进度条
+        setTimeout(() => {
+          isLoading.value = false;
+          loadingProgress.value = 0;
+        }, 500);
       },
-      undefined,
+      // onProgress
+      (progressEvent: ProgressEvent) => {
+        if (progressEvent.lengthComputable) {
+          loadingProgress.value = (progressEvent.loaded / progressEvent.total) * 100;
+        }
+      },
+      // onError
       (err: unknown) => {
         const errorMessage = err instanceof Error ? err.message : '未知错误';
         showError(`加载场景图片失败: ${errorMessage}`);
+        
+        // 出错时隐藏进度条
+        isLoading.value = false;
+        loadingProgress.value = 0;
       }
     );
   }
@@ -460,7 +534,7 @@ const switchScene = (target: number | string) => {
 
   // 在场景切换后重新应用视角限制
   nextTick(() => {
-    console.log('场景切换后重新应用视角限制');
+    // console.log('场景切换后重新应用视角限制');
     applyViewLimits();
   });
 };
@@ -507,9 +581,29 @@ const handleSceneClick = (event: MouseEvent) => {
     sceneId: currentSceneId.value
   };
 
-  // 如果在debug模式下，打印到控制台
-  if (props.debug) {
-    console.log('点击位置坐标:', coordinates);
+  // 如果在debug模式下，打印到控制台、复制到剪贴板并显示提示
+  if (props.debug && APP_CONFIG.debug.enabled) {
+    console.log('点击位置坐标:', coordinates, '场景ID:', currentSceneId.value);
+    
+    // 复制坐标和场景ID到剪贴板
+    const coordinateText = `longitude: ${coordinates.longitude}, latitude: ${coordinates.latitude}, sceneId: ${currentSceneId.value}`;
+    try {
+      navigator.clipboard.writeText(coordinateText).then(() => {
+        ElMessage.success('坐标和场景ID已复制到剪贴板');
+      }).catch(() => {
+        // 如果现代 Clipboard API 失败，尝试传统方法
+        const textArea = document.createElement('textarea');
+        textArea.value = coordinateText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        ElMessage.success('坐标和场景ID已复制到剪贴板');
+      });
+    } catch (error) {
+      console.error('复制坐标失败:', error);
+      ElMessage.error('复制坐标失败');
+    }
   }
   
   // 触发坐标选择事件
@@ -570,16 +664,16 @@ watch(
 // 应用视角限制的函数
 const applyViewLimits = () => {
   if (!controls.value) {
-    console.log('OrbitControls未初始化，跳过视角限制应用');
+    // console.log('OrbitControls未初始化，跳过视角限制应用');
     return;
   }
   
-  console.log('开始应用视角限制:', {
-    minLatitude: props.minLatitude,
-    maxLatitude: props.maxLatitude,
-    minLongitude: props.minLongitude,
-    maxLongitude: props.maxLongitude
-  });
+  // console.log('开始应用视角限制:', {
+  //   minLatitude: props.minLatitude,
+  //   maxLatitude: props.maxLatitude,
+  //   minLongitude: props.minLongitude,
+  //   maxLongitude: props.maxLongitude
+  // });
 
   // 重置角度限制为默认值（无限制）
   controls.value.minAzimuthAngle = -Infinity;
@@ -598,24 +692,24 @@ const applyViewLimits = () => {
 
   // 应用纬度限制（极角限制）
   if (props.minLatitude !== undefined) {
-    console.log('应用最小纬度限制:', props.minLatitude);
+    // console.log('应用最小纬度限制:', props.minLatitude);
     const { polarAngle } = latLonToOrbitAngles(props.minLatitude, 0);
     controls.value.maxPolarAngle = Math.min(Math.PI, polarAngle);
-    console.log('设置maxPolarAngle为:', controls.value.maxPolarAngle, '弧度，约', THREE.MathUtils.radToDeg(controls.value.maxPolarAngle), '度');
-    console.log('这意味着最低只能看到纬度:', props.minLatitude, '度');
+    // console.log('设置maxPolarAngle为:', controls.value.maxPolarAngle, '弧度，约', THREE.MathUtils.radToDeg(controls.value.maxPolarAngle), '度');
+    // console.log('这意味着最低只能看到纬度:', props.minLatitude, '度');
   }
   
   if (props.maxLatitude !== undefined) {
-    console.log('应用最大纬度限制:', props.maxLatitude);
+    // console.log('应用最大纬度限制:', props.maxLatitude);
     const { polarAngle } = latLonToOrbitAngles(props.maxLatitude, 0);
     controls.value.minPolarAngle = Math.max(0, polarAngle);
-    console.log('设置minPolarAngle为:', controls.value.minPolarAngle, '弧度，约', THREE.MathUtils.radToDeg(controls.value.minPolarAngle), '度');
-    console.log('这意味着最高只能看到纬度:', props.maxLatitude, '度');
+    // console.log('设置minPolarAngle为:', controls.value.minPolarAngle, '弧度，约', THREE.MathUtils.radToDeg(controls.value.minPolarAngle), '度');
+    // console.log('这意味着最高只能看到纬度:', props.maxLatitude, '度');
   }
 
   // 应用经度限制（方位角限制）
   if (props.minLongitude !== undefined && props.maxLongitude !== undefined) {
-    console.log('应用经度限制:', props.minLongitude, 'to', props.maxLongitude);
+    // console.log('应用经度限制:', props.minLongitude, 'to', props.maxLongitude);
     const { azimuthAngle: minAzimuth } = latLonToOrbitAngles(0, props.maxLongitude);
     const { azimuthAngle: maxAzimuth } = latLonToOrbitAngles(0, props.minLongitude);
     
@@ -623,21 +717,21 @@ const applyViewLimits = () => {
     controls.value.maxAzimuthAngle = maxAzimuth;
   }
 
-  console.log('视角限制已应用:', {
-    minLongitude: props.minLongitude,
-    maxLongitude: props.maxLongitude,
-    minLatitude: props.minLatitude,
-    maxLatitude: props.maxLatitude,
-    minAzimuthAngle: controls.value.minAzimuthAngle,
-    maxAzimuthAngle: controls.value.maxAzimuthAngle,
-    minPolarAngle: controls.value.minPolarAngle,
-    maxPolarAngle: controls.value.maxPolarAngle
-  });
+  // console.log('视角限制已应用:', {
+  //   minLongitude: props.minLongitude,
+  //   maxLongitude: props.maxLongitude,
+  //   minLatitude: props.minLatitude,
+  //   maxLatitude: props.maxLatitude,
+  //   minAzimuthAngle: controls.value.minAzimuthAngle,
+  //   maxAzimuthAngle: controls.value.maxAzimuthAngle,
+  //   minPolarAngle: controls.value.minPolarAngle,
+  //   maxPolarAngle: controls.value.maxPolarAngle
+  // });
 
   // 强制更新controls以应用新的限制
   controls.value.update();
   
-  console.log('视角限制应用完成');
+  // console.log('视角限制应用完成');
 };
 
 onMounted(() => {
@@ -659,12 +753,12 @@ onMounted(() => {
   
   // 在nextTick中应用视角限制，确保controls已初始化
   nextTick(() => {
-    console.log('在nextTick中调用applyViewLimits');
+    // console.log('在nextTick中调用applyViewLimits');
     applyViewLimits();
     
     // 再添加一个延迟调用，确保OrbitControls完全初始化
     setTimeout(() => {
-      console.log('延迟500ms后再次调用applyViewLimits');
+      // console.log('延迟500ms后再次调用applyViewLimits');
       applyViewLimits();
     }, 500);
   });
@@ -810,6 +904,157 @@ defineExpose({
   border-radius: 50%;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* 加载进度条样式 */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 101;
+}
+
+.loading-content {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 80%;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #409EFF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 18px;
+  color: #303133;
+  word-break: break-word;
+}
+
+.loading-dots span {
+  animation: fade 1.4s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fade {
+  0%, 80%, 100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+.loading-progress-container {
+  margin-top: 20px;
+}
+
+.loading-progress-bar {
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(
+    45deg,
+    #f0f0f0 25%,
+    #e8e8e8 25%,
+    #e8e8e8 50%,
+    #f0f0f0 50%,
+    #f0f0f0 75%,
+    #e8e8e8 75%
+  );
+  background-size: 20px 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  animation: scroll-background 2s linear infinite;
+}
+
+@keyframes scroll-background {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 0;
+  }
+}
+
+.loading-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #409EFF 0%, #66B1FF 100%);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-progress-fill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.loading-progress-text {
+  font-size: 14px;
+  color: #303133;
+  margin-top: 5px;
 }
 </style>
 

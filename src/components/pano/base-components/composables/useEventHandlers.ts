@@ -1,6 +1,8 @@
 import type { Ref } from 'vue';
 import * as THREE from 'three';
 import type { HotSpot } from './types';
+import { APP_CONFIG } from '@/config/config';
+import { ElMessage } from 'element-plus';
 
 interface EventHandlerProps {
   debug?: boolean;
@@ -51,9 +53,29 @@ export function useEventHandlers(
       sceneId: currentSceneId.value
     };
 
-    // 如果在debug模式下，打印到控制台
-    if (props.debug) {
-      console.log('点击位置坐标:', coordinates);
+    // 如果在debug模式下，打印到控制台、复制到剪贴板并显示提示
+    if (props.debug && APP_CONFIG.debug.enabled) {
+      console.log('点击位置坐标:', coordinates, '场景ID:', currentSceneId.value);
+      
+      // 复制坐标和场景ID到剪贴板
+      const coordinateText = `longitude: ${coordinates.longitude}, latitude: ${coordinates.latitude}, sceneId: ${currentSceneId.value}`;
+      try {
+        navigator.clipboard.writeText(coordinateText).then(() => {
+          ElMessage.success('坐标和场景ID已复制到剪贴板');
+        }).catch(() => {
+          // 如果现代 Clipboard API 失败，尝试传统方法
+          const textArea = document.createElement('textarea');
+          textArea.value = coordinateText;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          ElMessage.success('坐标和场景ID已复制到剪贴板');
+        });
+      } catch (error) {
+        console.error('复制坐标失败:', error);
+        ElMessage.error('复制坐标失败');
+      }
     }
     
     // 触发坐标选择事件

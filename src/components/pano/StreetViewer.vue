@@ -16,7 +16,7 @@
       :switchViewer="props.switchViewer" 
       :initialScene="props.initialScene ?? viewerconfig.initialScene"
       :maxLatitude="40"
-      :debug="false"
+      :debug="APP_CONFIG.debug.enabled"
     />
 
     <!-- 返回航拍图按钮 -->
@@ -38,6 +38,7 @@ import { onMounted, ref, shallowRef } from 'vue';
 import { ArrowLeft } from '@element-plus/icons-vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import { useStreetViewerConfig } from './composables/useStreetViewerConfig';
+import { APP_CONFIG } from '@/config/config';
 
 const panoramaViewerRef = ref(null);
 const props = defineProps<{ 
