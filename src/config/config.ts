@@ -2,7 +2,7 @@
 export const APP_CONFIG = {
   // 调试模式
   debug: {
-    enabled: false, // 是否启用调试模式
+    enabled: true, // 是否启用调试模式
   },
   // 其他配置项可以在这里添加
 };
