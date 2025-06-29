@@ -13,6 +13,11 @@ interface ThreeJsProps {
   zoomSpeed: number;
   dampingFactor: number;
   fovDampingFactor: number;
+  // 视角限制属性
+  minLongitude?: number;
+  maxLongitude?: number;
+  minLatitude?: number;
+  maxLatitude?: number;
 }
 
 export function useThreeJsSetup(
@@ -35,6 +40,8 @@ export function useThreeJsSetup(
   const autoRotateSpeed = ref<number>(-0.5); // 自动旋转速度，负值为顺时针旋转
   let autoRotateTimer: number | null = null;
   const autoRotateDelay = 5000; // 5秒无操作后开始自动旋转
+
+
 
   // 启动自动旋转定时器
   const startAutoRotateTimer = () => {

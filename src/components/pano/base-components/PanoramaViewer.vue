@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch, shallowRef } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, shallowRef, nextTick } from 'vue';
 import { ElIcon } from 'element-plus';
 import { Warning } from '@element-plus/icons-vue';
 import { useThreeJsSetup } from './composables/useThreeJsSetup';
@@ -63,7 +63,19 @@ const {
   onMouseWheel,
   disposeThreeJs,
   resetAutoRotate,
-} = useThreeJsSetup(viewerContainer, props);
+} = useThreeJsSetup(viewerContainer, {
+  initialFov: props.initialFov,
+  minFov: props.minFov,
+  maxFov: props.maxFov,
+  rotateSpeed: props.rotateSpeed,
+  zoomSpeed: props.zoomSpeed,
+  dampingFactor: props.dampingFactor,
+  fovDampingFactor: props.fovDampingFactor,
+  minLongitude: props.minLongitude,
+  maxLongitude: props.maxLongitude,
+  minLatitude: props.minLatitude,
+  maxLatitude: props.maxLatitude
+});
 
 let hotspotObject: THREE.Sprite | THREE.Mesh;
 
@@ -445,6 +457,12 @@ const switchScene = (target: number | string) => {
     controls.value.object.lookAt(controls.value.target);
     controls.value.update();
   }
+
+  // 在场景切换后重新应用视角限制
+  nextTick(() => {
+    console.log('场景切换后重新应用视角限制');
+    applyViewLimits();
+  });
 };
 
 // 获取当前场景ID
@@ -540,6 +558,88 @@ watch(() => props.scenes, () => {
   }
 }, { deep: true });
 
+// 监听视角限制属性变化并动态更新
+watch(
+  () => [props.minLongitude, props.maxLongitude, props.minLatitude, props.maxLatitude],
+  () => {
+    applyViewLimits();
+  },
+  { deep: true }
+);
+
+// 应用视角限制的函数
+const applyViewLimits = () => {
+  if (!controls.value) {
+    console.log('OrbitControls未初始化，跳过视角限制应用');
+    return;
+  }
+  
+  console.log('开始应用视角限制:', {
+    minLatitude: props.minLatitude,
+    maxLatitude: props.maxLatitude,
+    minLongitude: props.minLongitude,
+    maxLongitude: props.maxLongitude
+  });
+
+  // 重置角度限制为默认值（无限制）
+  controls.value.minAzimuthAngle = -Infinity;
+  controls.value.maxAzimuthAngle = Infinity;
+  controls.value.minPolarAngle = 0;
+  controls.value.maxPolarAngle = Math.PI;
+
+  // 将经纬度转换为OrbitControls的角度系统
+  const latLonToOrbitAngles = (latitude: number, longitude: number) => {
+    // 经度转方位角：经度0度对应OrbitControls的-90度方位角
+    const azimuthAngle = THREE.MathUtils.degToRad(-longitude - 90);
+    // 纬度转极角：纬度90度对应极角0度，纬度-90度对应极角180度
+    const polarAngle = THREE.MathUtils.degToRad(90 - latitude);
+    return { azimuthAngle, polarAngle };
+  };
+
+  // 应用纬度限制（极角限制）
+  if (props.minLatitude !== undefined) {
+    console.log('应用最小纬度限制:', props.minLatitude);
+    const { polarAngle } = latLonToOrbitAngles(props.minLatitude, 0);
+    controls.value.maxPolarAngle = Math.min(Math.PI, polarAngle);
+    console.log('设置maxPolarAngle为:', controls.value.maxPolarAngle, '弧度，约', THREE.MathUtils.radToDeg(controls.value.maxPolarAngle), '度');
+    console.log('这意味着最低只能看到纬度:', props.minLatitude, '度');
+  }
+  
+  if (props.maxLatitude !== undefined) {
+    console.log('应用最大纬度限制:', props.maxLatitude);
+    const { polarAngle } = latLonToOrbitAngles(props.maxLatitude, 0);
+    controls.value.minPolarAngle = Math.max(0, polarAngle);
+    console.log('设置minPolarAngle为:', controls.value.minPolarAngle, '弧度，约', THREE.MathUtils.radToDeg(controls.value.minPolarAngle), '度');
+    console.log('这意味着最高只能看到纬度:', props.maxLatitude, '度');
+  }
+
+  // 应用经度限制（方位角限制）
+  if (props.minLongitude !== undefined && props.maxLongitude !== undefined) {
+    console.log('应用经度限制:', props.minLongitude, 'to', props.maxLongitude);
+    const { azimuthAngle: minAzimuth } = latLonToOrbitAngles(0, props.maxLongitude);
+    const { azimuthAngle: maxAzimuth } = latLonToOrbitAngles(0, props.minLongitude);
+    
+    controls.value.minAzimuthAngle = minAzimuth;
+    controls.value.maxAzimuthAngle = maxAzimuth;
+  }
+
+  console.log('视角限制已应用:', {
+    minLongitude: props.minLongitude,
+    maxLongitude: props.maxLongitude,
+    minLatitude: props.minLatitude,
+    maxLatitude: props.maxLatitude,
+    minAzimuthAngle: controls.value.minAzimuthAngle,
+    maxAzimuthAngle: controls.value.maxAzimuthAngle,
+    minPolarAngle: controls.value.minPolarAngle,
+    maxPolarAngle: controls.value.maxPolarAngle
+  });
+
+  // 强制更新controls以应用新的限制
+  controls.value.update();
+  
+  console.log('视角限制应用完成');
+};
+
 onMounted(() => {
   // 初始化 Three.js 环境
   initThreeJs();
@@ -556,6 +656,18 @@ onMounted(() => {
       resetAutoRotate();
     });
   }
+  
+  // 在nextTick中应用视角限制，确保controls已初始化
+  nextTick(() => {
+    console.log('在nextTick中调用applyViewLimits');
+    applyViewLimits();
+    
+    // 再添加一个延迟调用，确保OrbitControls完全初始化
+    setTimeout(() => {
+      console.log('延迟500ms后再次调用applyViewLimits');
+      applyViewLimits();
+    }, 500);
+  });
   
   // 加载指定的初始场景
   if (props.scenes.length > 0) {
