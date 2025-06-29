@@ -30,13 +30,14 @@
     <!-- 侧边栏切换按钮 -->
     <div class="toggle-btn" @click.stop="toggleSidebar">
       <div style="background-color: white; margin: auto auto; width: 100%; height: 100%; display: flex; align-items: center; border-radius: 50%;">
-        <img class="toggle-icon" v-show="!sidebarVisible" src="/icons/SideBar/more.png" >
-        <img class="toggle-icon" v-show="sidebarVisible" src="../../assets/icons/close.png" >
+        <img class="toggle-icon" v-show="!sidebarVisible" src="../../assets/icons/more.png" >
+        <img class="toggle-icon" style="width: 50%; height: 50%;" v-show="sidebarVisible" src="../../assets/icons/close.png" >
       </div>
     </div>
 
+    
     <!-- 侧边栏 -->
-    <div class="sidebar" :class="{ active: sidebarVisible }" @click.stop>
+    <div class="sidebar" v-show="!isMobileDevice" :class="{ active: sidebarVisible }" @click.stop>
       <Sidebar 
         @toggle-site-choose="toggleSiteChoose" 
         @toggle-useful-info="toggleUsefulInfo" 
@@ -47,6 +48,18 @@
       />
     </div>
 
+    <!-- 移动端侧边栏 -->
+    <div class="m_sidebar" style="height: 80vh; background-color: red;" v-show="isMobileDevice" :class="{ active: sidebarVisible }" @click.stop>
+      <m_Sidebar 
+        @toggle-site-choose="toggleSiteChoose" 
+        @toggle-useful-info="toggleUsefulInfo" 
+        @toggle-help-view="toggleHelpView"
+        @toggle-about-view="toggleAboutView"
+        @toggle-privacy-view="togglePrivacyView"
+        :clearSideBarChoose="clearSideBarChoose" 
+      />
+    </div>
+   
 
     <!-- 地点跳转 -->
     <div class="sitechoose" :class="{ active: siteChooseVisible }" @click.stop>
@@ -123,6 +136,7 @@ import UsefulInfo from '@/components/usefulInfo.vue';
 import Help from '@/components/Help.vue';
 import About from '@/components/About.vue';
 import Privacy from '@/components/Privacy.vue';
+import { fa } from 'element-plus/es/locale';
 
 // Define types
 type SectionState = {
@@ -326,9 +340,19 @@ const viewers = [
   { name: 'scene', component: markRaw(SceneViewer) }
 ];
 
+const isMobileDevice = ref(false)
+function isMobile() {
+  // const ua = navigator.userAgent;
+  // return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+}
+
+
 onMounted(() => {
   checkLoginStatus();
   checkVideoPlayStatus();
+  
+  const ua = navigator.userAgent
+  isMobileDevice.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
 });
 
 </script>
@@ -377,7 +401,7 @@ body, html, #app {
 .sidebar {
   position: absolute;
   top: 0;
-  left: -300px; /* 桌面端固定宽度 */
+  left: -200vw; 
   width: 300px;
   height: 100vh;
   background-color: rgba(255, 255, 255, 1);
@@ -386,9 +410,26 @@ body, html, #app {
   z-index: 20;
   /* overflow-y: auto; */
 }
-
 .sidebar.active {
   left: 0;
+}
+
+
+/* 侧边栏样式 */
+.m_sidebar {
+  position: absolute;
+  left: 0;
+  top: -100vh; /* 桌面端固定宽度 */
+  width: 100vw;
+  /* height: 45vh; */
+  /* background-color: white; */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: top 0.3s ease;
+  z-index: 20;
+  /* overflow-y: auto; */
+}
+.m_sidebar.active {
+  top: 0;
 }
 
 /* 移动端样式 */

@@ -4,11 +4,13 @@
     <div style="width: 100%; height: 10vh; display: flex; align-items: center; justify-content: center; ">
       <img src="../../assets/icons/logo.png" class="project-name">
     </div>
-    <div style="height: 6vh; "></div>
+    <div style="height: 3vh; "></div>
+    <div style="height: 3vh; "></div>
 
-    <div class="sidebar-menu" style="height: 41vh;">
+
+    <div class="sidebar-menu">
       <!-- 地点跳转 -->
-      <div class="menu-section">
+      <div class="menu-section" >
         <button class="menu-button" @click="toggleSection('location')" :class="{ active: sectionsState.location }">
           <img class="menu-icon" src="../../assets/icons/location_selected.png" v-show="sectionsState.location" />
           <img class="menu-icon" src="../../assets/icons/location.png" v-show="!sectionsState.location" />
@@ -229,6 +231,7 @@ watch(
 
 .sidebar-menu {
   height: 41vh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -239,8 +242,8 @@ watch(
 
 /* 云游中珠 */
 .project-name {
-  height: 3vw;
-  width: 12vw;
+  height: 5vh;
+  width: 20vh;
   margin-left: 1vw;
   font-size: 1.4vw;
   font-weight: bold;
@@ -249,12 +252,14 @@ watch(
 }
 
 .menu-section {
+  margin-top: 1vh;
+  margin-bottom: -1vh;
   width: 100%;
-  height: 6vh;
+  height: 8vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  
+  /* background-color: #005826; */
 }
 
 
@@ -262,7 +267,7 @@ watch(
   border: 0;
   margin-left: 25%;
   width: 70%;
-  height: 80%;
+  height: 100%;
   background-color: rgba(255, 255, 255, 0);
 
   color: black;

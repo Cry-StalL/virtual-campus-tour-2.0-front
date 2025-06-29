@@ -2,10 +2,11 @@
   <div class="full_contain" ref="full_contain_ref">
     <!-- 删除按钮 -->
     <div class="delete-button">
-      <el-button style="background-color: rgba(0, 0, 0, 0); position: absolute; right: 1vw; top: 3vh; border: 0;" @click="closeSiteChooseView">
+      <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click="closeSiteChooseView">
         <img style="width: 2vw; height: 2vw;" src="../../assets/icons/delete.png">
       </el-button>
     </div>
+
 
     <div class="contain_body_map">
       <!-- 搜索框放在图片右上角 -->
