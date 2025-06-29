@@ -394,11 +394,11 @@ const redirectTo_back = () => {
 /* 手机端自适应 (18:9 比例) */
 @media screen and (max-width: 768px) and (orientation: portrait) {
   .about-container {
-    border-radius: 0;
-    width: 66.67vw;
-    max-width: 66.67vw;
+    border-radius: 1vw;
+    width: 100%;
+    max-width: 100%;
     height: 100%;
-    margin-left: 33.33vw;
+    margin-left: 0%;
     position: relative;
     overflow: hidden;
   }
@@ -409,8 +409,8 @@ const redirectTo_back = () => {
   }
   
   .delete-button img {
-    width: 40px;
-    height: 40px;
+    width: 20px;
+    height: 20px;
   }
   
   .header {
