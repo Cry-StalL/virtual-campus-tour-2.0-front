@@ -5,7 +5,7 @@
       <PanoramaViewerGroup
         :viewers="viewers"
         ref="viewerGroup"
-        initialViewerName="street"
+        initialViewerName="aerial"
         :isLoggedIn="isLoggedIn"
         :userID="userID"
         :username="username"
@@ -116,6 +116,7 @@ import PanoramaViewerGroup from '@/components/pano/base-components/PanoramaViewe
 import Sidebar from '@/components/Sidebar.vue';
 import { ElMessage } from 'element-plus';
 import { APP_CONFIG } from '@/config/config';
+import AerialViewer from '@/components/pano/AerialViewer.vue';
 import StreetViewer from '@/components/pano/StreetViewer.vue';
 import SceneViewer from '@/components/pano/SceneViewer.vue';
 import SiteChoose from '@/components/SiteChoose.vue';
@@ -322,6 +323,7 @@ const onVideoError = () => {
 };
 
 const viewers = [
+  { name: 'aerial', component: markRaw(AerialViewer) },
   { name: 'street', component: markRaw(StreetViewer) },
   { name: 'scene', component: markRaw(SceneViewer) }
 ];

@@ -11,6 +11,7 @@
       :resolutions="resolutions"
       :initialScene="viewerInitialScene[currentViewer!]"
       :handleReturnToStreet="handleReturnToStreet"
+      :handleReturnToAerial="handleReturnToAerial"
     />
   </div>
 </template>
@@ -49,6 +50,8 @@ const viewerInitialScene = ref<Record<string, string | number | undefined>>({});
 
 // 记录上一次 street viewer 的 sceneId
 const lastStreetSceneId = ref<string | number | undefined>(undefined);
+// 记录上一次 aerial viewer 的 sceneId
+const lastAerialSceneId = ref<string | number | undefined>(undefined);
 
 // 初始化 Viewer
 props.viewers.forEach(viewer => {
@@ -72,9 +75,18 @@ const switchViewer = (targetViewerName: string, targetSceneId?: string) => {
   // 如果从 street 跳到 scene，记录当前 street 的 sceneId
   if (currentViewer.value === 'street' && targetViewerName === 'scene') {
     // 尝试通过 window.streetViewer 获取当前 sceneId
-    const streetViewer = window.streetViewer as any;
+    const streetViewer = (window as any).streetViewer;
     if (streetViewer && typeof streetViewer.getCurrentSceneId === 'function') {
       lastStreetSceneId.value = streetViewer.getCurrentSceneId();
+    }
+  }
+
+  // 如果从 aerial 跳到 street，记录当前 aerial 的 sceneId
+  if (currentViewer.value === 'aerial' && targetViewerName === 'street') {
+    // 尝试通过 window.aerialViewer 获取当前 sceneId
+    const aerialViewer = (window as any).aerialViewer;
+    if (aerialViewer && typeof aerialViewer.getCurrentSceneId === 'function') {
+      lastAerialSceneId.value = aerialViewer.getCurrentSceneId();
     }
   }
 
@@ -90,7 +102,12 @@ const switchViewer = (targetViewerName: string, targetSceneId?: string) => {
 
 // 提供一个方法用于返回街景时恢复 sceneId
 const handleReturnToStreet = () => {
-  switchViewer('street', lastStreetSceneId.value);
+  switchViewer('street', typeof lastStreetSceneId.value === 'string' ? lastStreetSceneId.value : undefined);
+};
+
+// 提供一个方法用于返回航拍图时恢复 sceneId
+const handleReturnToAerial = () => {
+  switchViewer('aerial', typeof lastAerialSceneId.value === 'string' ? lastAerialSceneId.value : undefined);
 };
 
 // 获取当前 Viewer 组件
@@ -101,7 +118,8 @@ const currentViewerComponent = computed(() => {
 // 暴露方法
 defineExpose({
   switchViewer,
-  handleReturnToStreet
+  handleReturnToStreet,
+  handleReturnToAerial
 });
 
 // onMounted(() => {

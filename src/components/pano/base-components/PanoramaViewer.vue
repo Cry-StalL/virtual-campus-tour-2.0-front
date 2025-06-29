@@ -121,6 +121,13 @@ const validateHotspot = (hotspot: HotSpot): boolean => {
   } else if (hotspot.type === 'enterSceneViewer') {
     // enterSceneViewer 类型不需要额外验证
     return true;
+  } else if (hotspot.type === 'aerial') {
+    // aerial 类型需要验证 targetStreetSceneId
+    if (!hotspot.targetStreetSceneId) {
+      showError(`热点配置错误: 热点ID "${hotspot.id}" 的类型为 "aerial"，但未提供 targetStreetSceneId`);
+      return false;
+    }
+    return true;
   }
   else {
     showError(`热点配置错误: 热点ID "${hotspot.id}" 的类型 "${hotspot.type}" 未知`);
@@ -140,6 +147,8 @@ const createHotspot = (hotspot: HotSpot) => {
       hotspot.icon = '/icons/arrow_hotspot.png';
     } else if (hotspot.type === 'enterSceneViewer') {
       hotspot.icon = '/icons/scene_hotspot.png';
+    } else if (hotspot.type === 'aerial') {
+      hotspot.icon = '/icons/arrow_hotspot.png';
     }
   }
 
@@ -262,6 +271,16 @@ const handleHotspotClick = (hotspot: HotSpot) => {
         // props.switchViewer('scene');
       }
       
+    }
+  }
+  else if (hotspot.type === 'aerial') {
+    if (props.switchViewer && typeof props.switchViewer === 'function') {
+      if (hotspot.targetStreetSceneId) {
+        // 切换到街景视图，传递目标场景ID参数
+        (props.switchViewer as any)('street', hotspot.targetStreetSceneId);
+      } else {
+        showError(`热点ID "${hotspot.id}" 的类型为 "aerial"，但未提供 targetStreetSceneId`);
+      }
     }
   }
   else if (hotspot.type === 'custom') {
