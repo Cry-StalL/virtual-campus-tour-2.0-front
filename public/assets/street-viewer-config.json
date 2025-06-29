@@ -4868,6 +4868,8 @@
     {
       "sceneId": "ry-1-1",
       "relativeImagePath": "assets/panos/streets/ry_road1/1",
+      "initialLongitude": 0,
+      "initialLatitude": 0,
       "hotspots": [
         {
           "type": "switchScene",
@@ -5036,6 +5038,8 @@
     {
       "sceneId": "ry-1-17",
       "relativeImagePath": "assets/panos/streets/ry_road1/17",
+      "initialLongitude": 80,
+      "initialLatitude": 0,
       "hotspots": [
         {
           "type": "switchScene",

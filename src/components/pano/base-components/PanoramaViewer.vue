@@ -437,8 +437,21 @@ const switchScene = (target: number | string) => {
     }
   }
   
-  currentSceneIndex.value = targetIndex;
   const newScene = props.scenes[targetIndex];
+  
+  // 获取当前场景的默认朝向配置（如果是初始加载，使用0作为默认值）
+  const currentScene = currentSceneIndex.value >= 0 ? props.scenes[currentSceneIndex.value] : null;
+  const currentDefaultLongitude = currentScene?.initialLongitude || 0;
+  const currentDefaultLatitude = currentScene?.initialLatitude || 0;
+  
+  // 获取用户当前视角
+  const currentViewAngle = getCurrentViewAngle();
+  
+  // 计算用户相对于当前场景默认朝向的偏移
+  const userOffsetLongitude = currentViewAngle.longitude - currentDefaultLongitude;
+  const userOffsetLatitude = currentViewAngle.latitude - currentDefaultLatitude;
+  
+  currentSceneIndex.value = targetIndex;
   currentSceneId.value = newScene.sceneId;
   
   // 移除当前全景球体
@@ -518,11 +531,34 @@ const switchScene = (target: number | string) => {
   // 触发场景切换事件
   emit('sceneChange', targetIndex);
 
-  // 设置初始视角（如有配置）
-  if (controls.value && camera.value && newScene.initialLongitude !== undefined && newScene.initialLatitude !== undefined) {
-    // 复用latLonToVector3计算相机位置，修正：纬度取反，经度+180
+  // 设置视角 - 保持用户相对偏移，应用新场景的默认朝向
+  if (controls.value && camera.value) {
+    // 获取新场景的默认朝向
+    const newDefaultLongitude = newScene.initialLongitude || 0;
+    const newDefaultLatitude = newScene.initialLatitude || 0;
+    
+    // 计算最终视角：新场景默认朝向 + 用户相对偏移
+    const finalLongitude = newDefaultLongitude + userOffsetLongitude;
+    const finalLatitude = newDefaultLatitude + userOffsetLatitude;
+    
+    // 规范化经纬度到有效范围
+    const normalizedLongitude = ((finalLongitude + 540) % 360) - 180; // -180 到 180
+    const normalizedLatitude = Math.max(-90, Math.min(90, finalLatitude)); // -90 到 90
+    
+    // Debug信息
+    console.log('场景切换视角调试:', {
+      from: currentScene?.sceneId || 'initial',
+      to: newScene.sceneId,
+      currentViewAngle,
+      currentDefault: { longitude: currentDefaultLongitude, latitude: currentDefaultLatitude },
+      userOffset: { longitude: userOffsetLongitude, latitude: userOffsetLatitude },
+      newDefault: { longitude: newDefaultLongitude, latitude: newDefaultLatitude },
+      finalView: { longitude: normalizedLongitude, latitude: normalizedLatitude }
+    });
+    
+    // 使用现有的latLonToVector3函数设置相机位置
     const radius = controls.value.getDistance();
-    const camPos = latLonToVector3(-newScene.initialLatitude, newScene.initialLongitude + 180, radius);
+    const camPos = latLonToVector3(-normalizedLatitude, normalizedLongitude + 180, radius);
     controls.value.object.position.set(
       controls.value.target.x + camPos.x,
       controls.value.target.y + camPos.y,
@@ -632,6 +668,29 @@ const handleMouseMove = (event: MouseEvent) => {
   if (event.type === 'mousemove') {
     renderer.value.domElement.style.cursor = hotspotIntersects.length > 0 ? 'pointer' : 'default';
   }
+};
+
+// 获取当前相机朝向的经纬度
+const getCurrentViewAngle = (): { longitude: number; latitude: number } => {
+  if (!camera.value || !controls.value) {
+    return { longitude: 0, latitude: 0 };
+  }
+  
+  // 使用相机朝向向量来计算经纬度（与convertScreenToSphericalCoordinates保持一致）
+  const direction = new THREE.Vector3();
+  camera.value.getWorldDirection(direction);
+  
+  // 直接使用现有的 vector3ToLatLon 方法
+  const coordinates = vector3ToLatLon(direction);
+  
+  // 应用与 convertScreenToSphericalCoordinates 相同的修正逻辑
+  const correctedLongitude = coordinates.longitude - 180;
+  const normalizedLongitude = ((correctedLongitude + 540) % 360) - 180;
+  
+  return {
+    longitude: parseFloat(normalizedLongitude.toFixed(2)),
+    latitude: parseFloat(coordinates.latitude.toFixed(2))
+  };
 };
 
 // 获取3D坐标点
