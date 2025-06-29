@@ -70,14 +70,14 @@
           <div class="contact-item">
             <span class="contact-icon" style="margin-left: 20%;">📧</span>
             <div style="width: 40%; margin-right: 30%; display: flex; flex-direction: column; ">
-              <text style="width: 100%; text-align: center; font-size: 0.6vw; font-weight: bold; margin-top: 1vh; margin-bottom: 0.5vh;">邮箱</text>
-              <text style="width: 100%; text-align: center; font-size: 0.6vw; margin-bottom: 1vh; height: 0.8vw;">442085931@qq.com</text>
+              <text style="width: 120%; text-align: center; font-size: 0.6vw; font-weight: bold; margin-top: 1vh; margin-bottom: 0.5vh;">邮箱</text>
+              <text style="width: 120%; text-align: center; font-size: 0.6vw; margin-bottom: 1vh; height: 0.8vw;">virtual_sysu_tour@qq.com</text>
             </div>
           </div>
           <div class="contact-item">
             <span class="contact-icon">🐙</span>
             <div style="width: 50%; margin-right: 20%; display: flex; flex-direction: column; ">
-              <text style="width: 100%; text-align: center; font-size: 0.6vw; font-weight: bold; margin-top: 1vh; margin-bottom: 0.5vh;">GitHub</text>
+              <text style="width: 120%; text-align: center; font-size: 0.6vw; font-weight: bold; margin-top: 1vh; margin-bottom: 0.5vh;">GitHub</text>
               <div style="display: flex; flex-direction: row;">
                 <el-button style="font-size: 1.2vh; width: 5vw; height: 2.3vh; margin-bottom: 1vh;" @click="redirectTo_front">
                   前端仓库
