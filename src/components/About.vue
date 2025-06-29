@@ -476,47 +476,127 @@ const redirectTo_back = () => {
     display: block;
   }
   
-  /* 开发团队部分 - 调整为网格布局 */
+  /* 开发团队部分 - 美化布局 */
   .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 20px;
     width: 100%;
     max-width: 100%;
     justify-items: center;
-    margin-top: 15px;
+    margin-top: 20px;
+    padding: 0 10px;
+  }
+  
+  /* 第5个成员单独占一行并居中 */
+  .about-section[style*="height: 27vh"] .contact-grid .contact-item:nth-child(5) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: 10px;
   }
   
   .about-section[style*="height: 27vh"] {
     min-height: auto;
-    padding-bottom: 30px;
+    padding: 30px 15px 40px 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
   }
   
   .about-section[style*="height: 27vh"] .contact-item {
-    width: 100px !important;
-    max-width: 100px;
+    width: 120px !important;
+    max-width: 120px;
     height: auto !important;
-    min-height: 140px;
+    min-height: 160px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 12px;
+    padding: 18px;
     box-sizing: border-box;
     overflow: visible;
-    background-color: rgba(248, 249, 250, 0.8);
-    border-radius: 6px;
-    margin-bottom: 16px;
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* 添加微妙的悬浮背景效果 */
+  .about-section[style*="height: 27vh"] .contact-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 88, 38, 0.05) 0%, rgba(0, 88, 38, 0.1) 100%);
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+  }
+  
+  .about-section[style*="height: 27vh"] .contact-item:hover::before {
+    opacity: 1;
+  }
+  
+  .about-section[style*="height: 27vh"] .contact-item:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+    border-color: rgba(0, 88, 38, 0.25);
+  }
+  
+  .about-section[style*="height: 27vh"] .contact-item > div {
+    position: relative;
+    z-index: 1;
   }
   
   .about-section[style*="height: 27vh"] .contact-item img {
-    width: 70px !important;
-    height: 70px !important;
+    width: 85px !important;
+    height: 85px !important;
     border-radius: 50%;
+    border: 4px solid #ffffff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    object-fit: cover;
+    background: #f8f9fa;
+  }
+  
+  .about-section[style*="height: 27vh"] .contact-item:hover img {
+    transform: scale(1.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    border-color: rgba(0, 88, 38, 0.4);
+  }
+  
+  /* 第5个成员的头像特别突出 */
+  .about-section[style*="height: 27vh"] .contact-item:nth-child(5) {
+    width: 130px !important;
+    max-width: 130px;
+    min-height: 170px;
+    background: linear-gradient(145deg, #ffffff 0%, #f0f8f0 100%);
+    box-shadow: 0 10px 30px rgba(0, 88, 38, 0.15);
+    border: 2px solid rgba(0, 88, 38, 0.1);
+  }
+  
+  .about-section[style*="height: 27vh"] .contact-item:nth-child(5) img {
+    width: 95px !important;
+    height: 95px !important;
+    border: 5px solid #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 88, 38, 0.2);
+  }
+  
+  .about-section[style*="height: 27vh"] .contact-item:nth-child(5):hover {
+    box-shadow: 0 20px 50px rgba(0, 88, 38, 0.25);
+    border-color: rgba(0, 88, 38, 0.3);
   }
   
   .about-section[style*="height: 27vh"] .contact-item text {
-    font-size: 12px !important;
-    margin-top: 10px !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    margin-top: 15px !important;
     text-align: center;
     height: auto !important;
     word-wrap: break-word;
@@ -524,6 +604,22 @@ const redirectTo_back = () => {
     white-space: normal;
     max-width: 100%;
     line-height: 1.4;
+    color: #2c3e50 !important;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .about-section[style*="height: 27vh"] .contact-item:hover text {
+    color: #005826 !important;
+    transform: translateY(-2px);
+  }
+  
+  /* 第5个成员的名字特别样式 */
+  .about-section[style*="height: 27vh"] .contact-item:nth-child(5) text {
+    font-size: 15px !important;
+    color: #005826 !important;
+    font-weight: 800 !important;
   }
   
   /* 联系方式部分 */
@@ -596,13 +692,17 @@ const redirectTo_back = () => {
   
   /* GitHub按钮调整 */
   .about-section[style*="height: 15vh"] .contact-item div[style*="flex-direction: row"] {
+    display: flex !important;
     flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: center !important;
     gap: 8px;
     width: 100% !important;
     max-width: 100% !important;
     margin-top: 10px !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+    padding: 0 !important;
   }
   
   .about-section[style*="height: 15vh"] .contact-item .el-button {
@@ -610,12 +710,16 @@ const redirectTo_back = () => {
     max-width: 100% !important;
     height: 36px !important;
     font-size: 11px !important;
+    margin: 0 !important;
     margin-bottom: 0 !important;
     box-sizing: border-box;
     padding: 8px 12px !important;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    text-align: center !important;
   }
   
   /* 确保最后一个项目有额外的底部间距 */

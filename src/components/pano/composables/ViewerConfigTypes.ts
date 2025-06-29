@@ -11,8 +11,8 @@ export interface SceneConfig {
   sceneId: string;
   relativeImagePath: string;
   hotspots: HotspotConfig[];
-  initialLongitude?: number; // 初始经度
-  initialLatitude?: number; // 初始纬度
+  initialLongitude?: number; // 场景默认朝向经度（相对于绝对方向的偏移）
+  initialLatitude?: number; // 场景默认朝向纬度（相对于绝对方向的偏移）
 }
 
 export interface StreetViewerConfig {
