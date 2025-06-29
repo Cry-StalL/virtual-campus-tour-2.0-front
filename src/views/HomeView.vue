@@ -371,6 +371,14 @@ onMounted(() => {
   
   const ua = navigator.userAgent
   isMobileDevice.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
+  
+  // 将viewerGroup暴露到全局window对象，供SiteChoose组件使用
+  nextTick(() => {
+    if (viewerGroup.value) {
+      (window as any).viewerGroup = viewerGroup.value;
+      console.log('viewerGroup已暴露到全局window对象');
+    }
+  });
 });
 
 </script>
