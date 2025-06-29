@@ -12,30 +12,14 @@
     
     <div class="content">
       <div class="privacy-section" style="height: 11vh;">
-        <text class="section-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          隐私保护承诺&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </text>
+        <text class="section-title">隐私保护承诺</text>
         <div class="policy-content">
           <text style="width: 90%; text-align: center; font-size: 0.8vw; margin-bottom: 1vh;">我们承诺我们所收集的信息仅会被用于云游中珠 (Virtual Campus Tour) 虚拟校园导览服务中。</text>
         </div>
       </div>
       
       <div class="privacy-section" style="height: 16vh;">
-        <text class="section-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          我们收集的信息&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </text>
+        <text class="section-title">我们收集的信息</text>
         <div class="info-grid" >
           <div class="info-item">
             <span class="info-icon">👤</span>
@@ -69,15 +53,7 @@
       </div>
       
       <div class="privacy-section" style="height: 14vh;">
-        <text class="section-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          信息使用目的&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </text>
+        <text class="section-title">信息使用目的</text>
         <div class="purpose-list">
           <div class="purpose-item">
             <span class="purpose-number">1</span>
@@ -104,15 +80,7 @@
       </div>
       
       <div class="privacy-section" style="height: 14vh;">
-        <text class="section-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          信息保护措施&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </text>
+        <text class="section-title">信息保护措施</text>
         <div class="protection-content">
           <div class="protection-item">
             <text style="width: 100%; text-align: center; font-size: 0.6vw; font-weight: bold; margin-top: 1vh; margin-bottom: 0.5vh;">🔐 技术保护</text>
@@ -443,344 +411,6 @@ const closePrivacyView = () => {
   line-height: 1.5;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .privacy-container {
-    border-radius: 12px;
-  }
-  
-  .delete-button img {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .title {
-    font-size: 20px;
-  }
-  
-  .content {
-    padding: 15px;
-  }
-  
-  .privacy-section {
-    margin-bottom: 25px;
-    padding: 15px;
-    border-radius: 10px;
-  }
-  
-  .section-title {
-    font-size: 18px;
-    margin-bottom: 12px;
-  }
-  
-  .policy-content p {
-    font-size: 13px;
-    margin-bottom: 12px;
-  }
-  
-  .info-grid, .rights-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .info-item, .rights-item {
-    padding: 12px;
-  }
-  
-  .info-icon, .rights-icon {
-    font-size: 18px;
-    margin-right: 12px;
-  }
-  
-  .info-item h4, .rights-item h4 {
-    font-size: 15px;
-    margin-bottom: 6px;
-  }
-  
-  .info-item p, .rights-item p {
-    font-size: 13px;
-  }
-  
-  .purpose-list {
-    gap: 12px;
-  }
-  
-  .purpose-item {
-    padding: 12px;
-  }
-  
-  .purpose-number {
-    width: 28px;
-    height: 28px;
-    font-size: 13px;
-    margin-right: 12px;
-  }
-  
-  .purpose-item h4 {
-    font-size: 15px;
-    margin-bottom: 6px;
-  }
-  
-  .purpose-item p {
-    font-size: 13px;
-  }
-  
-  .protection-content {
-    gap: 12px;
-  }
-  
-  .protection-item {
-    padding: 12px;
-  }
-  
-  .protection-item h4 {
-    font-size: 15px;
-    margin-bottom: 6px;
-  }
-  
-  .protection-item p {
-    font-size: 13px;
-  }
-  
-  .cookie-content {
-    padding: 15px;
-  }
-  
-  .cookie-content p {
-    font-size: 13px;
-    margin-bottom: 12px;
-  }
-  
-  .cookie-list li {
-    font-size: 13px;
-    margin-bottom: 6px;
-    padding-left: 12px;
-  }
-  
-  .cookie-list li::before {
-    font-size: 15px;
-  }
-  
-  .rights-content {
-    padding: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .delete-button img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .title {
-    font-size: 18px;
-  }
-  
-  .content {
-    padding: 12px;
-  }
-  
-  .privacy-section {
-    margin-bottom: 20px;
-    padding: 12px;
-    border-radius: 8px;
-  }
-  
-  .section-title {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  
-  .policy-content p {
-    font-size: 12px;
-    margin-bottom: 10px;
-  }
-  
-  .info-item, .rights-item {
-    padding: 10px;
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .info-icon, .rights-icon {
-    font-size: 16px;
-    margin-right: 0;
-    margin-bottom: 8px;
-  }
-  
-  .info-item h4, .rights-item h4 {
-    font-size: 14px;
-    margin-bottom: 4px;
-  }
-  
-  .info-item p, .rights-item p {
-    font-size: 12px;
-  }
-  
-  .purpose-item {
-    padding: 10px;
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .purpose-number {
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
-    margin-right: 0;
-    margin-bottom: 8px;
-  }
-  
-  .purpose-item h4 {
-    font-size: 14px;
-    margin-bottom: 4px;
-  }
-  
-  .purpose-item p {
-    font-size: 12px;
-  }
-  
-  .protection-item {
-    padding: 10px;
-  }
-  
-  .protection-item h4 {
-    font-size: 14px;
-    margin-bottom: 4px;
-  }
-  
-  .protection-item p {
-    font-size: 12px;
-  }
-  
-  .cookie-content {
-    padding: 12px;
-  }
-  
-  .cookie-content p {
-    font-size: 12px;
-    margin-bottom: 10px;
-  }
-  
-  .cookie-list li {
-    font-size: 12px;
-    margin-bottom: 4px;
-    padding-left: 10px;
-  }
-  
-  .cookie-list li::before {
-    font-size: 14px;
-  }
-  
-  .rights-content {
-    padding: 12px;
-  }
-}
-
-@media (max-width: 320px) {
-  .delete-button img {
-    width: 18px;
-    height: 18px;
-  }
-  
-  .title {
-    font-size: 16px;
-  }
-  
-  .content {
-    padding: 10px;
-  }
-  
-  .privacy-section {
-    margin-bottom: 15px;
-    padding: 10px;
-  }
-  
-  .section-title {
-    font-size: 15px;
-    margin-bottom: 8px;
-  }
-  
-  .policy-content p {
-    font-size: 11px;
-    margin-bottom: 8px;
-  }
-  
-  .info-item, .rights-item {
-    padding: 8px;
-  }
-  
-  .info-icon, .rights-icon {
-    font-size: 14px;
-    margin-bottom: 6px;
-  }
-  
-  .info-item h4, .rights-item h4 {
-    font-size: 13px;
-    margin-bottom: 3px;
-  }
-  
-  .info-item p, .rights-item p {
-    font-size: 11px;
-  }
-  
-  .purpose-item {
-    padding: 8px;
-  }
-  
-  .purpose-number {
-    width: 20px;
-    height: 20px;
-    font-size: 11px;
-    margin-bottom: 6px;
-  }
-  
-  .purpose-item h4 {
-    font-size: 13px;
-    margin-bottom: 3px;
-  }
-  
-  .purpose-item p {
-    font-size: 11px;
-  }
-  
-  .protection-item {
-    padding: 8px;
-  }
-  
-  .protection-item h4 {
-    font-size: 13px;
-    margin-bottom: 3px;
-  }
-  
-  .protection-item p {
-    font-size: 11px;
-  }
-  
-  .cookie-content {
-    padding: 10px;
-  }
-  
-  .cookie-content p {
-    font-size: 11px;
-    margin-bottom: 8px;
-  }
-  
-  .cookie-list li {
-    font-size: 11px;
-    margin-bottom: 3px;
-    padding-left: 8px;
-  }
-  
-  .cookie-list li::before {
-    font-size: 13px;
-  }
-  
-  .rights-content {
-    padding: 10px;
-  }
-}
-
 /* 滚动条美化 */
 .content::-webkit-scrollbar {
   width: 8px;
@@ -799,4 +429,238 @@ const closePrivacyView = () => {
 .content::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
 }
+
+/* 手机端自适应 (18:9 比例) */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+  .privacy-container {
+    border-radius: 0;
+    width: 66.67vw;
+    max-width: 66.67vw;
+    height: 100%;
+    margin-left: 33.33vw;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .delete-button {
+    right: 3%;
+    top: 2%;
+  }
+  
+  .delete-button img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .header {
+    height: 8vh;
+    padding: 0 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  .title {
+    font-size: 18px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .content {
+    height: auto;
+    max-height: 82vh;
+    padding: 12px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  .privacy-section {
+    width: 100%;
+    max-width: 100%;
+    height: auto !important;
+    min-height: auto !important;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+  
+  .section-title {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 0 0 12px 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .policy-content text {
+    font-size: 13px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: block;
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+  
+  .info-grid, .rights-grid {
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 15px;
+  }
+  
+  .info-item, .rights-item {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 16px;
+    padding: 16px;
+    flex-direction: row;
+    align-items: flex-start;
+    box-sizing: border-box;
+    overflow: visible;
+    background-color: rgba(248, 249, 250, 0.8);
+    border-radius: 6px;
+    min-height: auto;
+  }
+  
+  .info-item text, .rights-item text {
+    font-size: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: left !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    display: block;
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  
+  .info-item text[style*="font-weight: bold"], 
+  .rights-item text[style*="font-weight: bold"] {
+    font-size: 13px !important;
+    margin-bottom: 8px;
+    display: block;
+    padding-bottom: 4px;
+  }
+  
+  .info-icon, .rights-icon {
+    font-size: 16px;
+    margin-right: 12px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  
+  .purpose-list {
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 15px;
+  }
+  
+  .purpose-item {
+    width: 100%;
+    max-width: 100%;
+    padding: 16px;
+    align-items: flex-start;
+    box-sizing: border-box;
+    overflow: visible;
+    background-color: rgba(248, 249, 250, 0.8);
+    border-radius: 6px;
+    margin-bottom: 16px;
+    min-height: auto;
+  }
+  
+  .purpose-number {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+    margin-right: 12px;
+    margin-left: 0;
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  
+  .purpose-item text {
+    font-size: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: left !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    display: block;
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  
+  .purpose-item text[style*="font-weight: bold"] {
+    font-size: 13px !important;
+    margin-bottom: 8px;
+    display: block;
+    padding-bottom: 4px;
+  }
+  
+  .protection-content {
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 15px;
+  }
+  
+  .protection-item {
+    width: 100%;
+    max-width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    overflow: visible;
+    background-color: rgba(248, 249, 250, 0.8);
+    border-radius: 6px;
+    margin-bottom: 16px;
+    min-height: auto;
+  }
+  
+  .protection-item text {
+    font-size: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: left !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    display: block;
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  
+  .protection-item text[style*="font-weight: bold"] {
+    font-size: 13px !important;
+    margin-bottom: 8px;
+    display: block;
+    padding-bottom: 4px;
+  }
+  
+  /* 确保最后一个项目有额外的底部间距 */
+  .privacy-section .info-item:last-child,
+  .privacy-section .purpose-item:last-child,
+  .privacy-section .protection-item:last-child {
+    margin-bottom: 25px;
+  }
+}
+
 </style> 

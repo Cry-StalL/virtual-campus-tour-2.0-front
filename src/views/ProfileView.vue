@@ -671,21 +671,13 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  /* align-items: flex-start; */
   align-items: center;
-  /* justify-content: center; */
-  width: 100%;
-  height: auto;
-  min-height: 100vh;
-
-  overflow-y: auto;
+  width: 100vw;       /* 占满整个视口宽度 */
+  min-height: 100vh;  /* 最小高度为视口高度 */
+  overflow-y: auto;   /* 允许垂直滚动 */
   padding: 40px;
   gap: 30px;
-  position: relative; /* Add position relative */
-  
-  width: 100vw;       /* 占满整个视口宽度 */
-  height: 100vh;      /* 占满整个视口高度 */
-  overflow: hidden;   /* 禁止滚动 */
+  position: relative;
 }
 
 .profile img{
@@ -700,7 +692,6 @@ export default {
 
 .profile-card, .message-history-card {
   width: 100%;
-  height: 70vh;
   max-width: 500px;
   height: fit-content;
   margin-bottom: 15vh;
@@ -708,9 +699,7 @@ export default {
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   background-color: rgba(255, 255, 255, 0.78);
-  /* background-color: #409EFF; */
   transition: all 0.3s ease;
-
   z-index: 100;
   position: relative;
 }
