@@ -1,5 +1,6 @@
 <template>
   <div class="profile">
+    <img src="../../assets/login_background.jpg" />
     <el-card class="profile-card">
       <div class="profile-header">
         <h2>个人信息</h2>
@@ -21,49 +22,56 @@
         :rules="rules"
         ref="form"
         label-position="left"
-        label-width="80px"
+        label-width="20%"
+        font-size="5%"
+        style="display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0%;
+        margin: 0%;
+        margin-bottom: 0vh;"
       >
-        <el-form-item label="用户名" prop="name" class="username-item">
-          <el-input v-model="form.name" :disabled="!isEditingUsername">
+        <el-form-item style="margin-bottom: 1.5vh;" label="用户名" prop="name" class="username-item" >
+          <el-input v-model="form.name" :disabled="!isEditingUsername" style="width: 40%; margin-right: 0%;">
             <template #prefix><el-icon><User /></el-icon></template>
           </el-input>
           <template v-if="!isEditingUsername">
-            <el-button type="primary" @click="startEditingUsername" class="username-edit-btn">
+            <el-button type="primary" @click="startEditingUsername" class="username-edit-btn" style="width: 40%;">
               <el-icon><Edit /></el-icon> 修改用户名
             </el-button>
           </template>
           <template v-else>
             <div class="username-action-btns">
-              <el-button type="success" @click="saveUsername">
+              <el-button type="success" @click="saveUsername" >
                 <el-icon><Check /></el-icon> 保存
               </el-button>
-              <el-button @click="cancelEditingUsername">
+              <el-button @click="cancelEditingUsername" >
                 <el-icon><Close /></el-icon> 取消
               </el-button>
             </div>
           </template>
         </el-form-item>
         
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" type="email" disabled>
+        <el-form-item style="margin-bottom: 1.5vh; width: 90%;" label="邮箱" prop="email" class="username-item" >
+          <el-input v-model="form.email" type="email" disabled style="width: 80%;">
             <template #prefix><el-icon><Message /></el-icon></template>
           </el-input>
         </el-form-item>
 
-        <el-form-item label="注册时间">
+        <el-form-item label="注册时间" class="username-item" style="margin-bottom: 1.5vh; width: 90%;">
           <el-input v-model="form.registerTime" disabled>
             <template #prefix><el-icon><Calendar /></el-icon></template>
           </el-input>
         </el-form-item>
 
         <template v-if="isResetingPassword">
-          <el-form-item label="新密码" prop="pass">
+          <el-form-item label="新密码" prop="pass" style="margin-bottom: 1.5vh; width: 90%;">
             <el-input type="password" v-model="form.pass" autocomplete="off" placeholder="请输入新密码">
               <template #prefix><el-icon><Lock /></el-icon></template>
             </el-input>
           </el-form-item>
           
-          <el-form-item label="确认密码" prop="checkPass">
+          <el-form-item label="确认密码" prop="checkPass" style="margin-bottom: 1.5vh; width: 90%;">
             <el-input type="password" v-model="form.checkPass" autocomplete="off" placeholder="请再次输入新密码">
               <template #prefix><el-icon><Lock /></el-icon></template>
             </el-input>
@@ -73,19 +81,19 @@
       
       <div class="action-buttons">
         <template v-if="!isResetingPassword">
-          <el-button type="warning" @click="startPasswordReset" round>
+          <el-button type="warning" @click="startPasswordReset" round style="height: 4vh; border-radius: 12px;" >
             <el-icon><Lock /></el-icon> 重置密码
           </el-button>
-          <el-button type="danger" @click="handleLogout" round>
+          <el-button type="danger" @click="handleLogout" round style="height: 4vh; border-radius: 12px;">
             <el-icon><SwitchButton /></el-icon> 注销账号
           </el-button>
         </template>
 
         <template v-if="isResetingPassword">
-          <el-button type="success" @click="savePassword" round>
+          <el-button type="success" @click="savePassword" round style="height: 4vh; border-radius: 12px; margin-top: -3vh;">
             <el-icon><Check /></el-icon> 保存密码
           </el-button>
-          <el-button @click="cancelPasswordReset" round>
+          <el-button @click="cancelPasswordReset" round style="height: 4vh; border-radius: 12px; margin-top: -3vh;">
             <el-icon><Close /></el-icon> 取消
           </el-button>
         </template>
@@ -149,7 +157,7 @@
     <!-- 返回按钮 -->
     <div class="back-button-container">
       <router-link to="/">
-        <el-button round>
+        <el-button round style="height: 4vh;">
           <el-icon><Back /></el-icon> 返回
         </el-button>
       </router-link>
@@ -196,8 +204,8 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (this.isResetingPassword && value === "") {
         callback(new Error("请输入密码"));
-      } else if (value && !/^\S{8,}$/.test(value)) {
-        callback(new Error("密码不能少于8位且不能包含空格"));
+      } else if (value && !/^\S{6,}$/.test(value)) {
+        callback(new Error("密码不能少于6位且不能包含空格"));
       } else {
         if (this.form.checkPass !== "") {
           this.$refs.form.validateField("checkPass");
@@ -663,30 +671,37 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-start;
-  width: 100%;
-  height: auto;
-  min-height: 100vh;
-  /* background: linear-gradient(135deg, #FFFEFF 0%, #FFFFEE 100%); */
-  background-image: url('123.jpg');
-  background-size: cover;
-  background-position: center;
-  overflow-y: auto;
+  align-items: center;
+  width: 100vw;       /* 占满整个视口宽度 */
+  min-height: 100vh;  /* 最小高度为视口高度 */
+  overflow-y: auto;   /* 允许垂直滚动 */
   padding: 40px;
   gap: 30px;
-  position: relative; /* Add position relative */
+  position: relative;
+}
+
+.profile img{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* 裁剪图片以填满整个容器 */
+  z-index: 1;
 }
 
 .profile-card, .message-history-card {
   width: 100%;
   max-width: 500px;
   height: fit-content;
-  margin: 0;
+  margin-bottom: 15vh;
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.78);
   transition: all 0.3s ease;
+  z-index: 100;
+  position: relative;
 }
 
 .profile-card:hover, .message-history-card:hover {
@@ -695,7 +710,7 @@ export default {
 }
 
 .message-history-card {
-  max-height: 600px;
+  max-height: 70vh;
   overflow-y: auto;
 }
 
@@ -776,8 +791,9 @@ export default {
 .action-buttons {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-top: 30px;
+  /* gap: 15px; */
+  margin-top: 5vh;
+  /* height: 8vh; */
 }
 
 .avatar-gallery {
@@ -822,7 +838,13 @@ export default {
 .username-item {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  /* gap: 10px; */
+  width: 90%;
+  padding: 0%;
+  /* margin: 0%; */
+  margin-bottom: 1vh;
+  /* background-color: #53a8ff; */
+  /* margin-bottom: -2vh; */
 }
 
 .username-edit-btn {
@@ -1129,6 +1151,7 @@ export default {
   .back-button-container {
     top: 15px;
     right: 15px;
+    height: 4vh;
   }
 }
 

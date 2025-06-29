@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineProps, getCurrentInstance } from 'vue';
+import { ref, computed, defineProps, onMounted, getCurrentInstance } from 'vue';
 
 // 定义 Viewer 类型
 interface Viewer {
@@ -111,6 +111,17 @@ defineExpose({
   getCurrentViewerName: () => currentViewer.value,
   handleReturnToStreet
 });
+
+// onMounted(() => {
+  // console.log('viewers:', props.viewers);
+  // console.log('initialViewerName:', props.initialViewerName);
+  // console.log('isLoggedIn:', props.isLoggedIn);
+  // console.log('userID:', props.userID);
+  // console.log('username:', props.username);
+  // console.log('progressiveLoading:', props.progressiveLoading);
+  // console.log('resolutions:', props.resolutions);
+// });
+
 </script>
 
 <style scoped>

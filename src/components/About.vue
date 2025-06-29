@@ -1,66 +1,97 @@
 <template>
   <div class="about-container">
     <div class="delete-button">
-      <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click="closeAboutView">
-        <img style="width: 3vw; height: 3vw;" src="../../assets/icons/delete.png">
+      <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click.stop="closeAboutView">
+        <img style="width: 2vw; height: 2vw;" src="../../assets/icons/delete.png">
       </el-button>
     </div>
     
     <div class="header">
-      <text class="title">关于我们</text>
+      <text class="title" style="color: #005826; font-size: 1.8vw; margin-top: 1vh;">关于我们</text>
     </div>
     
     <div class="content">
-      <div class="about-section">
-        <h3 class="section-title">项目介绍</h3>
-        <div class="intro-content">
-          <p>Virtual Campus Tour（云游中珠）是一个创新的虚拟校园导览系统，旨在为用户提供沉浸式的校园体验。</p>
-          <p>通过先进的3D技术和全景展示，我们让您能够足不出户就能深入了解美丽的校园环境，获得身临其境的参观体验。</p>
-          <div class="features">
-            <div class="feature-item">
-              <span class="feature-icon">🏫</span>
-              <div>
-                <h4>全景校园</h4>
-                <p>360度全景展示校园各个角落</p>
-              </div>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">🎮</span>
-              <div>
-                <h4>交互体验</h4>
-                <p>流畅的3D导航和交互操作</p>
-              </div>
-            </div>
-            <div class="feature-item">
-              <span class="feature-icon">🌐</span>
-              <div>
-                <h4>多语言</h4>
-                <p>支持多种语言，服务全球用户</p>
-              </div>
-            </div>
-          </div>
+      <div class="about-section" style="height: 22vh;">
+        <text class="section-title">项目介绍</text>
+        <div class="intro-content" style="display: flex; flex-direction: column; align-items: center; ">
+          <text style="width: 60%; text-align: center; font-size: 0.8vw; margin-bottom: 1vh; ">云游中珠（Virtual Campus Tour）是一个全景校园游览系统，包含街景云游、实用信息、发布弹幕等功能，旨在为中山大学珠海校区的师生同学、校友访客等提供沉浸式的校园体验。</text>
+          
+          <text style="width: 60%; text-align: center; font-size: 0.8vw; margin-bottom: 1vh; ">云游中珠诞生于中山大学软件工程学院综合实训，系统使用基于Three.js的自研3D全景架构，以及Vue3和Golang语言编写，部署于阿里云服务器，域名为https:sysu.site。</text>
+          
+          <text style="width: 60%; text-align: center; font-size: 0.8vw; margin-bottom: 1vh; ">在此感谢各位参与此项目的各位指导老师和测试用户的支持！</text>
+
         </div>
       </div>
       
-      <div class="about-section">
-        <h3 class="section-title">联系方式</h3>
+      <div class="about-section" style="height: 27vh;">
+        <text class="section-title">开发团队</text>
+        <div class="contact-grid">
+          <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="display: flex; flex-direction: column; ">
+              <img src="../../assets/developer1.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">Mark.G</text>
+            </div>
+          </div>
+
+          <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="display: flex; flex-direction: column; ">
+              <img src="../../assets/developer2.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">Sitan Han</text>
+            </div>
+          </div>
+
+          <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="display: flex; flex-direction: column; ">
+              <img src="../../assets/developer3.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">duanchy3</text>
+            </div>
+          </div>
+
+          <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="display: flex; flex-direction: column; ">
+              <img src="../../assets/developer4.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">小高</text>
+            </div>
+          </div>
+
+          <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="display: flex; flex-direction: column; ">
+              <img src="../../assets/developer5.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">luozhj33</text>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="about-section" style="height: 15vh;">
+        <text class="section-title">联系方式</text>
         <div class="contact-grid">
           <div class="contact-item">
-            <span class="contact-icon">📧</span>
-            <div>
-              <h4>邮箱</h4>
-              <p>info@virtualcampus.edu.cn</p>
+            <span class="contact-icon" style="margin-left: 20%;">📧</span>
+            <div style="width: 40%; margin-right: 30%; display: flex; flex-direction: column; ">
+              <text style="width: 100%; text-align: center; font-size: 0.6vw; font-weight: bold; margin-top: 1vh; margin-bottom: 0.5vh;">邮箱</text>
+              <text style="width: 100%; text-align: center; font-size: 0.6vw; margin-bottom: 1vh; height: 0.8vw;">442085931@qq.com</text>
             </div>
           </div>
           <div class="contact-item">
             <span class="contact-icon">🐙</span>
-            <div>
-              <h4>GitHub</h4>
-              <p><a href="https://github.com/Cry-StalL/virtual-campus-tour-2.0-front" target="_blank" class="contact-link">github.com/virtual-campus-tour</a></p>
+            <div style="width: 50%; margin-right: 20%; display: flex; flex-direction: column; ">
+              <text style="width: 100%; text-align: center; font-size: 0.6vw; font-weight: bold; margin-top: 1vh; margin-bottom: 0.5vh;">GitHub</text>
+              <div style="display: flex; flex-direction: row;">
+                <el-button style="font-size: 1.2vh; width: 5vw; height: 2.3vh; margin-bottom: 1vh;" @click="redirectTo_front">
+                  前端仓库
+                </el-button>
+                <el-button style="font-size: 1.2vh; width: 5vw; height: 2.3vh; margin-bottom: 1vh;" @click="redirectTo_back">
+                  后端仓库
+                </el-button>
+              </div>  
+              
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -70,6 +101,14 @@ const emit = defineEmits(['closeAboutView']);
 
 const closeAboutView = () => {
   emit('closeAboutView');
+};
+
+const redirectTo_front = () => {
+    window.open('https://github.com/Cry-StalL/virtual-campus-tour-2.0-front');
+};
+
+const redirectTo_back = () => {
+    window.open('https://github.com/Cry-StalL/virtual-campus-tour-2.0-back');
 };
 </script>
 
@@ -101,45 +140,60 @@ const closeAboutView = () => {
 
 .header {
   width: 100%;
-  height: 12%;
+  height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
   border-bottom: 2px solid #e0e0e0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: white;
+  color: #005826;
   flex-shrink: 0;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 4vh;
   font-weight: bold;
+  color: white;
 }
 
 .content {
+  background-image: url(../../assets/background.png);
   flex: 1;
-  padding: 20px;
-  overflow-y: auto;
+  padding: 0vh;
+  /* overflow-y: auto; */
   overflow-x: hidden;
   box-sizing: border-box;
   width: 100%;
+  height: 70vh;
+  background-color: blue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .about-section {
-  margin-bottom: 30px;
-  padding: 20px;
-  background-color: rgba(248, 249, 250, 0.8);
+  margin-top: 2vh;
+  margin-bottom: 2vh;
   border-radius: 12px;
-  border-left: 4px solid #667eea;
+  width: 60vw;
+  height: 20vh;
+  background-color: white;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .section-title {
-  font-size: 20px;
+  font-size: 2vh;
   font-weight: bold;
   color: #2c3e50;
-  margin-bottom: 15px;
-  padding-bottom: 8px;
+  margin-top: 0.5vh;
+  margin-bottom: 1.5vh;
   border-bottom: 1px solid #bdc3c7;
+  /* text-align: left; */
 }
 
 .intro-content p {
@@ -261,23 +315,34 @@ const closeAboutView = () => {
 }
 
 .contact-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 15px;
 }
 
 .contact-item {
   display: flex;
-  align-items: center;
-  padding: 15px;
+  align-items: flex-start;
+  margin-bottom: 1vh;
+  width: 28%;
+  height: 6vh;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  /* justify-content: center; */
 }
 
 .contact-icon {
   font-size: 20px;
-  margin-right: 15px;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 0.5vh;
+  width: 10%;
 }
 
 .contact-item h4 {
@@ -307,226 +372,6 @@ const closeAboutView = () => {
   text-decoration: none;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .about-container {
-    border-radius: 12px;
-  }
-  
-  .delete-button img {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .title {
-    font-size: 20px;
-  }
-  
-  .content {
-    padding: 15px;
-  }
-  
-  .about-section {
-    margin-bottom: 25px;
-    padding: 15px;
-    border-radius: 10px;
-  }
-  
-  .section-title {
-    font-size: 18px;
-  }
-  
-  .intro-content p {
-    font-size: 15px;
-  }
-  
-  .features {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .feature-item {
-    padding: 12px;
-  }
-  
-  .feature-icon {
-    font-size: 20px;
-    margin-right: 12px;
-  }
-  
-  .feature-item h4 {
-    font-size: 15px;
-  }
-  
-  .feature-item p {
-    font-size: 13px;
-  }
-  
-  .contact-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .contact-item {
-    padding: 12px;
-  }
-  
-  .contact-icon {
-    font-size: 18px;
-    margin-right: 12px;
-  }
-  
-  .contact-item h4 {
-    font-size: 15px;
-  }
-  
-  .contact-item p {
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 480px) {
-  .delete-button img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .title {
-    font-size: 18px;
-  }
-  
-  .content {
-    padding: 12px;
-  }
-  
-  .about-section {
-    margin-bottom: 20px;
-    padding: 12px;
-    border-radius: 8px;
-  }
-  
-  .section-title {
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
-  
-  .intro-content p {
-    font-size: 14px;
-    margin-bottom: 12px;
-  }
-  
-  .features {
-    gap: 10px;
-    margin-top: 15px;
-  }
-  
-  .feature-item {
-    padding: 10px;
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .feature-icon {
-    font-size: 18px;
-    margin-right: 0;
-    margin-bottom: 8px;
-  }
-  
-  .feature-item h4 {
-    font-size: 14px;
-    margin-bottom: 4px;
-  }
-  
-  .feature-item p {
-    font-size: 12px;
-  }
-  
-  .contact-item {
-    padding: 10px;
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .contact-icon {
-    font-size: 16px;
-    margin-right: 0;
-    margin-bottom: 8px;
-  }
-  
-  .contact-item h4 {
-    font-size: 14px;
-    margin-bottom: 4px;
-  }
-  
-  .contact-item p {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 320px) {
-  .delete-button img {
-    width: 18px;
-    height: 18px;
-  }
-  
-  .title {
-    font-size: 16px;
-  }
-  
-  .content {
-    padding: 10px;
-  }
-  
-  .about-section {
-    margin-bottom: 15px;
-    padding: 10px;
-  }
-  
-  .section-title {
-    font-size: 15px;
-    margin-bottom: 10px;
-  }
-  
-  .intro-content p {
-    font-size: 13px;
-    margin-bottom: 10px;
-  }
-  
-  .feature-item {
-    padding: 8px;
-  }
-  
-  .feature-icon {
-    font-size: 16px;
-    margin-bottom: 6px;
-  }
-  
-  .feature-item h4 {
-    font-size: 13px;
-  }
-  
-  .feature-item p {
-    font-size: 11px;
-  }
-  
-  .contact-item {
-    padding: 8px;
-  }
-  
-  .contact-icon {
-    font-size: 14px;
-    margin-bottom: 6px;
-  }
-  
-  .contact-item h4 {
-    font-size: 13px;
-  }
-  
-  .contact-item p {
-    font-size: 11px;
-  }
-}
-
 /* 滚动条美化 */
 .content::-webkit-scrollbar {
   width: 8px;
@@ -544,5 +389,236 @@ const closeAboutView = () => {
 
 .content::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* 手机端自适应 (18:9 比例) */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+  .about-container {
+    border-radius: 0;
+    width: 66.67vw;
+    max-width: 66.67vw;
+    height: 100%;
+    margin-left: 33.33vw;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .delete-button {
+    right: 3%;
+    top: 2%;
+  }
+  
+  .delete-button img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .header {
+    height: 8vh;
+    padding: 0 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  .title {
+    font-size: 18px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .content {
+    height: auto;
+    max-height: 82vh;
+    padding: 12px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  .about-section {
+    width: 100%;
+    max-width: 100%;
+    height: auto !important;
+    min-height: auto !important;
+    margin-top: 20px;
+    margin-bottom: 25px;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+  
+  .section-title {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 0 0 12px 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .intro-content text {
+    font-size: 13px !important;
+    width: 90% !important;
+    max-width: 90% !important;
+    line-height: 1.6;
+    margin-bottom: 16px !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    display: block;
+  }
+  
+  /* 开发团队部分 - 调整为网格布局 */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+    max-width: 100%;
+    justify-items: center;
+    margin-top: 15px;
+  }
+  
+  .about-section[style*="height: 27vh"] {
+    min-height: auto;
+    padding-bottom: 30px;
+  }
+  
+  .about-section[style*="height: 27vh"] .contact-item {
+    width: 100px !important;
+    max-width: 100px;
+    height: auto !important;
+    min-height: 140px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    box-sizing: border-box;
+    overflow: visible;
+    background-color: rgba(248, 249, 250, 0.8);
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+  
+  .about-section[style*="height: 27vh"] .contact-item img {
+    width: 70px !important;
+    height: 70px !important;
+    border-radius: 50%;
+  }
+  
+  .about-section[style*="height: 27vh"] .contact-item text {
+    font-size: 12px !important;
+    margin-top: 10px !important;
+    text-align: center;
+    height: auto !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+    line-height: 1.4;
+  }
+  
+  /* 联系方式部分 */
+  .about-section[style*="height: 15vh"] {
+    height: auto;
+    min-height: auto;
+    padding-bottom: 30px;
+  }
+  
+  .about-section[style*="height: 15vh"] .contact-grid {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .about-section[style*="height: 15vh"] .contact-item {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: 70px;
+    padding: 16px;
+    align-items: center;
+    box-sizing: border-box;
+    overflow: visible;
+    background-color: rgba(248, 249, 250, 0.8);
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+  
+  .contact-icon {
+    font-size: 18px !important;
+    margin-left: 0 !important;
+    margin-right: 12px !important;
+    width: auto !important;
+    flex-shrink: 0;
+  }
+  
+  /* 覆盖联系方式内容的所有内联样式 */
+  .about-section[style*="height: 15vh"] .contact-item div {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    flex: 1;
+  }
+  
+  .about-section[style*="height: 15vh"] .contact-item text {
+    font-size: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: left !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    display: block;
+    line-height: 1.5;
+    margin-bottom: 6px;
+    margin-top: 0 !important;
+    height: auto !important;
+  }
+  
+  .about-section[style*="height: 15vh"] .contact-item text[style*="font-weight: bold"] {
+    font-size: 13px !important;
+    margin-bottom: 8px;
+    display: block;
+    padding-bottom: 4px;
+  }
+  
+  /* GitHub按钮调整 */
+  .about-section[style*="height: 15vh"] .contact-item div[style*="flex-direction: row"] {
+    flex-direction: column !important;
+    gap: 8px;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 10px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  .about-section[style*="height: 15vh"] .contact-item .el-button {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 36px !important;
+    font-size: 11px !important;
+    margin-bottom: 0 !important;
+    box-sizing: border-box;
+    padding: 8px 12px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* 确保最后一个项目有额外的底部间距 */
+  .about-section[style*="height: 27vh"] .contact-item:last-child,
+  .about-section[style*="height: 15vh"] .contact-item:last-child {
+    margin-bottom: 25px;
+  }
 }
 </style> 

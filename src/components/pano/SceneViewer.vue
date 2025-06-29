@@ -377,13 +377,14 @@ const submitMessage = async () => {
             });
           }
         };
-        
-        // 添加到当前场景的热点数组
-        if (!scenes.value[0].hotspots) {
-          scenes.value[0].hotspots = [];
+        // 修复：将热点添加到当前场景
+        const currentSceneIndex = scenes.value.findIndex(s => s.sceneId === currentSceneId);
+        if (currentSceneIndex !== -1) {
+          if (!scenes.value[currentSceneIndex].hotspots) {
+            scenes.value[currentSceneIndex].hotspots = [];
+          }
+          scenes.value[currentSceneIndex].hotspots.push(newHotspot);
         }
-        scenes.value[0].hotspots.push(newHotspot);
-        
         // 重新加载当前场景以显示新热点
         panoramaViewer.switchScene(currentSceneId);
       }
@@ -412,25 +413,29 @@ const fetchMessages = async () => {
       console.log('allMessages', allMessages.value);
       
       // 更新场景的热点配置
-      scenes.value[0].hotspots = allMessages.value
-        .filter((message): message is typeof message & { position: { longitude: number; latitude: number } } => 
-          message.position !== undefined)
-        .map(message => ({
-          type: 'custom',
-          longitude: message.position.longitude,
-          latitude: message.position.latitude,
-          icon: '/icons/message_hotspot.png',    //没找到合适的图标
-          title: message.username || '匿名用户',
-          description: message.content,
-          onClick: () => {
-            // 点击热点时显示消息内容
-            ElMessage({
-              message: message.username + '：' + message.content,
-              type: 'info',
-              duration: 3000
-            });
-          }
-        }));
+      // 修复：只更新当前场景的hotspots
+      const currentSceneIndex = scenes.value.findIndex(s => s.sceneId === currentSceneId);
+      if (currentSceneIndex !== -1) {
+        scenes.value[currentSceneIndex].hotspots = allMessages.value
+          .filter((message): message is typeof message & { position: { longitude: number; latitude: number } } => 
+            message.position !== undefined)
+          .map(message => ({
+            type: 'custom',
+            longitude: message.position.longitude,
+            latitude: message.position.latitude,
+            icon: '/icons/message_hotspot.png',    //没找到合适的图标
+            title: message.username || '匿名用户',
+            description: message.content,
+            onClick: () => {
+              // 点击热点时显示消息内容
+              ElMessage({
+                message: message.username + '：' + message.content,
+                type: 'info',
+                duration: 3000
+              });
+            }
+          }));
+      }
       
       // 重新加载当前场景以更新热点
       panoramaViewer.switchScene(currentSceneId);
@@ -820,4 +825,4 @@ watch(
   z-index: 2002;
 }
 
-</style>
+</style> 
