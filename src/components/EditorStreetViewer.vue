@@ -26,6 +26,7 @@
         <div class="hotspot-type-header">选择热点类型</div>
         <div class="hotspot-type-select">
           <button class="hotspot-type-btn" @click="selectHotspotType('switchScene')">切换场景（switchScene）</button>
+          <button class="hotspot-type-btn" @click="selectHotspotType('enterSceneViewer')">进入场景视图（enterSceneViewer）</button>
         </div>
         <button class="cancel-btn" @click="cancelAddHotspot">取消</button>
       </div>
@@ -54,9 +55,15 @@
     <!-- 目标场景选择弹窗 -->
     <div v-if="showTargetSceneModal" class="target-scene-modal">
       <div class="target-scene-content">
-        <div class="target-scene-header">选择目标场景</div>
+        <div class="target-scene-header">
+          {{ tempHotspot.value && tempHotspot.value.type === 'enterSceneViewer' ? '选择目标场景视图' : '选择目标场景' }}
+        </div>
         <ul class="target-scene-list">
-          <li v-for="scene in sceneList" :key="scene.sceneId || scene.id" @click="setTargetSceneId(scene.sceneId)">
+          <li v-if="tempHotspot.value && tempHotspot.value.type === 'enterSceneViewer'"
+              v-for="scene in (props.sceneConfig && props.sceneConfig.value ? props.sceneConfig.value.scenes : [])" :key="'sceneViewer-' + scene.sceneId" @click="setTargetSceneId(scene.sceneId)">
+            {{ scene.sceneId || '(未设置sceneId)' }}
+          </li>
+          <li v-else v-for="scene in sceneList" :key="'street-' + scene.sceneId" @click="setTargetSceneId(scene.sceneId)">
             {{ scene.sceneId || '(未设置sceneId)' }}
           </li>
         </ul>
@@ -83,7 +90,7 @@ import { useSceneEditor } from '@/components/pano/composables/useSceneEditor';
 import { add } from 'three/tsl';
 
 const { viewerconfig: streetConfig, configFileName } = useStreetViewerConfig();
-const props = defineProps<{ switchViewer: (name: string, sceneIdx?: number) => void, initialScene?: number | string }>();
+const props = defineProps<{ switchViewer: (name: string, sceneIdx?: number) => void, initialScene?: number | string, sceneConfig: any }>();
 const emit = defineEmits(['sceneChanged']);
 
 // 使用 useSceneEditor 统一场景编辑逻辑
@@ -172,47 +179,55 @@ const onPanoramaClick = (coords: any) => {
       longitude: coords.longitude,
       latitude: coords.latitude
     };
-    tempHotspot.value.icon = 'icons/arrow_hotspot.png'; // 确保icon正确
-    tempHotspot.value.type = 'switchScene'; // 确保类型正确
+    // icon和type根据当前选择类型设置
+    if (tempHotspot.value.type === 'switchScene') {
+      tempHotspot.value.icon = 'icons/arrow_hotspot.png';
+    } else if (tempHotspot.value.type === 'enterSceneViewer') {
+      tempHotspot.value.icon = 'icons/scene_hotspot.png';
+    }
   }
 };
 
-// 进入选择目标场景
+// 进入选择目标场景/场景视图
 const nextSetTargetScene = () => {
   if (!tempHotspot.value.position) {
     window.alert('请先选择热点位置！');
     return;
   }
-  showTargetSceneModal.value = true;
+  // 直接确认，无需弹窗
+  confirmPlacingHotspot();
 };
 
-// 选择目标场景
+// 选择目标场景/场景视图
 const setTargetSceneId = (sceneId: string) => {
-  tempHotspot.value.targetSceneId = sceneId;
-  showTargetSceneModal.value = false;
-  // 添加到当前场景的hotspots
-  const scene = streetConfig.value?.scenes?.[currentSceneIdx.value];
-  if (scene) {
-    if (!Array.isArray(scene.hotspots)) scene.hotspots = [];
-    scene.hotspots.push({
-      type: tempHotspot.value.type,
-      longitude: tempHotspot.value.position.longitude,
-      latitude: tempHotspot.value.position.latitude,
-      icon: tempHotspot.value.icon || 'icons/scene_hotspot.png',
-      title: '跳转场景',
-      description: '',
-      targetSceneId: sceneId
-    });
-  }
-  // 结束添加流程
-  placingHotspot.value = false;
-  tempHotspot.value = null;
+  // 兼容旧流程，但不再弹窗
 };
 
 // 确认放置热点
 const confirmPlacingHotspot = () => {
-  // 进入选择目标场景弹窗
-  showTargetSceneModal.value = true;
+  // 直接添加热点，enterSceneViewer类型targetSceneViewerSceneId为'undefined'
+  const scene = streetConfig.value?.scenes?.[currentSceneIdx.value];
+  if (scene) {
+    if (!Array.isArray(scene.hotspots)) scene.hotspots = [];
+    if (tempHotspot.value.type === 'switchScene') {
+      // 仍然需要选择目标场景，保留原逻辑
+      showTargetSceneModal.value = true;
+      return;
+    } else if (tempHotspot.value.type === 'enterSceneViewer') {
+      scene.hotspots.push({
+        type: tempHotspot.value.type,
+        longitude: tempHotspot.value.position.longitude,
+        latitude: tempHotspot.value.position.latitude,
+        icon: tempHotspot.value.icon || 'icons/scene_hotspot.png',
+        title: '进入场景视图',
+        description: '',
+        targetSceneViewerSceneId: 'undefined'
+      });
+    }
+  }
+  // 结束添加流程
+  placingHotspot.value = false;
+  tempHotspot.value = null;
 };
 
 // 取消添加
@@ -234,7 +249,8 @@ const selectHotspotType = (type: string) => {
   tempHotspot.value = {
     type,
     position: null,
-    targetSceneId: null
+    targetSceneId: null,
+    targetSceneViewerSceneId: null
   };
 };
 const cancelHotspotTypeSelect = () => {

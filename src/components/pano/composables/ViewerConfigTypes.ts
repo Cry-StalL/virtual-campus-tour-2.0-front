@@ -6,6 +6,7 @@ export interface HotspotConfig {
   title: string;
   description?: string;
   targetSceneId?: string; // 新增，支持跳转场景热点
+  targetSceneViewerSceneId?: string; // 新增，支持进入场景视图热点
 }
 
 export interface SceneConfig {

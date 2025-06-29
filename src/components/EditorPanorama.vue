@@ -39,14 +39,15 @@ import { useCoordinateConverter } from '@/components/pano/base-components/compos
 
 const viewerGroup = ref();
 const resolutions = ["1920x960", "3840x1920", "7680x3840"];
-const viewers = [
-  { name: 'street', component: markRaw(EditorStreetViewer) },
-  { name: 'scene', component: markRaw(EditorSceneViewer) }
-];
 
 // 直接使用响应式 streetConfig/sceneConfig
 const { viewerconfig: streetConfig, configFileName: streetFile } = useStreetViewerConfig();
 const { viewerconfig: sceneConfig, configFileName: sceneFile } = useSceneViewerConfig();
+
+const viewers = [
+  { name: 'street', component: markRaw(EditorStreetViewer), props: { sceneConfig } },
+  { name: 'scene', component: markRaw(EditorSceneViewer) }
+];
 
 // 当前场景索引
 const currentSceneIdx = ref(0);
