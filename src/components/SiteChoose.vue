@@ -23,7 +23,7 @@
       </div>
 
       <!-- 背景图片 -->
-      <img src="../../assets/background.jpg">
+      <img src="https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/background.jpg">
       
       <!-- 新增的弹出确认组 -->
       <div class="popconfirm-group" v-show="showPopconfirm">
@@ -50,22 +50,7 @@
                 top: `${contain_body_map_ref_height * location.top - 15}px`
               }"
             >
-              <img v-show="location.id % 4 === 0"
-                src="../../assets/icons/click-0.gif" 
-                style="width:30px; height: 30px;"
-              >
-              <img v-show="location.id % 4 === 1"
-                src="../../assets/icons/click-0.gif" 
-                style="width:30px; height: 30px;"
-              >
-              <img v-show="location.id % 4 === 2"
-                src="../../assets/icons/click-0.gif" 
-                style="width:30px; height: 30px;"
-              >
-              <img v-show="location.id % 4 === 3"
-                src="../../assets/icons/click-0.gif" 
-                style="width:30px; height: 30px;"
-              >
+              <img src="../../assets/icons/click.gif" style="width:30px; height: 30px;">
             </el-button>
           </template>
 
@@ -103,22 +88,6 @@
                 top: `${contain_body_map_ref_height * location.top - 15}px`
               }"
             >
-              <img v-show="location.id % 4 === 0"
-                src="../../assets/icons/click-0.gif" 
-                style="width:30px; height: 30px;"
-              >
-              <img v-show="location.id % 4 === 1"
-                src="../../assets/icons/click-0.gif" 
-                style="width:30px; height: 30px;"
-              >
-              <img v-show="location.id % 4 === 2"
-                src="../../assets/icons/click-0.gif" 
-                style="width:30px; height: 30px;"
-              >
-              <img v-show="location.id % 4 === 3"
-                src="../../assets/icons/click-0.gif" 
-                style="width:30px; height: 30px;"
-              >
             </el-button>
           </template>
 
@@ -256,7 +225,7 @@
 </script>
 
 
-<style>
+<style >
 .full_contain{
     /* background-color: rgb(242, 245, 252); */
     background-image: url('../../assets/background.png');

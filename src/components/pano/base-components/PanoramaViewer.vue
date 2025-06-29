@@ -63,6 +63,7 @@ const {
   onWindowResize,
   onMouseWheel,
   disposeThreeJs,
+  resetAutoRotate,
 } = useThreeJsSetup(viewerContainer, props);
 
 let hotspotObject: THREE.Sprite | THREE.Mesh;
@@ -85,7 +86,9 @@ let tempHotspotSprite: THREE.Sprite | null = null;
 
 // 获取完整的图片 URL
 const getFullImageUrl = (relativeImagePath: string): string => {
-  const base = API_CONFIG.BASE_URL.replace(/\/$/, '');
+  // return "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/aabbcc.jpg";
+  // alert(relativeImagePath);
+  const base = import.meta.env.VITE_OSS_BASE_URL
   const rel = relativeImagePath.replace(/^\//, '');
   return `${base}/${rel}`;
 };
@@ -256,8 +259,8 @@ const handleHotspotClick = (hotspot: HotSpot) => {
     if (props.switchViewer && typeof props.switchViewer === 'function') {
       if (hotspot.targetSceneViewerSceneId) {
         // console.log(`切换到场景视图，目标场景ID: ${hotspot.targetSceneViewerSceneId}`);
-        // 切换到场景视图
-        props.switchViewer('scene', hotspot.targetSceneViewerSceneId);
+        // 切换到场景视图，传递场景ID参数
+        (props.switchViewer as any)('scene', hotspot.targetSceneViewerSceneId);
       } else {
         showError(`热点ID "${hotspot.id}" 的类型为 "enterSceneViewer"，但未提供 targetSceneViewerSceneId`);
         // props.switchViewer('scene');
@@ -289,6 +292,7 @@ const clearHotspots = () => {
 
 // 渐进加载图片
 const loadImageProgressively = (baseImagePath: string, targetMesh: THREE.Mesh) => {
+  // alert('渐进加载图片');
   if (!scene.value) return;
   const textureLoader = new THREE.TextureLoader();
   props.resolutions.forEach((resolution, index) => {
@@ -380,6 +384,8 @@ const switchScene = (target: number | string) => {
     loadImageProgressively(newScene.relativeImagePath, mesh);
   } else {
     // 标准加载模式
+    // alert('标注加载图片');
+
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(
       getFullImageUrl(`${newScene.relativeImagePath}/1920x960.jpg`),
@@ -437,6 +443,9 @@ const getCurrentSceneId = (): string => {
 const handleSceneClick = (event: MouseEvent) => {
   if (!camera.value || !renderer.value || !scene.value) return;
 
+  // 重置自动旋转
+  resetAutoRotate();
+
   // 计算归一化的设备坐标
   const mouse = new THREE.Vector2();
   const rect = renderer.value.domElement.getBoundingClientRect();
@@ -479,6 +488,9 @@ const handleSceneClick = (event: MouseEvent) => {
 // 添加鼠标移动事件处理
 const handleMouseMove = (event: MouseEvent) => {
   if (!camera.value || !renderer.value || !scene.value) return;
+
+  // 重置自动旋转
+  resetAutoRotate();
 
   // 计算归一化的设备坐标
   const mouse = new THREE.Vector2();
@@ -566,8 +578,16 @@ onMounted(() => {
   viewerContainer.value?.addEventListener('mousemove', handleMouseMove);
   window.addEventListener('resize', onWindowResize);
   
+  // 监听OrbitControls的交互事件，在用户拖拽时重置自动旋转
+  if (controls.value) {
+    controls.value.addEventListener('start', () => {
+      resetAutoRotate();
+    });
+  }
+  
   // 加载指定的初始场景
   if (props.scenes.length > 0) {
+    // alert('初始场景索引：' + props.initialScene);
     switchScene(props.initialScene);
   }
   

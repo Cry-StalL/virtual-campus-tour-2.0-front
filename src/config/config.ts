@@ -10,9 +10,7 @@ export const APP_CONFIG = {
 // API服务器(后端服务器)配置
 export const API_CONFIG = {
   // 后端服务器URL，根据环境变量设置，默认为本地开发环境
-  BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
-  // 资源URL
-  ASSETS_URL: import.meta.env.VITE_ASSETS_URL || 'http://localhost:8080',
+  BASE_URL: import.meta.env.VITE_API_BASE_URL,
   // API版本
   API_VERSION: 'v1',
 };

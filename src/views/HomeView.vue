@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <div class="content">
+    <div class="home">
+    <div class="content" @click="handleContentClick">
       <!-- 全景导览 -->
       <PanoramaViewerGroup
         :viewers="viewers"
@@ -11,12 +11,24 @@
         :username="username"
         :progressiveLoading="true"
         :resolutions="resolutions"
+        class="panorama-container"
       />
+
+      <!-- 全景图旋转视频 -->
+      <div v-if="showIntroVideo" class="intro-video-container">
+        <video 
+          src="/111.mp4" 
+          autoplay 
+          muted 
+          @ended="onVideoEnded"
+          @error="onVideoError"
+        ></video>
+      </div>
 
     </div>
 
     <!-- 侧边栏切换按钮 -->
-    <div class="toggle-btn" @click="toggleSidebar">
+    <div class="toggle-btn" @click.stop="toggleSidebar">
       <div style="background-color: white; margin: auto auto; width: 100%; height: 100%; display: flex; align-items: center; border-radius: 50%;">
         <img class="toggle-icon" v-show="!sidebarVisible" src="/icons/SideBar/more.png" >
         <img class="toggle-icon" v-show="sidebarVisible" src="../../assets/icons/close.png" >
@@ -24,47 +36,46 @@
     </div>
 
     <!-- 侧边栏 -->
-    <div class="sidebar" :class="{ active: sidebarVisible }" >
+    <div class="sidebar" :class="{ active: sidebarVisible }" @click.stop>
       <Sidebar 
         @toggle-site-choose="toggleSiteChoose" 
         @toggle-useful-info="toggleUsefulInfo" 
         @toggle-help-view="toggleHelpView"
         @toggle-about-view="toggleAboutView"
         @toggle-privacy-view="togglePrivacyView"
-        @toggle-language-view="toggleLanguageView"
         :clearSideBarChoose="clearSideBarChoose" 
       />
     </div>
 
 
     <!-- 地点跳转 -->
-    <div class="sitechoose" :class="{ active: siteChooseVisible }">
+    <div class="sitechoose" :class="{ active: siteChooseVisible }" @click.stop>
       <SiteChoose @closeSiteChooseView="closeSiteChoose"/>
     </div>
     
 
     <!-- 实用信息 -->
-    <div class="usefulinfo" :class="{ active: usefulInfoVisible }">
+    <div class="usefulinfo" :class="{ active: usefulInfoVisible }" @click.stop>
       <UsefulInfo @closeUsefulInfoView="closeUsefulInfo"/>
     </div>
 
     <!-- 帮助界面 -->
-    <div class="helpview" :class="{ active: helpViewVisible }">
+    <div class="helpview" :class="{ active: helpViewVisible }" @click.stop>
       <Help @closeHelpView="closeHelpView"/>
     </div>
 
     <!-- 关于我们界面 -->
-    <div class="aboutview" :class="{ active: aboutViewVisible }">
+    <div class="aboutview" :class="{ active: aboutViewVisible }" @click.stop>
       <About @closeAboutView="closeAboutView"/>
     </div>
 
     <!-- 隐私政策界面 -->
-    <div class="privacyview" :class="{ active: privacyViewVisible }">
+    <div class="privacyview" :class="{ active: privacyViewVisible }" @click.stop>
       <Privacy @closePrivacyView="closePrivacyView"/>
     </div>
 
     <!-- 登录和注册 -->
-    <div class="btnGroup1">
+    <div class="btnGroup1" @click.stop>
       <template v-if="isLoggedIn">
         <div class="user-info">
           <el-avatar :size="32" class="user-avatar">{{ username.charAt(0) }}</el-avatar>
@@ -108,7 +119,7 @@ import { APP_CONFIG } from '@/config/config';
 import StreetViewer from '@/components/pano/StreetViewer.vue';
 import SceneViewer from '@/components/pano/SceneViewer.vue';
 import SiteChoose from '@/components/SiteChoose.vue';
-import UsefulInfo from '@/components/UsefulInfo.vue';
+import UsefulInfo from '@/components/usefulInfo.vue';
 import Help from '@/components/Help.vue';
 import About from '@/components/About.vue';
 import Privacy from '@/components/Privacy.vue';
@@ -130,6 +141,9 @@ const username = ref('');
 const sidebarVisible = ref(false);
 const currentPanoramaId = ref('1');
 const resolutions = ref(["1920x960", "3840x1920", "7680x3840"]); // 定义分辨率列表
+
+// 视频播放状态控制
+const showIntroVideo = ref(false); // 默认为false，通过检查来决定是否显示
 const sectionsState = ref<SectionState>({
   location: false,
   info: false,
@@ -141,6 +155,14 @@ const sectionsState = ref<SectionState>({
 const checkLoginStatus = () => {
   username.value = Cookies.get('username') || '';
   userID.value = Cookies.get('userId') || '0';
+};
+
+// 检查视频是否已经播放过
+const checkVideoPlayStatus = () => {
+  const hasPlayedIntro = sessionStorage.getItem('hasPlayedIntroVideo');
+  if (!hasPlayedIntro) {
+    showIntroVideo.value = true;
+  }
 };
 
 const isLoggedIn = computed(() => {
@@ -160,6 +182,18 @@ let clearSideBarChoose = ref(false);
 const toggleSidebar = () => {
   sidebarVisible.value = !sidebarVisible.value;
   if (!sidebarVisible.value) {
+    siteChooseVisible.value = false;
+    usefulInfoVisible.value = false;
+    helpViewVisible.value = false;
+    aboutViewVisible.value = false;
+    privacyViewVisible.value = false;
+  }
+};
+
+// 处理点击内容区域
+const handleContentClick = () => {
+  if (sidebarVisible.value) {
+    sidebarVisible.value = false;
     siteChooseVisible.value = false;
     usefulInfoVisible.value = false;
     helpViewVisible.value = false;
@@ -203,15 +237,6 @@ const togglePrivacyView = () => {
   usefulInfoVisible.value = false;
   helpViewVisible.value = false;
   aboutViewVisible.value = false;
-};
-const toggleLanguageView = () => {
-  // 语言设置可以是一个简单的选择器，这里暂时用ElMessage显示
-  ElMessage({
-    message: '语言设置功能开发中...',
-    type: 'info',
-    duration: 2000
-  });
-  console.log('切换语言设置');
 };
 const closeSiteChoose = () => {
   // alert(siteChooseVisible.value)
@@ -281,6 +306,21 @@ const showCurrentSceneId = () => {
   console.log('当前场景ID:', currentSceneId);
 };
 
+// 视频播放控制方法
+const onVideoEnded = () => {
+  // 标记视频已播放过
+  sessionStorage.setItem('hasPlayedIntroVideo', 'true');
+  // 视频播放完后停留0.3秒
+  setTimeout(() => {
+    showIntroVideo.value = false;
+  }, 300);
+};
+
+const onVideoError = () => {
+  sessionStorage.setItem('hasPlayedIntroVideo', 'true');
+  showIntroVideo.value = false;
+};
+
 const viewers = [
   { name: 'street', component: markRaw(StreetViewer) },
   { name: 'scene', component: markRaw(SceneViewer) }
@@ -288,6 +328,7 @@ const viewers = [
 
 onMounted(() => {
   checkLoginStatus();
+  checkVideoPlayStatus();
 });
 
 </script>
@@ -323,26 +364,21 @@ body, html, #app {
 .toggle-btn {
   display: flex;
   position: absolute;
-  top: 2%;
-  left: 1.5%;
-  width: 3vw;
-  height: 3vw;
-
-
-
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
   z-index: 999;
-
   transition: transform 0.3s;
-
-
+  cursor: pointer;
 }
 
 /* 侧边栏样式 */
 .sidebar {
   position: absolute;
   top: 0;
-  left: -20vw;
-  width: 18vw;
+  left: -300px; /* 桌面端固定宽度 */
+  width: 300px;
   height: 100vh;
   background-color: rgba(255, 255, 255, 1);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -353,6 +389,27 @@ body, html, #app {
 
 .sidebar.active {
   left: 0;
+}
+
+/* 移动端样式 */
+@media (max-width: 768px) and (orientation: portrait) {
+  .sidebar {
+    width: 33.33vw;
+    min-width: 120px;
+    left: -50vw; /* 确保完全隐藏 */
+  }
+  
+  .sidebar.active {
+    left: 0;
+  }
+  
+  /* 移动端切换按钮 */
+  .toggle-btn {
+    top: 15px;
+    left: 15px;
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .sidebar-content {
@@ -379,12 +436,20 @@ body, html, #app {
   transform: scale(1.1);
 }
 
-.toggle-icon{
+/* 切换按钮图标样式 */
+.toggle-icon {
   width: 65%;
   height: 65%;
   margin: auto;
-  /* background-color: #F1F0EB; */
+  object-fit: contain;
+}
 
+/* 移动端图标调整 */
+@media (max-width: 768px) and (orientation: portrait) {
+  .toggle-icon {
+    width: 70%;
+    height: 70%;
+  }
 }
 
 .menu-section {
@@ -491,6 +556,8 @@ body, html, #app {
   border-radius: 22px;
   padding: 4px 8px 4px 4px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  height: 4vh;
+
 }
 
 .user-avatar {
@@ -625,6 +692,33 @@ body, html, #app {
 
 .privacyview.active {
   left: 18vw;
+}
+
+/* 全景图容器样式 */
+.panorama-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* 全景图视频容器样式 */
+.intro-video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  z-index: 15;
+}
+
+.intro-video-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 </style>

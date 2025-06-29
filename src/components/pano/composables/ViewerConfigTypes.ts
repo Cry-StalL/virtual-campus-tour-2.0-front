@@ -12,8 +12,13 @@ export interface SceneConfig {
   sceneId: string;
   relativeImagePath: string;
   hotspots: HotspotConfig[];
+<<<<<<< HEAD
   initialLongitude?: number;
   initialLatitude?: number;
+=======
+  initialLongitude?: number; // 初始经度
+  initialLatitude?: number; // 初始纬度
+>>>>>>> c68a6bc76804e283e1380e5ff9cba71695f19585
 }
 
 export interface StreetViewerConfig {

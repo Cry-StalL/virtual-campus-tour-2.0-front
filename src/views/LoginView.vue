@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="login">
+      <img src="../../assets/login_background.jpg" />
       <el-card class="box-card">
         <h2>登录</h2>
         <el-form
@@ -76,8 +77,8 @@
       var validatePass = (rule, value, callback) => {
         if (value === "") {
           callback(new Error("请输入密码"));
-        } else if (!/^\S{8,}$/.test(value)) {
-          callback(new Error("密码不能少于8位或密码无效!"));
+        } else if (!/^\S{6,}$/.test(value)) {
+          callback(new Error("密码不能少于6位或密码无效!"));
         } else {
           if (this.ruleForm.checkPass !== "") {
             this.$refs.ruleForm.validateField("checkPass");
@@ -198,12 +199,20 @@
   .login {
     display: grid;
     place-items: center;
+    width: 100vw;       /* 占满整个视口宽度 */
+    height: 100vh;      /* 占满整个视口高度 */
+    overflow: hidden;   /* 禁止滚动 */
+    position: relative;
+  }
+
+  .login img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 100vh; 
-    /* background: linear-gradient(135deg, #FFFEFF 0%, #FFFFEE 100%); */
-    background-image: url('123.jpg');
-    background-size: cover;
-    background-position: center;
+    height: 100%;
+    object-fit: cover;  /* 裁剪图片以填满整个容器 */
+    z-index: 1;
   }
   /* login */
   .box-card {
@@ -216,7 +225,7 @@
     transition: all 0.3s ease;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    background-color: rgba(255, 255, 255, 0.88); /* 半透明背景色 */
+    background-color: rgba(255, 255, 255, 0.78); /* 半透明背景色 */
     padding: 2rem; /* 使用rem单位 */
     position: relative; /* 添加 position 属性 */
     z-index: 2;
@@ -229,7 +238,7 @@
   }
   /* 两行表格 */
   .login-from {
-    /* background-color: #409EFF; */
+    /* background-color: #C83F39; */
     margin: auto auto;
     width: 100%;
     /* padding: 0 20px; */
@@ -255,12 +264,12 @@
   }
   
   :deep(.el-input__wrapper:hover) {
-    border-color: #409EFF;
+    border-color: #C83F39;
     box-shadow: 0 4px 12px rgba(64, 158, 255, 0.1) !important;
   }
   
   :deep(.el-input__wrapper.is-focus) {
-    border-color: #409EFF;
+    border-color: #C83F39;
     box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2) !important;
   }
   
@@ -272,16 +281,23 @@
     padding: 0 25px;
     font-size: 16px; /* 固定字体大小 */
   }
-  
-  :deep(.el-button:hover) {
+  :deep(.ttt:hover) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+    /* box-shadow: 0 4px 12px rgba(200, 63, 57, 0.1); */
+    /* background-color: rgba(200, 63, 57, 0.7); */
+    /* color: #C83F39; */
+  }
+  :deep(.back-btn:hover) {
+    transform: translateY(-2px);
+    /* box-shadow: 0 4px 12px rgba(200, 63, 57, 0.1); */
+    /* background-color: rgba(200, 63, 57, 0.7); */
+    /* color: #C83F39; */
   }
   
   /* 美化标题样式 */
   h2 {
     text-align: center;
-    color: #409EFF;
+    color: #C83F39;
     margin-bottom: 40px;
     font-weight: 600;
     position: relative;
@@ -297,7 +313,7 @@
     transform: translateX(-50%);
     width: 60px;
     height: 3px;
-    background: linear-gradient(90deg, #409EFF, #53a8ff);
+    background: linear-gradient(90deg, #C83F39, #C83F39);
     border-radius: 3px;
   }
   
@@ -319,14 +335,14 @@
   }
   
   .register-link a {
-    color: #409EFF;
+    color: #C83F39;
     text-decoration: none;
     margin-left: 5px;
     transition: all 0.3s ease;
   }
   
   .register-link a:hover {
-    color: #66b1ff;
+    color: rgba(200, 63, 57, 0.7);
     text-decoration: underline;
   }
   
@@ -351,9 +367,11 @@
   }
   
   .ttt{
-    /* background-color: #909399; */
+    background-color: #C83F39;
+    border-color: #C83F39;
     width: 120px; /* 固定按钮宽度 */
     min-width: 120px; /* 最小宽度 */
+    
   }
 
   .back-link {

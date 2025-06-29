@@ -29,6 +29,7 @@ export function useSceneViewerConfig() {
 
   onMounted(async () => {
     try {
+<<<<<<< HEAD
       const mode = getViewerConfigMode();
       let data, fileName;
       if (mode === 'fixed_file') {
@@ -40,6 +41,12 @@ export function useSceneViewerConfig() {
         data = result.data;
         fileName = result.fileName;
       }
+=======
+      const res = await fetch('/assets/scene-viewer-config.json');
+      if (!res.ok) throw new Error('配置文件加载失败');
+      const data = await res.json();
+
+>>>>>>> c68a6bc76804e283e1380e5ff9cba71695f19585
       // 简单类型检查
       if (
         typeof data.progressiveLoading === 'boolean' &&

@@ -1,9 +1,14 @@
 <template>
     <div class="full_contain" ref="full_contain_ref">
+        <div class="delete-button">
+            <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click.stop="closeUsefulInfoView">
+                <img style="width: 2vw; height: 2vw;" src="../../assets/icons/delete.png">
+            </el-button>
+        </div>
         <!-- <div style="width: 100%; height: 100%;"> -->
-            <el-tabs v-model="activeName" class="demo-tabs">
+            <el-tabs  class="demo-tabs">
                 <el-tab-pane label="学习">
-                    <div class="study_library">
+                    <div class="study_library" style="margin-top: 1vh;">
                         <div style="width: 66vh; margin-left: 4vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                             <text style="width: 66vh; margin-bottom: 0.2vh; text-align: left; font-weight: bold; color: black; font-size: 2vh;" >
                                 图书馆
@@ -38,7 +43,7 @@
                     <div style="display: flex; flex-direction: row;">
                         <div class="study_teaching_building ">
                             <div style="display: flex; flex-direction: column; justify-content: center; margin-left: 4vh;">
-                                <text style="margin-top: 3vh; margin-bottom: 0.5vh; text-align: left; font-weight: bold; color: black; font-size: 2vh;" >
+                                <text style="margin-top: 2.5vh; margin-bottom: 0.5vh; text-align: left; font-weight: bold; color: black; font-size: 2vh;" >
                                     教学楼
                                 </text>
                                 <text style="margin-bottom: 0.5vh; text-align: left; color: black; font-size: 1.5vh;" >
@@ -147,7 +152,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="饮食">
-                    <div style="width: 100%; height: 78vh; display: flex; flex-direction: row;">
+                    <div style="width: 100%; height: 78vh; display: flex; flex-direction: row; margin-top: 1vh;">
                         <!-- 榕园 -->
                         <div class="canteen">
                             <div style="height: 28vh; display: flex; flex-direction: column;">
@@ -329,7 +334,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="住宿">
-                    <div style="width: 100%; height: 78vh; display: flex; flex-direction: row;">
+                    <div style="width: 100%; height: 78vh; display: flex; flex-direction: row; margin-top: 1vh;">
                         <!-- 榕园 -->
                         <div class="dormitory" style="margin-left: 2%; margin-right: 6%;">
                             <div style="height: 32vh; display: flex; flex-direction: column; ">
@@ -451,7 +456,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="交通">
-                    <div style="width: 100%; height: 68vh; display: flex; flex-direction: row;">
+                    <div style="width: 100%; height: 68vh; display: flex; flex-direction: row; margin-top: 1vh;">
                         <!-- 校内出行 -->
                         <div class="traffic">
                             <div style="height: 23vh; display: flex; flex-direction: column;">
@@ -604,7 +609,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="就医与保卫">
-                    <div style="width: 100%; height: 78vh; display: flex; flex-direction: row;">
+                    <div style="width: 100%; height: 78vh; display: flex; flex-direction: row; margin-top: 1vh;">
                         <!-- 校医院 -->
                         <div class="hospital " style="margin-left: 2vh; margin-right: 6vh;">
                             <div style="height: 25vh; display: flex; flex-direction: column; ">
@@ -711,7 +716,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="校区管委会">
-                    <div class="committee" >
+                    <div class="committee" style="margin-top: 1vh;">
                         <div style="height: 20vh; display: flex; flex-direction: column;">
                             <text style="width: 100%; margin-top: 3vh; margin-bottom: 1vh; font-size: 2.5vh; font-weight: bold;">
                                 中山大学珠海校区管委会
@@ -814,11 +819,11 @@
 
 
 
-    const emit = defineEmits(['deleteSiteChooseView']);
-    const deleteSiteChooseView = () => {
-        // alert("delete")
+    const emit = defineEmits(['closeUsefulInfoView']);
+    
+    const closeUsefulInfoView = () => {
         emit('closeUsefulInfoView');
-    }
+    };
 
     const tableData = [
     {
@@ -977,6 +982,19 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+
+.delete-button {
+    position: absolute;
+    right: 2%;
+    top: 2%;
+    z-index: 10;
+}
+
+.delete-button img {
+    width: 30px;
+    height: 30px;
 }
 .delete_button{
     padding: 0%;
@@ -1014,15 +1032,21 @@
 /* 头部 */
 .demo-tabs {
     width: 120vh;
-    height: 80vh;
+    height: 82vh;
     margin-top: 4vh;
 }
+
 .el-tabs__header {
     height: 4vh;
 }
 .el-tabs__item {
     font-size: 1.8vh; /* 设置为你想要的字体大小 */
 }
+
+
+
+
+
 
 /* 学习 */
 .study_library{
@@ -1038,7 +1062,7 @@
 .study_teaching_building{
     width: 72vh; 
     margin-top: 2vh;
-    height: 53vh; 
+    height: 52vh; 
     background-color: white; 
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
@@ -1054,7 +1078,7 @@
     width: 46vh; 
     margin-top: 2vh;
     margin-left: 2vh;
-    height: 53vh; 
+    height: 52vh; 
     background-color: white; 
     box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
@@ -1131,6 +1155,26 @@
 }
 </style>
 
+<style scoped>
+::v-deep .el-tabs__item.is-active {
+  color: #005826;
+  opacity: 1;
+}
+ 
+::v-deep .el-tabs__item:hover {
+  color: #005826;
+  cursor: pointer;
+  opacity: 1;
+}
 
-
+/*去下划线 */
+::v-deep .el-tabs__nav-wrap::after {
+  position: static !important;
+}
+ 
+/* 下划线颜色 */
+::v-deep .el-tabs__active-bar {
+  background-color: #005826;
+}
+</style>
 
