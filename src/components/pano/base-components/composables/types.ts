@@ -38,4 +38,9 @@ export interface PanoramaViewerProps {
   resolutions?: string[]; // 渐进加载的分辨率列表，如 ["1920x960", "3840x1920", "7680x3840"]
   switchViewer?: (name: string) => void; // 切换视图方法
   initialScene?: number | string; // 初始场景索引
+  // 视角限制属性
+  minLongitude?: number; // 最小经度 (-180 到 180)
+  maxLongitude?: number; // 最大经度 (-180 到 180)
+  minLatitude?: number; // 最小纬度 (-90 到 90)
+  maxLatitude?: number; // 最大纬度 (-90 到 90)
 }

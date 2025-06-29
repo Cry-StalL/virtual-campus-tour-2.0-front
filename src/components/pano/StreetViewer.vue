@@ -15,6 +15,8 @@
       :resolutions="viewerconfig.resolutions"
       :switchViewer="props.switchViewer" 
       :initialScene="props.initialScene ?? viewerconfig.initialScene"
+      :maxLatitude="40"
+      :debug="false"
     />
 
     <!-- 返回航拍图按钮 -->
