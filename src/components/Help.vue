@@ -12,17 +12,7 @@
     
     <div class="content" >
       <div class="help-section" >
-        <text class="section-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          如何使用虚拟校园导览
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          
-        </text>
+        <text class="section-title">如何使用虚拟校园导览</text>
         <div class="help-item" >
           <text style="width: 90%; text-align: center; font-size: 0.8vw;">🎮 街景云游 ——— 在主页面：点击下方蓝色箭头即可实现前进与后退；点击望远镜图标即可进入场景的沉浸式高清观赏。</text>
         </div>
@@ -38,16 +28,7 @@
       </div>
       
       <div class="help-section">
-        <text class="section-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          常见问题
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </text>
+        <text class="section-title">常见问题</text>
         <div class="help-item" >
           <text style="width: 90%; text-align: center; font-size: 0.8vw; font-weight: bold; margin-bottom: 0.5vh; text-align: left; margin-left: 5vw;">Q: 为什么页面加载很慢？</text>
           <text style="width: 90%; text-align: center; font-size: 0.7vw; text-align: left; margin-left: 5vw;">A: 全景导览需要加载3D模型和全景图片，建议使用稳定的网络连接。首次访问可能需要较长加载时间。</text>
@@ -200,132 +181,6 @@ const closeHelpView = () => {
   margin: 0;
 }
 
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .help-container {
-    border-radius: 12px;
-  }
-  
-  .delete-button img {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .title {
-    font-size: 20px;
-  }
-  
-  .content {
-    padding: 15px;
-  }
-  
-  .help-section {
-    margin-bottom: 25px;
-    padding: 15px;
-    border-radius: 10px;
-  }
-  
-  .section-title {
-    font-size: 18px;
-    margin-bottom: 12px;
-  }
-  
-  .help-item, .faq-item {
-    margin-bottom: 15px;
-    padding: 12px;
-  }
-  
-  .help-item h4, .faq-item h4 {
-    font-size: 15px;
-    margin-bottom: 6px;
-  }
-  
-  .help-item p, .faq-item p {
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 480px) {
-  .delete-button img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .title {
-    font-size: 18px;
-  }
-  
-  .content {
-    padding: 12px;
-  }
-  
-  .help-section {
-    margin-bottom: 20px;
-    padding: 12px;
-    border-radius: 8px;
-  }
-  
-  .section-title {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  
-  .help-item, .faq-item {
-    margin-bottom: 12px;
-    padding: 10px;
-  }
-  
-  .help-item h4, .faq-item h4 {
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-  
-  .help-item p, .faq-item p {
-    font-size: 12px;
-    line-height: 1.5;
-  }
-}
-
-@media (max-width: 320px) {
-  .delete-button img {
-    width: 18px;
-    height: 18px;
-  }
-  
-  .title {
-    font-size: 16px;
-  }
-  
-  .content {
-    padding: 10px;
-  }
-  
-  .help-section {
-    margin-bottom: 15px;
-    padding: 10px;
-  }
-  
-  .section-title {
-    font-size: 15px;
-    margin-bottom: 8px;
-  }
-  
-  .help-item, .faq-item {
-    margin-bottom: 10px;
-    padding: 8px;
-  }
-  
-  .help-item h4, .faq-item h4 {
-    font-size: 13px;
-    margin-bottom: 4px;
-  }
-  
-  .help-item p, .faq-item p {
-    font-size: 11px;
-    line-height: 1.4;
-  }
-}
-
 /* 滚动条美化 */
 .content::-webkit-scrollbar {
   width: 8px;
@@ -343,5 +198,118 @@ const closeHelpView = () => {
 
 .content::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* 手机端自适应 (18:9 比例) */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+  .help-container {
+    border-radius: 0;
+    width: 66.67vw;
+    max-width: 66.67vw;
+    height: 100%;
+    margin-left: 33.33vw;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .delete-button {
+    right: 3%;
+    top: 2%;
+  }
+  
+  .delete-button img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .header {
+    height: 8vh;
+    padding: 0 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  .title {
+    font-size: 18px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .content {
+    height: auto;
+    max-height: 82vh;
+    padding: 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  
+  .help-section {
+    width: 100%;
+    max-width: 100%;
+    height: auto !important;
+    min-height: auto !important;
+    margin-top: 12px;
+    margin-bottom: 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+  
+  .section-title {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 15px;
+    padding: 0 0 8px 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .help-item {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 15px;
+    padding: 12px;
+    box-sizing: border-box;
+    overflow: visible;
+    background-color: rgba(248, 249, 250, 0.8);
+    border-radius: 6px;
+    min-height: auto;
+  }
+  
+  .help-item text {
+    font-size: 13px !important;
+    text-align: left !important;
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    display: block;
+    line-height: 1.5;
+  }
+  
+  /* 调整常见问题的样式 */
+  .help-item text[style*="font-weight: bold"] {
+    font-size: 14px !important;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  .help-item text[style*="font-size: 0.7vw"] {
+    font-size: 12px !important;
+    line-height: 1.4;
+    margin-top: 5px;
+    display: block;
+  }
 }
 </style> 

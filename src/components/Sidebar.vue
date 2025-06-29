@@ -194,8 +194,9 @@ watch(
 .sidebar {
   position: absolute;
   top: 0;
+  left: -300px; /* 桌面端默认隐藏 */
+  width: 300px; /* 桌面端固定宽度 */
   height: 100vh;
-
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   color: black;
   transition: left 0.3s ease;
@@ -297,8 +298,88 @@ watch(
   /* font-weight: normal; */
 }
 
+/* 18:9 手机屏幕适配 - 侧边栏占屏幕宽度的1/3 */
+@media (max-width: 768px) and (orientation: portrait) {
+  .sidebar {
+    width: 33.33vw;
+    min-width: 120px;
+    left: -50vw; /* 确保完全隐藏 */
+  }
+  .sidebar.active {
+    left: 0%;
+  }
+  
+  .sidebar-content {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
 
+  /* Logo适配 */
+  .project-name {
+    height: 8vw;
+    width: 28vw;
+    margin-left: 2.5vw;
+    font-size: 3.5vw;
+    font-weight: bold;
+    white-space: nowrap;
+  }
 
+  /* 菜单按钮适配 */
+  .menu-section {
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
+  .menu-button {
+    border: 0;
+    margin-left: 15%;
+    width: 85%;
+    height: 85%;
+    background-color: rgba(255, 255, 255, 0);
+    color: black;
+    display: flex;
+    font-weight: normal;
+    text-decoration-line: none;
+    padding: 2px 0;
+  }
+
+  /* 图标适配 */
+  .menu-icon {
+    width: 4vw;
+    height: 4vw;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2vw;
+    min-width: 16px;
+    min-height: 16px;
+  }
+
+  /* 文字适配 */
+  .menu-text {
+    width: 80%;
+    font-size: 3.2vw;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.2vh;
+    font-family: "Microsoft YaHei";
+    color: black;
+  }
+
+  /* 底部logo适配 */
+  .sidebar-content > div:last-child {
+    padding-top: 2vh;
+    height: 18vh;
+  }
+  
+  .sidebar-content > div:last-child img {
+    width: 80%;
+    margin-left: 10%;
+  }
+}
 
 </style>

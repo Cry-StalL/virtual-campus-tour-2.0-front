@@ -352,20 +352,21 @@ body, html, #app {
 .toggle-btn {
   display: flex;
   position: absolute;
-  top: 2%;
-  left: 1.5%;
-  width: 3vw;
-  height: 3vw;
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
   z-index: 999;
   transition: transform 0.3s;
+  cursor: pointer;
 }
 
 /* 侧边栏样式 */
 .sidebar {
   position: absolute;
   top: 0;
-  left: -20vw;
-  width: 18vw;
+  left: -300px; /* 桌面端固定宽度 */
+  width: 300px;
   height: 100vh;
   background-color: rgba(255, 255, 255, 1);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -376,6 +377,27 @@ body, html, #app {
 
 .sidebar.active {
   left: 0;
+}
+
+/* 移动端样式 */
+@media (max-width: 768px) and (orientation: portrait) {
+  .sidebar {
+    width: 33.33vw;
+    min-width: 120px;
+    left: -50vw; /* 确保完全隐藏 */
+  }
+  
+  .sidebar.active {
+    left: 0;
+  }
+  
+  /* 移动端切换按钮 */
+  .toggle-btn {
+    top: 15px;
+    left: 15px;
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .sidebar-content {
@@ -402,10 +424,20 @@ body, html, #app {
   transform: scale(1.1);
 }
 
+/* 切换按钮图标样式 */
 .toggle-icon {
   width: 65%;
   height: 65%;
   margin: auto;
+  object-fit: contain;
+}
+
+/* 移动端图标调整 */
+@media (max-width: 768px) and (orientation: portrait) {
+  .toggle-icon {
+    width: 70%;
+    height: 70%;
+  }
 }
 
 .menu-section {
