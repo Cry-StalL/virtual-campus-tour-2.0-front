@@ -134,7 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, onBeforeUnmount, markRaw } from 'vue';
+import { ref, onMounted, computed, onBeforeUnmount, markRaw, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
 import { ArrowDown, User, SwitchButton } from '@element-plus/icons-vue';
@@ -207,7 +207,7 @@ const privacyViewVisible = ref(false);
 
 let clearSideBarChoose = ref(false);
 
-// 切换侧边栏显示状态
+
 const toggleSidebar = () => {
   sidebarVisible.value = !sidebarVisible.value;
   if (!sidebarVisible.value) {
@@ -268,27 +268,29 @@ const togglePrivacyView = () => {
   aboutViewVisible.value = false;
 };
 const closeSiteChoose = () => {
-  // alert(siteChooseVisible.value)
-  siteChooseVisible.value = !siteChooseVisible.value; // 切换显示状态
-  clearSideBarChoose.value = !clearSideBarChoose.value;
-  // alert(siteChooseVisible.value)
-
+  if(siteChooseVisible.value){
+    siteChooseVisible.value = false;
+  }
 };
 const closeUsefulInfo = () => {
-  clearSideBarChoose.value = !clearSideBarChoose.value;
-  usefulInfoVisible.value = !usefulInfoVisible.value; // 切换显示状态
+  if(usefulInfoVisible.value){
+    usefulInfoVisible.value = false;
+  }
 };
 const closeHelpView = () => {
-  clearSideBarChoose.value = !clearSideBarChoose.value;
-  helpViewVisible.value = !helpViewVisible.value;
+  if(helpViewVisible.value){
+    helpViewVisible.value = false;
+  }
 };
 const closeAboutView = () => {
-  clearSideBarChoose.value = !clearSideBarChoose.value;
-  aboutViewVisible.value = !aboutViewVisible.value;
+  if(aboutViewVisible.value){
+    aboutViewVisible.value = false;
+  }
 };
 const closePrivacyView = () => {
-  clearSideBarChoose.value = !clearSideBarChoose.value;
-  privacyViewVisible.value = !privacyViewVisible.value;
+  if(privacyViewVisible.value){
+    privacyViewVisible.value = false;
+  }
 };
 
 
