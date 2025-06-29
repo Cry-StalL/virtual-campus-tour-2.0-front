@@ -8,6 +8,7 @@
       :resolutions="streetConfig.resolutions"
       debug
       :switchViewer="props.switchViewer"
+      :initialScene="props.initialScene ?? streetConfig.initialScene"
       @coordinateSelected="onPanoramaClick"
       :placingHotspot="placingHotspot"
       :tempHotspot="tempHotspot"
@@ -82,7 +83,7 @@ import { useSceneEditor } from '@/components/pano/composables/useSceneEditor';
 import { add } from 'three/tsl';
 
 const { viewerconfig: streetConfig, configFileName } = useStreetViewerConfig();
-const props = defineProps<{ switchViewer: (name: string) => void }>();
+const props = defineProps<{ switchViewer: (name: string, sceneIdx?: number) => void, initialScene?: number | string }>();
 const emit = defineEmits(['sceneChanged']);
 
 // 使用 useSceneEditor 统一场景编辑逻辑
@@ -139,6 +140,19 @@ onMounted(() => {
     alert('当前读取的Street配置文件：' + configFileName.value);
     promptCounter.count++;
   }
+  window.streetViewer = {
+    switchScene: (name: string) => {
+      if (panoramaViewerRef.value) {
+        panoramaViewerRef.value.switchScene(name);
+      }
+    },
+    getCurrentSceneId: () => {
+      if (panoramaViewerRef.value && typeof panoramaViewerRef.value.getCurrentSceneId === 'function') {
+        return panoramaViewerRef.value.getCurrentSceneId();
+      }
+      return undefined;
+    }
+  };
 });
 
 // 添加热点相关逻辑
@@ -226,6 +240,20 @@ const selectHotspotType = (type: string) => {
 const cancelHotspotTypeSelect = () => {
   showHotspotTypeModal.value = false;
 };
+
+defineExpose({
+  switchScene: (name: string) => {
+    if (panoramaViewerRef.value) {
+      panoramaViewerRef.value.switchScene(name);
+    }
+  },
+  getCurrentSceneId: () => {
+    if (panoramaViewerRef.value && typeof panoramaViewerRef.value.getCurrentSceneId === 'function') {
+      return panoramaViewerRef.value.getCurrentSceneId();
+    }
+    return undefined;
+  }
+});
 </script>
 
 <style scoped>
@@ -596,6 +624,7 @@ const cancelHotspotTypeSelect = () => {
 <script lang="ts">
 declare global {
   interface Window {
+    streetViewer?: any;
     __streetConfigPromptedCount?: { count: number };
   }
 }

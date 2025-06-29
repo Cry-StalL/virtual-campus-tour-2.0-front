@@ -58,7 +58,7 @@ import { useSceneViewerConfig } from '@/components/pano/composables/useSceneView
 import { useSceneEditor } from '@/components/pano/composables/useSceneEditor';
 
 const { viewerconfig: sceneConfig, configFileName } = useSceneViewerConfig();
-const props = defineProps<{ switchViewer: (name: string) => void, initialScene?: string | number }>();
+const props = defineProps<{ switchViewer: (name: string, sceneIdx?: number) => void, initialScene?: string | number, handleReturnToStreet?: () => void }>();
 const emit = defineEmits(['sceneChanged']);
 
 // 使用 useSceneEditor 统一场景编辑逻辑
@@ -123,8 +123,10 @@ onMounted(() => {
 });
 
 const handleReturn = () => {
-  if (props.switchViewer) {
-    props.switchViewer('street');
+  if (props.handleReturnToStreet) {
+    props.handleReturnToStreet();
+  } else if (props.switchViewer) {
+    props.switchViewer('street', 0);
   }
 };
 </script>
