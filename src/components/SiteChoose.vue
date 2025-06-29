@@ -1,5 +1,5 @@
 <template>
-  <div class="full_contain" ref="full_contain_ref">
+  <div class="full_contain" v-show="!isMobileDevice" ref="full_contain_ref">
     <!-- 删除按钮 -->
     <div class="delete-button">
       <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click="closeSiteChooseView">
@@ -8,7 +8,7 @@
     </div>
 
 
-    <div class="contain_body_map">
+    <div class="contain_body_map" >
       <!-- 搜索框放在图片右上角 -->
       <div style="position: absolute; right: 8vw; top: 5vh; z-index: 100;">
         <el-input
@@ -66,6 +66,7 @@
           </template>
         </el-popconfirm>
       </div>
+
       <div class="popconfirm-group" v-show="!showPopconfirm">
         <el-popconfirm
           v-for="location in search_locations"
@@ -105,6 +106,79 @@
       </div>
     </div>
   </div>
+
+  <div class="full_contain" v-show="isMobileDevice" ref="full_contain_ref2">
+    <!-- 删除按钮 -->
+    <div class="delete-button">
+      <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click="closeSiteChooseView">
+        <img style="width: 2vw; height: 2vw;" src="../../assets/icons/delete.png">
+      </el-button>
+    </div>
+
+    <div class="contain_body_map">
+      <!-- 搜索框放在图片右上角 -->
+      <div style="position: absolute; right: 1vw; bottom: 12vh; z-index: 100; transform: rotate(90deg); transform-origin: right top;">
+        <el-input
+          v-model="searchQuery"
+          placeholder="搜索地点或学院名称"
+          @input="handleSearch"
+          style="width: 20vh;"
+        >
+          <template #prefix>
+            <img src="../../assets/icons/search.png" alt="搜索图标" style="width: 1.2vh; height: 1.2vh;">
+          </template>
+        </el-input>
+      </div>
+
+      <!-- 背景图片 -->
+      <img src="https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/background2.jpg">
+
+      <!-- 新增的弹出确认组 -->
+      <div class="popconfirm-group" v-show="showPopconfirm">
+        <el-popconfirm
+          v-for="location in locations"
+          :key="location.id"
+          :hide-icon="true"
+          width="200"
+          placement="right"
+          trigger="hover"
+        >
+          <template #reference>
+            <el-button 
+              style="position: absolute; 
+                     background-color: rgba(0, 0, 0, 0); 
+                     border: 0; 
+                     padding: 0; 
+                     margin: 0; 
+                     width: 20px; 
+                     height: 20px;
+                     "
+              :style="{
+                top: `${contain_body_map_padding_top2 + contain_body_map_ref_height2 * location.left - 10}px`, 
+                right: `${contain_body_map_ref_height2 * location.top - 10}px`
+              }"
+            >
+              <img src="../../assets/icons/click.gif" style="width:20px; height: 20px;">
+            </el-button>
+          </template>
+
+          <template #actions="{ confirm, cancel }">
+            <el-container style="height: 8px; display: flex; align-items: center; justify-content: space-between;">
+              <el-text>{{ location.name }}</el-text>
+              <div>
+                <el-button style="width: 80px; height: 25px; font-size: 15px;" @click="handleConfirm(location)">点击跳转</el-button>
+              </div>
+            </el-container>
+            <el-container style="width: 100%; height: 5px;"></el-container>
+          </template>
+        </el-popconfirm>
+      </div>
+    </div>
+    
+
+  </div>
+
+
 </template>
 
 
@@ -202,8 +276,16 @@
     const search_locations = ref<Location[]>([]);
 
 
+    const isMobileDevice = ref(false)
     onMounted(() => {
         get_images_from_back();
+        const ua = navigator.userAgent
+        isMobileDevice.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
+        window.addEventListener('load', () => {
+          if (full_contain_ref2.value) {
+              console.log("full_contain_ref2.value.clientHeight after load:", full_contain_ref2.value.clientHeight);
+          }
+        });
     });
 
     // 计算闪烁点相关
@@ -213,6 +295,13 @@
     var contain_body_map_ref_width = ref(0);    
     var contain_body_map_ref_height = ref(0);
     var contain_body_map_padding_left = ref(0);
+
+    const full_contain_ref2 = ref<HTMLDivElement | null>(null)
+    var full_contain_ref_width2 = ref(0);
+    var full_contain_ref_height2 = ref(0);
+    var contain_body_map_ref_width2 = ref(0);    
+    var contain_body_map_ref_height2 = ref(0);
+    var contain_body_map_padding_top2 = ref(0);
     const get_images_from_back = () => { 
         // 动态调整背景图片的宽度和高度
         if (full_contain_ref.value){
@@ -221,6 +310,19 @@
             contain_body_map_ref_height.value = full_contain_ref_height.value;
             contain_body_map_ref_width.value = contain_body_map_ref_height.value / 5.0 * 7;
             contain_body_map_padding_left.value = (full_contain_ref_width.value - contain_body_map_ref_width.value) / 2;
+            // console.log("contain_body_map_padding_left.value:", contain_body_map_padding_left.value)
+          }
+        if (full_contain_ref2.value){
+            // console.log("full_contain_ref2.value.clientHeight:", full_contain_ref2.value.clientHeight)
+            full_contain_ref_height2.value = full_contain_ref2.value.clientHeight;
+            // console.log("full_contain_ref_height2.value:", full_contain_ref_height2.value)
+            full_contain_ref_width2.value = full_contain_ref2.value.clientWidth;
+            // console.log("full_contain_ref_width2.value:", full_contain_ref_width2.value)
+            contain_body_map_ref_width2.value = full_contain_ref_width2.value;
+            contain_body_map_ref_height2.value = contain_body_map_ref_width2.value / 5.0 * 7;
+            contain_body_map_padding_top2.value = (full_contain_ref_height2.value - contain_body_map_ref_height2.value) / 2;
+            // console.log("contain_body_map_padding_top2.value:", contain_body_map_padding_top2.value)
+           
         }
     };  
 
@@ -311,9 +413,27 @@
 
 /* 移动端样式 */
 @media screen and (max-width: 768px) and (orientation: portrait) {
+  .delete-button {
+    position: absolute;
+  }
   .delete-button img {
     width: 20px !important;
     height: 20px !important;
+  }
+
+  .contain_body_map{
+    /* background-color: rgb(242, 245, 252); */
+    border-radius: 0;
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+  }
+
+  .contain_body_map img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 确保图片完整显示不裁剪 */
+    display: block;      /* 去除底部空白间隙 */
   }
 }
 
