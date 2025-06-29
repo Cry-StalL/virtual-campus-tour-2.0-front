@@ -1,16 +1,16 @@
 <template>
-  <div class="full_contain" v-show="!isMobileDevice" ref="full_contain_ref">
+  <div class="full_contain" ref="full_contain_ref">
     <!-- 删除按钮 -->
     <div class="delete-button">
-      <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click="closeSiteChooseView">
-        <img style="width: 2vw; height: 2vw;" src="../../assets/icons/delete.png">
-      </el-button>
+        <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click.stop="closeSiteChooseView">
+            <img style="width: 2vw; height: 2vw;" src="../../assets/icons/delete.png">
+        </el-button>
     </div>
 
 
-    <div class="contain_body_map" >
+    <div class="contain_body_map">
       <!-- 搜索框放在图片右上角 -->
-      <div style="position: absolute; right: 8vw; top: 5vh; z-index: 100;">
+      <div style="position: absolute; right: 8vw; top: 5vh; z-index: 100;" >
         <el-input
           v-model="searchQuery"
           placeholder="搜索地点或学院名称"
@@ -23,8 +23,8 @@
         </el-input>
       </div>
 
-      <!-- 背景图片 -->
-      <img src="https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/background.jpg">
+      <img src="https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/background.jpg" >
+
       
       <!-- 新增的弹出确认组 -->
       <div class="popconfirm-group" v-show="showPopconfirm">
@@ -44,8 +44,7 @@
                      padding: 0; 
                      margin: 0; 
                      width:30px; 
-                     height: 30px;
-                     "
+                     height: 30px;"
               :style="{
                 left: `${contain_body_map_padding_left + contain_body_map_ref_width * location.left - 15}px`, 
                 top: `${contain_body_map_ref_height * location.top - 15}px`
@@ -90,6 +89,7 @@
                 top: `${contain_body_map_ref_height * location.top - 15}px`
               }"
             >
+              <img src="../../assets/icons/click.gif" style="width:30px; height: 30px;">
             </el-button>
           </template>
 
@@ -97,7 +97,7 @@
             <el-container style="height: 8px; display: flex; align-items: center; justify-content: space-between;">
               <el-text>{{ location.name }}</el-text>
               <div>
-                <el-button size="small" @click="confirm(); handleConfirm(location)">点击跳转</el-button>
+                <el-button style="width: 80px; height: 25px; font-size: 15px;" @click="confirm(); handleConfirm(location)">点击跳转</el-button>
               </div>
             </el-container>
             <el-container style="width: 100%; height: 5px;"></el-container>
@@ -106,89 +106,17 @@
       </div>
     </div>
   </div>
-
-  <div class="full_contain" v-show="isMobileDevice" ref="full_contain_ref2">
-    <!-- 删除按钮 -->
-    <div class="delete-button">
-      <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click="closeSiteChooseView">
-        <img style="width: 2vw; height: 2vw;" src="../../assets/icons/delete.png">
-      </el-button>
-    </div>
-
-    <div class="contain_body_map">
-      <!-- 搜索框放在图片右上角 -->
-      <div style="position: absolute; right: 1vw; bottom: 12vh; z-index: 100; transform: rotate(90deg); transform-origin: right top;">
-        <el-input
-          v-model="searchQuery"
-          placeholder="搜索地点或学院名称"
-          @input="handleSearch"
-          style="width: 20vh;"
-        >
-          <template #prefix>
-            <img src="../../assets/icons/search.png" alt="搜索图标" style="width: 1.2vh; height: 1.2vh;">
-          </template>
-        </el-input>
-      </div>
-
-      <!-- 背景图片 -->
-      <img src="https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/background2.jpg">
-
-      <!-- 新增的弹出确认组 -->
-      <div class="popconfirm-group" v-show="showPopconfirm">
-        <el-popconfirm
-          v-for="location in locations"
-          :key="location.id"
-          :hide-icon="true"
-          width="200"
-          placement="right"
-          trigger="hover"
-        >
-          <template #reference>
-            <el-button 
-              style="position: absolute; 
-                     background-color: rgba(0, 0, 0, 0); 
-                     border: 0; 
-                     padding: 0; 
-                     margin: 0; 
-                     width: 20px; 
-                     height: 20px;
-                     "
-              :style="{
-                top: `${contain_body_map_padding_top2 + contain_body_map_ref_height2 * location.left - 10}px`, 
-                right: `${contain_body_map_ref_height2 * location.top - 10}px`
-              }"
-            >
-              <img src="../../assets/icons/click.gif" style="width:20px; height: 20px;">
-            </el-button>
-          </template>
-
-          <template #actions="{ confirm, cancel }">
-            <el-container style="height: 8px; display: flex; align-items: center; justify-content: space-between;">
-              <el-text>{{ location.name }}</el-text>
-              <div>
-                <el-button style="width: 80px; height: 25px; font-size: 15px;" @click="handleConfirm(location)">点击跳转</el-button>
-              </div>
-            </el-container>
-            <el-container style="width: 100%; height: 5px;"></el-container>
-          </template>
-        </el-popconfirm>
-      </div>
-    </div>
-    
-
-  </div>
-
-
 </template>
 
 
 <script setup lang="ts">
     
-    import { onMounted, onBeforeUnmount, ref, computed } from 'vue';
+    import { onMounted, ref, computed } from 'vue';
 
     // 定义地点类型
     interface Location {
         name: string;
+        streetSceneId: string;
         text: string;
         id: number;
         left: number;
@@ -204,28 +132,14 @@
         }
     }
 
-
     // 搜索相关
     const searchQuery = ref('');
-    const searchResults = ref<Location[]>([]);
+    const searchResults = ref<Array<{name: string; text: string; id: number; left: number; top: number}>>([]);
     const showPopconfirm = computed(() => searchQuery.value.trim() === '');
-    const handleSearch = () => {
-        if (!searchQuery.value.trim()) {
-            searchResults.value = [];
-            search_locations.value = []; // 清空搜索结果
-            
-            return;
-        }
 
-        // 模糊匹配搜索
-        const results = locations.filter(location => 
-            location.text.includes(searchQuery.value.trim())
-        );
-        searchResults.value = results;
-        search_locations.value = results; // 将匹配结果赋值给 search_locations
-    };
 
-    // 地点相关
+    
+
     const locations = [
         { name: '南门', streetSceneId: 'rh-1-36', text: '南门', id: 1, left: 0.325, top: 0.7 },
         { name: '彩虹门', streetSceneId: 'rh-1-33', text: '彩虹门', id: 2, left: 0.345, top: 0.66 },
@@ -240,7 +154,7 @@
         { name: '若海食堂',streetSceneId: 'rh-3-3', text: '若海食堂，小肥羊，黄记煌', id: 10, left: 0.485, top: 0.685 },
         { name: '海琴六号', streetSceneId: 'rh-2-9',text: '海琴六号，国际翻译学院，国翻，历史学系（珠海），珠历，历珠，国际金融学院，国金，旅游学院，旅院，中国语言文学系（珠海），文珠，珠文，国际关系学院，国关，哲学系（珠海），哲珠，珠哲，“一带一路”研究院，一带一路研究院', id: 11, left: 0.435, top: 0.75 },
         { name: '音乐厅', streetSceneId: 'hl-1-1',text: '音乐厅', id: 12, left: 0.38, top: 0.44 },
-        { name: '教学楼', streetSceneId: 'yxdd-1-59',streetSceneId: 'yxdd-1-59',text: '教学楼，网络信息服务中心，岐关车乘车点，岐关车，瑞幸咖啡，瑞幸，满忆糖水，满忆，实验室', id: 13, left: 0.49, top: 0.38 },
+        { name: '教学楼', streetSceneId: 'yxdd-1-59',text: '教学楼，网络信息服务中心，岐关车乘车点，岐关车，瑞幸咖啡，瑞幸，满忆糖水，满忆，实验室', id: 13, left: 0.49, top: 0.38 },
         { name: '中山像', streetSceneId: 'jy-1-7',text: '中山像', id: 14, left: 0.56, top: 0.38 },
         { name: '槿园一二号',streetSceneId: 'jy-2-2', text: '槿园一二号，打印，文印中心', id: 15, left: 0.62, top: 0.33 },
         { name: '槿园食堂', streetSceneId: 'jy-2-4',text: '槿园食堂，古茗', id: 16, left: 0.64, top: 0.36 },
@@ -272,35 +186,42 @@
         { name: '华夏门', streetSceneId: 'byy-2-6',text: '华夏门', id: 39, left: 0.55, top: 0.09 },
         { name: '东南门', streetSceneId: 'hq-2-1',text: '东南门', id: 40, left: 0.535, top: 0.755 }
     ];
+
     const search_locations = ref<Location[]>([]);
 
+
+    // const search_locations = ref([]);
+
+    const handleSearch = () => {
+        if (!searchQuery.value.trim()) {
+            searchResults.value = [];
+            search_locations.value = []; // 清空搜索结果
+            return;
+        }
+
+        // 模糊匹配搜索
+        const results = locations.filter(location => 
+            location.text.includes(searchQuery.value.trim())
+        );
+
+        searchResults.value = results;
+        search_locations.value = results; // 将匹配结果赋值给 search_locations
+
+    };
 
     const isMobileDevice = ref(false)
     onMounted(() => {
         get_images_from_back();
         const ua = navigator.userAgent
         isMobileDevice.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
-        window.addEventListener('load', () => {
-          if (full_contain_ref2.value) {
-              console.log("full_contain_ref2.value.clientHeight after load:", full_contain_ref2.value.clientHeight);
-          }
-        });
     });
 
-    // 计算闪烁点相关
     const full_contain_ref = ref<HTMLDivElement | null>(null)
     var full_contain_ref_width = ref(0);
     var full_contain_ref_height = ref(0);
     var contain_body_map_ref_width = ref(0);    
     var contain_body_map_ref_height = ref(0);
     var contain_body_map_padding_left = ref(0);
-
-    const full_contain_ref2 = ref<HTMLDivElement | null>(null)
-    var full_contain_ref_width2 = ref(0);
-    var full_contain_ref_height2 = ref(0);
-    var contain_body_map_ref_width2 = ref(0);    
-    var contain_body_map_ref_height2 = ref(0);
-    var contain_body_map_padding_top2 = ref(0);
     const get_images_from_back = () => { 
         // 动态调整背景图片的宽度和高度
         if (full_contain_ref.value){
@@ -309,19 +230,6 @@
             contain_body_map_ref_height.value = full_contain_ref_height.value;
             contain_body_map_ref_width.value = contain_body_map_ref_height.value / 5.0 * 7;
             contain_body_map_padding_left.value = (full_contain_ref_width.value - contain_body_map_ref_width.value) / 2;
-            // console.log("contain_body_map_padding_left.value:", contain_body_map_padding_left.value)
-          }
-        if (full_contain_ref2.value){
-            // console.log("full_contain_ref2.value.clientHeight:", full_contain_ref2.value.clientHeight)
-            full_contain_ref_height2.value = full_contain_ref2.value.clientHeight;
-            // console.log("full_contain_ref_height2.value:", full_contain_ref_height2.value)
-            full_contain_ref_width2.value = full_contain_ref2.value.clientWidth;
-            // console.log("full_contain_ref_width2.value:", full_contain_ref_width2.value)
-            contain_body_map_ref_width2.value = full_contain_ref_width2.value;
-            contain_body_map_ref_height2.value = contain_body_map_ref_width2.value / 5.0 * 7;
-            contain_body_map_padding_top2.value = (full_contain_ref_height2.value - contain_body_map_ref_height2.value) / 2;
-            // console.log("contain_body_map_padding_top2.value:", contain_body_map_padding_top2.value)
-           
         }
     };  
 
@@ -367,6 +275,8 @@
         }, 300); // 先等待页面关闭动画完成，再开始跳转
     }
 
+
+
     // 删除
     const emit = defineEmits([
       'closeSiteChooseView',
@@ -380,21 +290,22 @@
 </script>
 
 
-<style >
+<style>
 .full_contain{
-    /* background-color: rgb(242, 245, 252); */
-    background-image: url('../../assets/background.png');
     border-radius: 0;
+
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
+    /* background-color: white; */
 }
 
 
 .contain_body_map{
-    /* background-color: rgb(242, 245, 252); */
+    background-color: rgba(255, 255, 255, 1);
     border-radius: 0;
     overflow-y: auto;
+
     height: 100%;
     width: 100%;
 }
@@ -406,64 +317,10 @@
   display: block;      /* 去除底部空白间隙 */
 }
 
-.el-input__wrapper:focus {
-  border-color: #F1F0EB !important;
-}
-
 .contain_body_site{
     margin-top: 2vh;
     width: 64vw; 
     height: 100vh;
 }
 
-/* 移动端样式 */
-@media screen and (max-width: 768px) and (orientation: portrait) {
-  .delete-button {
-    position: absolute;
-  }
-  .delete-button img {
-    width: 20px !important;
-    height: 20px !important;
-  }
-
-  .contain_body_map{
-    /* background-color: rgb(242, 245, 252); */
-    border-radius: 0;
-    overflow-y: auto;
-    height: 100%;
-    width: 100%;
-  }
-
-  .contain_body_map img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* 确保图片完整显示不裁剪 */
-    display: block;      /* 去除底部空白间隙 */
-  }
-}
-
-/* 加速悬浮框关闭动画 */
-:deep(.el-popper) {
-  transition: all 0.1s ease !important;
-}
-
-:deep(.el-popconfirm) {
-  transition: all 0.1s ease !important;
-}
-
-/* 针对淡入淡出动画 */
-:deep(.el-popper.is-pure) {
-  transition: opacity 0.1s ease !important;
-}
-
-/* 针对Vue的transition动画 */
-:deep(.fade-in-linear-enter-active),
-:deep(.fade-in-linear-leave-active) {
-  transition: opacity 0.1s ease !important;
-}
-
 </style>
-
-
-
-
