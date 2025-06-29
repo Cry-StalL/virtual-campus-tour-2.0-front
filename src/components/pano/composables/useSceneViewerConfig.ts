@@ -7,7 +7,7 @@ export function useSceneViewerConfig() {
 
   onMounted(async () => {
     try {
-      const res = await fetch('/src/assets/data/scene-viewer-config.json');
+      const res = await fetch('/assets/scene-viewer-config.json');
       if (!res.ok) throw new Error('配置文件加载失败');
       const data = await res.json();
 

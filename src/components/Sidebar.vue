@@ -10,7 +10,8 @@
       <!-- 地点跳转 -->
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('location')" :class="{ active: sectionsState.location }">
-          <img class="menu-icon" :src="sectionsState.location ? '/icons/SideBar/location_selected.png' : '/icons/SideBar/location.png'" />
+          <img class="menu-icon" src="../../assets/icons/location_selected.png" v-show="sectionsState.location" />
+          <img class="menu-icon" src="../../assets/icons/location.png" v-show="!sectionsState.location" />
           <text class="menu-text" :style="{ color: sectionsState.location?'#005826':'black'}" >地点跳转</text>
         </button>
       </div>
@@ -18,7 +19,8 @@
       <!-- 实用信息 -->
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('info')" :class="{ active: sectionsState.info }">
-          <img class="menu-icon" :src="sectionsState.info ? '/icons/SideBar/info_selected.png' : '/icons/SideBar/info.png'" />
+          <img class="menu-icon" src="../../assets/icons/info_selected.png" v-show="sectionsState.info" />
+          <img class="menu-icon" src="../../assets/icons/info.png" v-show="!sectionsState.info" />
           <text class="menu-text" :style="{ color: sectionsState.info?'#005826':'black'}" >实用信息</text>
         </button>
       </div>
@@ -27,7 +29,8 @@
        
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('help')" :class="{ active: sectionsState.help }">
-          <img class="menu-icon" :src="sectionsState.help ? '/icons/SideBar/help_selected.png' : '/icons/SideBar/help.png'" />
+          <img class="menu-icon" src="../../assets/icons/help_selected.png" v-show="sectionsState.help" />
+          <img class="menu-icon" src="../../assets/icons/help.png" v-show="!sectionsState.help" />
           <text class="menu-text" :style="{ color: sectionsState.help?'#005826':'black'}" >帮助中心</text>
         </button>
       </div>
@@ -36,7 +39,8 @@
       <!-- 隐私政策 -->
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('privacy')" :class="{ active: sectionsState.privacy }">
-          <img class="menu-icon" :src="sectionsState.privacy ? '/icons/SideBar/privacy_selected.png' : '/icons/SideBar/privacy.png'" />
+          <img class="menu-icon" src="../../assets/icons/privacy_selected.png" v-show="sectionsState.privacy" />
+          <img class="menu-icon" src="../../assets/icons/privacy.png" v-show="!sectionsState.privacy" />
           <text class="menu-text" :style="{ color: sectionsState.privacy?'#005826':'black'}">隐私政策</text>
         </button>
       </div>
@@ -44,8 +48,8 @@
       <!-- 关于我们 -->
       <div class="menu-section">
         <button class="menu-button" @click="toggleSection('about')" :class="{ active: sectionsState.about }">
-          <img class="menu-icon" src="/icons/SideBar/about_selected.png" v-if="sectionsState.about" />
-          <img class="menu-icon" src="/icons/SideBar/about.png" v-else />
+          <img class="menu-icon" src="../../assets/icons/about_selected.png" v-show="sectionsState.about" />
+          <img class="menu-icon" src="../../assets/icons/about.png" v-show="!sectionsState.about" />
           <text class="menu-text" :style="{ color: sectionsState.about?'#005826':'black'}">关于我们</text>
         </button>
       </div>
@@ -80,8 +84,7 @@
 
     [key: string]: boolean; // Index signature for dynamic access
   };
-  const src_path1 = ref('/icons/SideBar/help_selected.png')
-  const src_path2 = ref('/icons/SideBar/help.png')
+
 
   const sectionsState = ref<SectionState>({
     location: false,

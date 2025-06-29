@@ -81,6 +81,8 @@ const currentSphere = shallowRef<THREE.Mesh | null>(null);
 
 // 获取完整的图片 URL
 const getFullImageUrl = (relativeImagePath: string): string => {
+  // return "https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/aabbcc.jpg";
+  // alert(relativeImagePath);
   const base = import.meta.env.VITE_OSS_BASE_URL
   const rel = relativeImagePath.replace(/^\//, '');
   return `${base}/${rel}`;
@@ -285,6 +287,7 @@ const clearHotspots = () => {
 
 // 渐进加载图片
 const loadImageProgressively = (baseImagePath: string, targetMesh: THREE.Mesh) => {
+  // alert('渐进加载图片');
   if (!scene.value) return;
   const textureLoader = new THREE.TextureLoader();
   props.resolutions.forEach((resolution, index) => {
@@ -376,6 +379,8 @@ const switchScene = (target: number | string) => {
     loadImageProgressively(newScene.relativeImagePath, mesh);
   } else {
     // 标准加载模式
+    // alert('标注加载图片');
+
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(
       getFullImageUrl(`${newScene.relativeImagePath}/1920x960.jpg`),
@@ -521,6 +526,7 @@ onMounted(() => {
   
   // 加载指定的初始场景
   if (props.scenes.length > 0) {
+    // alert('初始场景索引：' + props.initialScene);
     switchScene(props.initialScene);
   }
   

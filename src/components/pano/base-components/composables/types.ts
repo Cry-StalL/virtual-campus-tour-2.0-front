@@ -17,6 +17,7 @@ export interface HotSpot {
   title?: string;      // 标题
   description?: string; // 描述
   targetSceneId?: string; // 目标场景ID（当type为"switchScene"时必填）
+  targetSceneViewerSceneId?: string;
   onClick?: (params?: any) => void; // 点击处理函数
   onClickParams?: any; // 传递给点击处理函数的参数
 }

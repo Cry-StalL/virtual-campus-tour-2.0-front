@@ -7,10 +7,12 @@ export function useStreetViewerConfig() {
 
   onMounted(async () => {
     try {
-      const res = await fetch('/src/assets/data/street-viewer-config.json');
+      const res = await fetch('/assets/street-viewer-config.json');
+      // const res = await fetch('./street-viewer-config.json');
+      console.log('完整响应:', res);
+      console.log('状态码:', res.status); // 立即打印 status
       if (!res.ok) throw new Error('配置文件加载失败');
       const data = await res.json();
-
       // 简单类型检查
       if (
         typeof data.progressiveLoading === 'boolean' &&
@@ -25,6 +27,6 @@ export function useStreetViewerConfig() {
       error.value = e.message;
     }
   });
-
+  // console.log(viewerconfig.value)
   return { viewerconfig, error };
 }

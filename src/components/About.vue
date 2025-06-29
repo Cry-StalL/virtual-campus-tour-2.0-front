@@ -44,35 +44,35 @@
         <div class="contact-grid">
           <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div style="display: flex; flex-direction: column; ">
-              <img src="../../assets//developer1.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <img src="../../assets/developer1.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
               <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">Mark.G</text>
             </div>
           </div>
 
           <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div style="display: flex; flex-direction: column; ">
-              <img src="../../assets//developer2.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <img src="../../assets/developer2.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
               <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">Sitan Han</text>
             </div>
           </div>
 
           <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div style="display: flex; flex-direction: column; ">
-              <img src="../../assets//developer3.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <img src="../../assets/developer3.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
               <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">duanchy3</text>
             </div>
           </div>
 
           <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div style="display: flex; flex-direction: column; ">
-              <img src="../../assets//developer4.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <img src="../../assets/developer4.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
               <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">小高</text>
             </div>
           </div>
 
           <div class="contact-item" style="width: 14vh; height: 18vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div style="display: flex; flex-direction: column; ">
-              <img src="../../assets//developer5.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
+              <img src="../../assets/developer5.jpg" style="width: 10vh; height: 10vh; border-radius: 0%;">
               <text style="width: 100%; text-align: center; font-size: 2vh; margin-top: 2vh; margin-bottom: 1vh; height: 0.8vw;">luozhj33</text>
             </div>
           </div>
