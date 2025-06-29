@@ -12,7 +12,11 @@
     <div v-if="isLoading" class="loading-overlay">
       <div class="loading-content">
         <div class="loading-spinner"></div>
-        <div class="loading-text">正在加载全景图...</div>
+        <div class="loading-text">
+          正在加载全景图<span class="loading-dots">
+            <span>.</span><span>.</span><span>.</span>
+          </span>
+        </div>
         <div class="loading-progress-container">
           <div class="loading-progress-bar">
             <div 
@@ -903,6 +907,16 @@ defineExpose({
   text-align: center;
   max-width: 80%;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
 }
 
 .loading-spinner {
@@ -926,6 +940,31 @@ defineExpose({
   word-break: break-word;
 }
 
+.loading-dots span {
+  animation: fade 1.4s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fade {
+  0%, 80%, 100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
 .loading-progress-container {
   margin-top: 20px;
 }
@@ -933,9 +972,29 @@ defineExpose({
 .loading-progress-bar {
   width: 100%;
   height: 20px;
-  background-color: #f0f0f0;
+  background: linear-gradient(
+    45deg,
+    #f0f0f0 25%,
+    #e8e8e8 25%,
+    #e8e8e8 50%,
+    #f0f0f0 50%,
+    #f0f0f0 75%,
+    #e8e8e8 75%
+  );
+  background-size: 20px 20px;
   border-radius: 10px;
   overflow: hidden;
+  position: relative;
+  animation: scroll-background 2s linear infinite;
+}
+
+@keyframes scroll-background {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 0;
+  }
 }
 
 .loading-progress-fill {
@@ -943,6 +1002,33 @@ defineExpose({
   background: linear-gradient(90deg, #409EFF 0%, #66B1FF 100%);
   border-radius: 10px;
   transition: width 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-progress-fill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 .loading-progress-text {
