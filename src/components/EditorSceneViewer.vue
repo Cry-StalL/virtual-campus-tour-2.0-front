@@ -6,6 +6,7 @@
       :scenes="sceneConfig.scenes"
       :progressiveLoading="sceneConfig.progressiveLoading"
       :resolutions="sceneConfig.resolutions"
+      :initialScene="props.initialScene ?? sceneConfig.initialScene"
       debug
     />
     <button class="select-img-btn main" @click="selectPanoramaCurrent" v-if="sceneConfig && currentSceneIdx >= 0">更改当前全景图</button>
@@ -57,7 +58,7 @@ import { useSceneViewerConfig } from '@/components/pano/composables/useSceneView
 import { useSceneEditor } from '@/components/pano/composables/useSceneEditor';
 
 const { viewerconfig: sceneConfig, configFileName } = useSceneViewerConfig();
-const props = defineProps<{ switchViewer: (name: string) => void }>();
+const props = defineProps<{ switchViewer: (name: string) => void, initialScene?: string | number }>();
 const emit = defineEmits(['sceneChanged']);
 
 // 使用 useSceneEditor 统一场景编辑逻辑
@@ -101,7 +102,20 @@ watch(
 
 const hasPrompted = ref(false);
 onMounted(() => {
-  currentSceneIdx.value = 0;
+  let initIdx = 0;
+  if (props.initialScene !== undefined && sceneConfig.value && Array.isArray(sceneConfig.value.scenes)) {
+    if (typeof props.initialScene === 'number') {
+      initIdx = props.initialScene;
+    } else {
+      // 按sceneId查找
+      const idx = sceneConfig.value.scenes.findIndex(s => s.sceneId == props.initialScene);
+      if (idx >= 0) initIdx = idx;
+    }
+  }
+  currentSceneIdx.value = initIdx;
+  if (panoramaViewerRef.value && typeof panoramaViewerRef.value.switchScene === 'function') {
+    nextTick(() => panoramaViewerRef.value.switchScene(initIdx));
+  }
   if (!hasPrompted.value && configFileName.value) {
     alert('当前读取的Scene配置文件：' + configFileName.value);
     hasPrompted.value = true;
