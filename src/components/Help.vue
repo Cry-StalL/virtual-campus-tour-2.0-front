@@ -218,8 +218,8 @@ const closeHelpView = () => {
   }
   
   .delete-button img {
-    width: 20px;
-    height: 20px;
+    width: 20px !important;
+    height: 20px !important;
   }
   
   .header {
