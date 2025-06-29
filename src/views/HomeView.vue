@@ -310,10 +310,10 @@ const showCurrentSceneId = () => {
 const onVideoEnded = () => {
   // 标记视频已播放过
   sessionStorage.setItem('hasPlayedIntroVideo', 'true');
-  // 视频播放完后停留1秒
+  // 视频播放完后停留0.3秒
   setTimeout(() => {
     showIntroVideo.value = false;
-  }, 1000);
+  }, 300);
 };
 
 const onVideoError = () => {
