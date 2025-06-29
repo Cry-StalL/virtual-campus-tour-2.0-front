@@ -28,15 +28,23 @@
     </div>
 
     <!-- 侧边栏切换按钮 -->
-    <div class="toggle-btn" @click.stop="toggleSidebar">
+    <div class="toggle-btn" v-show="!isMobileDevice" @click.stop="toggleSidebar">
       <div style="background-color: white; margin: auto auto; width: 100%; height: 100%; display: flex; align-items: center; border-radius: 50%;">
-        <img class="toggle-icon" v-show="!sidebarVisible" src="/icons/SideBar/more.png" >
-        <img class="toggle-icon" v-show="sidebarVisible" src="../../assets/icons/close.png" >
+        <img class="toggle-icon" v-show="!sidebarVisible" src="../../assets/icons/more.png" >
+        <img class="toggle-icon" style="width: 50%; height: 50%;" v-show="sidebarVisible && !isMobileDevice" src="../../assets/icons/close1.png" >
       </div>
     </div>
 
+    <div class="toggle-btn" style="top: 40px; width: 40px; height: 40px;" v-show="isMobileDevice" @click.stop="toggleSidebar">
+      <div style="background-color: white; margin: auto auto; width: 100%; height: 100%; display: flex; align-items: center; border-radius: 50%;">
+        <img class="toggle-icon" v-show="!sidebarVisible" src="../../assets/icons/more.png" >
+        <img class="toggle-icon" style="width: 50%; height: 50%;" v-show="sidebarVisible && isMobileDevice" src="../../assets/icons/close2.png" >
+      </div>
+    </div>
+
+    
     <!-- 侧边栏 -->
-    <div class="sidebar" :class="{ active: sidebarVisible }" @click.stop>
+    <div class="sidebar" v-show="!isMobileDevice" :class="{ active: sidebarVisible }" @click.stop>
       <Sidebar 
         @toggle-site-choose="toggleSiteChoose" 
         @toggle-useful-info="toggleUsefulInfo" 
@@ -47,6 +55,18 @@
       />
     </div>
 
+    <!-- 移动端侧边栏 -->
+    <div class="m_sidebar" style="height: 46vh; background-color: white;" v-show="isMobileDevice" :class="{ active: sidebarVisible }" @click.stop>
+      <m_Sidebar 
+        @toggle-site-choose="toggleSiteChoose" 
+        @toggle-useful-info="toggleUsefulInfo" 
+        @toggle-help-view="toggleHelpView"
+        @toggle-about-view="toggleAboutView"
+        @toggle-privacy-view="togglePrivacyView"
+        :clearSideBarChoose="clearSideBarChoose" 
+      />
+    </div>
+   
 
     <!-- 地点跳转 -->
     <div class="sitechoose" :class="{ active: siteChooseVisible }" @click.stop>
@@ -98,9 +118,15 @@
         </div>
       </template>
       <template v-else>
-        <div class="auth-buttons">
-          <el-button type="primary" class="login-btn" @click="goToLogin">登录</el-button>
-          <el-button class="register-btn" @click="goToRegister">注册</el-button>
+        <!-- 电脑端 -->
+        <div class="auth-buttons" v-show="!isMobileDevice">
+          <el-button type="primary" class="login-btn" @click="goToLogin" style="font-size: 45%;">登录</el-button>
+          <el-button class="register-btn" @click="goToRegister" style="font-size: 45%;">注册</el-button>
+        </div>
+        <!-- 移动端 -->
+        <div class="auth-buttons" style="position: absolute; top: 23px; right: -10px; height: 40px; background-origin: green;" v-show="isMobileDevice">
+          <el-button type="primary" class="login-btn" @click="goToLogin" style="padding: 8px 24px; font-size: 12px;">登录</el-button>
+          <el-button class="register-btn" @click="goToRegister" style="padding: 8px 24px; font-size: 12px;">注册</el-button>
         </div>
       </template>
     </div>
@@ -114,6 +140,7 @@ import Cookies from 'js-cookie';
 import { ArrowDown, User, SwitchButton } from '@element-plus/icons-vue';
 import PanoramaViewerGroup from '@/components/pano/base-components/PanoramaViewerGroup.vue';
 import Sidebar from '@/components/Sidebar.vue';
+import m_Sidebar from '@/components/m_Sidebar.vue';
 import { ElMessage } from 'element-plus';
 import { APP_CONFIG } from '@/config/config';
 import AerialViewer from '@/components/pano/AerialViewer.vue';
@@ -124,6 +151,7 @@ import UsefulInfo from '@/components/usefulInfo.vue';
 import Help from '@/components/Help.vue';
 import About from '@/components/About.vue';
 import Privacy from '@/components/Privacy.vue';
+import { fa } from 'element-plus/es/locale';
 
 // Define types
 type SectionState = {
@@ -328,9 +356,19 @@ const viewers = [
   { name: 'scene', component: markRaw(SceneViewer) }
 ];
 
+const isMobileDevice = ref(false)
+function isMobile() {
+  // const ua = navigator.userAgent;
+  // return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+}
+
+
 onMounted(() => {
   checkLoginStatus();
   checkVideoPlayStatus();
+  
+  const ua = navigator.userAgent
+  isMobileDevice.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
 });
 
 </script>
@@ -379,7 +417,7 @@ body, html, #app {
 .sidebar {
   position: absolute;
   top: 0;
-  left: -300px; /* 桌面端固定宽度 */
+  left: -200vw; 
   width: 300px;
   height: 100vh;
   background-color: rgba(255, 255, 255, 1);
@@ -388,31 +426,30 @@ body, html, #app {
   z-index: 20;
   /* overflow-y: auto; */
 }
-
 .sidebar.active {
   left: 0;
 }
 
-/* 移动端样式 */
-@media (max-width: 768px) and (orientation: portrait) {
-  .sidebar {
-    width: 33.33vw;
-    min-width: 120px;
-    left: -50vw; /* 确保完全隐藏 */
-  }
-  
-  .sidebar.active {
-    left: 0;
-  }
-  
-  /* 移动端切换按钮 */
-  .toggle-btn {
-    top: 15px;
-    left: 15px;
-    width: 40px;
-    height: 40px;
-  }
+
+/* 侧边栏样式 */
+.m_sidebar {
+  position: absolute;
+  left: 0;
+  top: -100vh; /* 桌面端固定宽度 */
+  width: 100vw;
+  /* height: 45vh; */
+  /* background-color: white; */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: top 0.3s ease;
+  z-index: 20;
+  /* overflow-y: auto; */
 }
+.m_sidebar.active {
+  top: 0;
+}
+
+
+
 
 .sidebar-content {
   padding: 20px;
@@ -446,13 +483,7 @@ body, html, #app {
   object-fit: contain;
 }
 
-/* 移动端图标调整 */
-@media (max-width: 768px) and (orientation: portrait) {
-  .toggle-icon {
-    width: 70%;
-    height: 70%;
-  }
-}
+
 
 .menu-section {
   margin-bottom: 15px;
@@ -508,7 +539,7 @@ body, html, #app {
 /* 登录和注册按钮样式 */
 .auth-buttons {
   display: flex;
-  gap: 10px;
+  gap: 0px;
   align-items: center;
 }
 
@@ -523,11 +554,13 @@ body, html, #app {
   box-shadow: 0 2px 4px rgba(64, 158, 255, 0.2);
   background-color: #7F0000;
   border-color: #7F0000;
+  z-index: 200;
 }
 .login-btn:hover {
   background-color: #AF0000;
   border-color: #AF0000;
   /* color: #409EFF; */
+  
 }
 
 .register-btn {
@@ -542,6 +575,8 @@ body, html, #app {
   color: #D8915C;
   border: 1px solid #d9ecff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+
 }
 
 .register-btn:hover {
