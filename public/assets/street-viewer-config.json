@@ -7,22 +7,39 @@
   ],
   "scenes": [
     {
-      "sceneId": "byy-1-1",
-      "relativeImagePath": "assets/panos/streets/byy_road1/1",
+      "sceneId": "ry-1-16",
+      "relativeImagePath": "assets/panos/streets/ry_road1/16",
       "hotspots": [
         {
           "type": "switchScene",
-          "longitude": -174.78,
-          "latitude": -16.23,
+          "longitude": -42.6,
+          "latitude": -19.4,
           "icon": "icons/arrow_hotspot.png",
           "title": "跳转场景",
           "description": "",
           "targetSceneId": "byy-1-2"
+        },
+        {
+          "type": "switchScene",
+          "longitude": -137.52,
+          "latitude": -23.23,
+          "icon": "icons/arrow_hotspot.png",
+          "title": "跳转场景",
+          "description": "",
+          "targetSceneId": "ry-2-1"
+        },
+        {
+          "type": "switchScene",
+          "longitude": 130.82,
+          "latitude": -16.97,
+          "icon": "icons/arrow_hotspot.png",
+          "title": "跳转场景",
+          "description": "",
+          "targetSceneId": "ry-1-15"
         }
-      ],
-      "initialLongitude": -74.78,
-      "initialLatitude": 16.23
+      ]
     },
+    
     {
       "sceneId": "byy-1-10",
       "relativeImagePath": "assets/panos/streets/byy_road1/10",
@@ -4958,39 +4975,7 @@
         }
       ]
     },
-    {
-      "sceneId": "ry-1-16",
-      "relativeImagePath": "assets/panos/streets/ry_road1/16",
-      "hotspots": [
-        {
-          "type": "switchScene",
-          "longitude": -42.6,
-          "latitude": -19.4,
-          "icon": "icons/arrow_hotspot.png",
-          "title": "跳转场景",
-          "description": "",
-          "targetSceneId": "byy-1-2"
-        },
-        {
-          "type": "switchScene",
-          "longitude": -137.52,
-          "latitude": -23.23,
-          "icon": "icons/arrow_hotspot.png",
-          "title": "跳转场景",
-          "description": "",
-          "targetSceneId": "ry-2-1"
-        },
-        {
-          "type": "switchScene",
-          "longitude": 130.82,
-          "latitude": -16.97,
-          "icon": "icons/arrow_hotspot.png",
-          "title": "跳转场景",
-          "description": "",
-          "targetSceneId": "ry-1-15"
-        }
-      ]
-    },
+    
     {
       "sceneId": "ry-1-17",
       "relativeImagePath": "assets/panos/streets/ry_road1/17",
