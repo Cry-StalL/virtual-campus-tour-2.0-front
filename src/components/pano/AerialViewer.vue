@@ -47,14 +47,144 @@ const aerialScenes: Scene[] = [
     sceneId: 'aerial-1',
     relativeImagePath: 'assets/panos/aerials/1',
     hotspots: [
-      
+      {
+        type: 'aerial',
+        longitude: -76.8, latitude: -17.25,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'yxdd-1-68' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: -13.15, latitude: -12.75,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'yxdd-2-12' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: 9.95, latitude: -5.69,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'yxdd-2-23' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: 35.79, latitude: -16.28,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'rh-4-5' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: 64.82, latitude: -13.29,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'rh-3-25' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: 33.04, latitude: -6.45,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'hq-2-21' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: 91.66, latitude: -16.16, 
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'rh-1-16' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: -138.98, latitude: -85.98, 
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'rh-1-9' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: -35.37, latitude: -8.16, 
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'jy-2-11' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: -147.59, latitude: -18.08, 
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'jxl-1-6' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: -108.91, latitude: -10.21,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'yxdd-1-59' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: 120.51, latitude: -4.84,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'rh-1-31' // 对应街景场景ID
+      }
     ]
   },
   {
     sceneId: 'aerial-2', 
     relativeImagePath: 'assets/panos/aerials/2',
     hotspots: [
-      
+      {
+        type: 'aerial',
+        longitude: -1.96, latitude: -20.9, 
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'yxdd-1-68' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: 28.5, latitude: -12.36, 
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'rh-1-9' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: -49.43, latitude: -13.29,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'jy-1-1' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: 76.94, latitude: -14.26, 
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'jxl-3-7' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: -9.05, latitude: -76.29, 
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'yxdd-1-56' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: -176.06, latitude: -25.73, 
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'yxdd-1-47' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: 170.79, latitude: -8.96,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'hl-4-6' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: -137.11, latitude: -12.22,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'ly-2-12' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: 99.74, latitude: -8.49,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'hl-1-1' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: 143.84, latitude: -37.66, 
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'yxdd-3-4' // 对应街景场景ID
+      }
     ]
   },
   {
@@ -65,7 +195,76 @@ const aerialScenes: Scene[] = [
         type: 'aerial',
         longitude: -170.04,
         latitude: -62.64,
+        icon: 'icons/aerial_hotspot.png',
         targetStreetSceneId: 'ry-1-3' // 对应街景场景ID
+      },
+      {
+        type: 'aerial',
+        longitude: -3.51,
+        latitude: -66.82,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'yxdd-1-16' // 对应街景场景ID 
+      },
+      {
+        type: 'aerial',
+        longitude:  -14.33,
+        latitude:  -46.96,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'hl-5-4' // 对应街景场景ID 
+      },
+      {
+        type: 'aerial',
+        longitude: -66.97, latitude: -19.45, 
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'hl-4-6' // 对应街景场景ID 
+      },
+      {
+        type: 'aerial',
+        longitude: 82.18, latitude: -24.93,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'yxdd-1-1' // 对应街景场景ID 
+      },
+      {
+        type: 'aerial',
+        longitude: 78.76, latitude: -14.68,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'tq-1-15' // 对应街景场景ID 
+      },
+      {
+        type: 'aerial',
+        longitude: -174.87, latitude: -32.76,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'ry-1-8' // 对应街景场景ID 
+      },
+      {
+        type: 'aerial',
+        longitude: -178.94, latitude: -16.08,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'ry-1-16' // 对应街景场景ID 
+      },
+      {
+        type: 'aerial',
+        longitude: -81.39, latitude: -12.37,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'yxdd-1-43' // 对应街景场景ID 
+      },
+      {
+        type: 'aerial',
+        longitude: -52.75, latitude: -9.98,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'hl-1-11' // 对应街景场景ID 
+      },
+      {
+        type: 'aerial',
+        longitude: 49.44, latitude: -17.77,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'hl-2-8' // 对应街景场景ID 
+      },
+      {
+        type: 'aerial',
+        longitude: 13.47, latitude: -17.5,
+        icon: 'icons/aerial_hotspot.png',
+        targetStreetSceneId: 'hl-2-18' // 对应街景场景ID 
       }
     ]
   }
