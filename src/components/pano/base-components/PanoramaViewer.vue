@@ -7,6 +7,23 @@
         <div class="error-message">{{ errorMessage }}</div>
       </div>
     </div>
+
+    <!-- 加载进度条 -->
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">正在加载全景图...</div>
+        <div class="loading-progress-container">
+          <div class="loading-progress-bar">
+            <div 
+              class="loading-progress-fill" 
+              :style="{ width: loadingProgress + '%' }"
+            ></div>
+          </div>
+          <div class="loading-progress-text">{{ Math.round(loadingProgress) }}%</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -46,6 +63,10 @@ const props = withDefaults(defineProps<PanoramaViewerProps>(), {
 });
 
 const viewerContainer = ref<HTMLElement | null>(null);
+
+// 加载进度状态
+const isLoading = ref(false);
+const loadingProgress = ref(0);
 
 // 初始化错误处理器
 const { errorMessage, showError, hideError } = useErrorHandler(emit);
@@ -319,16 +340,23 @@ const clearHotspots = () => {
 
 // 渐进加载图片
 const loadImageProgressively = (baseImagePath: string, targetMesh: THREE.Mesh) => {
-  // alert('渐进加载图片');
   if (!scene.value) return;
+  
+  isLoading.value = true;
+  loadingProgress.value = 0;
+  
   const textureLoader = new THREE.TextureLoader();
+  let firstImageLoaded = false;
+  
   props.resolutions.forEach((resolution, index) => {
     const imagePath = getFullImageUrl(`${baseImagePath}/${resolution}.jpg`);
     if (props.debug) {
       console.log(`加载分辨率图片: ${imagePath}`);
     }
+    
     textureLoader.load(
       imagePath,
+      // onLoad
       (texture: THREE.Texture) => {
         if (!scene.value) return;
         texture.colorSpace = THREE.SRGBColorSpace;
@@ -347,12 +375,36 @@ const loadImageProgressively = (baseImagePath: string, targetMesh: THREE.Mesh) =
             console.log(`已加载分辨率: ${resolution}`);
           }
         }
+        
+        // 第一个分辨率（较模糊版本）加载完成后立即隐藏进度条
+        if (index === 0 && !firstImageLoaded) {
+          firstImageLoaded = true;
+          loadingProgress.value = 100;
+          setTimeout(() => {
+            isLoading.value = false;
+            loadingProgress.value = 0;
+          }, 300); // 短暂延迟让用户看到完成状态
+        }
       },
-      undefined,
+      // onProgress - 只跟踪第一个分辨率（较模糊版本）的详细进度
+      index === 0 ? (progressEvent: ProgressEvent) => {
+        if (progressEvent.lengthComputable && !firstImageLoaded) {
+          loadingProgress.value = (progressEvent.loaded / progressEvent.total) * 100;
+        }
+      } : undefined,
+      // onError
       (err: unknown) => {
         const errorMessage = err instanceof Error ? err.message : '未知错误';
         if (props.debug) {
           console.error(`加载分辨率 ${resolution} 失败: ${errorMessage}`);
+        }
+        
+        // 如果第一个分辨率加载失败，隐藏进度条并显示错误
+        if (index === 0 && !firstImageLoaded) {
+          firstImageLoaded = true;
+          isLoading.value = false;
+          loadingProgress.value = 0;
+          showError(`加载场景图片失败: ${errorMessage}`);
         }
       }
     );
@@ -411,11 +463,13 @@ const switchScene = (target: number | string) => {
     loadImageProgressively(newScene.relativeImagePath, mesh);
   } else {
     // 标准加载模式
-    // alert('标注加载图片');
+    isLoading.value = true;
+    loadingProgress.value = 0;
 
     const textureLoader = new THREE.TextureLoader();
     textureLoader.load(
       getFullImageUrl(`${newScene.relativeImagePath}/1920x960.jpg`),
+      // onLoad
       (texture: THREE.Texture) => {
         if (!scene.value) return;
         texture.colorSpace = THREE.SRGBColorSpace;
@@ -425,11 +479,27 @@ const switchScene = (target: number | string) => {
         texture.anisotropy = renderer.value?.capabilities.getMaxAnisotropy() || 1;
         material.map = texture;
         material.needsUpdate = true;
+        
+        // 加载完成，隐藏进度条
+        setTimeout(() => {
+          isLoading.value = false;
+          loadingProgress.value = 0;
+        }, 500);
       },
-      undefined,
+      // onProgress
+      (progressEvent: ProgressEvent) => {
+        if (progressEvent.lengthComputable) {
+          loadingProgress.value = (progressEvent.loaded / progressEvent.total) * 100;
+        }
+      },
+      // onError
       (err: unknown) => {
         const errorMessage = err instanceof Error ? err.message : '未知错误';
         showError(`加载场景图片失败: ${errorMessage}`);
+        
+        // 出错时隐藏进度条
+        isLoading.value = false;
+        loadingProgress.value = 0;
       }
     );
   }
@@ -810,6 +880,75 @@ defineExpose({
   border-radius: 50%;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* 加载进度条样式 */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 101;
+}
+
+.loading-content {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 80%;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #409EFF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 18px;
+  color: #303133;
+  word-break: break-word;
+}
+
+.loading-progress-container {
+  margin-top: 20px;
+}
+
+.loading-progress-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.loading-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #409EFF 0%, #66B1FF 100%);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.loading-progress-text {
+  font-size: 14px;
+  color: #303133;
+  margin-top: 5px;
 }
 </style>
 
