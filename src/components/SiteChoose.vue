@@ -59,7 +59,7 @@
             <el-container style="height: 8px; display: flex; align-items: center; justify-content: space-between;">
               <el-text>{{ location.name }}</el-text>
               <div>
-                <el-button style="width: 80px; height: 25px; font-size: 15px;" @click="handleConfirm(location)">点击跳转</el-button>
+                <el-button style="width: 80px; height: 25px; font-size: 15px;" @click="confirm(); handleConfirm(location)">点击跳转</el-button>
               </div>
             </el-container>
             <el-container style="width: 100%; height: 5px;"></el-container>
@@ -96,7 +96,7 @@
             <el-container style="height: 8px; display: flex; align-items: center; justify-content: space-between;">
               <el-text>{{ location.name }}</el-text>
               <div>
-                <el-button size="small" @click="handleConfirm(location)">点击跳转</el-button>
+                <el-button size="small" @click="confirm(); handleConfirm(location)">点击跳转</el-button>
               </div>
             </el-container>
             <el-container style="width: 100%; height: 5px;"></el-container>
@@ -303,6 +303,26 @@
     width: 20px !important;
     height: 20px !important;
   }
+}
+
+/* 加速悬浮框关闭动画 */
+:deep(.el-popper) {
+  transition: all 0.1s ease !important;
+}
+
+:deep(.el-popconfirm) {
+  transition: all 0.1s ease !important;
+}
+
+/* 针对淡入淡出动画 */
+:deep(.el-popper.is-pure) {
+  transition: opacity 0.1s ease !important;
+}
+
+/* 针对Vue的transition动画 */
+:deep(.fade-in-linear-enter-active),
+:deep(.fade-in-linear-leave-active) {
+  transition: opacity 0.1s ease !important;
 }
 
 </style>
