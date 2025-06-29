@@ -384,7 +384,7 @@ body, html, #app {
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   transition: left 0.3s ease;
   z-index: 20;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 
 .sidebar.active {

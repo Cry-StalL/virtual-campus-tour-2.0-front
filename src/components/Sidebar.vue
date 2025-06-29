@@ -1,7 +1,7 @@
 <template>
-  <div class="sidebar-content" style="height: 100vh; margin: 0%; padding: 0%;">
+  <div class="sidebar-content" style="margin: 0%; padding: 0%;">
     <div style="height: 12vh; "></div>
-    <div style="width: 100%; height: 10vh; ">
+    <div style="width: 100%; height: 10vh; display: flex; align-items: center; justify-content: center; ">
       <img src="../../assets/icons/logo.png" class="project-name">
     </div>
     <div style="height: 6vh; "></div>
@@ -57,7 +57,7 @@
 
     </div>
 
-    <div style="display: flex; flex-direction: column; justify-content: center; padding-top: 4vh; height: 20vh;" >
+    <div style="display: flex; flex-direction: column; justify-content: center;margin-top: 6vh; margin-bottom: 5vh; height: 20vh;" >
         <img src="../../assets/xiaoxun.png" style="width: 70%; margin-left: 15%; ">
     </div>
 
@@ -208,9 +208,9 @@ watch(
 }
 
 .sidebar-content {
-  padding: 0;
-  margin: 0;
-  height: 100%;
+  padding: 0%;
+  margin: 0%;
+  height: 100vh;
   overflow-y: hidden;
   align-items: center;
   justify-content: center;
@@ -219,8 +219,8 @@ watch(
     to bottom,
     transparent 25vh,
     #F1F0EA 25vh,
-    #F1F0EA 73vh,
-    #005826 73vh,
+    #F1F0EA 72vh,
+    #005826 72vh,
     #005826 100vh,
     transparent 100vh
   );
@@ -228,8 +228,11 @@ watch(
 }
 
 .sidebar-menu {
-  /* height: 60vh; */
-  margin-top: 3vh;
+  height: 41vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin-top: 3vh; */
   flex-direction: column;
 }
 
@@ -246,6 +249,7 @@ watch(
 }
 
 .menu-section {
+  width: 100%;
   height: 6vh;
   display: flex;
   align-items: center;
