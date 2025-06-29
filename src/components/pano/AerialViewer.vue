@@ -10,6 +10,7 @@
       :initialScene="props.initialScene ?? 0"
       @hotspotClick="handleHotspotClick"
       @sceneChange="handleSceneChange"
+      :debug="APP_CONFIG.debug.enabled"
     />
     
     <!-- 场景切换按钮 -->
@@ -31,6 +32,7 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import type { Scene } from '@/components/pano/base-components/composables/types';
+import { APP_CONFIG } from '@/config/config';
 
 const panoramaViewerRef = ref(null);
 
@@ -45,26 +47,14 @@ const aerialScenes: Scene[] = [
     sceneId: 'aerial-1',
     relativeImagePath: 'assets/panos/aerials/1',
     hotspots: [
-      {
-        type: 'aerial',
-        longitude: 0,
-        latitude: 0,
-        icon: '/icons/aerial_hotspot.png',
-        targetStreetSceneId: 'ry-1-16' // 对应街景场景ID
-      }
+      
     ]
   },
   {
     sceneId: 'aerial-2', 
     relativeImagePath: 'assets/panos/aerials/2',
     hotspots: [
-      {
-        type: 'aerial',
-        longitude: 45,
-        latitude: 0,
-        icon: '/icons/aerial_hotspot.png',
-        targetStreetSceneId: 'byy-1-16' // 对应街景场景ID
-      }
+      
     ]
   },
   {
@@ -73,10 +63,9 @@ const aerialScenes: Scene[] = [
     hotspots: [
       {
         type: 'aerial',
-        longitude: -45,
-        latitude: 0,
-        icon: '/icons/aerial_hotspot.png',
-        targetStreetSceneId: 'ry-2-1' // 对应街景场景ID
+        longitude: -170.04,
+        latitude: -62.64,
+        targetStreetSceneId: 'ry-1-3' // 对应街景场景ID
       }
     ]
   }

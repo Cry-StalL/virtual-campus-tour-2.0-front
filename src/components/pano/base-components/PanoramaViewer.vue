@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch, shallowRef, nextTick } from 'vue';
-import { ElIcon } from 'element-plus';
+import { ElIcon, ElMessage } from 'element-plus';
 import { Warning } from '@element-plus/icons-vue';
 import { useThreeJsSetup } from './composables/useThreeJsSetup';
 import { useCoordinateConverter } from './composables/useCoordinateConverter';
@@ -41,7 +41,7 @@ import { useErrorHandler } from './composables/useErrorHandler';
 import type { PanoramaViewerProps, HotSpot, Scene } from './composables/types';
 import * as THREE from 'three';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
-import { API_CONFIG } from '@/config/config';
+import { APP_CONFIG, API_CONFIG } from '@/config/config';
 
 // 定义事件
 const emit = defineEmits<{
@@ -185,7 +185,7 @@ const createHotspot = (hotspot: HotSpot) => {
     } else if (hotspot.type === 'enterSceneViewer') {
       hotspot.icon = '/icons/scene_hotspot.png';
     } else if (hotspot.type === 'aerial') {
-      hotspot.icon = '/icons/arrow_hotspot.png';
+      hotspot.icon = '/icons/aerial_hotspot.png';
     }
   }
 
@@ -581,9 +581,29 @@ const handleSceneClick = (event: MouseEvent) => {
     sceneId: currentSceneId.value
   };
 
-  // 如果在debug模式下，打印到控制台
-  if (props.debug) {
-    console.log('点击位置坐标:', coordinates);
+  // 如果在debug模式下，打印到控制台、复制到剪贴板并显示提示
+  if (props.debug && APP_CONFIG.debug.enabled) {
+    console.log('点击位置坐标:', coordinates, '场景ID:', currentSceneId.value);
+    
+    // 复制坐标和场景ID到剪贴板
+    const coordinateText = `longitude: ${coordinates.longitude}, latitude: ${coordinates.latitude}, sceneId: ${currentSceneId.value}`;
+    try {
+      navigator.clipboard.writeText(coordinateText).then(() => {
+        ElMessage.success('坐标和场景ID已复制到剪贴板');
+      }).catch(() => {
+        // 如果现代 Clipboard API 失败，尝试传统方法
+        const textArea = document.createElement('textarea');
+        textArea.value = coordinateText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        ElMessage.success('坐标和场景ID已复制到剪贴板');
+      });
+    } catch (error) {
+      console.error('复制坐标失败:', error);
+      ElMessage.error('复制坐标失败');
+    }
   }
   
   // 触发坐标选择事件
