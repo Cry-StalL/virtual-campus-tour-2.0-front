@@ -409,8 +409,8 @@ const redirectTo_back = () => {
   }
   
   .delete-button img {
-    width: 20px;
-    height: 20px;
+    width: 20px !important;
+    height: 20px !important;
   }
   
   .header {
@@ -534,8 +534,11 @@ const redirectTo_back = () => {
   }
   
   .about-section[style*="height: 15vh"] .contact-grid {
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
     gap: 16px;
+    align-items: stretch;
+    justify-content: flex-start;
   }
   
   .about-section[style*="height: 15vh"] .contact-item {

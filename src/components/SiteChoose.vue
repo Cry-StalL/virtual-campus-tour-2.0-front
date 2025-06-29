@@ -262,6 +262,14 @@
     height: 100vh;
 }
 
+/* 移动端样式 */
+@media screen and (max-width: 768px) and (orientation: portrait) {
+  .delete-button img {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+
 </style>
 
 

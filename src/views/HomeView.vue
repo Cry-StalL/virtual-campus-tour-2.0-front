@@ -69,28 +69,28 @@
    
 
     <!-- 地点跳转 -->
-    <div class="sitechoose" :class="{ active: siteChooseVisible }" @click.stop>
+    <div class="sitechoose" :class="{ active: siteChooseVisible, mobile: isMobileDevice }" @click.stop>
       <SiteChoose @closeSiteChooseView="closeSiteChoose"/>
     </div>
     
 
     <!-- 实用信息 -->
-    <div class="usefulinfo" :class="{ active: usefulInfoVisible }" @click.stop>
+    <div class="usefulinfo" :class="{ active: usefulInfoVisible, mobile: isMobileDevice }" @click.stop>
       <UsefulInfo @closeUsefulInfoView="closeUsefulInfo"/>
     </div>
 
     <!-- 帮助界面 -->
-    <div class="helpview" :class="{ active: helpViewVisible }" @click.stop>
+    <div class="helpview" :class="{ active: helpViewVisible, mobile: isMobileDevice }" @click.stop>
       <Help @closeHelpView="closeHelpView"/>
     </div>
 
     <!-- 关于我们界面 -->
-    <div class="aboutview" :class="{ active: aboutViewVisible }" @click.stop>
+    <div class="aboutview" :class="{ active: aboutViewVisible, mobile: isMobileDevice }" @click.stop>
       <About @closeAboutView="closeAboutView"/>
     </div>
 
     <!-- 隐私政策界面 -->
-    <div class="privacyview" :class="{ active: privacyViewVisible }" @click.stop>
+    <div class="privacyview" :class="{ active: privacyViewVisible, mobile: isMobileDevice }" @click.stop>
       <Privacy @closePrivacyView="closePrivacyView"/>
     </div>
 
@@ -729,6 +729,77 @@ body, html, #app {
 
 .privacyview.active {
   left: 18vw;
+}
+
+/* 移动端样式 - 五个组件 */
+.sitechoose.mobile {
+  z-index: 1000;
+  width: 90vw;
+  left: -100vw;
+  margin-left: 5vw;
+  top: 5vh;
+  height: 85vh;
+  transition: left 0.3s ease;
+}
+
+.sitechoose.mobile.active {
+  left: 0vw;
+}
+
+.usefulinfo.mobile {
+  z-index: 1000;
+  width: 90vw;
+  left: -100vw;
+  margin-left: 5vw;
+  top: 5vh;
+  height: 85vh;
+  transition: left 0.3s ease;
+}
+
+.usefulinfo.mobile.active {
+  left: 0vw;
+}
+
+.helpview.mobile {
+  z-index: 1000;
+  width: 90vw;
+  left: -100vw;
+  margin-left: 5vw;
+  top: 5vh;
+  height: 85vh;
+  transition: left 0.3s ease;
+}
+
+.helpview.mobile.active {
+  left: 0vw;
+}
+
+.aboutview.mobile {
+  z-index: 1000;
+  width: 90vw;
+  left: -100vw;
+  margin-left: 5vw;
+  top: 5vh;
+  height: 85vh;
+  transition: left 0.3s ease;
+}
+
+.aboutview.mobile.active {
+  left: 0vw;
+}
+
+.privacyview.mobile {
+  z-index: 1000;
+  width: 90vw;
+  left: -100vw;
+  margin-left: 5vw;
+  top: 5vh;
+  height: 85vh;
+  transition: left 0.3s ease;
+}
+
+.privacyview.mobile.active {
+  left: 0vw;
 }
 
 /* 全景图容器样式 */
