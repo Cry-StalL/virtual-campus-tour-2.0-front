@@ -21,6 +21,7 @@
         @click="switchToScene(index)"
         :class="{ active: currentSceneIndex === index }"
         class="scene-button"
+        :style="{width: '110px'}"
       >
         {{ sceneNames[index] }}
       </button>
@@ -199,7 +200,7 @@ defineExpose({
 }
 
 .scene-button {
-  padding: 8px 16px;
+  padding: 8px 8px;
   background: rgba(0, 0, 0, 0.6);
   color: white;
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -209,6 +210,7 @@ defineExpose({
   font-weight: 500;
   transition: all 0.3s ease;
   backdrop-filter: blur(4px);
+  height: 40px;
 }
 
 .scene-button:hover {
