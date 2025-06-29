@@ -9,6 +9,7 @@
       :switchViewer="props.switchViewer" 
       :initialScene="props.initialScene ?? 0"
       @hotspotClick="handleHotspotClick"
+      @sceneChange="handleSceneChange"
     />
     
     <!-- 场景切换按钮 -->
@@ -27,12 +28,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import PanoramaViewer from '@/components/pano/base-components/PanoramaViewer.vue';
 import type { Scene } from '@/components/pano/base-components/composables/types';
 
 const panoramaViewerRef = ref(null);
-const currentSceneIndex = ref(0);
 
 const props = defineProps<{ 
   switchViewer: (name: string, targetSceneId?: string) => void;
@@ -49,8 +49,7 @@ const aerialScenes: Scene[] = [
         type: 'aerial',
         longitude: 0,
         latitude: 0,
-        icon: '/icons/arrow_hotspot.png',
-        title: '空降到指定地点',
+        icon: '/icons/aerial_hotspot.gif',
         targetStreetSceneId: 'ry-1-16' // 对应街景场景ID
       }
     ]
@@ -63,8 +62,7 @@ const aerialScenes: Scene[] = [
         type: 'aerial',
         longitude: 45,
         latitude: 0,
-        icon: '/icons/arrow_hotspot.png',
-        title: '空降到指定地点',
+        icon: '/icons/aerial_hotspot.gif',
         targetStreetSceneId: 'byy-1-16' // 对应街景场景ID
       }
     ]
@@ -77,8 +75,7 @@ const aerialScenes: Scene[] = [
         type: 'aerial',
         longitude: -45,
         latitude: 0,
-        icon: '/icons/arrow_hotspot.png',
-        title: '空降到指定地点',
+        icon: '/icons/aerial_hotspot.gif',
         targetStreetSceneId: 'ry-2-1' // 对应街景场景ID
       }
     ]
@@ -88,12 +85,51 @@ const aerialScenes: Scene[] = [
 // 场景名称映射
 const sceneNames = ['隐湖上空', '教学楼上空', '榕园上空'];
 
+// 计算初始场景索引
+const getInitialSceneIndex = () => {
+  if (props.initialScene === undefined || props.initialScene === null) {
+    return 0;
+  }
+  
+  if (typeof props.initialScene === 'number') {
+    return props.initialScene;
+  }
+  
+  if (typeof props.initialScene === 'string') {
+    const sceneIndex = aerialScenes.findIndex(scene => scene.sceneId === props.initialScene);
+    return sceneIndex !== -1 ? sceneIndex : 0;
+  }
+  
+  return 0;
+};
+
+const currentSceneIndex = ref(getInitialSceneIndex());
+
+// 监听initialScene变化，更新按钮状态
+watch(() => props.initialScene, (newValue) => {
+  if (newValue !== undefined && newValue !== null) {
+    if (typeof newValue === 'number') {
+      currentSceneIndex.value = newValue;
+    } else if (typeof newValue === 'string') {
+      const sceneIndex = aerialScenes.findIndex(scene => scene.sceneId === newValue);
+      if (sceneIndex !== -1) {
+        currentSceneIndex.value = sceneIndex;
+      }
+    }
+  }
+}, { immediate: true });
+
 // 处理热点点击
 function handleHotspotClick(hotspot: any) {
   if (hotspot.type === 'aerial' && hotspot.targetStreetSceneId) {
     // 切换到街景视图的指定场景
     props.switchViewer('street', hotspot.targetStreetSceneId);
   }
+}
+
+// 处理场景切换事件，同步按钮选中状态
+function handleSceneChange(sceneIndex: number) {
+  currentSceneIndex.value = sceneIndex;
 }
 
 // 切换场景
@@ -110,6 +146,16 @@ onMounted(() => {
     switchScene: (name: string) => {
       if (panoramaViewerRef.value) {
         (panoramaViewerRef.value as any).switchScene(name);
+        
+        // 如果是通过场景ID切换，需要找到对应的索引来更新按钮状态
+        if (typeof name === 'string') {
+          const sceneIndex = aerialScenes.findIndex(scene => scene.sceneId === name);
+          if (sceneIndex !== -1) {
+            currentSceneIndex.value = sceneIndex;
+          }
+        } else if (typeof name === 'number') {
+          currentSceneIndex.value = name;
+        }
       }
     },
     getCurrentSceneId: () => {
@@ -125,6 +171,16 @@ defineExpose({
   switchScene: (name: string) => {
     if (panoramaViewerRef.value) {
       (panoramaViewerRef.value as any).switchScene(name);
+      
+      // 如果是通过场景ID切换，需要找到对应的索引来更新按钮状态
+      if (typeof name === 'string') {
+        const sceneIndex = aerialScenes.findIndex(scene => scene.sceneId === name);
+        if (sceneIndex !== -1) {
+          currentSceneIndex.value = sceneIndex;
+        }
+      } else if (typeof name === 'number') {
+        currentSceneIndex.value = name;
+      }
     }
   },
   getCurrentSceneId: () => {
