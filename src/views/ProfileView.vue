@@ -184,8 +184,8 @@ export default {
     const validateUsername = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入用户名"));
-      } else if (!/^[\u4e00-\u9fa5\w-]{3,20}$/.test(value)) {
-        callback(new Error("用户名必须为3-20位中文、字母、数字、下划线或连字符"));
+      } else if (!/^[\u4e00-\u9fa5\w-]{4,20}$/.test(value)) {
+        callback(new Error("用户名必须为4-20位中文、字母、数字、下划线或连字符"));
       } else {
         callback();
       }
@@ -311,6 +311,23 @@ export default {
           type: 'info'
         });
         this.isEditingUsername = false;
+        return;
+      }
+
+      // 添加用户名合法性判断
+      if (!this.form.name || this.form.name.trim() === '') {
+        this.$message({
+          message: '请输入用户名',
+          type: 'error'
+        });
+        return;
+      }
+
+      if (!/^[\u4e00-\u9fa5\w-]{4,20}$/.test(this.form.name)) {
+        this.$message({
+          message: '用户名必须为4-20位中文、字母、数字、下划线或连字符',
+          type: 'error'
+        });
         return;
       }
 
