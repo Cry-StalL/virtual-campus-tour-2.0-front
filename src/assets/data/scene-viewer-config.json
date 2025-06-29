@@ -8,6 +8,11 @@
       "hotspots": []
     },
     {
+      "sceneId": "hl_3",
+      "relativeImagePath": "assets/panos/scenes/hl_3",
+      "hotspots": []
+    },
+    {
       "sceneId": "hq_4",
       "relativeImagePath": "assets/panos/scenes/hq_4",
       "hotspots": [],
@@ -15,8 +20,48 @@
       "initialLatitude": -10
     },
     {
+      "sceneId": "hq2_3",
+      "relativeImagePath": "assets/panos/scenes/hq2_3",
+      "hotspots": []
+    },
+    {
+      "sceneId": "jxl",
+      "relativeImagePath": "assets/panos/scenes/jxl",
+      "hotspots": []
+    },
+    {
+      "sceneId": "rygc",
+      "relativeImagePath": "assets/panos/scenes/rygc",
+      "hotspots": []
+    },
+    {
+      "sceneId": "south_gate",
+      "relativeImagePath": "assets/panos/scenes/south_gate",
+      "hotspots": []
+    },
+    {
+      "sceneId": "tqzx",
+      "relativeImagePath": "assets/panos/scenes/tqzx",
+      "hotspots": []
+    },
+    {
       "sceneId": "tsg",
       "relativeImagePath": "assets/panos/scenes/tsg",
+      "hotspots": []
+    },
+    {
+      "sceneId": "tyc",
+      "relativeImagePath": "assets/panos/scenes/tyc",
+      "hotspots": []
+    },
+    {
+      "sceneId": "yinhu",
+      "relativeImagePath": "assets/panos/scenes/yinhu",
+      "hotspots": []
+    },
+    {
+      "sceneId": "zhongshanxiang",
+      "relativeImagePath": "assets/panos/scenes/zhongshanxiang",
       "hotspots": []
     }
   ]
