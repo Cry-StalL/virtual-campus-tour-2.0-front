@@ -15,7 +15,7 @@
       />
 
       <!-- 全景图旋转视频 -->
-      <div v-if="showIntroVideo" class="intro-video-container">
+      <!-- <div v-if="showIntroVideo" class="intro-video-container">
         <video 
           src="/111.mp4" 
           autoplay 
@@ -23,7 +23,7 @@
           @ended="onVideoEnded"
           @error="onVideoError"
         ></video>
-      </div>
+      </div> -->
 
     </div>
 
