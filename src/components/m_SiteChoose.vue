@@ -246,11 +246,9 @@
 
     // 跳转相关
     const handleConfirm = (location: Location) => {
-        console.log('正在跳转到:', location.name, location.streetSceneId);
         
         // 先关闭sidebar和地图
         emit('closeSiteChooseViewWithSidebar');
-        
         // 延迟后开始跳转逻辑
         setTimeout(() => {
             // 获取当前的viewer组件
