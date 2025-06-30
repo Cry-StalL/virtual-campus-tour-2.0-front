@@ -136,7 +136,7 @@
                                 <div style="display: flex; flex-direction: row; justify-content: center; ">
                                     <div style="width: 18vh; margin-left: 4vh; margin-right: 2vh; display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/xx-hleh.jpg" style="margin-top: 1vh; width: 18vh; height: 12vh;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往翰林二号街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;">点击前往瀚林二号街景</el-button>
                                     </div>
                                 </div>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
