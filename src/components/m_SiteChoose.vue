@@ -1,5 +1,6 @@
 <template>
-  <div class="full_contain" ref="full_contain_ref">
+  <div class="full_contain" style="background-color: red;" ref="full_contain_ref2">
+
     <!-- 删除按钮 -->
     <div class="delete-button">
         <el-button style="background-color: rgba(0, 0, 0, 0); border: 0;" @click.stop="closeSiteChooseView">
@@ -8,14 +9,14 @@
     </div>
 
 
-    <div class="contain_body_map">
+    <div class="contain_body_map" >
       <!-- 搜索框放在图片右上角 -->
-      <div style="position: absolute; right: 8vw; top: 5vh; z-index: 100;" >
+      <div style="position: absolute; right: 1vw; bottom: 12vh; z-index: 100; transform: rotate(90deg); transform-origin: right top;" >
         <el-input
           v-model="searchQuery"
           placeholder="搜索地点或学院名称"
           @input="handleSearch"
-          style="width: 12vw;"
+          style="width: 20vh;"
         >
           <template #prefix>
             <img src="../../assets/icons/search.png" alt="搜索图标" style="width: 1.2vh; height: 1.2vh;">
@@ -23,7 +24,7 @@
         </el-input>
       </div>
 
-      <img src="https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/background.jpg" >
+      <img src="https://virtual-campus-tour-sysu-zhuhai.oss-cn-guangzhou.aliyuncs.com/background2.jpg" >
 
       
       <!-- 新增的弹出确认组 -->
@@ -32,7 +33,7 @@
           v-for="location in locations"
           :key="location.id"
           :hide-icon="true"
-          width="200"
+          width="150"
           placement="right"
           trigger="hover"
         >
@@ -43,25 +44,30 @@
                      border: 0; 
                      padding: 0; 
                      margin: 0; 
-                     width:30px; 
-                     height: 30px;"
+                     width:20px; 
+                     height: 20px;"
               :style="{
-                left: `${contain_body_map_padding_left + contain_body_map_ref_width * location.left - 15}px`, 
-                top: `${contain_body_map_ref_height * location.top - 15}px`
+                top: `${contain_body_map_padding_top2 + contain_body_map_ref_height2 * location.left - 10}px`, 
+                right: `${contain_body_map_ref_width2 * location.top - 10}px`
               }"
             >
-              <img src="../../assets/icons/click.gif" style="width:30px; height: 30px;">
+              <img src="../../assets/icons/click.gif">
             </el-button>
           </template>
 
+
           <template #actions="{ confirm, cancel }">
-            <el-container style="height: 8px; display: flex; align-items: center; justify-content: space-between;">
-              <el-text>{{ location.name }}</el-text>
-              <div>
-                <el-button style="width: 80px; height: 25px; font-size: 15px;" @click="confirm(); handleConfirm(location)">点击跳转</el-button>
-              </div>
-            </el-container>
-            <el-container style="width: 100%; height: 5px;"></el-container>
+            <div style="display: flex; flex-direction: column; height: 80px; padding: 0%; margin: 0%;">
+              <!-- <el-container style="padding: 0%; margin: 0%;transform: rotate(90deg); width: 100%; height: 5px; background-color: yellow;"></el-container> -->
+              <el-container style="padding: 0%; margin-left: 0px;transform: rotate(90deg); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <el-text style="font-size: 16px; margin-bottom: 4px;">{{ location.name }}</el-text>
+                <div>
+                  <el-button style="width: 80px; height: 25px; font-size: 15px;" @click="confirm(); handleConfirm(location)">点击跳转</el-button>
+                </div>
+              </el-container>
+              <!-- <el-container style="padding: 0%; margin: 0%;transform: rotate(90deg); width: 100%; height: 5px; background-color: blue;"></el-container> -->
+            </div>
+            
           </template>
         </el-popconfirm>
       </div>
@@ -82,14 +88,14 @@
                      border: 0; 
                      padding: 0; 
                      margin: 0; 
-                     width:30px; 
-                     height: 30px;"
+                     width:20px; 
+                     height: 20px;"
               :style="{
-                left: `${contain_body_map_padding_left + contain_body_map_ref_width * location.left - 15}px`, 
-                top: `${contain_body_map_ref_height * location.top - 15}px`
+                top: `${contain_body_map_padding_top2 + contain_body_map_ref_height2 * location.left - 10}px`, 
+                right: `${contain_body_map_ref_width2 * location.top - 10}px`
               }"
             >
-              <img src="../../assets/icons/click.gif" style="width:30px; height: 30px;">
+              <img src="../../assets/icons/click.gif">
             </el-button>
           </template>
 
@@ -216,20 +222,25 @@
         isMobileDevice.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
     });
 
-    const full_contain_ref = ref<HTMLDivElement | null>(null)
-    var full_contain_ref_width = ref(0);
-    var full_contain_ref_height = ref(0);
-    var contain_body_map_ref_width = ref(0);    
-    var contain_body_map_ref_height = ref(0);
-    var contain_body_map_padding_left = ref(0);
+    const full_contain_ref2 = ref<HTMLDivElement | null>(null)
+    var full_contain_ref_width2 = ref(0);
+    var full_contain_ref_height2 = ref(0);
+    var contain_body_map_ref_width2 = ref(0);    
+    var contain_body_map_ref_height2 = ref(0);
+    var contain_body_map_padding_top2 = ref(0);
+
     const get_images_from_back = () => { 
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
         // 动态调整背景图片的宽度和高度
-        if (full_contain_ref.value){
-            full_contain_ref_height.value = full_contain_ref.value.clientHeight;
-            full_contain_ref_width.value = full_contain_ref.value.clientWidth;
-            contain_body_map_ref_height.value = full_contain_ref_height.value;
-            contain_body_map_ref_width.value = contain_body_map_ref_height.value / 5.0 * 7;
-            contain_body_map_padding_left.value = (full_contain_ref_width.value - contain_body_map_ref_width.value) / 2;
+        if (full_contain_ref2.value){
+            full_contain_ref_height2.value = screenHeight * 0.85;
+            full_contain_ref_width2.value = screenWidth * 0.9;
+            contain_body_map_ref_width2.value = full_contain_ref_width2.value;
+            contain_body_map_ref_height2.value = contain_body_map_ref_width2.value / 5.0 * 7;
+            contain_body_map_padding_top2.value = (full_contain_ref_height2.value - contain_body_map_ref_height2.value) / 2;
+            console.log("contain_body_map_padding_top2.value:", contain_body_map_padding_top2.value)
+           
         }
     };  
 
@@ -298,7 +309,7 @@
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
-    /* background-color: white; */
+    background-color: green;
 }
 
 .delete-button {
@@ -309,22 +320,13 @@
 }
 
 .delete-button img {
-    width: 30px;
-    height: 30px;
-}
-/* .delete_button{
-    padding: 0%;
-    position: absolute;
-    left: 90%;
-    top: 4%;
-    background-color: red;
-} */
+    width: 20px !important;
+    height: 20px !important;
+  }
 
 .contain_body_map{
-    background-image: url(../../assets/background.png);
-
     /* background-color: rgba(255, 255, 0, 1); */
-    /* background-image: url(../../assets/background.png); */
+    background-image: url(../../assets/background.png);
 
     border-radius: 0;
     overflow-y: auto;
