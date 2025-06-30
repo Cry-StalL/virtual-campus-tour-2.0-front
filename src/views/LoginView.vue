@@ -386,10 +386,11 @@
   /* 响应式设计 */
   @media (max-width: 768px) {
     .box-card {
-      width: 400px;
-      max-width: 90vw;
+      /* max-width: 90vw; */
+      width: 90vw;
       padding: 1.5rem;
       margin: 1rem;
+
     }
     
     h2 {
@@ -422,11 +423,13 @@
   /* 18:9 手机屏幕适配 */
   @media (max-width: 480px) {
     .box-card {
-      width: 100%;
+      width: 80vw;
+      /* margin-left: 5vw; */
       max-width: 360px;
       min-width: 300px;
       padding: 1.5rem;
       margin: 1rem auto;
+
     }
     
     h2 {
@@ -440,6 +443,7 @@
       align-items: center;
       gap: 12px;
       margin-top: 25px;
+      width: 100%;
     }
     
     .btnGroup .el-button {
@@ -482,7 +486,7 @@
   /* 小屏幕手机适配 */
   @media (max-width: 375px) {
     .box-card {
-      width: 100%;
+      width: 80vw;
       max-width: 320px;
       min-width: 280px;
       padding: 1.2rem;
