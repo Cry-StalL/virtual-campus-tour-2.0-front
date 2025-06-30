@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <div class="toggle-btn" style="top: 40px; width: 40px; height: 40px;" v-show="isMobileDevice" @click.stop="toggleSidebar">
+    <div class="toggle-btn" style="top: 23px; width: 40px; height: 40px;" v-show="isMobileDevice" @click.stop="toggleSidebar">
       <div style="background-color: white; margin: auto auto; width: 100%; height: 100%; display: flex; align-items: center; border-radius: 50%;">
         <img class="toggle-icon" v-show="!sidebarVisible" src="../../assets/icons/more.png" >
         <img class="toggle-icon" style="width: 50%; height: 50%;" v-show="sidebarVisible && isMobileDevice" src="../../assets/icons/close2.png" >
