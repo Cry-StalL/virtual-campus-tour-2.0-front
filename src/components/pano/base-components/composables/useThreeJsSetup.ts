@@ -47,7 +47,7 @@ export function useThreeJsSetup(
         // 手机端参数：更大的FOV范围，更快的旋转速度
         minFov: props.minFov,
         maxFov: props.maxFov,
-        rotateSpeed: props.rotateSpeed * 2, // 增加旋转速度
+        rotateSpeed: props.rotateSpeed * 3, // 增加旋转速度
         zoomSpeed: props.zoomSpeed * 3, // 增加缩放速度
         dampingFactor: props.dampingFactor * 0.8, // 稍微减少阻尼，让操作更灵敏
         fovDampingFactor: props.fovDampingFactor * 1.2 // 稍微增加FOV阻尼，让缩放更平滑
