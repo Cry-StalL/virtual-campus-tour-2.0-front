@@ -5285,6 +5285,15 @@
           "title": "\u8df3\u8f6c\u573a\u666f",
           "description": "",
           "targetSceneId": "ry-1-17"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude": 22.45,
+          "latitude": -0.01,
+          "icon": "icons/scene_hotspot.png",
+          "title": "\u8fdb\u5165\u573a\u666f\u89c6\u56fe",
+          "description": "",
+          "targetSceneViewerSceneId": "rygc"
         }
       ]
     },
@@ -9012,6 +9021,15 @@
           "title": "\u8df3\u8f6c\u573a\u666f",
           "description": "",
           "targetSceneId": "jxl-2-6"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude":  -171.55,
+          "latitude": 8.99,
+          "icon": "icons/scene_hotspot.png",
+          "title": "\u8fdb\u5165\u573a\u666f\u89c6\u56fe",
+          "description": "",
+          "targetSceneViewerSceneId": "jxl"
         }
       ]
     },
@@ -9776,6 +9794,15 @@
           "title": "\u8df3\u8f6c\u573a\u666f",
           "description": "",
           "targetSceneId": "yxdd-3-21"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude": -80.76,
+          "latitude": 9.81,
+          "icon": "icons/scene_hotspot.png",
+          "title": "\u8fdb\u5165\u573a\u666f\u89c6\u56fe",
+          "description": "",
+          "targetSceneViewerSceneId": "hl_3"
         }
       ]
     },
@@ -10011,6 +10038,15 @@
           "title": "\u8df3\u8f6c\u573a\u666f",
           "description": "",
           "targetSceneId": "yxdd-3-2"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude":   -141.6,
+          "latitude": -4.64,
+          "icon": "icons/scene_hotspot.png",
+          "title": "\u8fdb\u5165\u573a\u666f\u89c6\u56fe",
+          "description": "",
+          "targetSceneViewerSceneId": "yinhu"
         }
       ]
     },
@@ -10306,6 +10342,15 @@
           "title": "\u8df3\u8f6c\u573a\u666f",
           "description": "",
           "targetSceneId": "yxdd-2-23"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude": -161.17,
+          "latitude": 3.35,
+          "icon": "icons/scene_hotspot.png",
+          "title": "\u8fdb\u5165\u573a\u666f\u89c6\u56fe",
+          "description": "",
+          "targetSceneViewerSceneId": "hq2_3"
         }
       ]
     },
@@ -10914,6 +10959,15 @@
           "title": "\u8df3\u8f6c\u573a\u666f",
           "description": "",
           "targetSceneId": "hq-2-22"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude":  -163.25,
+          "latitude":  -0.6,
+          "icon": "icons/scene_hotspot.png",
+          "title": "\u8fdb\u5165\u573a\u666f\u89c6\u56fe",
+          "description": "",
+          "targetSceneViewerSceneId": "hq2_3"
         }
       ]
     },
@@ -12530,6 +12584,15 @@
           "title": "\u8fdb\u5165\u573a\u666f\u89c6\u56fe",
           "description": "",
           "targetSceneViewerSceneId": "tyc"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude": 132.7,
+          "latitude": 9.4,
+          "icon": "icons/scene_hotspot.png",
+          "title": "\u8fdb\u5165\u573a\u666f\u89c6\u56fe",
+          "description": "",
+          "targetSceneViewerSceneId": "zhongshanxiang"
         }
       ]
     },
@@ -14293,6 +14356,15 @@
           "title": "\u8df3\u8f6c\u573a\u666f",
           "description": "",
           "targetSceneId": "rh-1-37"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude": 15.21,
+          "latitude": -2.58,
+          "icon": "icons/scene_hotspot.png",
+          "title": "\u8fdb\u5165\u573a\u666f\u89c6\u56fe",
+          "description": "",
+          "targetSceneViewerSceneId": "south_gate"
         }
       ]
     },
