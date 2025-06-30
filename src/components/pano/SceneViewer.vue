@@ -10,6 +10,7 @@
       :initialScene="props.initialScene ?? viewerconfig.initialScene"
       :handleReturnToStreet="handleReturnToStreet"
       :debug="APP_CONFIG.debug.enabled"
+      :minFov="10"
     />
     
     <!-- 可拖动留言预览框 -->
