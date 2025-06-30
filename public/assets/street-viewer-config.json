@@ -1,6 +1,9 @@
 {
   "progressiveLoading": true,
-  "resolutions": ["1920x960", "7680x3840"],
+  "resolutions": [
+    "1920x960",
+    "7680x3840"
+  ],
   "scenes": [
     {
       "sceneId": "ry-1-16",

@@ -69,8 +69,12 @@
    
 
     <!-- 地点跳转 -->
-    <div class="sitechoose" :class="{ active: siteChooseVisible, mobile: isMobileDevice }" @click.stop>
+    <div class="sitechoose" v-show="!isMobileDevice" :class="{ active: siteChooseVisible, mobile: isMobileDevice }" @click.stop>
       <SiteChoose @closeSiteChooseView="closeSiteChoose" @closeSiteChooseViewWithSidebar="closeSiteChooseWithSidebar"/>
+    </div>
+
+    <div class="sitechoose" v-show="isMobileDevice" :class="{ active: siteChooseVisible, mobile: isMobileDevice }" @click.stop>
+      <m_SiteChoose @closeSiteChooseView="closeSiteChoose" @closeSiteChooseViewWithSidebar="closeSiteChooseWithSidebar"/>
     </div>
     
 
@@ -147,6 +151,7 @@ import AerialViewer from '@/components/pano/AerialViewer.vue';
 import StreetViewer from '@/components/pano/StreetViewer.vue';
 import SceneViewer from '@/components/pano/SceneViewer.vue';
 import SiteChoose from '@/components/SiteChoose.vue';
+import m_SiteChoose from '@/components/m_SiteChoose.vue';
 import UsefulInfo from '@/components/usefulInfo.vue';
 import Help from '@/components/Help.vue';
 import About from '@/components/About.vue';

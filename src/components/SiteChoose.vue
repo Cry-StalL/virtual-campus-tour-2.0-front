@@ -301,9 +301,31 @@
     /* background-color: white; */
 }
 
+.delete-button {
+    position: absolute;
+    right: 2%;
+    top: 2%;
+    z-index: 10;
+}
+
+.delete-button img {
+    width: 30px;
+    height: 30px;
+}
+/* .delete_button{
+    padding: 0%;
+    position: absolute;
+    left: 90%;
+    top: 4%;
+    background-color: red;
+} */
 
 .contain_body_map{
-    background-color: rgba(255, 255, 255, 1);
+    background-image: url(../../assets/background.png);
+
+    /* background-color: rgba(255, 255, 0, 1); */
+    /* background-image: url(../../assets/background.png); */
+
     border-radius: 0;
     overflow-y: auto;
 
