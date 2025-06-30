@@ -688,9 +688,11 @@ export default {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100vw;       /* 占满整个视口宽度 */
-  min-height: 100vh;  /* 最小高度为视口高度 */
-  overflow-y: auto;   /* 允许垂直滚动 */
+  width: 100vw;
+  min-height: 100vh;
+  height: auto;
+  overflow-y: auto;
+  overflow-x: auto;
   padding: 40px;
   gap: 30px;
   position: relative;
@@ -702,6 +704,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+  min-height: 100vh;
   object-fit: cover;  /* 裁剪图片以填满整个容器 */
   z-index: 1;
 }
@@ -710,7 +713,7 @@ export default {
   width: 100%;
   max-width: 500px;
   height: fit-content;
-  margin-bottom: 15vh;
+  margin-bottom: 30px;
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -1059,19 +1062,31 @@ export default {
   
   .message-history-card {
     max-height: none;
+    overflow-y: visible;
   }
 }
 
 @media (max-width: 768px) {
   .profile {
-    padding: 20px;
+    padding: 20px 20px 80px 20px;
+    height: auto;
+    min-height: 100vh;
+    align-items: flex-start;
+    flex-direction: column;
+    -webkit-overflow-scrolling: touch; /* iOS平滑滚动 */
   }
   
   .profile-card, .message-history-card {
-    width: 400px;
+    width: 100%;
     max-width: 90vw;
     padding: 1.5rem;
-    margin: 1rem;
+    margin: 1rem auto;
+    margin-bottom: 20px;
+  }
+  
+  .message-history-card {
+    max-height: none !important;
+    overflow-y: visible !important;
   }
   
   .profile-header h2, .message-header h2 {
@@ -1175,16 +1190,27 @@ export default {
 @media (max-width: 480px) {
   .profile {
     flex-direction: column;
-    padding: 1.5rem;
-    gap: 25px;
+    padding: 1.5rem 1.5rem 100px 1.5rem;
+    gap: 20px;
+    height: auto;
+    min-height: 100vh;
+    align-items: flex-start;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch; /* iOS平滑滚动 */
   }
   
   .profile-card, .message-history-card {
     width: 100%;
-    max-width: 360px;
-    min-width: 300px;
+    max-width: 95vw;
+    min-width: unset;
     padding: 1.5rem;
-    margin: 1rem auto;
+    margin: 0.5rem auto;
+    margin-bottom: 20px;
+  }
+  
+  .message-history-card {
+    max-height: none !important;
+    overflow-y: visible !important;
   }
   
   .profile-header h2, .message-header h2 {
@@ -1282,16 +1308,27 @@ export default {
 @media (max-width: 375px) {
   .profile {
     flex-direction: column;
-    padding: 1rem;
-    gap: 20px;
+    padding: 1rem 1rem 120px 1rem;
+    gap: 15px;
+    height: auto;
+    min-height: 100vh;
+    align-items: flex-start;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch; /* iOS平滑滚动 */
   }
   
   .profile-card, .message-history-card {
     width: 100%;
-    max-width: 320px;
-    min-width: 280px;
+    max-width: 95vw;
+    min-width: unset;
     padding: 1.2rem;
-    margin: 1rem auto;
+    margin: 0.5rem auto;
+    margin-bottom: 15px;
+  }
+  
+  .message-history-card {
+    max-height: none !important;
+    overflow-y: visible !important;
   }
   
   .profile-header h2, .message-header h2 {
@@ -1539,5 +1576,28 @@ letter-spacing: 0.5px !important;
 h2 {
 font-family: 'Helvetica Neue', Arial, sans-serif !important;
 letter-spacing: 1px !important;
+}
+
+/* 移动端滚动优化 */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  #app {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  .profile {
+    position: relative !important;
+  }
 }
 </style>
