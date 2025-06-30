@@ -22,7 +22,7 @@
         :rules="rules"
         ref="form"
         label-position="left"
-        label-width="20%"
+        label-width="auto"
         font-size="5%"
         style="display: flex;
         flex-direction: column;
@@ -1108,6 +1108,10 @@ export default {
   /* 用户名输入框与按钮同行布局 */
   .username-item :deep(.el-form-item__label) {
     margin-bottom: 8px !important;
+    white-space: nowrap !important;
+    min-width: 80px !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
   }
   
   .username-item :deep(.el-form-item__content) {
@@ -1245,6 +1249,10 @@ export default {
   
   .username-item :deep(.el-form-item__label) {
     margin-bottom: 8px !important;
+    white-space: nowrap !important;
+    min-width: 80px !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
   }
   
   .username-item :deep(.el-form-item__content) {
@@ -1356,6 +1364,13 @@ export default {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
+  }
+  
+  .username-item :deep(.el-form-item__label) {
+    white-space: nowrap !important;
+    min-width: 80px !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
   }
   
   .username-edit-btn {
@@ -1566,6 +1581,7 @@ font-size: 16px !important;
 font-weight: 600 !important;
 color: #606266 !important;
 font-family: 'Helvetica Neue', Arial, sans-serif !important;
+white-space: nowrap !important;
 }
 
 .el-button {
