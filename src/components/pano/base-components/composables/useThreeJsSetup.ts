@@ -45,10 +45,10 @@ export function useThreeJsSetup(
     if (isMobile) {
       return {
         // 手机端参数：更大的FOV范围，更快的旋转速度
-        minFov: Math.max(10, props.minFov - 20), // 允许更大的缩放范围
-        maxFov: Math.min(120, props.maxFov + 30), // 允许更大的缩放范围
-        rotateSpeed: props.rotateSpeed * 1.5, // 增加旋转速度
-        zoomSpeed: props.zoomSpeed * 1.8, // 增加缩放速度
+        minFov: props.minFov,
+        maxFov: props.maxFov,
+        rotateSpeed: props.rotateSpeed * 2, // 增加旋转速度
+        zoomSpeed: props.zoomSpeed * 3, // 增加缩放速度
         dampingFactor: props.dampingFactor * 0.8, // 稍微减少阻尼，让操作更灵敏
         fovDampingFactor: props.fovDampingFactor * 1.2 // 稍微增加FOV阻尼，让缩放更平滑
       };
@@ -98,6 +98,60 @@ export function useThreeJsSetup(
     autoRotate.value = false;
     startAutoRotateTimer();
   };
+  
+  // 手机端触摸事件处理函数
+  let lastTouchDistance = 0;
+  
+  const handleTouchStart = (event: TouchEvent) => {
+    if (event.touches.length === 2) {
+      const touch1 = event.touches[0];
+      const touch2 = event.touches[1];
+      lastTouchDistance = Math.sqrt(
+        Math.pow(touch2.clientX - touch1.clientX, 2) + 
+        Math.pow(touch2.clientY - touch1.clientY, 2)
+      );
+    }
+  };
+  
+  const handleTouchMove = (event: TouchEvent) => {
+    if (event.touches.length === 2 && camera.value) {
+      event.preventDefault();
+      
+      const touch1 = event.touches[0];
+      const touch2 = event.touches[1];
+      const currentDistance = Math.sqrt(
+        Math.pow(touch2.clientX - touch1.clientX, 2) + 
+        Math.pow(touch2.clientY - touch1.clientY, 2)
+      );
+      
+      if (lastTouchDistance > 0) {
+        const delta = currentDistance - lastTouchDistance;
+        const scaleFactor = delta * 0.01; // 调整缩放敏感度
+        
+        targetFov -= scaleFactor * deviceParams.zoomSpeed;
+        
+        // 应用设备特定的FOV限制
+        targetFov = Math.max(deviceParams.minFov, Math.min(deviceParams.maxFov, targetFov));
+        
+        console.log('手机端双指缩放:', {
+          delta: delta,
+          scaleFactor: scaleFactor,
+          targetFov: targetFov,
+          minFov: deviceParams.minFov,
+          maxFov: deviceParams.maxFov
+        });
+        
+        // 重置自动旋转
+        resetAutoRotate();
+      }
+      
+      lastTouchDistance = currentDistance;
+    }
+  };
+  
+  const handleTouchEnd = () => {
+    lastTouchDistance = 0;
+  };
 
   // 初始化 Three.js 环境
   const initThreeJs = () => {
@@ -144,13 +198,17 @@ export function useThreeJsSetup(
     controls.value.enableDamping = true;
     controls.value.dampingFactor = deviceParams.dampingFactor;
 
-    // 手机端特殊处理：启用触摸操作
+    // 手机端特殊处理：自定义触摸缩放处理
     if (isMobile) {
-      controls.value.enableZoom = true;
       controls.value.touches = {
         ONE: THREE.TOUCH.ROTATE,
         TWO: THREE.TOUCH.DOLLY_PAN
       };
+      
+      // 添加触摸事件监听器
+      renderer.value.domElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+      renderer.value.domElement.addEventListener('touchmove', handleTouchMove, { passive: false });
+      renderer.value.domElement.addEventListener('touchend', handleTouchEnd);
     }
 
     // 启动自动旋转定时器
@@ -223,6 +281,15 @@ export function useThreeJsSetup(
   // 释放资源
   const disposeThreeJs = () => {
     stopAnimation();
+    
+    // 移除触摸事件监听器（如果存在）
+    if (renderer.value && isMobile) {
+      const domElement = renderer.value.domElement;
+      // 移除我们添加的触摸事件监听器
+      domElement.removeEventListener('touchstart', handleTouchStart);
+      domElement.removeEventListener('touchmove', handleTouchMove);
+      domElement.removeEventListener('touchend', handleTouchEnd);
+    }
     
     if (renderer.value && viewerContainer.value) {
       viewerContainer.value.removeChild(renderer.value.domElement);
