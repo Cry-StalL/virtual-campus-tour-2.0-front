@@ -4,6 +4,12 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 
+// 设备检测功能 - 与项目中其他组件保持一致
+const isMobileDevice = (): boolean => {
+  const ua = navigator.userAgent;
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+};
+
 // 定义Props接口
 interface ThreeJsProps {
   initialFov: number;
@@ -31,6 +37,36 @@ export function useThreeJsSetup(
   const controls = shallowRef<OrbitControls | null>(null);
   const isAnimating = ref<boolean>(false);
   
+  // 检测设备类型
+  const isMobile = isMobileDevice();
+  
+  // 根据设备类型调整参数
+  const getDeviceSpecificParams = () => {
+    if (isMobile) {
+      return {
+        // 手机端参数：更大的FOV范围，更快的旋转速度
+        minFov: Math.max(10, props.minFov - 20), // 允许更大的缩放范围
+        maxFov: Math.min(120, props.maxFov + 30), // 允许更大的缩放范围
+        rotateSpeed: props.rotateSpeed * 1.5, // 增加旋转速度
+        zoomSpeed: props.zoomSpeed * 1.8, // 增加缩放速度
+        dampingFactor: props.dampingFactor * 0.8, // 稍微减少阻尼，让操作更灵敏
+        fovDampingFactor: props.fovDampingFactor * 1.2 // 稍微增加FOV阻尼，让缩放更平滑
+      };
+    } else {
+      return {
+        // 桌面端参数：保持原有逻辑
+        minFov: props.minFov,
+        maxFov: props.maxFov,
+        rotateSpeed: props.rotateSpeed,
+        zoomSpeed: props.zoomSpeed,
+        dampingFactor: props.dampingFactor,
+        fovDampingFactor: props.fovDampingFactor
+      };
+    }
+  };
+
+  const deviceParams = getDeviceSpecificParams();
+  
   // FOV 相关变量
   let currentFov = props.initialFov;
   let targetFov = props.initialFov;
@@ -40,8 +76,6 @@ export function useThreeJsSetup(
   const autoRotateSpeed = ref<number>(-0.5); // 自动旋转速度，负值为顺时针旋转
   let autoRotateTimer: number | null = null;
   const autoRotateDelay = 5000; // 5秒无操作后开始自动旋转
-
-
 
   // 启动自动旋转定时器
   const startAutoRotateTimer = () => {
@@ -99,16 +133,25 @@ export function useThreeJsSetup(
     labelRenderer.value.domElement.style.pointerEvents = 'none';
     viewerContainer.value.appendChild(labelRenderer.value.domElement);
     
-    // 添加控制器
+    // 添加控制器，使用设备特定参数
     controls.value = new OrbitControls(camera.value, renderer.value.domElement);
     controls.value.enableZoom = true;
     controls.value.enablePan = false;
-    controls.value.rotateSpeed = props.rotateSpeed;
+    controls.value.rotateSpeed = deviceParams.rotateSpeed;
     controls.value.minDistance = 0.1;
     controls.value.maxDistance = 100;
-    controls.value.zoomSpeed = props.zoomSpeed;
+    controls.value.zoomSpeed = deviceParams.zoomSpeed;
     controls.value.enableDamping = true;
-    controls.value.dampingFactor = props.dampingFactor;
+    controls.value.dampingFactor = deviceParams.dampingFactor;
+
+    // 手机端特殊处理：启用触摸操作
+    if (isMobile) {
+      controls.value.enableZoom = true;
+      controls.value.touches = {
+        ONE: THREE.TOUCH.ROTATE,
+        TWO: THREE.TOUCH.DOLLY_PAN
+      };
+    }
 
     // 启动自动旋转定时器
     startAutoRotateTimer();
@@ -121,10 +164,10 @@ export function useThreeJsSetup(
     if (!camera.value) return;
     
     const delta = Math.sign(event.deltaY);
-    targetFov += delta * props.zoomSpeed;
+    targetFov += delta * deviceParams.zoomSpeed;
     
-    // 限制目标FOV范围
-    targetFov = Math.max(props.minFov, Math.min(props.maxFov, targetFov));
+    // 使用设备特定的FOV范围限制
+    targetFov = Math.max(deviceParams.minFov, Math.min(deviceParams.maxFov, targetFov));
 
     // 重置自动旋转
     resetAutoRotate();
@@ -139,9 +182,9 @@ export function useThreeJsSetup(
     const animateFrame = () => {
       if (!isAnimating.value) return;
       
-      // 应用FOV缩放惯性
+      // 应用FOV缩放惯性，使用设备特定的阻尼参数
       if (camera.value && Math.abs(currentFov - targetFov) > 0.01) {
-        currentFov += (targetFov - currentFov) * props.fovDampingFactor;
+        currentFov += (targetFov - currentFov) * deviceParams.fovDampingFactor;
         camera.value.fov = currentFov;
         camera.value.updateProjectionMatrix();
       }
@@ -219,6 +262,9 @@ export function useThreeJsSetup(
     autoRotateSpeed,
     resetAutoRotate,
     startAutoRotateTimer,
-    stopAutoRotateTimer
+    stopAutoRotateTimer,
+    // 导出设备检测信息（用于调试）
+    isMobile,
+    deviceParams
   };
 } 
