@@ -36,7 +36,7 @@
                         </div>
                         <div style="width: 25vh; padding-right: 2vh; display: flex; align-items: center; display: flex; flex-direction: column;">
                             <img src="../../assets/xx-tsg-2.jpg" style="margin-top: 1.5vh; width: 21vh; height: 14vh;">
-                            <el-button style="width: 21vh; height: 3vh;">点击前往图书馆街景</el-button>
+                            <el-button style="width: 21vh; height: 3vh;" @click="handleSceneJump('图书馆街景', 'rh-1-31')">点击前往图书馆街景</el-button>
                         </div>
                         
                     </div>
@@ -89,7 +89,7 @@
                                 </div>
                                 <div style="width: 18vh; display: flex; align-items: center; display: flex; flex-direction: column;">
                                     <img src="../../assets/xx-jxl-3.jpg" style="margin-top: 1vh; width: 18vh; height: 12vh;">
-                                    <el-button style="width: 18vh; height: 3vh;">点击前往教学楼街景</el-button>
+                                    <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('教学楼街景', 'yxdd-1-59')">点击前往教学楼街景</el-button>
                                 </div>
                             </div>
                             
@@ -136,13 +136,13 @@
                                 <div style="display: flex; flex-direction: row; justify-content: center; ">
                                     <div style="width: 18vh; margin-left: 4vh; margin-right: 2vh; display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/xx-hleh.jpg" style="margin-top: 1vh; width: 18vh; height: 12vh;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往瀚林二号街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('瀚林二号街景', 'yxdd-3-17')">点击前往瀚林二号街景</el-button>
                                     </div>
                                 </div>
                                 <div style="display: flex; flex-direction: row; justify-content: center;">
                                     <div style="width: 18vh; display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/xx-hqlh.jpg" style="margin-top: 1vh; width: 18vh; height: 12vh;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往海琴六号街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('海琴六号街景', 'rh-2-9')">点击前往海琴六号街景</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -182,7 +182,7 @@
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/ys-ry-3.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往榕园食堂街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('榕园食堂街景', 'ry-1-1')">点击前往榕园食堂街景</el-button>
                                     </div>
                                    
                                 </div>
@@ -219,7 +219,7 @@
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/ys-ly-3.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往荔园食堂街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('荔园食堂街景', 'ly-2-13')">点击前往荔园食堂街景</el-button>
                                     </div>
                                    
                                 </div>
@@ -254,7 +254,7 @@
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/ys-jy-3.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往槿园食堂街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('槿园食堂街景', 'jy-2-4')">点击前往槿园食堂街景</el-button>
                                     </div>
                                    
                                 </div>
@@ -289,7 +289,7 @@
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/ys-rh-3.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往槿园食堂街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('若海食堂街景', 'rh-3-3')">点击前往若海食堂街景</el-button>
                                     </div>
                                    
                                 </div>
@@ -324,7 +324,7 @@
                                     </div>
                                     <div style="width: 18vh; height: 12vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/ys-xwms-3.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往北门街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('北门街景', 'jy-2-23')">点击前往北门街景</el-button>
                                     </div>
                                    
                                 </div>
@@ -367,7 +367,7 @@
                                     </div>
                                     <div style="width: 24vh; height: 19vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/zs-ry-2.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 24vh; height: 3vh;">点击前往榕园宿舍街景</el-button>
+                                        <el-button style="width: 24vh; height: 3vh;" @click="handleSceneJump('榕园宿舍街景', 'ry-1-9')">点击前往榕园宿舍街景</el-button>
                                     </div>
                                    
                                 </div>
@@ -407,7 +407,7 @@
                                     </div>
                                     <div style="width: 24vh; height: 19vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/zs-ly-2.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 24vh; height: 3vh;">点击前往荔园宿舍街景</el-button>
+                                        <el-button style="width: 24vh; height: 3vh;" @click="handleSceneJump('荔园宿舍街景', 'ly-3-12')">点击前往荔园宿舍街景</el-button>
                                     </div>
                                    
                                 </div>
@@ -447,7 +447,7 @@
                                     </div>
                                     <div style="width: 24vh; height: 19vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/zs-jy-2.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 24vh; height: 3vh;">点击前往槿园宿舍街景</el-button>
+                                        <el-button style="width: 24vh; height: 3vh;" @click="handleSceneJump('槿园宿舍街景', 'jy-2-2')">点击前往槿园宿舍街景</el-button>
                                     </div>
                                    
                                 </div>
@@ -480,11 +480,11 @@
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/jt-jxlscd.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往教学楼上车点</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('教学楼上车点', 'jxl-1-6')">点击前往教学楼上车点</el-button>
                                     </div>
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/jt-byyscd.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往博雅苑上车点</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('博雅苑上车点', 'byy-1-30')">点击前往博雅苑上车点</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -512,7 +512,7 @@
                                     </text>
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/jt-bm.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往北门街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('北门街景', 'jy-2-23')">点击前往北门街景</el-button>
                                     </div>
                                    
                                 </div>
@@ -541,7 +541,7 @@
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/jt-hxm.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往华夏门街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('华夏门街景', 'byy-2-6')">点击前往华夏门街景</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -569,7 +569,7 @@
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/jt-nm.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往南门街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('南门街景', 'rh-1-36')">点击前往南门街景</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -600,7 +600,7 @@
                                     </div>
                                     <div style="width: 18vh; height: 15vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/jt-hxm.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 18vh; height: 3vh;">点击前往华夏门街景</el-button>
+                                        <el-button style="width: 18vh; height: 3vh;" @click="handleSceneJump('华夏门街景', 'byy-2-6')">点击前往华夏门街景</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -639,7 +639,7 @@
                                     </div>
                                     <div style="width: 24vh; height: 19vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/jyybw-xyy-2.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 24vh; height: 3vh;">点击前往校医院街景</el-button>
+                                        <el-button style="width: 24vh; height: 3vh;" @click="handleSceneJump('校医院街景', 'byy-1-13')">点击前往校医院街景</el-button>
                                     </div>
                                    
                                 </div>
@@ -707,7 +707,7 @@
                                     </div>
                                     <div style="width: 24vh; height: 19vh; margin-top: 1vh;  display: flex; align-items: center; display: flex; flex-direction: column;">
                                         <img src="../../assets/jyybw-bwc-2.jpg" style="width: 100%; height: 100%;">
-                                        <el-button style="width: 24vh; height: 3vh;">点击前往荔园一号街景</el-button>
+                                        <el-button style="width: 24vh; height: 3vh;" @click="handleSceneJump('荔园一号街景', 'yxdd-1-44')">点击前往荔园一号街景</el-button>
                                     </div>
                                 </div>
                             </div>
@@ -735,7 +735,7 @@
                         <div style="margin-top: 2vh; display: flex; flex-direction: row; align-items: center; justify-content: center;">
                             <div style="width: 28vh; display: flex; align-items: center; display: flex; flex-direction: column;">
                                 <img src="../../assets/xqgwh-hlyh.jpg" style="margin-top: 1vh; width: 24vh; height: 16vh;">
-                                <el-button style="width: 24vh; height: 3vh;">点击前往翰林一号街景</el-button>
+                                <el-button style="width: 24vh; height: 3vh;" @click="handleSceneJump('翰林一号街景', 'yxdd-3-7')">点击前往翰林一号街景</el-button>
                             </div>
                             <div style="width: 28vh; display: flex; align-items: center; display: flex; flex-direction: column;">
                                 <img src="../../assets/xqgwh-gwh.jpg" style="margin-top: 1vh; width: 24vh; height: 16vh;">
@@ -771,6 +771,15 @@
 <script setup lang="ts">
     import { onMounted, ref, computed, nextTick } from 'vue';
 
+    // 声明window上的streetViewer属性
+    declare global {
+        interface Window {
+            streetViewer?: {
+                switchScene: (name: string) => void;
+            };
+        }
+    }
+
     onMounted(() => {
         get_vh();
     });
@@ -789,6 +798,56 @@
         }
         // alert("3:"+full_contain_ref_vh.value);
     };  
+
+    // 地点跳转相关函数
+    const handleSceneJump = (sceneName: string, sceneId: string = '') => {
+        console.log('正在跳转到:', sceneName, sceneId);
+        
+        // 先关闭实用信息界面
+        emit('closeUsefulInfoView');
+        
+        // 延迟后开始跳转逻辑
+        setTimeout(() => {
+            // 如果没有提供sceneId，则只是关闭界面，不跳转
+            if (!sceneId) {
+                console.log(`${sceneName}的场景ID暂未配置`);
+                return;
+            }
+            
+            // 获取当前的viewer组件
+            const viewerGroup = (window as any).viewerGroup;
+            if (!viewerGroup) {
+                console.error('无法获取viewerGroup');
+                return;
+            }
+            
+            // 检查当前是否在street viewer中
+            const currentViewer = viewerGroup.currentViewer;
+            console.log('当前viewer:', currentViewer);
+            
+            if (currentViewer !== 'street') {
+                // 如果不在street viewer中，先切换到street viewer
+                console.log('当前不在street viewer，先切换到street viewer');
+                viewerGroup.switchViewer('street');
+                
+                // 等待切换完成后再跳转场景
+                setTimeout(() => {
+                    if ((window as any).streetViewer && sceneId) {
+                        console.log('切换到street viewer完成，跳转场景:', sceneId);
+                        (window as any).streetViewer.switchScene(sceneId);
+                    }
+                }, 500); // 给一点时间让viewer切换完成
+            } else {
+                // 如果已经在street viewer中，直接跳转场景
+                if ((window as any).streetViewer && sceneId) {
+                    console.log('已在street viewer中，直接跳转场景:', sceneId);
+                    (window as any).streetViewer.switchScene(sceneId);
+                }
+            }
+        }, 300); // 先等待页面关闭动画完成，再开始跳转
+    };
+
+
 
     const redirectTo_xx_tsg = () => {
         window.open('https://library.sysu.edu.cn/');
@@ -815,10 +874,6 @@
         window.open('http://ewpay.sysu.edu.cn/ewpay/index.jsp');
     };
     
-
-
-
-
     const emit = defineEmits(['closeUsefulInfoView']);
     
     const closeUsefulInfoView = () => {

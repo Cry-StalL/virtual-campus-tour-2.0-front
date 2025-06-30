@@ -292,9 +292,8 @@ const closeSiteChoose = () => {
   handleContentClick();
 };
 const closeUsefulInfo = () => {
-  if(usefulInfoVisible.value){
-    usefulInfoVisible.value = false;
-  }
+  // 复用现有的关闭逻辑，同时关闭sidebar和所有页面
+  handleContentClick();
 };
 const closeHelpView = () => {
   if(helpViewVisible.value){
