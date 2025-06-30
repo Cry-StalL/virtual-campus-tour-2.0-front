@@ -272,7 +272,7 @@ const aerialScenes: Scene[] = [
 ];
 
 // 场景名称映射
-const sceneNames = ['隐湖上空', '教学楼上空', '榕园上空'];
+const sceneNames = ['若海湖上空', '教学楼上空', '榕园上空'];
 
 // 计算初始场景索引
 const getInitialSceneIndex = () => {
