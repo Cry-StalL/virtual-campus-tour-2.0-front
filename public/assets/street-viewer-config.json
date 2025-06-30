@@ -9602,6 +9602,15 @@
           "title": "\u8df3\u8f6c\u573a\u666f",
           "description": "",
           "targetSceneId": "yxdd-3-16"
+        },
+        {
+          "type": "enterSceneViewer",
+          "longitude": -77.48,
+          "latitude": 9.07,
+          "icon": "icons/scene_hotspot.png",
+          "title": "\u8fdb\u5165\u573a\u666f\u89c6\u56fe",
+          "description": "",
+          "targetSceneViewerSceneId": "hl_2"
         }
       ]
     },
