@@ -18,7 +18,7 @@
           
           <text style="width: 60%; text-align: center; font-size: 0.8vw; margin-bottom: 1vh; ">云游中珠诞生于中山大学软件工程学院综合实训，系统使用基于Three.js的自研3D全景架构，以及Vue3和Golang语言编写，部署于阿里云服务器，域名为https:sysu.site。</text>
           
-          <text style="width: 60%; text-align: center; font-size: 0.8vw; margin-bottom: 1vh; ">在此感谢各位参与此项目的各位指导老师和测试用户的支持！</text>
+          <text style="width: 60%; text-align: center; font-size: 0.8vw; margin-bottom: 1vh; ">在此感谢各位参与此项目的指导老师和测试用户的支持！</text>
 
         </div>
       </div>

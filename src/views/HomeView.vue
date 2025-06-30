@@ -76,7 +76,8 @@
 
     <!-- 实用信息 -->
     <div class="usefulinfo" :class="{ active: usefulInfoVisible, mobile: isMobileDevice }" @click.stop>
-      <UsefulInfo @closeUsefulInfoView="closeUsefulInfo" @closeUsefulInfoViewWithSidebar="closeUsefulInfoWithSidebar"/>
+      <UsefulInfo v-if="!isMobileDevice" @closeUsefulInfoView="closeUsefulInfo" @closeUsefulInfoViewWithSidebar="closeUsefulInfoWithSidebar"/>
+      <m_UsefulInfo v-else @closeUsefulInfoView="closeUsefulInfo" @closeUsefulInfoViewWithSidebar="closeUsefulInfoWithSidebar"/>
     </div>
 
     <!-- 帮助界面 -->
@@ -148,6 +149,7 @@ import StreetViewer from '@/components/pano/StreetViewer.vue';
 import SceneViewer from '@/components/pano/SceneViewer.vue';
 import SiteChoose from '@/components/SiteChoose.vue';
 import UsefulInfo from '@/components/usefulInfo.vue';
+import m_UsefulInfo from '@/components/m_usefulInfo.vue';
 import Help from '@/components/Help.vue';
 import About from '@/components/About.vue';
 import Privacy from '@/components/Privacy.vue';
