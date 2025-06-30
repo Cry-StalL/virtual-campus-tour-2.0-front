@@ -70,13 +70,13 @@
 
     <!-- 地点跳转 -->
     <div class="sitechoose" :class="{ active: siteChooseVisible, mobile: isMobileDevice }" @click.stop>
-      <SiteChoose @closeSiteChooseView="closeSiteChoose"/>
+      <SiteChoose @closeSiteChooseView="closeSiteChoose" @closeSiteChooseViewWithSidebar="closeSiteChooseWithSidebar"/>
     </div>
     
 
     <!-- 实用信息 -->
     <div class="usefulinfo" :class="{ active: usefulInfoVisible, mobile: isMobileDevice }" @click.stop>
-      <UsefulInfo @closeUsefulInfoView="closeUsefulInfo"/>
+      <UsefulInfo @closeUsefulInfoView="closeUsefulInfo" @closeUsefulInfoViewWithSidebar="closeUsefulInfoWithSidebar"/>
     </div>
 
     <!-- 帮助界面 -->
@@ -288,10 +288,24 @@ const togglePrivacyView = () => {
   }
 };
 const closeSiteChoose = () => {
+  if(siteChooseVisible.value){
+    siteChooseVisible.value = false;
+  }
+};
+
+// 处理场景跳转时的关闭逻辑，需要同时关闭sidebar和页面
+const closeSiteChooseWithSidebar = () => {
   // 复用现有的关闭逻辑，同时关闭sidebar和所有页面
   handleContentClick();
 };
 const closeUsefulInfo = () => {
+  if(usefulInfoVisible.value){
+    usefulInfoVisible.value = false;
+  }
+};
+
+// 处理场景跳转时的关闭逻辑，需要同时关闭sidebar和页面
+const closeUsefulInfoWithSidebar = () => {
   // 复用现有的关闭逻辑，同时关闭sidebar和所有页面
   handleContentClick();
 };

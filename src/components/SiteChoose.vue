@@ -238,7 +238,7 @@
         console.log('正在跳转到:', location.name, location.streetSceneId);
         
         // 先关闭sidebar和地图
-        emit('closeSiteChooseView');
+        emit('closeSiteChooseViewWithSidebar');
         
         // 延迟后开始跳转逻辑
         setTimeout(() => {
@@ -280,6 +280,7 @@
     // 删除
     const emit = defineEmits([
       'closeSiteChooseView',
+      'closeSiteChooseViewWithSidebar',
     ]);
     const closeSiteChooseView = () => {
         emit('closeSiteChooseView');

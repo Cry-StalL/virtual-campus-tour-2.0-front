@@ -803,8 +803,8 @@
     const handleSceneJump = (sceneName: string, sceneId: string = '') => {
         console.log('正在跳转到:', sceneName, sceneId);
         
-        // 先关闭实用信息界面
-        emit('closeUsefulInfoView');
+        // 先关闭实用信息界面和sidebar
+        emit('closeUsefulInfoViewWithSidebar');
         
         // 延迟后开始跳转逻辑
         setTimeout(() => {
@@ -874,7 +874,7 @@
         window.open('http://ewpay.sysu.edu.cn/ewpay/index.jsp');
     };
     
-    const emit = defineEmits(['closeUsefulInfoView']);
+    const emit = defineEmits(['closeUsefulInfoView', 'closeUsefulInfoViewWithSidebar']);
     
     const closeUsefulInfoView = () => {
         emit('closeUsefulInfoView');
