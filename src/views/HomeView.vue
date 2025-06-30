@@ -227,14 +227,14 @@ const toggleSidebar = () => {
 
 // 处理点击内容区域
 const handleContentClick = () => {
-  if (sidebarVisible.value) {
+  // if (sidebarVisible.value) {
     sidebarVisible.value = false;
     siteChooseVisible.value = false;
     usefulInfoVisible.value = false;
     helpViewVisible.value = false;
     aboutViewVisible.value = false;
     privacyViewVisible.value = false;
-  }
+  // }
 };
 
 
