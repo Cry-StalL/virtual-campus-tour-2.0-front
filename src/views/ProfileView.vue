@@ -90,12 +90,14 @@
         </template>
 
         <template v-if="isResetingPassword">
-          <el-button type="success" @click="savePassword" round style="height: 4vh; border-radius: 12px; margin-top: -3vh;">
-            <el-icon><Check /></el-icon> 保存密码
-          </el-button>
-          <el-button @click="cancelPasswordReset" round style="height: 4vh; border-radius: 12px; margin-top: -3vh;">
-            <el-icon><Close /></el-icon> 取消
-          </el-button>
+          <div class="password-reset-buttons">
+            <el-button type="success" @click="savePassword" round class="password-reset-btn">
+              <el-icon><Check /></el-icon> 保存密码
+            </el-button>
+            <el-button @click="cancelPasswordReset" round class="password-reset-btn">
+              <el-icon><Close /></el-icon> 取消
+            </el-button>
+          </div>
         </template>
       </div>
     </el-card>
@@ -815,6 +817,24 @@ export default {
   /* height: 8vh; */
 }
 
+/* 密码重置按钮容器 */
+.password-reset-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: -3vh;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+/* 密码重置按钮样式 */
+.password-reset-btn {
+  height: 4vh !important;
+  border-radius: 12px !important;
+  padding: 8px 20px !important;
+  margin: 0 !important;
+}
+
 .avatar-gallery {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1239,6 +1259,25 @@ export default {
     padding: 0;
     border-radius: 8px;
     margin: 0 auto;
+  }
+  
+  /* 移动端密码重置按钮 */
+  .password-reset-buttons {
+    display: flex;
+    flex-direction: row !important;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    width: 100%;
+  }
+  
+  .password-reset-btn {
+    width: 120px !important;
+    height: 40px !important;
+    font-size: 13px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    margin: 0 !important;
   }
   
   .username-item {
