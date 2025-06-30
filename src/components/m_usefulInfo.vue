@@ -281,6 +281,11 @@
     z-index: 10;
 }
 
+.delete-button img {
+    width: 20px !important;
+    height: 20px !important;
+}
+
 .header {
     width: 100%;
     height: 12vh;
